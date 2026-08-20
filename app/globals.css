@@ -167,7 +167,7 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .hero-progress > div > strong { display: block; margin: 6px 0 0; color: var(--wine); font-size: 54px; line-height: 1; letter-spacing: -.055em; }
 .hero-progress p { max-width: 430px; margin: 8px 0 16px; color: var(--muted); font-size: 11px; line-height: 1.5; }
 .hero-readiness-visual { position: relative; z-index: 1; display: grid; justify-items: center; gap: 10px; padding-left: 24px; }
-.ring { width: 124px; aspect-ratio: 1; border-radius: 50%; position: relative; display: grid; place-items: center; flex: 0 0 auto; }
+.ring { width: 124px; aspect-ratio: 1; border: 0; outline: 0; box-shadow: none; border-radius: 50%; position: relative; display: grid; place-items: center; flex: 0 0 auto; }
 .ring:before { content: ""; position: absolute; inset: 12px; border-radius: 50%; background: #fff; }
 .ring span { position: relative; display: inline-flex; align-items: baseline; justify-content: center; font-size: 26px; font-weight: 790; letter-spacing: -.04em; line-height: 1; }
 .ring small { margin-left: 1px; color: var(--muted); font-size: 12px; }
@@ -191,6 +191,21 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .action-row.done strong { color: var(--muted); text-decoration: line-through; }
 .action-row.done em { color: var(--green); }
 .recommend-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 11px; }
+.recommend-scroll {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(245px, 32%);
+  gap: 11px;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scroll-snap-type: inline proximity;
+  padding: 2px 3px 12px 1px;
+  scrollbar-width: thin;
+  scrollbar-color: #c8d0ef transparent;
+}
+.recommend-scroll .recommendation { scroll-snap-align: start; }
+.recommend-scroll::-webkit-scrollbar { height: 6px; }
+.recommend-scroll::-webkit-scrollbar-thumb { background: #c8d0ef; border-radius: 999px; }
 .recommendation {
   min-height: 115px; padding: 14px; display: grid; grid-template-columns: 42px 1fr auto; align-items: center; gap: 10px;
   border: 1px solid rgba(73, 54, 46, .08); text-align: left; cursor: pointer; transition: .2s;
