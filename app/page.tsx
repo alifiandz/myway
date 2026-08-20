@@ -10,7 +10,7 @@ import {
   Trophy, WalletCards, X,
 } from "lucide-react";
 
-type View = "dashboard" | "explore" | "pathway" | "progress" | "profile";
+type View = "dashboard" | "explore" | "pathway" | "tasks" | "progress" | "profile";
 type Fit = "Good Fit" | "Possible Fit" | "Entry Structure Mismatch";
 type Role = "Dream" | "Target" | "Alternative";
 
@@ -278,6 +278,7 @@ const navItems = [
   { id: "dashboard" as View, label: "Dashboard", icon: LayoutDashboard },
   { id: "explore" as View, label: "Explore", icon: Search },
   { id: "pathway" as View, label: "Pathway", icon: Map },
+  { id: "tasks" as View, label: "Tasks & Habits", icon: ClipboardCheck },
   { id: "progress" as View, label: "Progress", icon: BarChart3 },
   { id: "profile" as View, label: "Profile", icon: CircleUserRound },
 ];
@@ -320,7 +321,7 @@ function Navigation({ active, go, openGuide, progress, hasTarget }: { active: Vi
 }
 
 function Header({ view, go, notices, setNotices }: { view: View; go: (v: View) => void; notices: boolean; setNotices: (v: boolean) => void }) {
-  const title = { dashboard: "Dashboard", explore: "Explore programs", pathway: "My Pathway", progress: "Progress", profile: "Profile" }[view];
+  const title = { dashboard: "Dashboard", explore: "Explore programs", pathway: "My Pathway", tasks: "Tasks & Habits", progress: "Progress", profile: "Profile" }[view];
   return <header className="topbar">
     <div><span className="eyebrow">Alif’s study planner</span><h1>{title}</h1></div>
     <div className="top-actions">
@@ -494,6 +495,63 @@ function ComparePanel({ ids, close, remove, open }: { ids: string[]; close: () =
   return <div className="modal-backdrop" role="dialog" aria-modal="true"><section className="compare-modal page-enter"><header><div><span className="eyebrow">Side-by-side evidence</span><h2>Compare programs</h2><p>{items.length} of 4 selected</p></div><button className="icon-button" onClick={close}><X /></button></header>{items.length ? <div className="compare-scroll"><div className="compare-grid" style={{ gridTemplateColumns: "170px repeat(" + items.length + ", minmax(210px, 1fr))" }}><strong className="compare-label">Program</strong>{items.map((p) => <article key={p.id}><button className="remove-x" onClick={() => remove(p.id)}><X size={13} /></button><UniversityLogo program={p} /><strong>{p.university}</strong><small>{p.title}</small><button className="text-link" onClick={() => { open(p); close(); }}>View evidence</button></article>)}{rows.flatMap(([label, value]) => [<strong className="compare-label" key={label}>{label}</strong>, ...items.map((p) => <span className="compare-value" key={label + p.id}>{value(p)}</span>)])}</div></div> : <div className="empty"><Scale /><h3>Select programs to compare</h3></div>}<footer><p><CircleHelp size={14} /> Comparison uses verified program facts and keeps unknowns visible.</p><button className="primary-button" onClick={close}>Done</button></footer></section></div>;
 }
 
+const weeklyActions = [
+  { id: "ielts-practice", title: "Complete an IELTS speaking mock test", meta: "30 min · English", tag: "English", points: "+20 pts" },
+  { id: "program-shortlist", title: "Shortlist 3 Aalto business programs", meta: "25 min · University research", tag: "Research", points: "+20 pts" },
+  { id: "portfolio", title: "Draft a portfolio project summary", meta: "30 min · Portfolio", tag: "Portfolio", points: "+25 pts" },
+  { id: "documents", title: "Collect transcript requirements", meta: "15 min · Documents", tag: "Documents", points: "+15 pts" },
+  { id: "scholarship", title: "Review one scholarship deadline", meta: "15 min · Scholarships", tag: "Funding", points: "+15 pts" },
+];
+
+const habits = [
+  { id: "speaking", title: "IELTS speaking", meta: "20 min · 3 times weekly", goal: 3 },
+  { id: "reading", title: "IELTS reading", meta: "20 min · 3 times weekly", goal: 3 },
+  { id: "math", title: "Mathematics review", meta: "30 min · 2 times weekly", goal: 2 },
+  { id: "research", title: "University research", meta: "25 min · once weekly", goal: 1 },
+  { id: "portfolio-build", title: "Portfolio building", meta: "30 min · once weekly", goal: 1 },
+];
+
+const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+function TasksHabits({ completed, toggleTask, target, toast }: { completed: string[]; toggleTask: (v: string) => void; target?: Program; toast: (s: string) => void }) {
+  const [tab, setTab] = useState<"actions" | "habits">("actions");
+  const [habitChecks, setHabitChecks] = useState<Record<string, string[]>>({
+    speaking: ["Mon", "Tue", "Wed"], reading: ["Mon", "Wed"], math: ["Tue"], research: ["Mon"], "portfolio-build": ["Sat"],
+  });
+  const [adding, setAdding] = useState(false);
+  const [newAction, setNewAction] = useState("");
+  const [customActions, setCustomActions] = useState<{ id: string; title: string }[]>([]);
+  const actionList = [...weeklyActions, ...customActions.map((item) => ({ ...item, meta: "Added by you · This week", tag: "Personal", points: "+10 pts" }))];
+  const done = actionList.filter((action) => completed.includes(action.id)).length;
+  const goalName = target?.university || "your business bachelor’s plan";
+  const targetTitle = target?.title || "BSc in International Business";
+
+  const toggleHabit = (habitId: string, day: string) => {
+    setHabitChecks((current) => {
+      const checked = current[habitId] || [];
+      return { ...current, [habitId]: checked.includes(day) ? checked.filter((item) => item !== day) : [...checked, day] };
+    });
+  };
+  const addAction = () => {
+    const title = newAction.trim();
+    if (!title) return;
+    setCustomActions((current) => [...current, { id: `custom-${Date.now()}`, title }]);
+    setNewAction("");
+    setAdding(false);
+    toast("Action added to this week");
+  };
+
+  return <div className="page-enter tasks-page">
+    <section className="page-intro tasks-intro"><div><span className="eyebrow">This week</span><h2>Tasks & Habits</h2><p>Finish important actions. Repeat routines that build readiness.</p></div><button className="primary-button" onClick={() => setAdding(!adding)}><Plus size={15} /> Add action</button></section>
+    {adding && <article className="card add-action-panel"><div><span className="section-label">New one-time action</span><strong>What do you want to finish?</strong></div><input autoFocus value={newAction} onChange={(event) => setNewAction(event.target.value)} onKeyDown={(event) => event.key === "Enter" && addAction()} placeholder="Example: Review Aalto application deadline" /><button className="primary-button" onClick={addAction}>Add to week</button><button className="text-link" onClick={() => setAdding(false)}>Cancel</button></article>}
+    <div className="task-tabs" role="tablist" aria-label="Tasks and habits views"><button className={tab === "actions" ? "active" : ""} onClick={() => setTab("actions")}>Weekly actions</button><button className={tab === "habits" ? "active" : ""} onClick={() => setTab("habits")}>Habit tracker</button></div>
+    {tab === "actions" ? <div className="tasks-layout">
+      <article className="card weekly-actions-card"><div className="section-head"><div><span className="section-label">One-time tasks</span><h3>This week’s actions</h3></div><span className="today-count">{done} of {actionList.length} done</span></div><p className="tasks-helper">Complete each action once. Finished actions increase the related readiness category.</p><div className="weekly-action-list">{actionList.map((action) => { const isDone = completed.includes(action.id); return <button key={action.id} className={`weekly-action ${isDone ? "done" : ""}`} onClick={() => toggleTask(action.id)}><span className={`task-check ${isDone ? "checked" : ""}`}>{isDone && <Check size={15} />}</span><span className="weekly-action-copy"><strong>{action.title}</strong><small>{action.meta}</small></span><span className="action-tag">{action.tag}</span><em>{isDone ? "Done" : action.points}</em></button>; })}</div></article>
+      <aside className="card connected-goal-card"><span className="section-label">Connected goal</span><h3>Why these actions?</h3><div className="goal-connection"><div><small>University goal</small><strong>{goalName}</strong>{target && <span>{targetTitle}</span>}</div><i /><div><small>Current priority</small><strong>Reach IELTS 6.5</strong><span>Current estimate 5.5</span></div><i /><div><small>This week</small><strong>Practise speaking twice</strong><span>Two focused sessions</span></div></div><p>Goal shows where you are going. Actions are the steps you finish once.</p></aside>
+    </div> : <article className="card habit-card"><div className="section-head"><div><span className="section-label">Repeatable routines</span><h3>Your weekly rhythm</h3></div><span className="today-count">Tap a day to check in</span></div><p className="tasks-helper">Habits repeat. The weekly goal tells you how many sessions to complete.</p><div className="habit-scroll"><div className="habit-grid"><div className="habit-grid-head"><strong>Habit and weekly goal</strong>{weekDays.map((day) => <span key={day}>{day.slice(0, 1)}</span>)}<strong>Progress</strong></div>{habits.map((habit) => { const checks = habitChecks[habit.id] || []; return <div className="habit-row" key={habit.id}><span><strong>{habit.title}</strong><small>{habit.meta}</small></span>{weekDays.map((day) => { const checked = checks.includes(day); return <button key={day} className={checked ? "checked" : ""} aria-label={`${habit.title}, ${day}`} onClick={() => toggleHabit(habit.id, day)}>{checked && <Check size={15} />}</button>; })}<em className={checks.length >= habit.goal ? "complete" : ""}>{Math.min(checks.length, habit.goal)} / {habit.goal}</em></div>; })}</div></div><div className="habit-insight"><span className="mini-icon"><Sparkles size={16} /></span><span><strong>Keep this rhythm</strong><small>Speaking is strongest early in the week. Keep portfolio work for Saturday.</small></span></div></article>}
+  </div>;
+}
+
 function Pathway({ selected, completed, toggleTask, go }: { selected: { p: Program; role: Role }[]; completed: string[]; toggleTask: (v: string) => void; go: (v: View) => void }) {
   const [stage, setStage] = useState(2);
   const stages = ["Confirm search profile", "Compare program requirements", "Build academic foundation", "Prepare English evidence", "Plan experience portfolio", "Research scholarships", "Prepare documents", "Submit applications", "Decide and transition"];
@@ -615,6 +673,7 @@ export default function App() {
   else if (view === "dashboard") content = <Dashboard go={go} completed={completed} toggleTask={toggleTask} openProgram={openProgram} target={targetProgram} />;
   else if (view === "explore") content = <Explore open={openProgram} saved={saved} setSaved={toggleSaved} compared={compared} toggleCompare={toggleCompare} addPath={(p) => addPath(p)} />;
   else if (view === "pathway") content = <Pathway selected={pathway} completed={completed} toggleTask={toggleTask} go={go} />;
+  else if (view === "tasks") content = <TasksHabits completed={completed} toggleTask={toggleTask} target={targetProgram} toast={setToast} />;
   else if (view === "progress") content = <ProgressPage completed={completed} selected={pathway} />;
   else content = <ProfilePage toast={setToast} restart={() => setOnboarded(false)} />;
 
