@@ -191,38 +191,6 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .action-row.done strong { color: var(--muted); text-decoration: line-through; }
 .action-row.done em { color: var(--green); }
 .recommend-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 11px; }
-.recommend-carousel { position: relative; min-width: 0; }
-.recommend-carousel:after {
-  content: "";
-  position: absolute;
-  z-index: 2;
-  inset: 0 0 10px auto;
-  width: 38px;
-  pointer-events: none;
-  background: linear-gradient(90deg, rgba(245, 247, 251, 0), rgba(245, 247, 251, .96));
-}
-.recommend-scroll {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(245px, 32%);
-  gap: 11px;
-  overflow-x: auto;
-  overscroll-behavior-inline: contain;
-  scroll-snap-type: inline proximity;
-  padding: 8px 42px 17px 7px;
-  margin: -7px -7px -10px;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(95, 118, 232, .42) transparent;
-}
-.recommend-scroll .recommendation {
-  scroll-snap-align: start;
-  background: linear-gradient(180deg, #fff 0%, #fafbff 100%);
-  border-color: #e0e5f2;
-  box-shadow: 0 8px 20px rgba(32, 52, 98, .075), 0 2px 5px rgba(32, 52, 98, .035);
-}
-.recommend-scroll::-webkit-scrollbar { height: 6px; }
-.recommend-scroll::-webkit-scrollbar-track { margin-inline: 7px 42px; background: transparent; }
-.recommend-scroll::-webkit-scrollbar-thumb { background: rgba(95, 118, 232, .42); border-radius: 999px; }
 .recommendation {
   min-height: 115px; padding: 14px; display: grid; grid-template-columns: 42px 1fr auto; align-items: center; gap: 10px;
   border: 1px solid rgba(73, 54, 46, .08); text-align: left; cursor: pointer; transition: .2s;
