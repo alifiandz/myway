@@ -18,6 +18,7 @@ type Program = {
   id: string;
   university: string;
   initials: string;
+  logo: string;
   title: string;
   location: string;
   duration: string;
@@ -43,6 +44,7 @@ const programs: Program[] = [
     id: "aalto",
     university: "Aalto University",
     initials: "A",
+    logo: "https://www.aalto.fi/themes/custom/aalto_base/images/aalto_logo.svg",
     title: "BSc in International Business",
     location: "Mikkeli, Finland",
     duration: "3 years · 180 ECTS",
@@ -69,6 +71,7 @@ const programs: Program[] = [
     id: "escp",
     university: "ESCP Business School",
     initials: "ES",
+    logo: "https://escp.eu/sites/default/files/inline-images/ESCP-logo-white-misalign.svg",
     title: "Bachelor in Management (BSc)",
     location: "Multi-campus, Europe",
     duration: "3 years · 180 ECTS",
@@ -92,6 +95,7 @@ const programs: Program[] = [
     id: "essec",
     university: "ESSEC Business School",
     initials: "E",
+    logo: "https://images.ctfassets.net/vmb6iqn8sgcm/6yXnJQs5jk9NJ5r90536Vb/3696bdeb28508cf4255d3cefdc8313a9/Logo_essec_noir.svg",
     title: "Global BBA",
     location: "France · Singapore · Morocco",
     duration: "4 years",
@@ -118,6 +122,7 @@ const programs: Program[] = [
     id: "edhec",
     university: "EDHEC Business School",
     initials: "ED",
+    logo: "https://www.edhec.edu/sites/default/files/logo.svg",
     title: "International BBA · Business Management",
     location: "Lille, France",
     duration: "4 years",
@@ -144,6 +149,7 @@ const programs: Program[] = [
     id: "emlyon",
     university: "emlyon business school",
     initials: "em",
+    logo: "https://em-lyon.com/themes/custom/emlyon/logo.svg",
     title: "Global BBA",
     location: "Lyon, France",
     duration: "4 years",
@@ -167,6 +173,7 @@ const programs: Program[] = [
     id: "ubc",
     university: "UBC Sauder School of Business",
     initials: "UBC",
+    logo: "https://www.sauder.ubc.ca/themes/custom/sauder/images/ubc-sauder-logo.svg",
     title: "Bachelor of Commerce",
     location: "Vancouver, Canada",
     duration: "4 years",
@@ -193,6 +200,7 @@ const programs: Program[] = [
     id: "ivey",
     university: "Ivey Business School",
     initials: "I",
+    logo: "https://www.ivey.uwo.ca/images/template/ivey-main-logo.svg",
     title: "Honours Business Administration",
     location: "London, Canada",
     duration: "2+2 structure",
@@ -220,6 +228,7 @@ const programs: Program[] = [
     id: "asu",
     university: "W. P. Carey School of Business",
     initials: "ASU",
+    logo: "https://wpcarey.asu.edu/sites/g/files/litvpz246/files/styles/footer_logo/public/images/asu-wpcarey-school-of-business-asu-footer.png?itok=h3Cx3NLs",
     title: "BA in Entrepreneurial Leadership",
     location: "Arizona, USA",
     duration: "4 years",
@@ -243,6 +252,7 @@ const programs: Program[] = [
     id: "kelley",
     university: "Kelley School of Business",
     initials: "K",
+    logo: "https://assets.iu.edu/brand/3.x/trident-large.png",
     title: "Bachelor of Science in Business",
     location: "Bloomington, USA",
     duration: "4 years",
@@ -274,6 +284,19 @@ const navItems = [
 
 function fitClass(fit: Fit) {
   return fit === "Good Fit" ? "good" : fit === "Possible Fit" ? "possible" : "mismatch";
+}
+
+function UniversityLogo({ program, size = "" }: { program: Program; size?: "" | "large" | "small" }) {
+  return <span className={`crest university-logo ${size} ${program.id === "escp" ? "dark" : ""}`.trim()}>
+    <span>{program.initials}</span>
+    {/* Official university-hosted assets; initials remain as a resilient fallback. */}
+    {/* eslint-disable-next-line @next/next/no-img-element */}
+    <img
+      src={program.logo}
+      alt={`${program.university} logo`}
+      onError={(event) => { event.currentTarget.style.display = "none"; }}
+    />
+  </span>;
 }
 
 function Brand() {
@@ -369,9 +392,9 @@ function Onboarding({ finish, saveLater }: { finish: () => void; saveLater: () =
 
 function Dashboard({ go, completed, toggleTask, openProgram, target }: { go: (v: View) => void; completed: string[]; toggleTask: (v: string) => void; openProgram: (p: Program) => void; target?: Program }) {
   const actions = [
-    { id: "ielts-practice", title: "Complete an IELTS speaking drill", meta: "20 min · IELTS 6.5 goal", points: "+20 pts" },
-    { id: "documents", title: "Upload your semester grade report", meta: "10 min · Documents", points: "+15 pts" },
-    { id: "portfolio", title: "Outline portfolio project #3", meta: "30 min · Portfolio", points: "+25 pts" },
+    { id: "ielts-practice", title: "Complete an IELTS speaking drill", meta: "20 min · IELTS 6.5 goal", points: "+20 pts", icon: Languages },
+    { id: "documents", title: "Upload your semester grade report", meta: "10 min · Documents", points: "+15 pts", icon: ClipboardCheck },
+    { id: "portfolio", title: "Outline portfolio project #3", meta: "30 min · Portfolio", points: "+25 pts", icon: BriefcaseBusiness },
   ];
   const readiness = [
     { label: "English", note: "IELTS goal 6.5", value: completed.includes("ielts-practice") ? 72 : 64, icon: Languages, tone: "blue" },
@@ -381,23 +404,25 @@ function Dashboard({ go, completed, toggleTask, openProgram, target }: { go: (v:
   ];
   const doneToday = actions.filter((action) => completed.includes(action.id)).length;
   const milestoneProgress = Math.round(readiness.slice(0, 3).reduce((sum, item) => sum + item.value, 0) / 3);
+  const overallReadiness = Math.round(readiness.reduce((sum, item) => sum + item.value, 0) / readiness.length);
 
   if (!target) return <div className="page-enter">
     <section className="welcome-row"><div><span className="eyebrow">Your preparation workspace</span><h2>Choose a target to start tracking</h2><p>Readiness is always measured against a specific program—not a generic profile score.</p></div></section>
     <article className="card no-target-gate"><span className="large-icon"><Target /></span><div><span className="section-label">Tracker locked</span><h3>Add one program as your target university</h3><p>Until then, you can explore and compare programs. Your daily actions, readiness goals, and milestones will appear here after a target is chosen.</p><button className="primary-button" onClick={() => go("explore")}><Search size={15} /> Explore programs</button></div></article>
-    <section className="section-space dashboard-recommendations"><div className="section-head"><div><span className="section-label">Start here</span><h3>Strong current matches</h3></div></div><div className="recommend-grid">{programs.slice(0, 3).map((p) => <button className="card recommendation" key={p.id} onClick={() => openProgram(p)}><span className="crest">{p.initials}</span><span><strong>{p.university}</strong><small>{p.title}</small><em className={"fit " + fitClass(p.fit)}>{p.fit}</em></span><ChevronRight /></button>)}</div></section>
+    <section className="section-space dashboard-recommendations"><div className="section-head"><div><span className="section-label">Start here</span><h3>Strong current matches</h3></div></div><div className="recommend-grid">{programs.slice(0, 3).map((p) => <button className="card recommendation" key={p.id} onClick={() => openProgram(p)}><UniversityLogo program={p} /><span><strong>{p.university}</strong><small>{p.title}</small><em className={"fit " + fitClass(p.fit)}>{p.fit}</em></span><ChevronRight /></button>)}</div></section>
   </div>;
 
   return <div className="page-enter">
     <section className="welcome-row"><div><span className="eyebrow">Wednesday, 19 August</span><h2>Good afternoon, Alif</h2><p>{target.university} · {target.title}</p></div><button className="secondary-button" onClick={() => go("progress")}><BarChart3 size={16} /> View progress</button></section>
     <div className="dashboard-grid">
       <div className="main-column">
-        <article className="card today-card"><div className="today-card-head"><div><span className="section-label">Focus</span><h3>Today’s actions</h3><p>Chosen from the highest-priority gaps for your target.</p></div><span className="today-count">{doneToday} of {actions.length} done</span></div><div className="today-action-list">{actions.map(({ id, title, meta, points }) => { const done = completed.includes(id); return <button key={id} className={"today-action " + (done ? "done" : "")} onClick={() => toggleTask(id)}><span className={"task-check " + (done ? "checked" : "")}>{done && <Check size={17} />}</span><span><strong>{title}</strong><small>{meta}</small></span><em>{done ? "Complete" : points}</em></button>; })}</div></article>
+        <article className="card hero-progress"><div><span className="section-label">Preparation progress</span><strong>{overallReadiness}%</strong><p>Based on readiness categories and completed actions for {target.university}—not an admission prediction.</p><button className="text-link" onClick={() => go("progress")}>Open full pathway <ChevronRight size={15} /></button></div><div className="ring" style={{ background: `conic-gradient(var(--blue) ${overallReadiness}%, #e9ebf2 0)` }}><span>{overallReadiness}<small>%</small></span></div></article>
+        <section className="section-space"><div className="section-head"><div><span className="section-label">Today’s actions</span><h3>Close the most useful gaps</h3></div><span className="badge amber">{actions.length - doneToday} open</span></div><article className="card action-list">{actions.map(({ id, title, meta, points, icon: Icon }) => { const done = completed.includes(id); return <button key={id} className={"action-row " + (done ? "done" : "")} onClick={() => toggleTask(id)}><span className={"check " + (done ? "checked" : "")}>{done && <Check size={13} />}</span><span className="row-icon"><Icon size={17} /></span><span><strong>{title}</strong><small>{meta}</small></span><em>{done ? "Complete" : points}</em><ChevronRight size={15} /></button>; })}</article></section>
         <article className="card readiness-overview"><div className="section-head"><div><span className="section-label">Overall overview</span><h3>Target readiness</h3></div><button className="text-link" onClick={() => go("progress")}>View all <ChevronRight size={15} /></button></div><p className="readiness-context">Progress toward the evidence needed for {target.university}. This is not an admission prediction.</p><div className="readiness-grid">{readiness.map(({ label, note, value, icon: Icon, tone }) => <div className="readiness-item" key={label}><span className={"readiness-icon " + tone}><Icon size={19} /></span><span><span><strong>{label}</strong><em>{value}%</em></span><small>{note}</small><div className={"goal-bar " + tone}><i style={{ width: value + "%" }} /></div></span></div>)}</div></article>
-        <section className="section-space"><div className="section-head"><div><span className="section-label">Recommended for you</span><h3>Best current program matches</h3></div><button className="text-link" onClick={() => go("explore")}>View all <ChevronRight size={15} /></button></div><div className="recommend-grid">{programs.slice(0, 3).map((p) => <button className="card recommendation" key={p.id} onClick={() => openProgram(p)}><span className="crest">{p.initials}</span><span><strong>{p.university}</strong><small>{p.title}</small><em className={"fit " + fitClass(p.fit)}>{p.fit}</em></span><ChevronRight /></button>)}</div></section>
+        <section className="section-space"><div className="section-head"><div><span className="section-label">Recommended for you</span><h3>Best current program matches</h3></div><button className="text-link" onClick={() => go("explore")}>View all <ChevronRight size={15} /></button></div><div className="recommend-grid">{programs.slice(0, 3).map((p) => <button className="card recommendation" key={p.id} onClick={() => openProgram(p)}><UniversityLogo program={p} /><span><strong>{p.university}</strong><small>{p.title}</small><em className={"fit " + fitClass(p.fit)}>{p.fit}</em></span><ChevronRight /></button>)}</div></section>
       </div>
       <aside className="right-column">
-        <article className="card target-card"><span className="section-label">Target university</span><div><span className="crest large">{target.initials}</span><span><strong>{target.university}</strong><small>{target.title}</small><em className={"fit " + fitClass(target.fit)}>{target.fit}</em></span></div><button className="outline-button" onClick={() => openProgram(target)}>Open program evidence</button></article>
+        <article className="card priority-card"><span className="section-label">Current priority</span><div className="priority-title"><span className="large-icon"><Languages /></span><span><strong>Reach IELTS 6.5</strong><small>Current estimate 5.5 · Target 6.5</small></span></div><div className="priority-measure"><div className="goal-bar blue"><i style={{ width: "64%" }} /></div><span><small>Current 5.5</small><small>Target 6.5</small></span></div><div className="priority-why"><strong>Why this matters</strong><p>English evidence is required for your current target and unlocks the next application step.</p></div><button className="outline-button" onClick={() => go("pathway")}>Open action plan</button></article>
         <article className="card dashboard-milestone"><div className="milestone-symbol"><Flag size={20} /></div><span className="section-label">Next milestone</span><h3>Application essentials ready</h3><p>Reach the three core evidence goals before reviewing your final application shortlist.</p><div className="milestone-progress"><span><strong>{milestoneProgress}%</strong><small>toward milestone</small></span><div className="goal-bar blue"><i style={{ width: milestoneProgress + "%" }} /></div></div><ul><li className={readiness[0].value >= 100 ? "done" : ""}><CircleCheck size={15} /><span>IELTS 6.5</span><em>{readiness[0].value}%</em></li><li className={readiness[1].value >= 100 ? "done" : ""}><CircleCheck size={15} /><span>4 portfolio projects</span><em>{readiness[1].value}%</em></li><li className={readiness[2].value >= 100 ? "done" : ""}><CircleCheck size={15} /><span>6 core documents</span><em>{readiness[2].value}%</em></li></ul><button className="text-link" onClick={() => go("pathway")}>See milestone plan <ChevronRight size={14} /></button></article>
       </aside>
     </div>
@@ -406,7 +431,7 @@ function Dashboard({ go, completed, toggleTask, openProgram, target }: { go: (v:
 
 function ProgramCard({ p, open, saved, toggleSaved, compared, toggleCompare, addPath }: { p: Program; open: () => void; saved: boolean; toggleSaved: () => void; compared: boolean; toggleCompare: () => void; addPath: () => void }) {
   return <article className="card program-card">
-    <button className="program-copy" onClick={open}><span className="crest">{p.initials}</span><span><span className="program-title"><strong>{p.university}</strong><em className={"fit " + fitClass(p.fit)}>{p.fit}</em></span><small><MapPin size={12} />{p.location}</small><b>{p.title}</b><small>{p.duration} · {p.language}</small></span></button>
+    <button className="program-copy" onClick={open}><UniversityLogo program={p} /><span><span className="program-title"><strong>{p.university}</strong><em className={"fit " + fitClass(p.fit)}>{p.fit}</em></span><small><MapPin size={12} />{p.location}</small><b>{p.title}</b><small>{p.duration} · {p.language}</small></span></button>
     <div className="program-evidence"><span><strong>{p.math}</strong><small>Quantitative fit</small></span><span><strong>{p.management}</strong><small>Management</small></span><span><strong>{p.experience.split(" · ")[0]}</strong><small>Experience</small></span></div>
     <p><CircleCheck size={14} /> {p.why[0]}</p>
     <div className="program-actions"><button className={"icon-label " + (saved ? "selected" : "")} onClick={toggleSaved}><Bookmark size={15} />{saved ? "Saved" : "Save"}</button><button className={"outline-button " + (compared ? "selected" : "")} onClick={toggleCompare}><Scale size={15} />{compared ? "Compared" : "Compare"}</button><button className="outline-button" onClick={open}>View evidence</button><button className="primary-button" onClick={addPath}><Plus size={15} />Pathway</button></div>
@@ -442,7 +467,7 @@ function ProgramDetail({ p, close, saved, toggleSaved, compared, toggleCompare, 
   return <div className="page-enter detail-page">
     <button className="back-button" onClick={close}><ChevronLeft size={17} /> Back to programs</button>
     <section className="card detail-hero">
-      <span className="crest large">{p.initials}</span><div><span className="verified"><CircleCheck size={14} /> Source checked {p.verified}</span><h2>{p.university}</h2><p>{p.title} · {p.location}</p></div>
+      <UniversityLogo program={p} size="large" /><div><span className="verified"><CircleCheck size={14} /> Source checked {p.verified}</span><h2>{p.university}</h2><p>{p.title} · {p.location}</p></div>
       <div className="detail-hero-actions"><button className={"outline-button " + (saved ? "selected" : "")} onClick={toggleSaved}><Bookmark size={15} /> {saved ? "Saved" : "Save"}</button><button className={"outline-button " + (compared ? "selected" : "")} onClick={toggleCompare}><Scale size={15} /> Compare</button><div className="role-menu"><button className="primary-button" onClick={() => setRoleOpen(!roleOpen)}><Plus size={15} /> Add to pathway <ChevronDown size={14} /></button>{roleOpen && <div>{(["Dream", "Target", "Alternative"] as Role[]).map((r) => <button key={r} onClick={() => { addPath(r); setRoleOpen(false); }}>{r}<small>{r === "Dream" ? "Aspirational option" : r === "Target" ? "Leading realistic option" : "Keep as a backup"}</small></button>)}</div>}</div></div>
     </section>
     <div className="detail-grid">
@@ -464,7 +489,7 @@ function ProgramDetail({ p, close, saved, toggleSaved, compared, toggleCompare, 
 function ComparePanel({ ids, close, remove, open }: { ids: string[]; close: () => void; remove: (id: string) => void; open: (p: Program) => void }) {
   const items = programs.filter((p) => ids.includes(p.id));
   const rows: [string, (p: Program) => string][] = [["Entry", (p) => p.entry], ["Management", (p) => p.management], ["Entrepreneurship", (p) => p.enterprise], ["Marketing", (p) => p.marketing], ["Quant load", (p) => p.math], ["Experience", (p) => p.experience], ["Tuition", (p) => p.tuition]];
-  return <div className="modal-backdrop" role="dialog" aria-modal="true"><section className="compare-modal page-enter"><header><div><span className="eyebrow">Side-by-side evidence</span><h2>Compare programs</h2><p>{items.length} of 4 selected</p></div><button className="icon-button" onClick={close}><X /></button></header>{items.length ? <div className="compare-scroll"><div className="compare-grid" style={{ gridTemplateColumns: "170px repeat(" + items.length + ", minmax(210px, 1fr))" }}><strong className="compare-label">Program</strong>{items.map((p) => <article key={p.id}><button className="remove-x" onClick={() => remove(p.id)}><X size={13} /></button><span className="crest">{p.initials}</span><strong>{p.university}</strong><small>{p.title}</small><button className="text-link" onClick={() => { open(p); close(); }}>View evidence</button></article>)}{rows.flatMap(([label, value]) => [<strong className="compare-label" key={label}>{label}</strong>, ...items.map((p) => <span className="compare-value" key={label + p.id}>{value(p)}</span>)])}</div></div> : <div className="empty"><Scale /><h3>Select programs to compare</h3></div>}<footer><p><CircleHelp size={14} /> Comparison uses verified program facts and keeps unknowns visible.</p><button className="primary-button" onClick={close}>Done</button></footer></section></div>;
+  return <div className="modal-backdrop" role="dialog" aria-modal="true"><section className="compare-modal page-enter"><header><div><span className="eyebrow">Side-by-side evidence</span><h2>Compare programs</h2><p>{items.length} of 4 selected</p></div><button className="icon-button" onClick={close}><X /></button></header>{items.length ? <div className="compare-scroll"><div className="compare-grid" style={{ gridTemplateColumns: "170px repeat(" + items.length + ", minmax(210px, 1fr))" }}><strong className="compare-label">Program</strong>{items.map((p) => <article key={p.id}><button className="remove-x" onClick={() => remove(p.id)}><X size={13} /></button><UniversityLogo program={p} /><strong>{p.university}</strong><small>{p.title}</small><button className="text-link" onClick={() => { open(p); close(); }}>View evidence</button></article>)}{rows.flatMap(([label, value]) => [<strong className="compare-label" key={label}>{label}</strong>, ...items.map((p) => <span className="compare-value" key={label + p.id}>{value(p)}</span>)])}</div></div> : <div className="empty"><Scale /><h3>Select programs to compare</h3></div>}<footer><p><CircleHelp size={14} /> Comparison uses verified program facts and keeps unknowns visible.</p><button className="primary-button" onClick={close}>Done</button></footer></section></div>;
 }
 
 function Pathway({ selected, completed, toggleTask, go }: { selected: { p: Program; role: Role }[]; completed: string[]; toggleTask: (v: string) => void; go: (v: View) => void }) {
@@ -481,7 +506,7 @@ function Pathway({ selected, completed, toggleTask, go }: { selected: { p: Progr
       <section className="card stage-panel"><div className="section-head"><div><span className="section-label">Milestones</span><h3>From search to enrolment</h3></div><span className="badge green">2 foundations ready</span></div><div className="stage-list">{stages.map((name, i) => <button key={name} onClick={() => setStage(i)} className={i < 2 ? "complete" : i === stage ? "current" : ""}><span>{i < 2 ? <Check size={14} /> : String(i + 1).padStart(2, "0")}</span><strong>{name}</strong><small>{i < 2 ? "Complete" : i === stage ? "In progress" : "Not started"}</small><ChevronRight /></button>)}</div></section>
       <aside className="pathway-side">
         <article className="card active-milestone"><span className="section-label">Current milestone · {String(stage + 1).padStart(2, "0")}</span><h3>{stages[stage]}</h3><p>Complete the highest-value evidence gaps before narrowing your program list.</p><div className="milestone-actions">{actions.map((id) => { const done = completed.includes(id); return <button key={id} onClick={() => toggleTask(id)}><span className={"check " + (done ? "checked" : "")}>{done && <Check size={14} />}</span><span><strong>{actionNames[id]}</strong><small>{id === "quant" ? "25 min · Program fit" : "Profile gap"}</small></span></button>; })}</div></article>
-        <article className="card path-options"><div className="section-head"><h3>Program roles</h3><button onClick={() => go("explore")}>Manage</button></div>{selected.length ? selected.map(({ p, role }) => <div key={p.id}><span className="crest small">{p.initials}</span><span><strong>{p.university}</strong><small>{p.title}</small></span><em>{role}</em></div>) : <div className="empty-compact"><Bookmark size={18} /><span>No pathway programs yet</span></div>}</article>
+        <article className="card path-options"><div className="section-head"><h3>Program roles</h3><button onClick={() => go("explore")}>Manage</button></div>{selected.length ? selected.map(({ p, role }) => <div key={p.id}><UniversityLogo program={p} size="small" /><span><strong>{p.university}</strong><small>{p.title}</small></span><em>{role}</em></div>) : <div className="empty-compact"><Bookmark size={18} /><span>No pathway programs yet</span></div>}</article>
       </aside>
     </div>
     <section className="gap-section"><div className="section-head"><div><span className="section-label">Preparation gaps</span><h3>What is known—and what is not</h3></div></div><div className="gap-grid">{[["Academic profile", "Not provided", "attention"], ["English readiness", "Not provided", "attention"], ["Program research", completed.includes("quant") ? "Core modules checked" : "In progress", "green"], ["Documents", "Not provided", "attention"]].map(([label, value, tone]) => <article className="card gap-card" key={label}><span className="row-icon">{tone === "green" ? <CircleCheck /> : <CircleAlert />}</span><span><small>{label}</small><strong>{value}</strong><em className={tone}>{tone === "green" ? "On track" : "Needs information"}</em></span></article>)}</div></section>

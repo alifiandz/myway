@@ -263,6 +263,11 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 }
 .crest.large { width: 70px; height: 70px; border-radius: 19px; font-size: 20px; }
 .crest.small { width: 34px; height: 34px; border-radius: 9px; font-size: 10px; }
+.university-logo { position: relative; overflow: hidden; padding: 6px; background: #fff; }
+.university-logo > span { position: absolute; inset: 0; z-index: 0; display: grid; place-items: center; }
+.university-logo img { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: contain; background: #fff; }
+.university-logo.dark, .university-logo.dark img { background: var(--navy); }
+.university-logo.small { padding: 4px; }
 .fit { width: max-content; border-radius: 999px; padding: 5px 7px; font-size: 8px; font-style: normal; font-weight: 770; }
 .fit.good { color: var(--green); background: var(--green-soft); }
 .fit.possible { color: var(--amber); background: var(--amber-soft); }
@@ -274,6 +279,16 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .priority-card strong { font-size: 12px; }
 .priority-card small { color: var(--muted); font-size: 9px; line-height: 1.5; }
 .priority-card .outline-button { width: 100%; }
+.priority-card .priority-title { margin: 14px 0 13px; display: grid; grid-template-columns: 42px 1fr; align-items: start; gap: 11px; }
+.priority-card .priority-measure { margin: 0 0 13px; display: block; }
+.priority-measure > span { margin-top: 6px; display: flex; justify-content: space-between; }
+.priority-card .priority-why { margin: 0 0 15px; display: block; padding: 11px 12px; border-radius: 10px; background: #f6f7fc; }
+.priority-why strong { display: block; margin-bottom: 4px; }
+.priority-why p { margin: 0; color: var(--muted); font-size: 9px; line-height: 1.5; }
+.readiness-overview { padding: 21px 23px; }
+.readiness-overview h3 { margin: 4px 0 0; font-size: 17px; letter-spacing: -.025em; }
+.readiness-overview .readiness-context { margin-top: 6px; }
+.readiness-overview .readiness-grid { margin-top: 16px; gap: 16px 24px; }
 .profile-summary .section-head button, .path-options .section-head button {
   border: 0; color: var(--wine); background: transparent; cursor: pointer; font-size: 10px; font-weight: 720;
 }
