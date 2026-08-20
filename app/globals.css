@@ -164,18 +164,14 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .hero-progress { min-height: 195px; padding: 28px 30px; display: flex; align-items: center; justify-content: space-between; overflow: hidden; position: relative; }
 .hero-progress:after { content: ""; position: absolute; width: 260px; height: 260px; right: -110px; top: -145px; border-radius: 50%; background: rgba(95, 118, 232, .07); }
 .hero-progress > div:first-child { position: relative; z-index: 1; }
-.hero-progress > div > strong { display: block; margin: 6px 0 0; color: var(--wine); font-size: 45px; line-height: 1; letter-spacing: -.055em; }
+.hero-progress > div > strong { display: block; margin: 6px 0 0; color: var(--wine); font-size: 54px; line-height: 1; letter-spacing: -.055em; }
 .hero-progress p { max-width: 430px; margin: 8px 0 16px; color: var(--muted); font-size: 11px; line-height: 1.5; }
-.hero-readiness-visual { position: relative; z-index: 1; display: flex; align-items: center; gap: 20px; padding-left: 24px; border-left: 1px solid var(--line); }
+.hero-readiness-visual { position: relative; z-index: 1; display: grid; justify-items: center; gap: 10px; padding-left: 24px; }
 .ring { width: 124px; aspect-ratio: 1; border-radius: 50%; position: relative; display: grid; place-items: center; flex: 0 0 auto; }
 .ring:before { content: ""; position: absolute; inset: 12px; border-radius: 50%; background: #fff; }
 .ring span { position: relative; display: grid; place-items: center; font-size: 26px; font-weight: 790; letter-spacing: -.04em; line-height: 1; }
 .ring small { color: var(--muted); font-size: 12px; }
-.ring em { margin-top: 7px; color: var(--muted); font-size: 7px; font-style: normal; font-weight: 760; letter-spacing: .13em; text-transform: uppercase; }
-.hero-readiness-copy { min-width: 112px; display: grid; gap: 6px; }
-.hero-readiness-copy small { color: var(--muted); font-size: 8px; font-weight: 760; letter-spacing: .11em; text-transform: uppercase; }
-.hero-readiness-copy strong { color: var(--ink); font-size: 15px; line-height: 1.15; }
-.hero-readiness-copy em { color: var(--green); font-size: 10px; font-style: normal; font-weight: 760; }
+.hero-weekly-gain { color: var(--green); font-size: 10px; font-style: normal; font-weight: 760; }
 .action-list { overflow: hidden; }
 .action-row {
   width: 100%; min-height: 74px; padding: 10px 17px; display: grid;
@@ -670,10 +666,8 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
   .welcome-row h2, .page-intro h2 { font-size: 28px; }
   .source-stamp { justify-self: start; }
   .hero-progress { min-height: 180px; padding: 22px 19px; }
-  .hero-progress > div > strong { font-size: 38px; }
-  .hero-readiness-visual { gap: 12px; padding-left: 15px; }
-  .hero-readiness-copy { min-width: 92px; }
-  .hero-readiness-copy strong { font-size: 13px; }
+  .hero-progress > div > strong { font-size: 46px; }
+  .hero-readiness-visual { gap: 8px; padding-left: 15px; }
   .ring { width: 92px; }
   .ring:before { inset: 9px; }
   .ring span { font-size: 21px; }
@@ -728,8 +722,8 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
   .readiness-grid { grid-template-columns: 1fr; }
   .no-target-gate { padding: 25px 20px; grid-template-columns: 1fr; justify-items: start; }
   .ring { width: 80px; margin-left: 5px; }
-  .hero-readiness-visual { padding-left: 0; border-left: 0; }
-  .hero-readiness-copy { display: none; }
+  .hero-readiness-visual { padding-left: 0; }
+  .hero-weekly-gain { font-size: 9px; }
   .hero-progress p { max-width: 205px; }
   .overview-grid { grid-template-columns: 1fr; }
   .overview-grid > div { border-right: 0 !important; border-bottom: 1px solid var(--line) !important; }
