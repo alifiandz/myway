@@ -4,7 +4,18 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Alif Pathway",
   description: "A personalized university preparation and application planner for Alif.",
-  other: { "codex-preview": "development" },
+  metadataBase: new URL("https://alif-pathway.smalhi2025.chatgpt.site"),
+  openGraph: {
+    title: "Alif Pathway",
+    description: "Plan university choices with evidence.",
+    images: [{ url: "/og.png", width: 1742, height: 911, alt: "Alif Pathway" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Alif Pathway",
+    description: "Plan university choices with evidence.",
+    images: ["/og.png"],
+  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
