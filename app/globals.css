@@ -169,8 +169,8 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .hero-readiness-visual { position: relative; z-index: 1; display: grid; justify-items: center; gap: 10px; padding-left: 24px; }
 .ring { width: 124px; aspect-ratio: 1; border-radius: 50%; position: relative; display: grid; place-items: center; flex: 0 0 auto; }
 .ring:before { content: ""; position: absolute; inset: 12px; border-radius: 50%; background: #fff; }
-.ring span { position: relative; display: grid; place-items: center; font-size: 26px; font-weight: 790; letter-spacing: -.04em; line-height: 1; }
-.ring small { color: var(--muted); font-size: 12px; }
+.ring span { position: relative; display: inline-flex; align-items: baseline; justify-content: center; font-size: 26px; font-weight: 790; letter-spacing: -.04em; line-height: 1; }
+.ring small { margin-left: 1px; color: var(--muted); font-size: 12px; }
 .hero-weekly-gain { color: var(--green); font-size: 10px; font-style: normal; font-weight: 760; }
 .action-list { overflow: hidden; }
 .action-row {
@@ -278,6 +278,14 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .fit.possible { color: var(--amber); background: var(--amber-soft); }
 .fit.mismatch { color: var(--danger); background: var(--danger-soft); }
 .priority-card, .profile-summary { padding: 20px; }
+.chosen-university-card { padding: 20px; overflow: hidden; position: relative; }
+.chosen-university-card:after { content: ""; position: absolute; right: -44px; top: -54px; width: 132px; height: 132px; border-radius: 50%; background: var(--wine-soft); opacity: .7; }
+.chosen-university-main { position: relative; z-index: 1; margin: 14px 0 13px; display: flex; align-items: center; gap: 13px; }
+.chosen-university-main > span { min-width: 0; display: grid; gap: 5px; }
+.chosen-university-main strong { font-size: 15px; line-height: 1.2; }
+.chosen-university-main small { display: flex; align-items: center; color: var(--muted); font-size: 9px; }
+.chosen-university-main em { color: var(--green); font-size: 9px; font-style: normal; font-weight: 700; }
+.chosen-university-card .text-link { position: relative; z-index: 1; }
 .priority-card > div { margin: 14px 0 17px; display: grid; grid-template-columns: 42px 1fr; align-items: start; gap: 11px; }
 .large-icon { width: 42px; height: 42px; border-radius: 13px; }
 .priority-card > div > span:last-child { display: grid; gap: 4px; }
@@ -287,9 +295,6 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .priority-card .priority-title { margin: 14px 0 13px; display: grid; grid-template-columns: 42px 1fr; align-items: start; gap: 11px; }
 .priority-card .priority-measure { margin: 0 0 13px; display: block; }
 .priority-measure > span { margin-top: 6px; display: flex; justify-content: space-between; }
-.priority-card .priority-why { margin: 0 0 15px; display: block; padding: 11px 12px; border-radius: 10px; background: #f6f7fc; }
-.priority-why strong { display: block; margin-bottom: 4px; }
-.priority-why p { margin: 0; color: var(--muted); font-size: 9px; line-height: 1.5; }
 .readiness-overview { padding: 21px 23px; }
 .readiness-overview h3 { margin: 4px 0 0; font-size: 17px; letter-spacing: -.025em; }
 .readiness-overview .readiness-context { margin-top: 6px; }
