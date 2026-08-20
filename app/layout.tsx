@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Alif Pathway",
     description: "Plan university choices with evidence.",
-    images: [{ url: "/og.png", width: 1742, height: 911, alt: "Alif Pathway" }],
+    images: [{ url: "/og.png", width: 1730, height: 909, alt: "Alif Pathway" }],
   },
   twitter: {
     card: "summary_large_image",
