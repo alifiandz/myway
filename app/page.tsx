@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import {
-  BarChart3, Bell, BookOpen, Bookmark, BriefcaseBusiness, CalendarDays,
+  BarChart3, Bell, BookOpen, Bookmark, BriefcaseBusiness,
   Check, ChevronDown, ChevronLeft, ChevronRight, CircleAlert, CircleCheck,
   CircleHelp, CircleUserRound, ClipboardCheck, Clock3, ExternalLink,
   Flag, Globe2, GraduationCap, Languages, LayoutDashboard, Map, MapPin, Plus,
@@ -280,14 +280,14 @@ function Brand() {
   return <div className="brand"><span className="brand-mark"><Map size={20} /></span><span><strong>Pathway</strong><small>Plan with evidence</small></span></div>;
 }
 
-function Navigation({ active, go, openGuide, progress }: { active: View; go: (v: View) => void; openGuide: () => void; progress: number }) {
+function Navigation({ active, go, openGuide, progress, hasTarget }: { active: View; go: (v: View) => void; openGuide: () => void; progress: number; hasTarget: boolean }) {
   return <>
     <aside className="sidebar">
       <Brand />
       <nav className="nav-list" aria-label="Main navigation">
         {navItems.map(({ id, label, icon: Icon }) => <button key={id} className={"nav-item " + (active === id ? "active" : "")} onClick={() => go(id)}><Icon size={19} /><span>{label}</span></button>)}
       </nav>
-      <article className="sidebar-progress"><span className="mini-icon"><Sparkles size={16} /></span><strong>{progress}% prepared</strong><small>Your plan updates as you complete actions.</small><div className="bar"><i style={{ width: progress + "%" }} /></div></article>
+      <article className="sidebar-progress"><span className="mini-icon"><Sparkles size={16} /></span><strong>{hasTarget ? progress + "% prepared" : "Choose a target"}</strong><small>{hasTarget ? "Your plan updates as you complete actions." : "Your readiness tracker starts after a target is added."}</small><div className="bar"><i style={{ width: progress + "%" }} /></div></article>
       <button className="guide-link" onClick={openGuide}><BookOpen size={17} /> Planning guide</button>
     </aside>
     <nav className="mobile-nav" aria-label="Mobile navigation">
@@ -367,27 +367,38 @@ function Onboarding({ finish, saveLater }: { finish: () => void; saveLater: () =
   </main>;
 }
 
-function Dashboard({ go, completed, toggleTask, openProgram }: { go: (v: View) => void; completed: string[]; toggleTask: (v: string) => void; openProgram: (p: Program) => void }) {
+function Dashboard({ go, completed, toggleTask, openProgram, target }: { go: (v: View) => void; completed: string[]; toggleTask: (v: string) => void; openProgram: (p: Program) => void; target?: Program }) {
   const actions = [
-    { id: "intake", icon: CalendarDays, title: "Add intended intake", meta: "Needed to check deadlines", time: "5 min" },
-    { id: "english", icon: Languages, title: "Add English score", meta: "Needed to compare requirements", time: "3 min" },
-    { id: "quant", icon: BarChart3, title: "Compare compulsory quantitative modules", meta: "Your math preference", time: "25 min" },
+    { id: "ielts-practice", title: "Complete an IELTS speaking drill", meta: "20 min · IELTS 6.5 goal", points: "+20 pts" },
+    { id: "documents", title: "Upload your semester grade report", meta: "10 min · Documents", points: "+15 pts" },
+    { id: "portfolio", title: "Outline portfolio project #3", meta: "30 min · Portfolio", points: "+25 pts" },
   ];
-  const progress = Math.min(100, 28 + completed.length * 9);
+  const readiness = [
+    { label: "English", note: "IELTS goal 6.5", value: completed.includes("ielts-practice") ? 72 : 64, icon: Languages, tone: "blue" },
+    { label: "Portfolio", note: completed.includes("portfolio") ? "3 of 4 projects" : "2 of 4 projects", value: completed.includes("portfolio") ? 75 : 50, icon: BriefcaseBusiness, tone: "purple" },
+    { label: "Documents", note: completed.includes("documents") ? "4 of 6 ready" : "3 of 6 ready", value: completed.includes("documents") ? 67 : 50, icon: ClipboardCheck, tone: "green" },
+    { label: "Scholarships", note: "2 of 6 researched", value: 35, icon: Trophy, tone: "amber" },
+  ];
+  const doneToday = actions.filter((action) => completed.includes(action.id)).length;
+  const milestoneProgress = Math.round(readiness.slice(0, 3).reduce((sum, item) => sum + item.value, 0) / 3);
+
+  if (!target) return <div className="page-enter">
+    <section className="welcome-row"><div><span className="eyebrow">Your preparation workspace</span><h2>Choose a target to start tracking</h2><p>Readiness is always measured against a specific program—not a generic profile score.</p></div></section>
+    <article className="card no-target-gate"><span className="large-icon"><Target /></span><div><span className="section-label">Tracker locked</span><h3>Add one program as your target university</h3><p>Until then, you can explore and compare programs. Your daily actions, readiness goals, and milestones will appear here after a target is chosen.</p><button className="primary-button" onClick={() => go("explore")}><Search size={15} /> Explore programs</button></div></article>
+    <section className="section-space dashboard-recommendations"><div className="section-head"><div><span className="section-label">Start here</span><h3>Strong current matches</h3></div></div><div className="recommend-grid">{programs.slice(0, 3).map((p) => <button className="card recommendation" key={p.id} onClick={() => openProgram(p)}><span className="crest">{p.initials}</span><span><strong>{p.university}</strong><small>{p.title}</small><em className={"fit " + fitClass(p.fit)}>{p.fit}</em></span><ChevronRight /></button>)}</div></section>
+  </div>;
+
   return <div className="page-enter">
-    <section className="welcome-row"><div><span className="eyebrow">Wednesday, 19 August</span><h2>Good afternoon, Alif</h2><p>Your business pathway is ready for the next decision.</p></div><button className="secondary-button" onClick={() => go("profile")}><Settings2 size={16} /> Edit preferences</button></section>
+    <section className="welcome-row"><div><span className="eyebrow">Wednesday, 19 August</span><h2>Good afternoon, Alif</h2><p>{target.university} · {target.title}</p></div><button className="secondary-button" onClick={() => go("progress")}><BarChart3 size={16} /> View progress</button></section>
     <div className="dashboard-grid">
       <div className="main-column">
-        <article className="card hero-progress"><div><span className="section-label">Preparation progress</span><strong>{progress}%</strong><p>Based on your profile and completed planning actions—not an admission prediction.</p><button className="text-link" onClick={() => go("pathway")}>Open full pathway <ChevronRight size={15} /></button></div><div className="ring" style={{ background: "conic-gradient(var(--wine) 0 " + progress + "%, #efeae7 " + progress + "%)" }}><span>{progress}<small>%</small></span></div></article>
-        <section className="section-space"><div className="section-head"><div><span className="section-label">Next actions</span><h3>Close the most useful gaps</h3></div><span className="badge amber">{actions.length - completed.filter((v) => actions.some((a) => a.id === v)).length} open</span></div>
-          <div className="card action-list">{actions.map(({ id, icon: Icon, title, meta, time }) => { const done = completed.includes(id); return <button key={id} className={"action-row " + (done ? "done" : "")} onClick={() => toggleTask(id)}><span className={"check " + (done ? "checked" : "")}>{done && <Check size={14} />}</span><span className="row-icon"><Icon size={18} /></span><span><strong>{title}</strong><small>{meta}</small></span><em>{done ? "Complete" : time}</em><ChevronRight size={16} /></button>; })}</div>
-        </section>
+        <article className="card today-card"><div className="today-card-head"><div><span className="section-label">Focus</span><h3>Today’s actions</h3><p>Chosen from the highest-priority gaps for your target.</p></div><span className="today-count">{doneToday} of {actions.length} done</span></div><div className="today-action-list">{actions.map(({ id, title, meta, points }) => { const done = completed.includes(id); return <button key={id} className={"today-action " + (done ? "done" : "")} onClick={() => toggleTask(id)}><span className={"task-check " + (done ? "checked" : "")}>{done && <Check size={17} />}</span><span><strong>{title}</strong><small>{meta}</small></span><em>{done ? "Complete" : points}</em></button>; })}</div></article>
+        <article className="card readiness-overview"><div className="section-head"><div><span className="section-label">Overall overview</span><h3>Target readiness</h3></div><button className="text-link" onClick={() => go("progress")}>View all <ChevronRight size={15} /></button></div><p className="readiness-context">Progress toward the evidence needed for {target.university}. This is not an admission prediction.</p><div className="readiness-grid">{readiness.map(({ label, note, value, icon: Icon, tone }) => <div className="readiness-item" key={label}><span className={"readiness-icon " + tone}><Icon size={19} /></span><span><span><strong>{label}</strong><em>{value}%</em></span><small>{note}</small><div className={"goal-bar " + tone}><i style={{ width: value + "%" }} /></div></span></div>)}</div></article>
         <section className="section-space"><div className="section-head"><div><span className="section-label">Recommended for you</span><h3>Best current program matches</h3></div><button className="text-link" onClick={() => go("explore")}>View all <ChevronRight size={15} /></button></div><div className="recommend-grid">{programs.slice(0, 3).map((p) => <button className="card recommendation" key={p.id} onClick={() => openProgram(p)}><span className="crest">{p.initials}</span><span><strong>{p.university}</strong><small>{p.title}</small><em className={"fit " + fitClass(p.fit)}>{p.fit}</em></span><ChevronRight /></button>)}</div></section>
       </div>
       <aside className="right-column">
-        <article className="card priority-card"><span className="section-label">Current priority</span><div><span className="large-icon"><Scale /></span><span><strong>Check quantitative fit</strong><small>Aalto includes analytics and accounting. Compare module depth before deciding.</small></span></div><button className="outline-button" onClick={() => openProgram(programs[0])}>Review Aalto fit</button></article>
-        <article className="card profile-summary"><div className="section-head"><h3>Your search profile</h3><button onClick={() => go("profile")}>Edit</button></div><dl><div><dt>Degree</dt><dd>Bachelor’s</dd></div><div><dt>Field</dt><dd>Business</dd></div><div><dt>Primary</dt><dd>Management</dd></div><div><dt>Math</dt><dd>Low–moderate</dd></div></dl><div className="profile-chips"><span>Entrepreneurship</span><span>Marketing</span><span>International</span></div></article>
-        <article className="card missing-card"><CircleAlert /><div><strong>4 profile facts are missing</strong><p>Country, grades, English score, and intended intake remain incomplete.</p><button className="text-link" onClick={() => go("profile")}>Complete profile <ChevronRight size={14} /></button></div></article>
+        <article className="card target-card"><span className="section-label">Target university</span><div><span className="crest large">{target.initials}</span><span><strong>{target.university}</strong><small>{target.title}</small><em className={"fit " + fitClass(target.fit)}>{target.fit}</em></span></div><button className="outline-button" onClick={() => openProgram(target)}>Open program evidence</button></article>
+        <article className="card dashboard-milestone"><div className="milestone-symbol"><Flag size={20} /></div><span className="section-label">Next milestone</span><h3>Application essentials ready</h3><p>Reach the three core evidence goals before reviewing your final application shortlist.</p><div className="milestone-progress"><span><strong>{milestoneProgress}%</strong><small>toward milestone</small></span><div className="goal-bar blue"><i style={{ width: milestoneProgress + "%" }} /></div></div><ul><li className={readiness[0].value >= 100 ? "done" : ""}><CircleCheck size={15} /><span>IELTS 6.5</span><em>{readiness[0].value}%</em></li><li className={readiness[1].value >= 100 ? "done" : ""}><CircleCheck size={15} /><span>4 portfolio projects</span><em>{readiness[1].value}%</em></li><li className={readiness[2].value >= 100 ? "done" : ""}><CircleCheck size={15} /><span>6 core documents</span><em>{readiness[2].value}%</em></li></ul><button className="text-link" onClick={() => go("pathway")}>See milestone plan <ChevronRight size={14} /></button></article>
       </aside>
     </div>
   </div>;
@@ -567,20 +578,21 @@ export default function App() {
     setToast(p.university + " added as " + role);
   };
   const toggleTask = (id: string) => setCompleted(completed.includes(id) ? completed.filter((v) => v !== id) : [...completed, id]);
-  const progress = Math.min(100, 28 + completed.length * 9);
+  const targetProgram = pathway.find((item) => item.role === "Target")?.p;
+  const progress = targetProgram ? Math.min(100, 28 + completed.length * 9) : 0;
 
   if (!onboarded) return <Onboarding finish={finish} saveLater={saveLater} />;
 
   let content;
   if (selectedProgram) content = <ProgramDetail p={selectedProgram} close={() => setSelectedProgram(null)} saved={saved.includes(selectedProgram.id)} toggleSaved={() => toggleSaved(selectedProgram.id)} compared={compared.includes(selectedProgram.id)} toggleCompare={() => toggleCompare(selectedProgram.id)} addPath={(role) => addPath(selectedProgram, role)} />;
-  else if (view === "dashboard") content = <Dashboard go={go} completed={completed} toggleTask={toggleTask} openProgram={openProgram} />;
+  else if (view === "dashboard") content = <Dashboard go={go} completed={completed} toggleTask={toggleTask} openProgram={openProgram} target={targetProgram} />;
   else if (view === "explore") content = <Explore open={openProgram} saved={saved} setSaved={toggleSaved} compared={compared} toggleCompare={toggleCompare} addPath={(p) => addPath(p)} />;
   else if (view === "pathway") content = <Pathway selected={pathway} completed={completed} toggleTask={toggleTask} go={go} />;
   else if (view === "progress") content = <ProgressPage completed={completed} selected={pathway} />;
   else content = <ProfilePage toast={setToast} restart={() => setOnboarded(false)} />;
 
   return <div className="app-shell">
-    <Navigation active={view} go={go} openGuide={() => setOnboarded(false)} progress={progress} />
+    <Navigation active={view} go={go} openGuide={() => setOnboarded(false)} progress={progress} hasTarget={Boolean(targetProgram)} />
     <main className="app-main"><Header view={view} go={go} notices={notices} setNotices={setNotices} /><div className="content-wrap">{content}</div></main>
     {compared.length > 0 && !compareOpen && <button className="compare-fab" onClick={() => setCompareOpen(true)}><Scale size={17} /><span>Compare {compared.length}</span><small>of 4</small></button>}
     {compareOpen && <ComparePanel ids={compared} close={() => setCompareOpen(false)} remove={toggleCompare} open={openProgram} />}
