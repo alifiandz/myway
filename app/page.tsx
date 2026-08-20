@@ -228,7 +228,7 @@ const programs: Program[] = [
     id: "asu",
     university: "W. P. Carey School of Business",
     initials: "ASU",
-    logo: "https://wpcarey.asu.edu/sites/g/files/litvpz246/files/styles/footer_logo/public/images/asu-wpcarey-school-of-business-asu-footer.png?itok=h3Cx3NLs",
+    logo: "https://www.asu.edu/asuthemes/4.8/assets/full_logo.png",
     title: "BA in Entrepreneurial Leadership",
     location: "Arizona, USA",
     duration: "4 years",
