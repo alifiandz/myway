@@ -450,6 +450,16 @@ function ProgramCard({ p, open, saved, toggleSaved, compared, toggleCompare, add
   </article>;
 }
 
+function UniversityCard({ p, programCount, viewPrograms }: { p: Program; programCount: number; viewPrograms: () => void }) {
+  return <article className="card university-card">
+    <div className="university-card-head"><UniversityLogo program={p} size="large" /><span className={"fit " + fitClass(p.fit)}>{p.fit}</span></div>
+    <div className="university-card-copy"><h3>{p.university}</h3><p><MapPin size={12} />{p.location}</p></div>
+    <div className="university-best-match"><span>Best current match</span><strong>{p.title}</strong></div>
+    <div className="university-facts"><span><strong>{p.fitScore}%</strong><small>best match</small></span><span><strong>{programCount}</strong><small>{programCount === 1 ? "program" : "programs"}</small></span><span><strong>{p.language}</strong><small>language</small></span></div>
+    <button type="button" className="primary-button university-view" onClick={viewPrograms}>View programs <ChevronRight size={14} /></button>
+  </article>;
+}
+
 function Explore({ open, saved, setSaved, compared, toggleCompare, addPath }: { open: (p: Program) => void; saved: string[]; setSaved: (id: string) => void; compared: string[]; toggleCompare: (id: string) => void; addPath: (p: Program) => void }) {
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("All");
@@ -461,16 +471,17 @@ function Explore({ open, saved, setSaved, compared, toggleCompare, addPath }: { 
     const matchesFilter = filter === "All" || (filter === "Good fit" && p.fit === "Good Fit") || (filter === "Direct entry" && p.entry.toLowerCase().includes("direct")) || (filter === "Moderate math" && !p.math.toLowerCase().includes("high")) || (filter === "Exchange" && /(international|exchange|countries|abroad)/i.test(p.experience));
     return matchesQuery && matchesFilter;
   }).sort((a, b) => sort === "A–Z" ? a.university.localeCompare(b.university) : b.fitScore - a.fitScore), [query, filter, sort]);
-  const display = tab === "Universities" ? Array.from(new Map(filtered.map((p) => [p.university, p])).values()) : filtered;
+  const universities = Array.from(new Map(filtered.map((p) => [p.university, p])).values());
+  const showUniversityPrograms = (university: string) => { setQuery(university); setFilter("All"); setTab("Programs"); };
   return <div className="page-enter">
-    <section className="page-intro"><div><span className="eyebrow">Evidence-backed discovery</span><h2>Business programs</h2><p>Best matches for Alif · Management first · Low-to-moderate math</p></div><span className="source-stamp"><CircleCheck size={15} /> Official sources checked 19 Aug 2026</span></section>
+    <section className="page-intro"><div><span className="eyebrow">Evidence-backed discovery</span><h2>{tab === "Programs" ? "Business programs" : "Explore universities"}</h2><p>{tab === "Programs" ? "Best matches for Alif · Management first · Low-to-moderate math" : "Browse universities that offer your strongest business program matches"}</p></div><span className="source-stamp"><CircleCheck size={15} /> Official sources checked 19 Aug 2026</span></section>
     <section className="card search-card">
       <label className="search-box"><Search size={18} /><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search programs, universities, specializations, or countries…" />{query && <button onClick={() => setQuery("")} aria-label="Clear search"><X size={15} /></button>}</label>
       <div className="tabs"><button className={tab === "Programs" ? "active" : ""} onClick={() => setTab("Programs")}>Programs</button><button className={tab === "Universities" ? "active" : ""} onClick={() => setTab("Universities")}>Universities</button></div>
       <div className="filter-row"><SlidersHorizontal size={16} />{["All", "Good fit", "Direct entry", "Moderate math", "Exchange"].map((item) => <button className={filter === item ? "active" : ""} onClick={() => setFilter(item)} key={item}>{item}</button>)}</div>
     </section>
-    <div className="results-head"><div><strong>{display.length} {tab.toLowerCase()}</strong><span>Matched at program level</span></div><button className="sort-button" onClick={() => setSort(sort === "Best match" ? "A–Z" : "Best match")}>Sort: {sort} <ChevronDown size={14} /></button></div>
-    <section className="program-list">{display.map((p) => <ProgramCard key={p.id} p={p} open={() => open(p)} saved={saved.includes(p.id)} toggleSaved={() => setSaved(p.id)} compared={compared.includes(p.id)} toggleCompare={() => toggleCompare(p.id)} addPath={() => addPath(p)} />)}{display.length === 0 && <div className="card empty"><Search /><h3>No exact matches</h3><p>Try a broader term or remove a filter.</p><button className="outline-button" onClick={() => { setQuery(""); setFilter("All"); }}>Reset filters</button></div>}</section>
+    <div className="results-head"><div><strong>{tab === "Programs" ? filtered.length : universities.length} {tab.toLowerCase()}</strong><span>{tab === "Programs" ? "Matched at program level" : "Universities with matching business programs"}</span></div><button className="sort-button" onClick={() => setSort(sort === "Best match" ? "A–Z" : "Best match")}>Sort: {sort} <ChevronDown size={14} /></button></div>
+    {tab === "Programs" ? <section className="program-list">{filtered.map((p) => <ProgramCard key={p.id} p={p} open={() => open(p)} saved={saved.includes(p.id)} toggleSaved={() => setSaved(p.id)} compared={compared.includes(p.id)} toggleCompare={() => toggleCompare(p.id)} addPath={() => addPath(p)} />)}{filtered.length === 0 && <div className="card empty"><Search /><h3>No exact matches</h3><p>Try a broader term or remove a filter.</p><button className="outline-button" onClick={() => { setQuery(""); setFilter("All"); }}>Reset filters</button></div>}</section> : <section className="program-list university-list">{universities.map((p) => <UniversityCard key={p.university} p={p} programCount={programs.filter((item) => item.university === p.university).length} viewPrograms={() => showUniversityPrograms(p.university)} />)}{universities.length === 0 && <div className="card empty"><Search /><h3>No universities found</h3><p>Try a broader university, country, or program search.</p><button className="outline-button" onClick={() => { setQuery(""); setFilter("All"); }}>Reset filters</button></div>}</section>}
   </div>;
 }
 

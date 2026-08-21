@@ -369,6 +369,19 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .compact-action { min-height: 32px; padding: 0 7px; border: 0; border-radius: 8px; color: var(--muted); background: transparent; display: inline-flex; align-items: center; justify-content: center; gap: 4px; cursor: pointer; font-size: 8px; font-weight: 740; }
 .compact-action:hover, .compact-action.selected { color: var(--blue-dark); background: var(--blue-soft); }
 .compact-view { min-height: 34px; padding: 0 11px; justify-self: end; }
+.university-card { min-width: 0; min-height: 330px; padding: 19px; display: flex; flex-direction: column; gap: 15px; transition: .2s; }
+.university-card:hover { transform: translateY(-2px); border-color: #bac4ec; box-shadow: 0 18px 36px rgba(37, 52, 89, .085); }
+.university-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.university-card-copy h3 { margin: 0 0 5px; font-size: 15px; letter-spacing: -.02em; }
+.university-card-copy p { margin: 0; color: var(--muted); display: flex; align-items: center; gap: 4px; font-size: 9px; }
+.university-best-match { padding: 11px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); display: grid; gap: 5px; }
+.university-best-match span { color: var(--muted); font-size: 8px; text-transform: uppercase; letter-spacing: .06em; }
+.university-best-match strong { font-size: 11px; line-height: 1.35; }
+.university-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
+.university-facts > span { min-width: 0; padding: 8px; border-radius: 9px; background: #f7f8fc; display: grid; gap: 3px; }
+.university-facts strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--blue-dark); font-size: 10px; }
+.university-facts small { color: var(--muted); font-size: 7px; }
+.university-view { width: 100%; min-height: 37px; margin-top: auto; }
 .empty { min-height: 290px; display: grid; justify-items: center; align-content: center; gap: 8px; color: var(--muted); }
 .empty h3, .empty p { margin: 0; }
 .empty h3 { color: var(--ink); }
