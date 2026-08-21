@@ -461,7 +461,7 @@ function Explore({ open, saved, setSaved, compared, toggleCompare, addPath }: { 
     const matchesFilter = filter === "All" || (filter === "Good fit" && p.fit === "Good Fit") || (filter === "Direct entry" && p.entry.toLowerCase().includes("direct")) || (filter === "Moderate math" && !p.math.toLowerCase().includes("high")) || (filter === "Exchange" && /(international|exchange|countries|abroad)/i.test(p.experience));
     return matchesQuery && matchesFilter;
   }).sort((a, b) => sort === "A–Z" ? a.university.localeCompare(b.university) : b.fitScore - a.fitScore), [query, filter, sort]);
-  const display = tab === "Universities" ? Array.from(new Map(filtered.map((p) => [p.university, p])).values()) : filtered;
+  const display = tab === "Universities" ? filtered.filter((p, index) => filtered.findIndex((item) => item.university === p.university) === index) : filtered;
   const showUniversityPrograms = (university: string) => { setQuery(university); setFilter("All"); setTab("Programs"); };
   return <div className="page-enter">
     <section className="page-intro"><div><span className="eyebrow">Evidence-backed discovery</span><h2>Business programs</h2><p>Best matches for Alif · Management first · Low-to-moderate math</p></div><span className="source-stamp"><CircleCheck size={15} /> Official sources checked 19 Aug 2026</span></section>
