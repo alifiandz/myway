@@ -45,8 +45,8 @@ const programs: Program[] = [
     university: "Aalto University",
     initials: "A",
     logo: "https://www.aalto.fi/themes/custom/aalto_base/images/aalto_logo.svg",
-    title: "BSc in International Business",
-    location: "Mikkeli, Finland",
+    title: "Bachelor’s Programme in International Business",
+    location: "Otaniemi, Finland",
     duration: "3 years · 180 ECTS",
     language: "English",
     entry: "Direct bachelor’s entry",
@@ -56,12 +56,12 @@ const programs: Program[] = [
     enterprise: "Available",
     marketing: "Strong",
     math: "Moderate",
-    experience: "Required international semester · Career services",
-    tuition: "Verify current fee",
-    verified: "19 Aug 2026",
-    why: ["Management and marketing align closely", "International minor and semester abroad", "Project-based business curriculum"],
-    caution: ["Compulsory data analytics and accounting", "Grades, intake and eligibility not yet in profile"],
-    curriculum: ["Strategic Management", "People Management", "Marketing", "Introduction to Data Analytics", "Principles of Accounting"],
+    experience: "24 ECTS international minor · Project or internship option",
+    tuition: "€12,000 / year for non-EU/EEA/Swiss students",
+    verified: "21 Aug 2026",
+    why: ["Broad international-business foundation", "International minor included in the degree", "Project or professional internship option"],
+    caution: ["Data analytics, accounting, finance and statistics are compulsory", "The 2026–28 curriculum is still marked subject to change"],
+    curriculum: ["Strategic Management", "People Management", "Marketing Management", "Data Analytics", "Accounting", "Economics", "Corporate Finance", "Statistics"],
     sources: [
       { label: "Official program page", href: "https://www.aalto.fi/en/study-options/international-business-bachelor-of-science-and-master-of-science-economics-and-business" },
       { label: "Official 2026–28 curriculum", href: "https://www.aalto.fi/en/programmes/bachelors-programme-in-international-business/curriculum-2026-2028" },
@@ -84,8 +84,8 @@ const programs: Program[] = [
     marketing: "Strong",
     math: "Moderate",
     experience: "3 countries · Internships · Career services",
-    tuition: "2027 total: €20,800 EU / €26,800 non-EU",
-    verified: "19 Aug 2026",
+    tuition: "See the current official fee schedule",
+    verified: "21 Aug 2026",
     why: ["Management across three countries", "Entrepreneurship and digital marketing major option", "Internship and social-impact experience"],
     caution: ["Maths, accounting and statistics are included", "Fee depends on citizenship, which is incomplete"],
     curriculum: ["Management", "Economics and law", "Entrepreneurship & Digital Marketing", "Consulting & Digital Business Strategy", "Maths, accounting and statistics"],
@@ -108,15 +108,12 @@ const programs: Program[] = [
     marketing: "Available",
     math: "Not yet verified",
     experience: "10–12 months professional · 6+ months international",
-    tuition: "Verify by campus and status",
-    verified: "19 Aug 2026",
+    tuition: "Not yet verified",
+    verified: "21 Aug 2026",
     why: ["International BBA structure", "Substantial professional experience", "Entrepreneurship support and career services"],
     caution: ["Quantitative course load needs curriculum verification", "English readiness and intake are incomplete"],
     curriculum: ["Business fundamentals", "International experience", "Professional experience", "Entrepreneurship support"],
-    sources: [
-      { label: "Official Global BBA page", href: "https://www.essec.edu/en/pages/essec-global-bba//" },
-      { label: "Official international admissions", href: "https://essec.edu/en/program/global-bba-international/" },
-    ],
+    sources: [{ label: "Official Global BBA international admissions", href: "https://essec.edu/en/program/global-bba-international/" }],
   },
   {
     id: "edhec",
@@ -135,8 +132,8 @@ const programs: Program[] = [
     marketing: "Available",
     math: "Not yet verified",
     experience: "15 months professional · 165 partner universities",
-    tuition: "Verify current fee",
-    verified: "19 Aug 2026",
+    tuition: "Not yet verified",
+    verified: "21 Aug 2026",
     why: ["Flexible business-management route", "Strong exchange network", "Long professional-experience component"],
     caution: ["Compulsory quantitative load is not yet verified", "Application readiness cannot be scored yet"],
     curriculum: ["Business Management track", "Global Business option", "Professional experience", "Study abroad"],
@@ -163,114 +160,11 @@ const programs: Program[] = [
     math: "Not yet verified",
     experience: "Up to 75% abroad · Minimum 3 internships",
     tuition: "2026–27: €15,100 / year",
-    verified: "19 Aug 2026",
+    verified: "21 Aug 2026",
     why: ["Majors in entrepreneurship, branding and digital marketing", "Three internship minimum", "Extensive international mobility"],
     caution: ["Quantitative intensity needs curriculum verification", "2027 intake dates are not in profile"],
     curriculum: ["Corporate Entrepreneurship & Innovation", "Branding & Communication", "Digital Marketing", "International mobility"],
     sources: [{ label: "Official Global BBA page", href: "https://em-lyon.com/en/student/bachelor/global-bba" }],
-  },
-  {
-    id: "ubc",
-    university: "UBC Sauder School of Business",
-    initials: "UBC",
-    logo: "https://www.sauder.ubc.ca/themes/custom/sauder/images/ubc-sauder-logo.svg",
-    title: "Bachelor of Commerce",
-    location: "Vancouver, Canada",
-    duration: "4 years",
-    language: "English",
-    entry: "Direct Year 1 entry",
-    fit: "Possible Fit",
-    fitScore: 70,
-    management: "Strong",
-    enterprise: "Available",
-    marketing: "Strong",
-    math: "Moderate–high",
-    experience: "Career centre · 200 exchange partners",
-    tuition: "2026 international: CAD 66,679",
-    verified: "19 Aug 2026",
-    why: ["Broad commerce degree with 10 specializations", "Strong career and exchange infrastructure", "Marketing and organizational options"],
-    caution: ["Senior-level mathematics required", "Quantitative Decision Making is compulsory"],
-    curriculum: ["Commerce core", "Marketing", "Organizational Behaviour", "Quantitative Decision Making", "Specialization electives"],
-    sources: [
-      { label: "Official Bachelor of Commerce", href: "https://org-www.sauder.ubc.ca/programs/bachelors-degrees/bachelor-commerce" },
-      { label: "Official direct-entry information", href: "https://org-www.sauder.ubc.ca/programs/bachelors-degrees/bachelor-commerce/admissions-finance/direct-entry" },
-    ],
-  },
-  {
-    id: "ivey",
-    university: "Ivey Business School",
-    initials: "I",
-    logo: "https://www.ivey.uwo.ca/images/template/ivey-main-logo.svg",
-    title: "Honours Business Administration",
-    location: "London, Canada",
-    duration: "2+2 structure",
-    language: "English",
-    entry: "Prior university study required",
-    fit: "Entry Structure Mismatch",
-    fitScore: 48,
-    management: "Strong",
-    enterprise: "Strong",
-    marketing: "Available",
-    math: "Not yet verified",
-    experience: "Case method · Career management",
-    tuition: "Verify current fee",
-    verified: "19 Aug 2026",
-    why: ["Strong case-based management education", "Entrepreneurship and strategy alignment"],
-    caution: ["HBA begins after two years of university study", "AEO is conditional pre-admission, not direct first-year HBA"],
-    curriculum: ["Two years prior university study", "HBA years 3–4", "Case-method business core"],
-    sources: [
-      { label: "Official HBA program", href: "https://www.ivey.uwo.ca/hba/" },
-      { label: "Official program road map", href: "https://www.ivey.uwo.ca/hba/program-details/program-road-map/" },
-      { label: "Official secondary-school pathway", href: "https://www.ivey.uwo.ca/hba/admissions/secondary-school-students/" },
-    ],
-  },
-  {
-    id: "asu",
-    university: "W. P. Carey School of Business",
-    initials: "ASU",
-    logo: "https://www.asu.edu/asuthemes/4.8/assets/full_logo.png",
-    title: "BA in Entrepreneurial Leadership",
-    location: "Arizona, USA",
-    duration: "4 years",
-    language: "English",
-    entry: "Direct bachelor’s entry",
-    fit: "Good Fit",
-    fitScore: 84,
-    management: "Strong",
-    enterprise: "Strong",
-    marketing: "Available",
-    math: "Lower calculus exposure",
-    experience: "Leadership projects · Career services",
-    tuition: "Verify current fee",
-    verified: "19 Aug 2026",
-    why: ["Entrepreneurship-led curriculum", "Official page notes no calculus for this BA", "Leadership and management emphasis"],
-    caution: ["Detailed compulsory curriculum needs verification", "Campus, intake and budget are incomplete"],
-    curriculum: ["Entrepreneurial Leadership", "Management options", "Business projects"],
-    sources: [{ label: "Official management degrees", href: "https://wpcarey.asu.edu/management-degrees/undergraduate" }],
-  },
-  {
-    id: "kelley",
-    university: "Kelley School of Business",
-    initials: "K",
-    logo: "https://assets.iu.edu/brand/3.x/trident-large.png",
-    title: "Bachelor of Science in Business",
-    location: "Bloomington, USA",
-    duration: "4 years",
-    language: "English",
-    entry: "Direct admission route available",
-    fit: "Possible Fit",
-    fitScore: 72,
-    management: "Strong",
-    enterprise: "Available",
-    marketing: "Strong",
-    math: "Not yet verified",
-    experience: "Career services · Study abroad",
-    tuition: "Verify current fee",
-    verified: "19 Aug 2026",
-    why: ["Wide major and co-major choice", "Marketing and management pathways", "Career services and study abroad"],
-    caution: ["Quantitative core has not yet been checked", "Direct-admission eligibility needs profile data"],
-    curriculum: ["Business core", "20 majors and co-majors", "Marketing and management pathways"],
-    sources: [{ label: "Official undergraduate program", href: "https://kelley.iu.edu/undergraduate/index.html" }],
   },
 ];
 
@@ -321,12 +215,12 @@ function Navigation({ active, go, openGuide, progress, hasTarget }: { active: Vi
 }
 
 function Header({ view, go, notices, setNotices }: { view: View; go: (v: View) => void; notices: boolean; setNotices: (v: boolean) => void }) {
-  const title = { dashboard: "Dashboard", explore: "Explore programs", pathway: "My Pathway", tasks: "Tasks & Habits", progress: "Progress", profile: "Profile" }[view];
+  const title = { dashboard: "Dashboard", explore: "Explore universities", pathway: "My Pathway", tasks: "Tasks & Habits", progress: "Progress", profile: "Profile" }[view];
   return <header className="topbar">
-    <div><span className="eyebrow">Alif’s study planner</span><h1>{title}</h1></div>
+    <div><span className="eyebrow">Business study planner</span><h1>{title}</h1></div>
     <div className="top-actions">
       <button className="icon-button" onClick={() => setNotices(!notices)} aria-label="Notifications"><Bell size={19} /><i /></button>
-      <button className="avatar" onClick={() => go("profile")} aria-label="Open Alif’s profile">A</button>
+      <button className="avatar" onClick={() => go("profile")} aria-label="Open your profile">U</button>
       {notices && <aside className="notice-popover"><strong>Next best action</strong><p>Add your intended intake so application deadlines can be checked.</p><button onClick={() => { go("profile"); setNotices(false); }}>Update profile <ChevronRight size={15} /></button></aside>}
     </div>
   </header>;
@@ -336,7 +230,7 @@ const onboardingSteps = ["About you", "Study goals", "Learning preferences", "Ca
 
 function Onboarding({ finish, saveLater }: { finish: () => void; saveLater: () => void }) {
   const [step, setStep] = useState(1);
-  const [name, setName] = useState("Alif");
+  const [name, setName] = useState("");
   const [selected, setSelected] = useState<string[]>(["Management", "Entrepreneurship", "Marketing", "International Business", "Low-to-moderate math", "Projects & cases", "Flexible electives", "English-taught", "Business development", "Strategy", "Consulting", "Exchange", "Internships", "Career services", "Scholarships"]);
   const toggle = (item: string) => setSelected((current) => current.includes(item) ? current.filter((v) => v !== item) : [...current, item]);
   return <main className="onboarding-shell">
@@ -352,8 +246,8 @@ function Onboarding({ finish, saveLater }: { finish: () => void; saveLater: () =
       <div className="step-labels">{onboardingSteps.map((label, i) => <button key={label} aria-label={"Go to " + label} onClick={() => setStep(i + 1)} className={i + 1 === step ? "active" : i + 1 < step ? "done" : ""}>{i + 1 < step ? <Check size={12} /> : i + 1}<small>{label}</small></button>)}</div>
       <div className="onboard-content" key={step}>
         {step === 1 && <>
-          <span className="eyebrow">Start with the basics</span><h2>Welcome, Alif. Let’s build your profile.</h2><p>We only use the information you provide. You can leave anything incomplete.</p>
-          <div className="form-grid"><label><span>Preferred name</span><input value={name} onChange={(e) => setName(e.target.value)} /></label><label><span>Full name</span><input defaultValue="Alif Makarim" /></label><label><span>Country / citizenship</span><input placeholder="Not provided" /></label><label><span>Intended intake</span><input placeholder="Not provided" /></label></div>
+          <span className="eyebrow">Start with the basics</span><h2>{name.trim() ? `Welcome, ${name.trim()}.` : "Welcome."} Let’s build your profile.</h2><p>We only use the information you provide. You can leave anything incomplete.</p>
+          <div className="form-grid"><label><span>Preferred name</span><input value={name} onChange={(e) => setName(e.target.value)} placeholder="Your preferred name" /></label><label><span>Full name</span><input placeholder="Your full name" /></label><label><span>Country / citizenship</span><input placeholder="Not provided" /></label><label><span>Intended intake</span><input placeholder="Not provided" /></label></div>
         </>}
         {step === 2 && <>
           <span className="eyebrow">Study goals</span><h2>What do you want to study?</h2><p>Your answers shape program matches and stay editable in Profile.</p>
@@ -415,7 +309,7 @@ function Dashboard({ go, completed, toggleTask, openProgram, target }: { go: (v:
   </div>;
 
   return <div className="page-enter">
-    <section className="welcome-row"><div><span className="eyebrow">Wednesday, 19 August</span><h2>Good afternoon, Alif</h2><p>{target.university} · {target.title}</p></div><button className="secondary-button" onClick={() => go("progress")}><BarChart3 size={16} /> View progress</button></section>
+    <section className="welcome-row"><div><span className="eyebrow">Your study pathway</span><h2>Good afternoon</h2><p>{target.university} · {target.title}</p></div><button className="secondary-button" onClick={() => go("progress")}><BarChart3 size={16} /> View progress</button></section>
     <div className="dashboard-grid">
       <div className="main-column">
         <article className="card hero-progress"><div><span className="section-label">Preparation progress</span><strong>{overallReadiness}%</strong><p>Based on your readiness categories and completed actions. Not an admission prediction.</p><button className="text-link" onClick={() => go("progress")}>Open full pathway <ChevronRight size={15} /></button></div><div className="hero-readiness-visual"><div className="ring" style={{ background: `conic-gradient(var(--blue) ${overallReadiness}%, #e9ebf2 0)` }}><span>{overallReadiness}<small>%</small></span></div><em className="hero-weekly-gain">+{weeklyGain}% this week</em></div></article>
@@ -456,23 +350,36 @@ function Explore({ open, saved, setSaved, compared, toggleCompare, addPath }: { 
   const [filters, setFilters] = useState<string[]>([]);
   const [sort, setSort] = useState("Best match");
   const filterGroups = [
-    { label: "Country", options: ["Finland", "France", "Canada", "USA", "Netherlands"] },
-    { label: "Study focus", options: ["Management", "Entrepreneurship", "Marketing", "International Business"] },
-    { label: "Math level", options: ["Low math", "Low–moderate", "Moderate math"] },
-    { label: "Opportunities", options: ["English-taught", "Exchange", "Internship", "Career services", "Direct entry"] },
+    { label: "Location", note: "Where you want to study", options: ["Finland", "France", "Multi-country Europe"] },
+    { label: "Business area", note: "What you want to study", options: ["Business Administration", "Management", "International Business", "Entrepreneurship", "Marketing", "Finance", "Accounting", "Economics", "Business Analytics", "Supply Chain & Operations", "Human Resources", "Hospitality & Tourism"] },
+    { label: "Study details", note: "How the degree is structured", options: ["English-taught", "Direct entry", "3 years", "4 years"] },
+    { label: "Math level", note: "Based only on verified curricula", options: ["Lower quantitative load", "Moderate quantitative load", "Not yet verified"] },
+    { label: "Opportunities", note: "Experiences included or available", options: ["Exchange or study abroad", "Internship", "Multi-country study", "Career services"] },
   ];
   const toggleFilter = (item: string) => setFilters((current) => current.includes(item) ? current.filter((value) => value !== item) : [...current, item]);
   const matchesFilter = (p: Program, item: string) => {
-    if (["Finland", "France", "Canada", "USA", "Netherlands"].includes(item)) return p.location.includes(item);
+    if (["Finland", "France"].includes(item)) return p.location.includes(item);
+    if (item === "Multi-country Europe") return /multi-campus|europe/i.test(p.location);
+    const curriculum = [p.title, ...p.curriculum].join(" ");
+    if (item === "Business Administration") return /business management|bba|business administration/i.test(curriculum);
     if (item === "Management") return /management/i.test(p.title) || p.management === "Strong";
     if (item === "Entrepreneurship") return /strong|available/i.test(p.enterprise);
     if (item === "Marketing") return /strong|available/i.test(p.marketing);
     if (item === "International Business") return /international|global bba/i.test(p.title) || /international/i.test(p.experience);
-    if (item === "Low math") return /low|lower/i.test(p.math);
-    if (item === "Low–moderate") return !/high|not yet verified/i.test(p.math);
-    if (item === "Moderate math") return /moderate/i.test(p.math);
+    if (item === "Finance") return /finance/i.test(curriculum);
+    if (item === "Accounting") return /accounting/i.test(curriculum);
+    if (item === "Economics") return /economics/i.test(curriculum);
+    if (item === "Business Analytics") return /analytics|data/i.test(curriculum);
+    if (item === "Supply Chain & Operations") return /supply chain|operations/i.test(curriculum);
+    if (item === "Human Resources") return /human resources|people management/i.test(curriculum);
+    if (item === "Hospitality & Tourism") return /hospitality|tourism/i.test(curriculum);
+    if (item === "Lower quantitative load") return /low|lower/i.test(p.math);
+    if (item === "Moderate quantitative load") return /moderate/i.test(p.math);
+    if (item === "Not yet verified") return /not yet verified/i.test(p.math);
     if (item === "English-taught") return /english/i.test(p.language);
-    if (item === "Exchange") return /international|exchange|countries|abroad/i.test(p.experience);
+    if (item === "3 years" || item === "4 years") return p.duration.startsWith(item);
+    if (item === "Exchange or study abroad") return /international|exchange|abroad/i.test(p.experience);
+    if (item === "Multi-country study") return /countries|multi-country/i.test(p.experience);
     if (item === "Internship") return /internship/i.test(p.experience);
     if (item === "Career services") return /career services/i.test(p.experience);
     return p.entry.toLowerCase().includes("direct");
@@ -483,14 +390,14 @@ function Explore({ open, saved, setSaved, compared, toggleCompare, addPath }: { 
     return matchesQuery && filters.every((item) => matchesFilter(p, item));
   }).sort((a, b) => sort === "A–Z" ? a.university.localeCompare(b.university) : b.fitScore - a.fitScore), [query, filters, sort]);
   return <div className="page-enter">
-    <section className="page-intro"><div><span className="eyebrow">Evidence-backed discovery</span><h2>Business programs</h2><p>Best matches for Alif · Management first · Low-to-moderate math</p></div><span className="source-stamp"><CircleCheck size={15} /> Official sources checked 19 Aug 2026</span></section>
+    <section className="page-intro"><div><span className="eyebrow">Europe-first discovery</span><h2>Find your business program</h2><p>Explore verified bachelor’s programs across Europe’s business universities and schools.</p></div><span className="source-stamp"><CircleCheck size={15} /> Official pages checked 21 Aug 2026</span></section>
     <section className="card search-card">
       <label className="search-box"><Search size={18} /><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search programs, universities, specializations, or countries…" />{query && <button onClick={() => setQuery("")} aria-label="Clear search"><X size={15} /></button>}</label>
-      <button type="button" className={"refine-toggle " + (refineOpen ? "open" : "")} onClick={() => setRefineOpen(!refineOpen)}><span><SlidersHorizontal size={16} /><strong>Refine your search</strong><small>{filters.length ? `${filters.length} selected` : "Country, focus, math level, and more"}</small></span><ChevronDown size={17} /></button>
-      {refineOpen && <div className="refine-panel">{filterGroups.map((group) => <fieldset key={group.label}><legend>{group.label}</legend>{group.options.map((item) => <label key={item}><input type="checkbox" checked={filters.includes(item)} onChange={() => toggleFilter(item)} /><span>{item}</span></label>)}</fieldset>)}</div>}
+      <button type="button" className={"refine-toggle " + (refineOpen ? "open" : "")} onClick={() => setRefineOpen(!refineOpen)} aria-expanded={refineOpen}><span className="refine-toggle-icon"><SlidersHorizontal size={17} /></span><span className="refine-toggle-copy"><strong>Filters</strong><small>{filters.length ? `${filters.length} active filter${filters.length === 1 ? "" : "s"}` : "Country, business area, study details, math, and opportunities"}</small></span>{filters.length > 0 && <em>{filters.length}</em>}<ChevronDown size={17} /></button>
+      {refineOpen && <div className="refine-panel"><header><div><span className="section-label">Build your shortlist</span><h3>What matters to you?</h3><p>Select any combination. Results update immediately.</p></div>{filters.length > 0 && <button type="button" onClick={() => setFilters([])}>Reset</button>}</header><div className="refine-groups">{filterGroups.map((group) => <fieldset key={group.label}><legend>{group.label}<small>{group.note}</small></legend><div>{group.options.map((item) => <label key={item} className={filters.includes(item) ? "selected" : ""}><input type="checkbox" checked={filters.includes(item)} onChange={() => toggleFilter(item)} /><span className="filter-check">{filters.includes(item) && <Check size={12} />}</span><span>{item}</span></label>)}</div></fieldset>)}</div><footer><span>{filters.length ? `${filters.length} filters selected` : "No filters selected"}</span><button type="button" className="primary-button" onClick={() => setRefineOpen(false)}>Show {filtered.length} program{filtered.length === 1 ? "" : "s"}</button></footer></div>}
       {filters.length > 0 && <div className="active-filters">{filters.map((item) => <button key={item} onClick={() => toggleFilter(item)}>{item}<X size={12} /></button>)}<button className="clear-all" onClick={() => setFilters([])}>Clear all</button></div>}
     </section>
-    <div className="results-head"><div><strong>{filtered.length} programs</strong><span>Matched to your search and preferences</span></div><button className="sort-button" onClick={() => setSort(sort === "Best match" ? "A–Z" : "Best match")}>Sort: {sort} <ChevronDown size={14} /></button></div>
+    <div className="results-head"><div><strong>{filtered.length} verified European program{filtered.length === 1 ? "" : "s"}</strong><span>Only programs with checked official pages are shown</span></div><button className="sort-button" onClick={() => setSort(sort === "Best match" ? "A–Z" : "Best match")}>Sort: {sort} <ChevronDown size={14} /></button></div>
     <section className="program-list">{filtered.map((p) => <ProgramCard key={p.id} p={p} open={() => open(p)} saved={saved.includes(p.id)} toggleSaved={() => setSaved(p.id)} compared={compared.includes(p.id)} toggleCompare={() => toggleCompare(p.id)} addPath={() => addPath(p)} />)}{filtered.length === 0 && <div className="card empty"><Search /><h3>No exact matches</h3><p>Try a broader search or remove a preference.</p><button className="outline-button" onClick={() => { setQuery(""); setFilters([]); }}>Reset search</button></div>}</section>
   </div>;
 }
@@ -510,7 +417,7 @@ function ProgramDetail({ p, close, saved, toggleSaved, compared, toggleCompare, 
         <article className="card detail-section"><span className="section-label">Official sources</span><h3>Verify before applying</h3><div className="source-list">{p.sources.map((s) => <a key={s.href} href={s.href} target="_blank" rel="noreferrer"><ExternalLink size={15} /><span>{s.label}</span><ChevronRight size={15} /></a>)}</div><div className="source-warning"><CircleHelp size={16} /><p>Program information can change. Confirm requirements, dates and fees on the official page before applying.</p></div></article>
       </main>
       <aside>
-        <article className="fit-panel"><span className="section-label light">Fit for Alif</span><strong>{p.fitScore}<small>/100</small></strong><div className="fit-bar"><i style={{ width: p.fitScore + "%" }} /></div><h3>{p.fit}</h3><p>This reflects learning preferences and program evidence—not admission probability.</p></article>
+        <article className="fit-panel"><span className="section-label light">Your program fit</span><strong>{p.fitScore}<small>/100</small></strong><div className="fit-bar"><i style={{ width: p.fitScore + "%" }} /></div><h3>{p.fit}</h3><p>This reflects learning preferences and program evidence—not admission probability.</p></article>
         <article className="card detail-section why-list"><span className="section-label">Why it matches</span>{p.why.map((item) => <div key={item}><CircleCheck size={16} /><span>{item}</span></div>)}</article>
         <article className="card detail-section caution-list"><span className="section-label">Open questions</span>{p.caution.map((item) => <div key={item}><CircleAlert size={16} /><span>{item}</span></div>)}</article>
         <article className="card readiness"><span className="section-label">Application readiness</span><strong>More information needed</strong><p>Add grades, English score, citizenship and intended intake to compare requirements.</p></article>
@@ -548,8 +455,14 @@ function TaskWorkspace({ routine, isDone, close, toggleTask }: { routine: Routin
   const [secondsLeft, setSecondsLeft] = useState(routine.minutes * 60);
   const [running, setRunning] = useState(false);
   const [checkedSteps, setCheckedSteps] = useState<number[]>([]);
-  useEffect(() => { if (!running || secondsLeft <= 0) return; const timer = window.setInterval(() => setSecondsLeft((current) => Math.max(0, current - 1)), 1000); return () => window.clearInterval(timer); }, [running, secondsLeft]);
-  useEffect(() => { if (secondsLeft === 0) setRunning(false); }, [secondsLeft]);
+  useEffect(() => {
+    if (!running || secondsLeft <= 0) return;
+    const timer = window.setTimeout(() => {
+      setSecondsLeft((current) => Math.max(0, current - 1));
+      if (secondsLeft <= 1) setRunning(false);
+    }, 1000);
+    return () => window.clearTimeout(timer);
+  }, [running, secondsLeft]);
   const minutes = String(Math.floor(secondsLeft / 60)).padStart(2, "0");
   const seconds = String(secondsLeft % 60).padStart(2, "0");
   return <div className="page-enter task-workspace"><button className="back-button" onClick={close}><ChevronLeft size={17} /> Back to weekly actions</button><section className="task-workspace-head"><div><span className="eyebrow">Focused task</span><h2>{routine.title}</h2><p>{routine.focus}</p><span className="task-source"><Sparkles size={14} /> {guide.source}</span></div><button className={isDone ? "outline-button selected" : "primary-button"} onClick={() => toggleTask(routine.id)}>{isDone ? <><CircleCheck size={16} /> Completed</> : <><Check size={16} /> Mark complete</>}</button></section><div className="task-workspace-grid"><main><article className="card task-guide-card"><span className="section-label">Your outcome</span><h3>{guide.outcome}</h3><p>{guide.sourceDetail}</p></article><article className="card task-guide-card"><div className="section-head"><div><span className="section-label">Do this now</span><h3>Step-by-step session</h3></div><span className="today-count">{checkedSteps.length} of {guide.steps.length}</span></div><div className="task-step-list">{guide.steps.map((step, index) => { const checked = checkedSteps.includes(index); return <button key={step} className={checked ? "checked" : ""} onClick={() => setCheckedSteps((current) => checked ? current.filter((item) => item !== index) : [...current, index])}><span>{checked ? <Check size={15} /> : index + 1}</span><strong>{step}</strong></button>; })}</div></article><div className="task-info-grid"><article className="card task-guide-card"><span className="section-label">What you need</span><ul>{guide.materials.map((item) => <li key={item}><CircleCheck size={15} /> {item}</li>)}</ul></article><article className="card task-guide-card"><span className="section-label">Done when</span><ul>{guide.doneWhen.map((item) => <li key={item}><Target size={15} /> {item}</li>)}</ul></article></div></main><aside className="card task-timer-card"><span className="section-label">Focus timer</span><div className="task-timer-ring"><strong>{minutes}:{seconds}</strong><small>{routine.minutes} minute session</small></div><button className="primary-button" onClick={() => setRunning((current) => !current)}>{running ? "Pause timer" : secondsLeft === 0 ? "Session finished" : "Start timer"}</button><button className="text-link" onClick={() => { setRunning(false); setSecondsLeft(routine.minutes * 60); }}>Reset</button><div className="task-related"><small>Connected to</small><strong>{guide.source}</strong><p>This link explains why the task appears in your week.</p></div></aside></div></div>;
@@ -562,7 +475,7 @@ const habitSeed: Record<string, number[]> = {
   "2026-7-pathway-review": [2, 9, 16],
 };
 
-function TasksHabits({ completed, toggleTask, target, toast }: { completed: string[]; toggleTask: (v: string) => void; target?: Program; toast: (s: string) => void }) {
+function TasksHabits({ completed, toggleTask, toast }: { completed: string[]; toggleTask: (v: string) => void; toast: (s: string) => void }) {
   const [tab, setTab] = useState<"actions" | "habits">("actions");
   const [routines, setRoutines] = useState<Routine[]>(initialRoutines);
   const [habitChecks, setHabitChecks] = useState<Record<string, number[]>>(habitSeed);
@@ -689,7 +602,7 @@ function ProgressPage({ completed, selected }: { completed: string[]; selected: 
     { label: "Scholarships", value: 18, note: "Research started" },
   ];
   return <div className="page-enter"><section className="page-intro"><div><span className="eyebrow">Planning, not prediction</span><h2>Your progress</h2><p>Track research and preparation across your business pathway.</p></div><span className="source-stamp"><RefreshCw size={14} /> Recalculates as you act</span></section>
-    <div className="metric-grid"><article className="card metric"><span className="metric-icon"><ClipboardCheck /></span><span><small>Actions completed</small><strong>{completed.length}</strong><em>Across your pathway</em></span></article><article className="card metric"><span className="metric-icon"><Bookmark /></span><span><small>Pathway programs</small><strong>{selected.length}</strong><em>Up to 4 per comparison</em></span></article><article className="card metric"><span className="metric-icon"><ExternalLink /></span><span><small>Official sources</small><strong>13</strong><em>Linked for verification</em></span></article><article className="card metric"><span className="metric-icon"><Trophy /></span><span><small>Search profile</small><strong>Ready</strong><em>Preferences captured</em></span></article></div>
+    <div className="metric-grid"><article className="card metric"><span className="metric-icon"><ClipboardCheck /></span><span><small>Actions completed</small><strong>{completed.length}</strong><em>Across your pathway</em></span></article><article className="card metric"><span className="metric-icon"><Bookmark /></span><span><small>Pathway programs</small><strong>{selected.length}</strong><em>Up to 4 per comparison</em></span></article><article className="card metric"><span className="metric-icon"><ExternalLink /></span><span><small>Official sources</small><strong>{programs.reduce((total, program) => total + program.sources.length, 0)}</strong><em>Linked for verification</em></span></article><article className="card metric"><span className="metric-icon"><Trophy /></span><span><small>Search profile</small><strong>Ready</strong><em>Preferences captured</em></span></article></div>
     <section className="card progress-board"><div className="section-head"><div><span className="section-label">Readiness areas</span><h3>Preparation overview</h3></div><span className="badge amber">Not an admission score</span></div>{areas.map((area) => <div className="progress-row" key={area.label}><span><strong>{area.label}</strong><small>{area.note}</small></span><div className="bar"><i style={{ width: area.value + "%" }} /></div><em>{area.value}%</em></div>)}</section>
   </div>;
 }
@@ -701,12 +614,12 @@ function ProfilePage({ toast, restart }: { toast: (s: string) => void; restart: 
   const [english, setEnglish] = useState("");
   const [grades, setGrades] = useState("");
   const save = () => { setEditing(false); toast("Profile saved · recommendations recalculated"); };
-  return <div className="page-enter"><section className="card profile-hero"><span className="profile-avatar">A</span><div><span className="eyebrow">Study profile</span><h2>Alif Makarim</h2><p>Bachelor’s · Business · Management first</p><div className="profile-chips"><span>Low–moderate math</span><span>Entrepreneurship</span><span>Marketing</span><span>International Business</span></div></div><button className="secondary-button" onClick={() => editing ? save() : setEditing(true)}>{editing ? <><Check size={15} /> Save changes</> : <><Settings2 size={15} /> Edit profile</>}</button></section>
+  return <div className="page-enter"><section className="card profile-hero"><span className="profile-avatar">U</span><div><span className="eyebrow">Study profile</span><h2>Your profile</h2><p>Bachelor’s · Business · Preferences ready</p><div className="profile-chips"><span>Low–moderate math</span><span>Entrepreneurship</span><span>Marketing</span><span>International Business</span></div></div><button className="secondary-button" onClick={() => editing ? save() : setEditing(true)}>{editing ? <><Check size={15} /> Save changes</> : <><Settings2 size={15} /> Edit profile</>}</button></section>
     <div className="profile-grid">
-      <article className="card profile-section"><div className="section-head"><div><span className="section-label">Search preferences</span><h3>What Alif wants</h3></div><GraduationCap /></div><dl className="profile-fields"><div><dt>Degree</dt><dd>Bachelor’s</dd></div><div><dt>Broad field</dt><dd>Business</dd></div><div><dt>Primary focus</dt><dd>Management</dd></div><div><dt>Secondary</dt><dd>Entrepreneurship · Marketing</dd></div><div><dt>Optional</dt><dd>International Business</dd></div><div><dt>Math preference</dt><dd>Low-to-moderate</dd></div></dl></article>
+      <article className="card profile-section"><div className="section-head"><div><span className="section-label">Search preferences</span><h3>What you want</h3></div><GraduationCap /></div><dl className="profile-fields"><div><dt>Degree</dt><dd>Bachelor’s</dd></div><div><dt>Broad field</dt><dd>Business</dd></div><div><dt>Primary focus</dt><dd>Management</dd></div><div><dt>Secondary</dt><dd>Entrepreneurship · Marketing</dd></div><div><dt>Optional</dt><dd>International Business</dd></div><div><dt>Math preference</dt><dd>Low-to-moderate</dd></div></dl></article>
       <article className="card profile-section"><div className="section-head"><div><span className="section-label">Profile gaps</span><h3>Still needed</h3></div><CircleAlert /></div><div className="editable-fields"><label><span>Country / citizenship</span>{editing ? <input value={country} onChange={(e) => setCountry(e.target.value)} placeholder="Add country" /> : <strong>{country || "Not provided"}</strong>}</label><label><span>Intended intake</span>{editing ? <input value={intake} onChange={(e) => setIntake(e.target.value)} placeholder="Add intake" /> : <strong>{intake || "Not provided"}</strong>}</label><label><span>English test / score</span>{editing ? <input value={english} onChange={(e) => setEnglish(e.target.value)} placeholder="Add score" /> : <strong>{english || "Not provided"}</strong>}</label><label><span>Current grades</span>{editing ? <input value={grades} onChange={(e) => setGrades(e.target.value)} placeholder="Add grades" /> : <strong>{grades || "Not provided"}</strong>}</label></div></article>
       <article className="card profile-section span-two"><div className="section-head"><div><span className="section-label">Career and experience</span><h3>Preferences used in matching</h3></div><Target /></div><div className="preference-grid">{[["Careers", "Business development · Management · Strategy · Marketing · Consulting · Entrepreneurship"], ["Learning", "Projects, case studies and flexible electives"], ["Experiences", "Exchange · Internships · Career services"], ["Avoid", "Finance, accounting, analytics and economics-heavy routes"]].map(([label, text]) => <div key={label}><span className="row-icon">{label === "Careers" ? <BriefcaseBusiness /> : label === "Learning" ? <BookOpen /> : label === "Experiences" ? <Globe2 /> : <CircleAlert />}</span><span><small>{label}</small><strong>{text}</strong></span></div>)}</div></article>
-      <article className="card privacy-card span-two"><CircleHelp /><div><strong>Matching is explainable and source-aware</strong><p>Fit reflects Alif’s stated preferences. Application readiness stays separate, and missing facts are never treated as a rejection.</p></div><button className="outline-button" onClick={restart}>Review onboarding</button></article>
+      <article className="card privacy-card span-two"><CircleHelp /><div><strong>Matching is explainable and source-aware</strong><p>Fit reflects your stated preferences. Application readiness stays separate, and missing facts are never treated as a rejection.</p></div><button className="outline-button" onClick={restart}>Review onboarding</button></article>
     </div>
   </div>;
 }
@@ -751,7 +664,7 @@ export default function App() {
   };
   const finish = () => {
     window.localStorage.setItem("alif-pathway-business-v1", "complete");
-    setOnboarded(true); setView("explore"); setToast("Profile ready · 9 programs matched");
+    setOnboarded(true); setView("explore"); setToast("Profile ready · verified European programs loaded");
   };
   const saveLater = () => {
     window.localStorage.setItem("alif-pathway-business-v1", "complete");
@@ -775,13 +688,6 @@ export default function App() {
   const progress = targetProgram ? Math.min(100, 28 + completed.length * 9) : 0;
   const selectedProgram = selectedProgramId ? programs.find((program) => program.id === selectedProgramId) ?? null : null;
 
-  useEffect(() => {
-    if (selectedProgramId && !selectedProgram) {
-      setSelectedProgramId(null);
-      setToast("That program could not be opened. Please try again.");
-    }
-  }, [selectedProgramId, selectedProgram]);
-
   if (!onboarded) return <Onboarding finish={finish} saveLater={saveLater} />;
 
   let content;
@@ -789,7 +695,7 @@ export default function App() {
   else if (view === "dashboard") content = <Dashboard go={go} completed={completed} toggleTask={toggleTask} openProgram={openProgram} target={targetProgram} />;
   else if (view === "explore") content = <Explore open={openProgram} saved={saved} setSaved={toggleSaved} compared={compared} toggleCompare={toggleCompare} addPath={(p) => addPath(p)} />;
   else if (view === "pathway") content = <Pathway selected={pathway} completed={completed} toggleTask={toggleTask} go={go} />;
-  else if (view === "tasks") content = <TasksHabits completed={completed} toggleTask={toggleTask} target={targetProgram} toast={setToast} />;
+  else if (view === "tasks") content = <TasksHabits completed={completed} toggleTask={toggleTask} toast={setToast} />;
   else if (view === "progress") content = <ProgressPage completed={completed} selected={pathway} />;
   else content = <ProfilePage toast={setToast} restart={() => setOnboarded(false)} />;
 
