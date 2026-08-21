@@ -5,7 +5,7 @@ import {
   BarChart3, Bell, BookOpen, Bookmark, BriefcaseBusiness,
   Check, ChevronDown, ChevronLeft, ChevronRight, CircleAlert, CircleCheck,
   CircleHelp, CircleUserRound, ClipboardCheck, Clock3, ExternalLink,
-  Flag, Globe2, GraduationCap, Languages, LayoutDashboard, Map, MapPin, Plus,
+  Flag, Flame, Globe2, GraduationCap, Languages, LayoutDashboard, Map, MapPin, Plus,
   RefreshCw, Scale, Search, Settings2, SlidersHorizontal, Sparkles, Star, Target,
   Trophy, WalletCards, X,
 } from "lucide-react";
@@ -500,37 +500,59 @@ const weeklyActions = [
   { id: "program-shortlist", title: "Shortlist 3 Aalto business programs", meta: "25 min · University research", tag: "Research", points: "+20 pts" },
   { id: "portfolio", title: "Draft a portfolio project summary", meta: "30 min · Portfolio", tag: "Portfolio", points: "+25 pts" },
   { id: "documents", title: "Collect transcript requirements", meta: "15 min · Documents", tag: "Documents", points: "+15 pts" },
-  { id: "scholarship", title: "Review one scholarship deadline", meta: "15 min · Scholarships", tag: "Funding", points: "+15 pts" },
 ];
 
 const habits = [
-  { id: "speaking", title: "IELTS speaking", meta: "20 min · 3 times weekly", goal: 3 },
-  { id: "reading", title: "IELTS reading", meta: "20 min · 3 times weekly", goal: 3 },
-  { id: "math", title: "Mathematics review", meta: "30 min · 2 times weekly", goal: 2 },
-  { id: "research", title: "University research", meta: "25 min · once weekly", goal: 1 },
-  { id: "portfolio-build", title: "Portfolio building", meta: "30 min · once weekly", goal: 1 },
+  { id: "speaking", title: "IELTS speaking practice", focus: "Part 2 responses and fluency", goal: 10 },
+  { id: "reading", title: "IELTS reading practice", focus: "Skimming and True/False/Not Given", goal: 8 },
+  { id: "math", title: "Mathematics review", focus: "Algebra, percentages, and basic functions", goal: 6 },
+  { id: "pathway-review", title: "Weekly pathway review", focus: "Review university choices and next requirements", goal: 4 },
 ];
 
-const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const weekDays = ["M", "T", "W", "T", "F", "S", "S"];
+
+const habitSeed: Record<string, number[]> = {
+  "2026-7-speaking": [1, 3, 5, 7, 10, 12, 14, 17, 19],
+  "2026-7-reading": [2, 4, 6, 9, 11, 13, 16, 18],
+  "2026-7-math": [3, 6, 10, 13, 17],
+  "2026-7-pathway-review": [2, 9, 16],
+};
 
 function TasksHabits({ completed, toggleTask, target, toast }: { completed: string[]; toggleTask: (v: string) => void; target?: Program; toast: (s: string) => void }) {
   const [tab, setTab] = useState<"actions" | "habits">("actions");
-  const [habitChecks, setHabitChecks] = useState<Record<string, string[]>>({
-    speaking: ["Mon", "Tue", "Wed"], reading: ["Mon", "Wed"], math: ["Tue"], research: ["Mon"], "portfolio-build": ["Sat"],
-  });
+  const [habitChecks, setHabitChecks] = useState<Record<string, number[]>>(habitSeed);
+  const [monthOffset, setMonthOffset] = useState(0);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
   const [adding, setAdding] = useState(false);
   const [newAction, setNewAction] = useState("");
   const [customActions, setCustomActions] = useState<{ id: string; title: string }[]>([]);
   const actionList = [...weeklyActions, ...customActions.map((item) => ({ ...item, meta: "Added by you · This week", tag: "Personal", points: "+10 pts" }))];
   const done = actionList.filter((action) => completed.includes(action.id)).length;
-  const goalName = target?.university || "your business bachelor’s plan";
-  const targetTitle = target?.title || "BSc in International Business";
+  const actionStatus = done >= actionList.length ? "Ahead of plan" : done >= Math.ceil(actionList.length / 2) ? "On track" : "Needs attention";
+  const shownMonth = new Date(2026, 7 + monthOffset, 1);
+  const shownYear = shownMonth.getFullYear();
+  const shownMonthIndex = shownMonth.getMonth();
+  const monthKey = `${shownYear}-${shownMonthIndex}`;
+  const monthLabel = new Intl.DateTimeFormat("en", { month: "long", year: "numeric" }).format(shownMonth);
+  const daysInMonth = new Date(shownYear, shownMonthIndex + 1, 0).getDate();
+  const firstDayOffset = (shownMonth.getDay() + 6) % 7;
+  const days = Array.from({ length: daysInMonth }, (_, index) => index + 1);
+  const monthCompletions = habits.reduce((total, habit) => total + (habitChecks[`${monthKey}-${habit.id}`]?.length || 0), 0);
+  const speakingCompletions = habitChecks[`${monthKey}-speaking`]?.length || 0;
 
-  const toggleHabit = (habitId: string, day: string) => {
+  const toggleHabit = (habitId: string, day: number) => {
+    const key = `${monthKey}-${habitId}`;
     setHabitChecks((current) => {
-      const checked = current[habitId] || [];
-      return { ...current, [habitId]: checked.includes(day) ? checked.filter((item) => item !== day) : [...checked, day] };
+      const checked = current[key] || [];
+      return { ...current, [key]: checked.includes(day) ? checked.filter((item) => item !== day) : [...checked, day].sort((a, b) => a - b) };
     });
+  };
+  const moveMonth = (direction: number) => setMonthOffset((current) => current + direction);
+  const finishSwipe = (end: number) => {
+    if (touchStart === null) return;
+    const distance = end - touchStart;
+    if (Math.abs(distance) > 55) moveMonth(distance < 0 ? 1 : -1);
+    setTouchStart(null);
   };
   const addAction = () => {
     const title = newAction.trim();
@@ -547,8 +569,8 @@ function TasksHabits({ completed, toggleTask, target, toast }: { completed: stri
     <div className="task-tabs" role="tablist" aria-label="Tasks and habits views"><button className={tab === "actions" ? "active" : ""} onClick={() => setTab("actions")}>Weekly actions</button><button className={tab === "habits" ? "active" : ""} onClick={() => setTab("habits")}>Habit tracker</button></div>
     {tab === "actions" ? <div className="tasks-layout">
       <article className="card weekly-actions-card"><div className="section-head"><div><span className="section-label">One-time tasks</span><h3>This week’s actions</h3></div><span className="today-count">{done} of {actionList.length} done</span></div><p className="tasks-helper">Complete each action once. Finished actions increase the related readiness category.</p><div className="weekly-action-list">{actionList.map((action) => { const isDone = completed.includes(action.id); return <button key={action.id} className={`weekly-action ${isDone ? "done" : ""}`} onClick={() => toggleTask(action.id)}><span className={`task-check ${isDone ? "checked" : ""}`}>{isDone && <Check size={15} />}</span><span className="weekly-action-copy"><strong>{action.title}</strong><small>{action.meta}</small></span><span className="action-tag">{action.tag}</span><em>{isDone ? "Done" : action.points}</em></button>; })}</div></article>
-      <aside className="card connected-goal-card"><span className="section-label">Connected goal</span><h3>Why these actions?</h3><div className="goal-connection"><div><small>University goal</small><strong>{goalName}</strong>{target && <span>{targetTitle}</span>}</div><i /><div><small>Current priority</small><strong>Reach IELTS 6.5</strong><span>Current estimate 5.5</span></div><i /><div><small>This week</small><strong>Practise speaking twice</strong><span>Two focused sessions</span></div></div><p>Goal shows where you are going. Actions are the steps you finish once.</p></aside>
-    </div> : <article className="card habit-card"><div className="section-head"><div><span className="section-label">Repeatable routines</span><h3>Your weekly rhythm</h3></div><span className="today-count">Tap a day to check in</span></div><p className="tasks-helper">Habits repeat. The weekly goal tells you how many sessions to complete.</p><div className="habit-scroll"><div className="habit-grid"><div className="habit-grid-head"><strong>Habit and weekly goal</strong>{weekDays.map((day) => <span key={day}>{day.slice(0, 1)}</span>)}<strong>Progress</strong></div>{habits.map((habit) => { const checks = habitChecks[habit.id] || []; return <div className="habit-row" key={habit.id}><span><strong>{habit.title}</strong><small>{habit.meta}</small></span>{weekDays.map((day) => { const checked = checks.includes(day); return <button key={day} className={checked ? "checked" : ""} aria-label={`${habit.title}, ${day}`} onClick={() => toggleHabit(habit.id, day)}>{checked && <Check size={15} />}</button>; })}<em className={checks.length >= habit.goal ? "complete" : ""}>{Math.min(checks.length, habit.goal)} / {habit.goal}</em></div>; })}</div></div><div className="habit-insight"><span className="mini-icon"><Sparkles size={16} /></span><span><strong>Keep this rhythm</strong><small>Speaking is strongest early in the week. Keep portfolio work for Saturday.</small></span></div></article>}
+      <aside className="card weekly-focus-card"><div className="focus-card-head"><span className="section-label">This week’s focus</span>{done >= 2 && <span className="focus-fire"><Flame size={14} /> Building momentum</span>}</div><div className="focus-readiness"><strong>50%</strong><span><b>{actionStatus}</b><small>+4% this week</small></span></div><div className="focus-bar"><i style={{ width: "50%" }} /></div><div className="focus-detail"><small>Main gap</small><strong>IELTS 5.5 <span>→</span> 6.5</strong></div><div className="focus-detail"><small>Weekly actions</small><strong>{done} of {actionList.length} complete</strong></div><p>{actionStatus === "Needs attention" ? "Finish one priority action to get back on track." : actionStatus === "Ahead of plan" ? "You cleared every priority action this week." : "Your highest impact actions are moving forward."}</p></aside>
+    </div> : <article className="card habit-card" onTouchStart={(event) => setTouchStart(event.touches[0].clientX)} onTouchEnd={(event) => finishSwipe(event.changedTouches[0].clientX)}><div className="habit-month-head"><div><span className="section-label">Repeatable routines</span><h3>{monthLabel}</h3><p className="tasks-helper">Tap a date when you complete a session. Swipe to move between months.</p></div><div className="month-controls"><button aria-label="Previous month" onClick={() => moveMonth(-1)}><ChevronLeft size={17} /></button><span>{monthCompletions} check-ins</span><button aria-label="Next month" onClick={() => moveMonth(1)}><ChevronRight size={17} /></button></div></div><div className="monthly-habit-list">{habits.map((habit) => { const checks = habitChecks[`${monthKey}-${habit.id}`] || []; const isAhead = checks.length > habit.goal; const isComplete = checks.length === habit.goal; const onFire = habit.id === "speaking" && checks.length >= 7; return <section className="monthly-habit-row" key={habit.id}><div className="monthly-habit-copy"><strong>{habit.title}</strong><small>{habit.focus}</small></div><div className="mini-month" aria-label={`${habit.title} calendar for ${monthLabel}`}><div className="mini-weekdays">{weekDays.map((day, index) => <span key={`${day}-${index}`}>{day}</span>)}</div><div className="mini-days">{Array.from({ length: firstDayOffset }, (_, index) => <i key={`blank-${index}`} />)}{days.map((day) => { const checked = checks.includes(day); return <button key={day} className={checked ? "checked" : ""} aria-label={`${habit.title}, ${monthLabel} ${day}${checked ? ", complete" : ""}`} onClick={() => toggleHabit(habit.id, day)}><span>{day}</span>{checked && <Check size={11} />}</button>; })}</div></div><div className="habit-progress"><strong>{checks.length}<span> / {habit.goal}</span></strong><small>sessions</small>{isAhead ? <em className="ahead"><Sparkles size={12} /> Ahead of plan</em> : isComplete ? <em className="complete"><CircleCheck size={12} /> Goal met</em> : onFire ? <em className="fire"><Flame size={12} /> On fire</em> : <em>{habit.goal - checks.length} to goal</em>}</div></section>; })}</div><div className="habit-insight"><span className="mini-icon"><Sparkles size={16} /></span><span><strong>{speakingCompletions ? "Speaking is your strongest routine this month" : "Start with one small speaking session"}</strong><small>{speakingCompletions ? `${Math.max(0, 10 - speakingCompletions)} session${10 - speakingCompletions === 1 ? "" : "s"} to reach your monthly speaking goal.` : "Checking in once makes the rest of the month easier to build."}</small></span></div></article>}
   </div>;
 }
 
