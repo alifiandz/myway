@@ -173,6 +173,7 @@ type BusinessSchool = {
   rank: string;
   name: string;
   location: string;
+  domain: string;
   programId?: string;
 };
 
@@ -281,11 +282,117 @@ const businessSchoolRows: [string, string, string, string?][] = [
   ["100", "SGH Warsaw School of Economics", "Poland"],
 ];
 
+// Official institution domains, kept in the same order as the FT directory above.
+// They power both the official-site link and the institution mark shown on each card.
+const businessSchoolDomains = [
+  "insead.edu",
+  "hec.edu",
+  "london.edu",
+  "escp.eu",
+  "iese.edu",
+  "sdabocconi.it",
+  "essec.edu",
+  "unisg.ch",
+  "edhec.edu",
+  "em-lyon.com",
+  "esade.edu",
+  "esmt.berlin",
+  "imd.org",
+  "sbs.ox.ac.uk",
+  "mannheim-business-school.com",
+  "skema.edu",
+  "novasbe.unl.pt",
+  "wbs.ac.uk",
+  "hhs.se",
+  "whu.edu",
+  "ie.edu",
+  "jbs.cam.ac.uk",
+  "smurfitschool.ie",
+  "grenoble-em.com",
+  "vlerick.com",
+  "clsbe.lisboa.ucp.pt",
+  "audencia.com",
+  "neoma-bs.com",
+  "cranfield.ac.uk",
+  "eada.edu",
+  "frankfurt-school.de",
+  "kedge.edu",
+  "rsm.nl",
+  "bayes.citystgeorges.ac.uk",
+  "gsom.polimi.it",
+  "alliance-manchester.ac.uk",
+  "henley.ac.uk",
+  "fep.up.pt",
+  "imperial.ac.uk",
+  "bi.edu",
+  "wu.ac.at",
+  "kozminski.edu.pl",
+  "tcd.ie",
+  "iscte-iul.pt",
+  "cbs.dk",
+  "aalto.fi",
+  "ieseg.fr",
+  "vse.cz",
+  "tias.edu",
+  "luiss.it",
+  "nhh.no",
+  "unil.ch",
+  "sabanciuniv.edu",
+  "ulb.be",
+  "antwerpmanagementschool.be",
+  "excelia-group.com",
+  "montpellier-bs.com",
+  "ku.edu.tr",
+  "ebs.edu",
+  "nyenrode.nl",
+  "rennes-sb.com",
+  "uni-koeln.de",
+  "unibo.it",
+  "icn-artem.com",
+  "uni-lj.si",
+  "essca.fr",
+  "iseg.ulisboa.pt",
+  "bath.ac.uk",
+  "psbedu.paris",
+  "ed.ac.uk",
+  "durham.ac.uk",
+  "zhaw.ch",
+  "em-strasbourg.com",
+  "hhl.de",
+  "lu.se",
+  "bsb-education.com",
+  "imt-bs.eu",
+  "uzh.ch",
+  "tum.de",
+  "maastrichtuniversity.nl",
+  "ucp.pt",
+  "hanken.fi",
+  "uc3m.es",
+  "univ-amu.fr",
+  "uclouvain.be",
+  "ju.se",
+  "gla.ac.uk",
+  "iqs.edu",
+  "leeds.ac.uk",
+  "aston.ac.uk",
+  "uva.nl",
+  "deusto.es",
+  "em-normandie.com",
+  "tbs-education.com",
+  "lancaster.ac.uk",
+  "esdes.fr",
+  "clermont-sb.fr",
+  "strath.ac.uk",
+  "uantwerpen.be",
+  "sgh.waw.pl",
+] as const;
+
 const businessSchools: BusinessSchool[] = businessSchoolRows.map(([rank, name, location, programId], index) => ({
   id: `ft-school-${index + 1}`,
   rank,
   name,
   location,
+  domain: businessSchoolDomains[index],
   programId,
 }));
 
@@ -312,6 +419,22 @@ function UniversityLogo({ program, size = "" }: { program: Program; size?: "" | 
     <img
       src={program.logo}
       alt={`${program.university} logo`}
+      onError={(event) => { event.currentTarget.style.display = "none"; }}
+    />
+  </span>;
+}
+
+function SchoolLogo({ school, program }: { school: BusinessSchool; program?: Program }) {
+  if (program) return <UniversityLogo program={program} size="small" />;
+  const initials = school.name.split(/\s+/).filter((word) => /^[A-ZÀ-Ž]/.test(word)).slice(0, 2).map((word) => word[0]).join("") || school.name.slice(0, 2).toUpperCase();
+  const officialSite = `https://${school.domain}`;
+  return <span className="crest university-logo small school-logo">
+    <span>{initials}</span>
+    {/* The mark is resolved from the institution's official domain; initials remain as fallback. */}
+    {/* eslint-disable-next-line @next/next/no-img-element */}
+    <img
+      src={`https://www.google.com/s2/favicons?domain_url=${encodeURIComponent(officialSite)}&sz=128`}
+      alt={`${school.name} mark`}
       onError={(event) => { event.currentTarget.style.display = "none"; }}
     />
   </span>;
@@ -450,17 +573,23 @@ function Dashboard({ go, completed, toggleTask, openProgram, target }: { go: (v:
 }
 
 function BusinessSchoolCard({ school, program, open, saved, toggleSaved, compared, toggleCompare, addPath }: { school: BusinessSchool; program?: Program; open?: () => void; saved: boolean; toggleSaved: () => void; compared: boolean; toggleCompare?: () => void; addPath?: () => void }) {
-  const initials = school.name.split(/\s+/).filter((word) => /^[A-ZÀ-Ž]/.test(word)).slice(0, 2).map((word) => word[0]).join("") || school.name.slice(0, 2).toUpperCase();
+  const rankLabel = school.rank.startsWith("=") ? school.rank : `#${school.rank}`;
+  const officialSite = `https://${school.domain}`;
   return <article className={"card school-card " + (program ? "program-verified" : "directory-only")}>
-    <div className="school-card-top"><span className="rank-badge"><small>FT Europe</small><strong>{school.rank.startsWith("=") ? school.rank : `#${school.rank}`}</strong></span><button type="button" className={"program-save " + (saved ? "selected" : "")} onClick={toggleSaved} aria-label={saved ? `Remove ${school.name} from saved schools` : `Save ${school.name}`}><Bookmark size={16} fill={saved ? "currentColor" : "none"} /></button></div>
-    <div className="school-identity">{program ? <UniversityLogo program={program} size="small" /> : <span className="crest small school-initials">{initials}</span>}<span><strong>{school.name}</strong><small><MapPin size={11} />{school.location}</small></span></div>
+    <div className="school-card-top"><div className="school-identity"><SchoolLogo school={school} program={program} /><span><strong>{school.name}</strong><small><MapPin size={11} />{school.location}</small></span></div><button type="button" className={"program-save " + (saved ? "selected" : "")} onClick={toggleSaved} aria-label={saved ? `Remove ${school.name} from saved schools` : `Save ${school.name}`}><Bookmark size={16} fill={saved ? "currentColor" : "none"} /></button></div>
+    <div className="school-meta-strip"><span className="rank-chip">FT Europe 2025 · {rankLabel}</span><a href={officialSite} target="_blank" rel="noreferrer">Official website <ExternalLink size={11} /></a></div>
     {program ? <>
       <div className="verified-program"><CircleCheck size={13} /><span>Official bachelor page checked {program.verified}</span></div>
       <button type="button" className="school-program-copy" onClick={open}><strong>{program.title}</strong><span><Clock3 size={12} />{program.duration}</span><span><Languages size={12} />{program.language}</span></button>
       <div className="school-actions"><button type="button" className={"compact-action " + (compared ? "selected" : "")} onClick={toggleCompare}><Scale size={14} />{compared ? "Compared" : "Compare"}</button><button type="button" className="compact-action" onClick={addPath}><Plus size={14} />Pathway</button><button type="button" className="primary-button compact-view" onClick={open}>View bachelor <ChevronRight size={14} /></button></div>
     </> : <>
-      <div className="school-directory-note"><GraduationCap size={17} /><span><strong>School listing verified</strong><small>Bachelor facts will appear only after its official degree page is checked.</small></span></div>
-      <a className="ranking-link" href={rankingSource} target="_blank" rel="noreferrer">View ranking source <ExternalLink size={13} /></a>
+      <div className="school-facts">
+        <span><small>Location</small><strong>{school.location}</strong></span>
+        <span><small>Business profile</small><strong>Management and business education</strong></span>
+        <span><small>Directory position</small><strong>FT Europe 2025 · {rankLabel}</strong></span>
+      </div>
+      <p className="school-data-note">Degree details are added only after review of the school’s official programme pages.</p>
+      <div className="school-directory-actions"><a className="outline-button" href={officialSite} target="_blank" rel="noreferrer">Official site <ExternalLink size={12} /></a><a className="ranking-link" href={rankingSource} target="_blank" rel="noreferrer">Ranking source <ExternalLink size={12} /></a></div>
     </>}
   </article>;
 }
