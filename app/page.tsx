@@ -435,10 +435,10 @@ function Dashboard({ go, completed, toggleTask, openProgram, target }: { go: (v:
 function ProgramCard({ p, open, saved, toggleSaved, compared, toggleCompare, addPath }: { p: Program; open: () => void; saved: boolean; toggleSaved: () => void; compared: boolean; toggleCompare: () => void; addPath: () => void }) {
   return <article className="card program-card">
     <div className="program-card-head">
-      <button className="program-identity" onClick={open}><UniversityLogo program={p} size="small" /><span><strong>{p.university}</strong><small><MapPin size={11} />{p.location}</small></span></button>
-      <button className={"program-save " + (saved ? "selected" : "")} onClick={toggleSaved} aria-label={saved ? `Remove ${p.university} from saved programs` : `Save ${p.university}`}><Bookmark size={16} fill={saved ? "currentColor" : "none"} /></button>
+      <button type="button" className="program-identity" onClick={open}><UniversityLogo program={p} size="small" /><span><strong>{p.university}</strong><small><MapPin size={11} />{p.location}</small></span></button>
+      <button type="button" className={"program-save " + (saved ? "selected" : "")} onClick={toggleSaved} aria-label={saved ? `Remove ${p.university} from saved programs` : `Save ${p.university}`}><Bookmark size={16} fill={saved ? "currentColor" : "none"} /></button>
     </div>
-    <button className="program-main-copy" onClick={open}>
+    <button type="button" className="program-main-copy" onClick={open}>
       <span className="program-match"><strong>{p.fitScore}<small>%</small></strong><em>match</em></span>
       <span className={"fit " + fitClass(p.fit)}>{p.fit}</span>
       <b>{p.title}</b>
@@ -446,7 +446,7 @@ function ProgramCard({ p, open, saved, toggleSaved, compared, toggleCompare, add
     <div className="program-meta"><span><Clock3 size={13} />{p.duration}</span><span><Languages size={13} />{p.language}</span></div>
     <div className="program-evidence"><span><small>Management</small><strong>{p.management}</strong></span><span><small>Quantitative</small><strong>{p.math}</strong></span></div>
     <p><CircleCheck size={14} /> <span>{p.why[0]}</span></p>
-    <div className="program-actions"><button className={"compact-action " + (compared ? "selected" : "")} onClick={toggleCompare}><Scale size={14} />{compared ? "Compared" : "Compare"}</button><button className="compact-action" onClick={addPath}><Plus size={14} />Pathway</button><button className="primary-button compact-view" onClick={open}>View <ChevronRight size={14} /></button></div>
+    <div className="program-actions"><button type="button" className={"compact-action " + (compared ? "selected" : "")} onClick={toggleCompare}><Scale size={14} />{compared ? "Compared" : "Compare"}</button><button type="button" className="compact-action" onClick={addPath}><Plus size={14} />Pathway</button><button type="button" className="primary-button compact-view" onClick={open}>View <ChevronRight size={14} /></button></div>
   </article>;
 }
 
@@ -693,7 +693,7 @@ function ProfilePage({ toast, restart }: { toast: (s: string) => void; restart: 
 export default function App() {
   const [onboarded, setOnboarded] = useState(false);
   const [view, setView] = useState<View>("dashboard");
-  const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
+  const [selectedProgramId, setSelectedProgramId] = useState<string | null>(null);
   const [saved, setSaved] = useState<string[]>([]);
   const [compared, setCompared] = useState<string[]>([]);
   const [compareOpen, setCompareOpen] = useState(false);
@@ -718,12 +718,14 @@ export default function App() {
   }, [toast]);
 
   const go = (next: View) => {
-    setView(next); setSelectedProgram(null); setNotices(false);
+    setView(next); setSelectedProgramId(null); setNotices(false);
     window.history.replaceState(null, "", "#" + next);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
   const openProgram = (program: Program) => {
-    setSelectedProgram(program);
+    setView("explore");
+    setSelectedProgramId(program.id);
+    window.history.replaceState(null, "", "#explore");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
   const finish = () => {
@@ -750,11 +752,19 @@ export default function App() {
   const toggleTask = (id: string) => setCompleted(completed.includes(id) ? completed.filter((v) => v !== id) : [...completed, id]);
   const targetProgram = pathway.find((item) => item.role === "Target")?.p;
   const progress = targetProgram ? Math.min(100, 28 + completed.length * 9) : 0;
+  const selectedProgram = selectedProgramId ? programs.find((program) => program.id === selectedProgramId) ?? null : null;
+
+  useEffect(() => {
+    if (selectedProgramId && !selectedProgram) {
+      setSelectedProgramId(null);
+      setToast("That program could not be opened. Please try again.");
+    }
+  }, [selectedProgramId, selectedProgram]);
 
   if (!onboarded) return <Onboarding finish={finish} saveLater={saveLater} />;
 
   let content;
-  if (selectedProgram) content = <ProgramDetail p={selectedProgram} close={() => setSelectedProgram(null)} saved={saved.includes(selectedProgram.id)} toggleSaved={() => toggleSaved(selectedProgram.id)} compared={compared.includes(selectedProgram.id)} toggleCompare={() => toggleCompare(selectedProgram.id)} addPath={(role) => addPath(selectedProgram, role)} />;
+  if (selectedProgram) content = <ProgramDetail p={selectedProgram} close={() => setSelectedProgramId(null)} saved={saved.includes(selectedProgram.id)} toggleSaved={() => toggleSaved(selectedProgram.id)} compared={compared.includes(selectedProgram.id)} toggleCompare={() => toggleCompare(selectedProgram.id)} addPath={(role) => addPath(selectedProgram, role)} />;
   else if (view === "dashboard") content = <Dashboard go={go} completed={completed} toggleTask={toggleTask} openProgram={openProgram} target={targetProgram} />;
   else if (view === "explore") content = <Explore open={openProgram} saved={saved} setSaved={toggleSaved} compared={compared} toggleCompare={toggleCompare} addPath={(p) => addPath(p)} />;
   else if (view === "pathway") content = <Pathway selected={pathway} completed={completed} toggleTask={toggleTask} go={go} />;
