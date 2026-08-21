@@ -495,21 +495,14 @@ function ComparePanel({ ids, close, remove, open }: { ids: string[]; close: () =
   return <div className="modal-backdrop" role="dialog" aria-modal="true"><section className="compare-modal page-enter"><header><div><span className="eyebrow">Side-by-side evidence</span><h2>Compare programs</h2><p>{items.length} of 4 selected</p></div><button className="icon-button" onClick={close}><X /></button></header>{items.length ? <div className="compare-scroll"><div className="compare-grid" style={{ gridTemplateColumns: "170px repeat(" + items.length + ", minmax(210px, 1fr))" }}><strong className="compare-label">Program</strong>{items.map((p) => <article key={p.id}><button className="remove-x" onClick={() => remove(p.id)}><X size={13} /></button><UniversityLogo program={p} /><strong>{p.university}</strong><small>{p.title}</small><button className="text-link" onClick={() => { open(p); close(); }}>View evidence</button></article>)}{rows.flatMap(([label, value]) => [<strong className="compare-label" key={label}>{label}</strong>, ...items.map((p) => <span className="compare-value" key={label + p.id}>{value(p)}</span>)])}</div></div> : <div className="empty"><Scale /><h3>Select programs to compare</h3></div>}<footer><p><CircleHelp size={14} /> Comparison uses verified program facts and keeps unknowns visible.</p><button className="primary-button" onClick={close}>Done</button></footer></section></div>;
 }
 
-const weeklyActions = [
-  { id: "ielts-practice", title: "Complete an IELTS speaking mock test", meta: "30 min · English", tag: "English", points: "+20 pts" },
-  { id: "program-shortlist", title: "Shortlist 3 Aalto business programs", meta: "25 min · University research", tag: "Research", points: "+20 pts" },
-  { id: "portfolio", title: "Draft a portfolio project summary", meta: "30 min · Portfolio", tag: "Portfolio", points: "+25 pts" },
-  { id: "documents", title: "Collect transcript requirements", meta: "15 min · Documents", tag: "Documents", points: "+15 pts" },
-];
+type Routine = { id: string; title: string; focus: string; weeklyGoal: number; minutes: number };
 
-const habits = [
-  { id: "speaking", title: "IELTS speaking practice", focus: "Part 2 responses and fluency", goal: 10 },
-  { id: "reading", title: "IELTS reading practice", focus: "Skimming and True/False/Not Given", goal: 8 },
-  { id: "math", title: "Mathematics review", focus: "Algebra, percentages, and basic functions", goal: 6 },
-  { id: "pathway-review", title: "Weekly pathway review", focus: "Review university choices and next requirements", goal: 4 },
+const initialRoutines: Routine[] = [
+  { id: "speaking", title: "IELTS speaking practice", focus: "Part 2 responses and fluency", weeklyGoal: 3, minutes: 20 },
+  { id: "reading", title: "IELTS reading practice", focus: "Skimming and True/False/Not Given", weeklyGoal: 3, minutes: 20 },
+  { id: "math", title: "Mathematics review", focus: "Algebra, percentages, and basic functions", weeklyGoal: 2, minutes: 30 },
+  { id: "pathway-review", title: "Weekly pathway review", focus: "Review university choices and next requirements", weeklyGoal: 1, minutes: 25 },
 ];
-
-const weekDays = ["M", "T", "W", "T", "F", "S", "S"];
 
 const habitSeed: Record<string, number[]> = {
   "2026-7-speaking": [1, 3, 5, 7, 10, 12, 14, 17, 19],
@@ -520,57 +513,93 @@ const habitSeed: Record<string, number[]> = {
 
 function TasksHabits({ completed, toggleTask, target, toast }: { completed: string[]; toggleTask: (v: string) => void; target?: Program; toast: (s: string) => void }) {
   const [tab, setTab] = useState<"actions" | "habits">("actions");
+  const [routines, setRoutines] = useState<Routine[]>(initialRoutines);
   const [habitChecks, setHabitChecks] = useState<Record<string, number[]>>(habitSeed);
+  const [periodMode, setPeriodMode] = useState<"week" | "month">("week");
+  const [weekOffset, setWeekOffset] = useState(0);
   const [monthOffset, setMonthOffset] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [adding, setAdding] = useState(false);
-  const [newAction, setNewAction] = useState("");
-  const [customActions, setCustomActions] = useState<{ id: string; title: string }[]>([]);
-  const actionList = [...weeklyActions, ...customActions.map((item) => ({ ...item, meta: "Added by you · This week", tag: "Personal", points: "+10 pts" }))];
-  const done = actionList.filter((action) => completed.includes(action.id)).length;
-  const actionStatus = done >= actionList.length ? "Ahead of plan" : done >= Math.ceil(actionList.length / 2) ? "On track" : "Needs attention";
+  const [newTarget, setNewTarget] = useState({ title: "", focus: "", weeklyGoal: 2 });
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editDraft, setEditDraft] = useState({ title: "", focus: "", weeklyGoal: 1 });
+  const done = routines.filter((routine) => completed.includes(routine.id)).length;
   const shownMonth = new Date(2026, 7 + monthOffset, 1);
   const shownYear = shownMonth.getFullYear();
   const shownMonthIndex = shownMonth.getMonth();
-  const monthKey = `${shownYear}-${shownMonthIndex}`;
   const monthLabel = new Intl.DateTimeFormat("en", { month: "long", year: "numeric" }).format(shownMonth);
   const daysInMonth = new Date(shownYear, shownMonthIndex + 1, 0).getDate();
-  const firstDayOffset = (shownMonth.getDay() + 6) % 7;
-  const days = Array.from({ length: daysInMonth }, (_, index) => index + 1);
-  const monthCompletions = habits.reduce((total, habit) => total + (habitChecks[`${monthKey}-${habit.id}`]?.length || 0), 0);
-  const speakingCompletions = habitChecks[`${monthKey}-speaking`]?.length || 0;
+  const monthDates = Array.from({ length: daysInMonth }, (_, index) => new Date(shownYear, shownMonthIndex, index + 1));
+  const shownWeekStart = new Date(2026, 7, 17 + weekOffset * 7);
+  const weekDates = Array.from({ length: 7 }, (_, index) => new Date(shownWeekStart.getFullYear(), shownWeekStart.getMonth(), shownWeekStart.getDate() + index));
+  const shownWeekEnd = weekDates[6];
+  const weekLabel = `${new Intl.DateTimeFormat("en", { day: "numeric", month: "short" }).format(shownWeekStart)} – ${new Intl.DateTimeFormat("en", { day: "numeric", month: "short", year: "numeric" }).format(shownWeekEnd)}`;
+  const periodDates = periodMode === "week" ? weekDates : monthDates;
+  const periodLabel = periodMode === "week" ? weekLabel : monthLabel;
 
-  const toggleHabit = (habitId: string, day: number) => {
-    const key = `${monthKey}-${habitId}`;
+  const dateKey = (date: Date, habitId: string) => `${date.getFullYear()}-${date.getMonth()}-${habitId}`;
+  const isChecked = (habitId: string, date: Date) => (habitChecks[dateKey(date, habitId)] || []).includes(date.getDate());
+  const countChecks = (habitId: string, dates: Date[]) => dates.filter((date) => isChecked(habitId, date)).length;
+  const currentWeekDates = Array.from({ length: 7 }, (_, index) => new Date(2026, 7, 17 + index));
+  const currentHabitSessions = routines.reduce((total, routine) => total + countChecks(routine.id, currentWeekDates), 0);
+  const currentHabitGoal = routines.reduce((total, routine) => total + routine.weeklyGoal, 0);
+  const executionTotal = routines.length + currentHabitGoal;
+  const executionProgress = executionTotal ? Math.round(((done + Math.min(currentHabitSessions, currentHabitGoal)) / executionTotal) * 100) : 0;
+  const activeDays = currentWeekDates.filter((date) => routines.some((routine) => isChecked(routine.id, date))).length;
+  const needsAttention = [...routines].sort((a, b) => (countChecks(a.id, currentWeekDates) / a.weeklyGoal) - (countChecks(b.id, currentWeekDates) / b.weeklyGoal))[0];
+  const actionStatus = executionProgress >= 100 ? "Ahead of plan" : executionProgress >= 55 ? "On track" : executionProgress > 0 ? "Building rhythm" : "Ready to begin";
+  const periodCompletions = routines.reduce((total, routine) => total + countChecks(routine.id, periodDates), 0);
+
+  const toggleHabit = (habitId: string, date: Date) => {
+    const key = dateKey(date, habitId);
+    const day = date.getDate();
     setHabitChecks((current) => {
       const checked = current[key] || [];
       return { ...current, [key]: checked.includes(day) ? checked.filter((item) => item !== day) : [...checked, day].sort((a, b) => a - b) };
     });
   };
-  const moveMonth = (direction: number) => setMonthOffset((current) => current + direction);
+  const movePeriod = (direction: number) => periodMode === "week" ? setWeekOffset((current) => current + direction) : setMonthOffset((current) => current + direction);
   const finishSwipe = (end: number) => {
     if (touchStart === null) return;
     const distance = end - touchStart;
-    if (Math.abs(distance) > 55) moveMonth(distance < 0 ? 1 : -1);
+    if (Math.abs(distance) > 55) movePeriod(distance < 0 ? 1 : -1);
     setTouchStart(null);
   };
-  const addAction = () => {
-    const title = newAction.trim();
-    if (!title) return;
-    setCustomActions((current) => [...current, { id: `custom-${Date.now()}`, title }]);
-    setNewAction("");
+  const addTarget = () => {
+    const title = newTarget.title.trim();
+    const focus = newTarget.focus.trim();
+    if (!title || !focus) return;
+    setRoutines((current) => [...current, { id: `routine-${Date.now()}`, title, focus, weeklyGoal: Math.max(1, newTarget.weeklyGoal), minutes: 20 }]);
+    setNewTarget({ title: "", focus: "", weeklyGoal: 2 });
     setAdding(false);
-    toast("Action added to this week");
+    toast("New target added to your routine");
+  };
+  const startEditing = (routine: Routine) => {
+    setEditingId(routine.id);
+    setEditDraft({ title: routine.title, focus: routine.focus, weeklyGoal: routine.weeklyGoal });
+  };
+  const saveRoutine = () => {
+    if (!editingId || !editDraft.title.trim() || !editDraft.focus.trim()) return;
+    setRoutines((current) => current.map((routine) => routine.id === editingId ? { ...routine, title: editDraft.title.trim(), focus: editDraft.focus.trim(), weeklyGoal: Math.max(1, editDraft.weeklyGoal) } : routine));
+    setEditingId(null);
+    toast("Target updated");
+  };
+  const removeRoutine = (id: string) => {
+    setRoutines((current) => current.filter((routine) => routine.id !== id));
+    if (editingId === id) setEditingId(null);
+    toast("Target removed");
   };
 
+  const routineEditor = (routine: Routine) => editingId === routine.id ? <div className="routine-editor"><input value={editDraft.title} onChange={(event) => setEditDraft((current) => ({ ...current, title: event.target.value }))} aria-label="Routine title" /><input value={editDraft.focus} onChange={(event) => setEditDraft((current) => ({ ...current, focus: event.target.value }))} aria-label="Routine description" /><label><span>Weekly target</span><input type="number" min="1" max="14" value={editDraft.weeklyGoal} onChange={(event) => setEditDraft((current) => ({ ...current, weeklyGoal: Number(event.target.value) || 1 }))} /></label><div><button className="primary-button compact" onClick={saveRoutine}>Save</button><button className="text-link" onClick={() => setEditingId(null)}>Cancel</button></div></div> : <><strong>{routine.title}</strong><small>{routine.focus}</small><em>{routine.minutes} min · {routine.weeklyGoal}× weekly</em></>;
+
   return <div className="page-enter tasks-page">
-    <section className="page-intro tasks-intro"><div><span className="eyebrow">This week</span><h2>Tasks & Habits</h2><p>Finish important actions. Repeat routines that build readiness.</p></div><button className="primary-button" onClick={() => setAdding(!adding)}><Plus size={15} /> Add action</button></section>
-    {adding && <article className="card add-action-panel"><div><span className="section-label">New one-time action</span><strong>What do you want to finish?</strong></div><input autoFocus value={newAction} onChange={(event) => setNewAction(event.target.value)} onKeyDown={(event) => event.key === "Enter" && addAction()} placeholder="Example: Review Aalto application deadline" /><button className="primary-button" onClick={addAction}>Add to week</button><button className="text-link" onClick={() => setAdding(false)}>Cancel</button></article>}
+    <section className="page-intro tasks-intro"><div><span className="eyebrow">This week</span><h2>Tasks & Habits</h2><p>Set weekly targets, then build a routine around them.</p></div><button className="primary-button" onClick={() => setAdding(!adding)}><Plus size={15} /> Add target</button></section>
+    {adding && <article className="card add-target-panel"><div><span className="section-label">New target</span><strong>Add a repeatable focus</strong></div><div className="target-fields"><input autoFocus value={newTarget.title} onChange={(event) => setNewTarget((current) => ({ ...current, title: event.target.value }))} placeholder="Target title" /><input value={newTarget.focus} onChange={(event) => setNewTarget((current) => ({ ...current, focus: event.target.value }))} onKeyDown={(event) => event.key === "Enter" && addTarget()} placeholder="What will you practise?" /><label><span>Times per week</span><input type="number" min="1" max="14" value={newTarget.weeklyGoal} onChange={(event) => setNewTarget((current) => ({ ...current, weeklyGoal: Number(event.target.value) || 1 }))} /></label></div><button className="primary-button" onClick={addTarget}>Add target</button><button className="text-link" onClick={() => setAdding(false)}>Cancel</button></article>}
     <div className="task-tabs" role="tablist" aria-label="Tasks and habits views"><button className={tab === "actions" ? "active" : ""} onClick={() => setTab("actions")}>Weekly actions</button><button className={tab === "habits" ? "active" : ""} onClick={() => setTab("habits")}>Habit tracker</button></div>
     {tab === "actions" ? <div className="tasks-layout">
-      <article className="card weekly-actions-card"><div className="section-head"><div><span className="section-label">One-time tasks</span><h3>This week’s actions</h3></div><span className="today-count">{done} of {actionList.length} done</span></div><p className="tasks-helper">Complete each action once. Finished actions increase the related readiness category.</p><div className="weekly-action-list">{actionList.map((action) => { const isDone = completed.includes(action.id); return <button key={action.id} className={`weekly-action ${isDone ? "done" : ""}`} onClick={() => toggleTask(action.id)}><span className={`task-check ${isDone ? "checked" : ""}`}>{isDone && <Check size={15} />}</span><span className="weekly-action-copy"><strong>{action.title}</strong><small>{action.meta}</small></span><span className="action-tag">{action.tag}</span><em>{isDone ? "Done" : action.points}</em></button>; })}</div></article>
-      <aside className="card weekly-focus-card"><div className="focus-card-head"><span className="section-label">This week’s focus</span>{done >= 2 && <span className="focus-fire"><Flame size={14} /> Building momentum</span>}</div><div className="focus-readiness"><strong>50%</strong><span><b>{actionStatus}</b><small>+4% this week</small></span></div><div className="focus-bar"><i style={{ width: "50%" }} /></div><div className="focus-detail"><small>Main gap</small><strong>IELTS 5.5 <span>→</span> 6.5</strong></div><div className="focus-detail"><small>Weekly actions</small><strong>{done} of {actionList.length} complete</strong></div><p>{actionStatus === "Needs attention" ? "Finish one priority action to get back on track." : actionStatus === "Ahead of plan" ? "You cleared every priority action this week." : "Your highest impact actions are moving forward."}</p></aside>
-    </div> : <article className="card habit-card" onTouchStart={(event) => setTouchStart(event.touches[0].clientX)} onTouchEnd={(event) => finishSwipe(event.changedTouches[0].clientX)}><div className="habit-month-head"><div><span className="section-label">Repeatable routines</span><h3>{monthLabel}</h3><p className="tasks-helper">Tap a date when you complete a session. Swipe to move between months.</p></div><div className="month-controls"><button aria-label="Previous month" onClick={() => moveMonth(-1)}><ChevronLeft size={17} /></button><span>{monthCompletions} check-ins</span><button aria-label="Next month" onClick={() => moveMonth(1)}><ChevronRight size={17} /></button></div></div><div className="monthly-habit-list">{habits.map((habit) => { const checks = habitChecks[`${monthKey}-${habit.id}`] || []; const isAhead = checks.length > habit.goal; const isComplete = checks.length === habit.goal; const onFire = habit.id === "speaking" && checks.length >= 7; return <section className="monthly-habit-row" key={habit.id}><div className="monthly-habit-copy"><strong>{habit.title}</strong><small>{habit.focus}</small></div><div className="mini-month" aria-label={`${habit.title} calendar for ${monthLabel}`}><div className="mini-weekdays">{weekDays.map((day, index) => <span key={`${day}-${index}`}>{day}</span>)}</div><div className="mini-days">{Array.from({ length: firstDayOffset }, (_, index) => <i key={`blank-${index}`} />)}{days.map((day) => { const checked = checks.includes(day); return <button key={day} className={checked ? "checked" : ""} aria-label={`${habit.title}, ${monthLabel} ${day}${checked ? ", complete" : ""}`} onClick={() => toggleHabit(habit.id, day)}><span>{day}</span>{checked && <Check size={11} />}</button>; })}</div></div><div className="habit-progress"><strong>{checks.length}<span> / {habit.goal}</span></strong><small>sessions</small>{isAhead ? <em className="ahead"><Sparkles size={12} /> Ahead of plan</em> : isComplete ? <em className="complete"><CircleCheck size={12} /> Goal met</em> : onFire ? <em className="fire"><Flame size={12} /> On fire</em> : <em>{habit.goal - checks.length} to goal</em>}</div></section>; })}</div><div className="habit-insight"><span className="mini-icon"><Sparkles size={16} /></span><span><strong>{speakingCompletions ? "Speaking is your strongest routine this month" : "Start with one small speaking session"}</strong><small>{speakingCompletions ? `${Math.max(0, 10 - speakingCompletions)} session${10 - speakingCompletions === 1 ? "" : "s"} to reach your monthly speaking goal.` : "Checking in once makes the rest of the month easier to build."}</small></span></div></article>}
+      <article className="card weekly-actions-card"><div className="section-head"><div><span className="section-label">Your targets</span><h3>This week’s actions</h3></div><span className="today-count">{done} of {routines.length} done</span></div><p className="tasks-helper">Use these as clear weekly outcomes. Edit the wording or target whenever your plan changes.</p><div className="weekly-action-list">{routines.map((routine) => { const isDone = completed.includes(routine.id); return <section key={routine.id} className={`weekly-action ${isDone ? "done" : ""}`}><button className="action-toggle" onClick={() => toggleTask(routine.id)} aria-label={`${isDone ? "Reopen" : "Complete"} ${routine.title}`}><span className={`task-check ${isDone ? "checked" : ""}`}>{isDone && <Check size={15} />}</span></button><div className="weekly-action-copy">{routineEditor(routine)}</div><span className="action-tag">{routine.weeklyGoal}× / week</span><span className="routine-row-actions"><button onClick={() => startEditing(routine)} aria-label={`Edit ${routine.title}`}><Settings2 size={14} /></button><button onClick={() => removeRoutine(routine.id)} aria-label={`Remove ${routine.title}`}><X size={14} /></button></span><em>{isDone ? "Done" : "Open"}</em></section>; })}</div></article>
+      <aside className="card weekly-focus-card"><div className="focus-card-head"><span className="section-label">This week’s progress</span>{activeDays >= 3 && <span className="focus-fire"><Flame size={14} /> {activeDays} active days</span>}</div><div className="focus-readiness"><strong>{executionProgress}%</strong><span><b>{actionStatus}</b><small>{currentHabitSessions} routine check-ins</small></span></div><div className="focus-bar"><i style={{ width: `${executionProgress}%` }} /></div><div className="focus-detail"><small>Targets completed</small><strong>{done} of {routines.length}</strong></div><div className="focus-detail"><small>Habit sessions</small><strong>{currentHabitSessions} of {currentHabitGoal}</strong></div><div className="focus-detail"><small>Needs attention</small><strong>{needsAttention?.title || "Add a target"}</strong></div><p>{executionProgress >= 100 ? "You went beyond the plan. Keep the routine sustainable." : executionProgress >= 55 ? "You are moving at a healthy pace for this week." : "One small check-in today will move the week forward."}</p></aside>
+    </div> : <article className="card habit-card" onTouchStart={(event) => setTouchStart(event.touches[0].clientX)} onTouchEnd={(event) => finishSwipe(event.changedTouches[0].clientX)}><div className="habit-month-head"><div><span className="section-label">Repeatable routines</span><h3>Your rhythm</h3><p className="tasks-helper">Tap a date to check in. Use the arrows to move through weeks or months.</p></div><div className="habit-toolbar"><div className="period-toggle"><button className={periodMode === "week" ? "active" : ""} onClick={() => setPeriodMode("week")}>Week</button><button className={periodMode === "month" ? "active" : ""} onClick={() => setPeriodMode("month")}>Month</button></div><div className="month-controls"><button aria-label={`Previous ${periodMode}`} onClick={() => movePeriod(-1)}><ChevronLeft size={17} /></button><span>{periodLabel}</span><button aria-label={`Next ${periodMode}`} onClick={() => movePeriod(1)}><ChevronRight size={17} /></button></div></div></div><div className="habit-table-scroll"><div className={`habit-table ${periodMode}`}><div className="habit-table-row habit-table-header"><span>Routine and target</span><div className={`period-cells ${periodMode}`}>{periodDates.map((date) => <span key={date.toISOString()}>{periodMode === "week" ? <><b>{["M", "T", "W", "T", "F", "S", "S"][(date.getDay() + 6) % 7]}</b><small>{date.getDate()}</small></> : date.getDate()}</span>)}</div><span>Progress</span></div>{routines.map((routine) => { const checks = countChecks(routine.id, periodDates); const goal = periodMode === "week" ? routine.weeklyGoal : routine.weeklyGoal * 4; const isAhead = checks > goal; const isComplete = checks === goal; const onFire = checks >= Math.max(3, Math.ceil(goal * .65)); return <section className="habit-table-row" key={routine.id}><div className="monthly-habit-copy">{routineEditor(routine)}<span className="routine-row-actions"><button onClick={() => startEditing(routine)} aria-label={`Edit ${routine.title}`}><Settings2 size={14} /></button><button onClick={() => removeRoutine(routine.id)} aria-label={`Remove ${routine.title}`}><X size={14} /></button></span></div><div className={`period-cells ${periodMode}`} aria-label={`${routine.title} check-ins for ${periodLabel}`}>{periodDates.map((date) => { const checked = isChecked(routine.id, date); return <button key={date.toISOString()} className={checked ? "checked" : ""} aria-label={`${routine.title}, ${date.toLocaleDateString()}${checked ? ", complete" : ""}`} onClick={() => toggleHabit(routine.id, date)}>{checked ? <Check size={periodMode === "month" ? 10 : 15} /> : <span>{periodMode === "month" ? date.getDate() : ""}</span>}</button>; })}</div><div className="habit-progress"><strong>{checks}<span> / {goal}</span></strong>{isAhead ? <em className="ahead"><Sparkles size={12} /> Ahead</em> : isComplete ? <em className="complete"><CircleCheck size={12} /> Goal met</em> : onFire ? <em className="fire"><Flame size={12} /> On fire</em> : <em>{goal - checks} to goal</em>}</div></section>; })}</div></div><div className="habit-insight"><span className="mini-icon"><Sparkles size={16} /></span><span><strong>{periodCompletions ? `${periodCompletions} check-ins across this ${periodMode}` : `Start your ${periodMode} with one small session`}</strong><small>{periodCompletions ? "Your check-ins stay connected to the targets you chose above." : "A single check-in is enough to begin building the pattern."}</small></span></div></article>}
   </div>;
 }
 
