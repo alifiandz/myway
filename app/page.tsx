@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   BarChart3, Bell, BookOpen, Bookmark, BriefcaseBusiness,
   Check, ChevronDown, ChevronLeft, ChevronRight, CircleAlert, CircleCheck,
@@ -168,6 +168,129 @@ const programs: Program[] = [
   },
 ];
 
+type BusinessSchool = {
+  id: string;
+  rank: string;
+  name: string;
+  location: string;
+  programId?: string;
+};
+
+// Institution list and order follow the FT European Business Schools 2025 table.
+// Degree-level facts are attached only when the official university program page is checked.
+const businessSchoolRows: [string, string, string, string?][] = [
+  ["1", "INSEAD", "France / international"],
+  ["2", "HEC Paris", "France"],
+  ["3", "London Business School", "United Kingdom / UAE"],
+  ["4", "ESCP Business School", "Multi-country Europe", "escp"],
+  ["5", "IESE Business School", "Spain / international"],
+  ["6", "SDA Bocconi School of Management", "Italy"],
+  ["7", "ESSEC Business School", "France", "essec"],
+  ["8", "University of St Gallen", "Switzerland"],
+  ["9", "EDHEC Business School", "France", "edhec"],
+  ["10", "emlyon business school", "France", "emlyon"],
+  ["11", "Esade Business School", "Spain"],
+  ["12", "ESMT Berlin", "Germany"],
+  ["13", "IMD", "Switzerland"],
+  ["14", "University of Oxford: Saïd", "United Kingdom"],
+  ["15", "Mannheim Business School", "Germany"],
+  ["16", "SKEMA Business School", "France"],
+  ["17", "Nova School of Business and Economics", "Portugal"],
+  ["18", "Warwick Business School", "United Kingdom"],
+  ["19", "Stockholm School of Economics", "Sweden"],
+  ["20", "WHU – Otto Beisheim School of Management", "Germany"],
+  ["21", "IE Business School", "Spain"],
+  ["22", "University of Cambridge: Judge", "United Kingdom"],
+  ["23", "University College Dublin: Smurfit", "Ireland"],
+  ["24", "Grenoble Ecole de Management", "France"],
+  ["25", "Vlerick Business School", "Belgium"],
+  ["26", "Católica Lisbon School of Business and Economics", "Portugal"],
+  ["=26", "Audencia", "France"],
+  ["28", "NEOMA Business School", "France"],
+  ["29", "Cranfield School of Management", "United Kingdom"],
+  ["30", "EADA Business School Barcelona", "Spain"],
+  ["31", "Frankfurt School of Finance and Management", "Germany"],
+  ["32", "KEDGE Business School", "France"],
+  ["33", "Rotterdam School of Management, Erasmus University", "Netherlands"],
+  ["34", "Bayes Business School", "United Kingdom"],
+  ["35", "POLIMI School of Management", "Italy"],
+  ["36", "Alliance Manchester Business School", "United Kingdom"],
+  ["37", "Henley Business School", "United Kingdom"],
+  ["38", "University of Porto – FEP | PBS", "Portugal"],
+  ["39", "Imperial Business School", "United Kingdom"],
+  ["40", "BI Norwegian Business School", "Norway"],
+  ["41", "WU Vienna University of Economics and Business", "Austria"],
+  ["42", "Kozminski University", "Poland"],
+  ["43", "Trinity College Dublin, Trinity Business School", "Ireland"],
+  ["44", "Iscte Business School", "Portugal"],
+  ["45", "Copenhagen Business School", "Denmark"],
+  ["46", "Aalto University", "Finland", "aalto"],
+  ["47", "IÉSEG School of Management", "France"],
+  ["48", "Prague University of Economics and Business", "Czechia"],
+  ["49", "TIAS Business School, Tilburg University", "Netherlands"],
+  ["50", "Luiss University / Luiss Business School", "Italy"],
+  ["51", "NHH Norwegian School of Economics", "Norway"],
+  ["52", "HEC Lausanne, University of Lausanne", "Switzerland"],
+  ["53", "Sabancı Business School", "Türkiye"],
+  ["54", "Solvay Brussels School of Economics and Management", "Belgium"],
+  ["55", "Antwerp Management School", "Belgium"],
+  ["56", "Excelia Business School", "France"],
+  ["57", "Montpellier Business School", "France"],
+  ["58", "Koç University Graduate School of Business", "Türkiye"],
+  ["59", "EBS Business School", "Germany"],
+  ["60", "Nyenrode Business Universiteit", "Netherlands"],
+  ["61", "Rennes School of Business", "France"],
+  ["62", "University of Cologne", "Germany"],
+  ["63", "Bologna Business School", "Italy"],
+  ["64", "ICN Business School", "France"],
+  ["65", "University of Ljubljana, School of Economics and Business", "Slovenia"],
+  ["66", "ESSCA School of Management", "France"],
+  ["67", "ISEG – Lisbon School of Economics and Management", "Portugal"],
+  ["=67", "University of Bath School of Management", "United Kingdom"],
+  ["69", "Paris School of Business", "France"],
+  ["70", "University of Edinburgh Business School", "United Kingdom"],
+  ["71", "Durham University Business School", "United Kingdom"],
+  ["72", "ZHAW School of Management and Law", "Switzerland"],
+  ["73", "EM Strasbourg Business School", "France"],
+  ["74", "HHL Leipzig Graduate School of Management", "Germany"],
+  ["75", "Lund University School of Economics and Management", "Sweden"],
+  ["76", "Burgundy School of Business", "France"],
+  ["77", "Institut Mines-Télécom Business School", "France"],
+  ["=77", "University of Zurich", "Switzerland"],
+  ["79", "TUM School of Management", "Germany"],
+  ["80", "Maastricht University, School of Business and Economics", "Netherlands"],
+  ["81", "Católica Porto Business School", "Portugal"],
+  ["82", "Hanken School of Economics", "Finland"],
+  ["83", "University Carlos III de Madrid", "Spain"],
+  ["84", "IAE Aix-Marseille Graduate School of Management", "France"],
+  ["85", "Louvain School of Management, UCLouvain", "Belgium"],
+  ["86", "Jönköping International Business School", "Sweden"],
+  ["87", "University of Glasgow: Adam Smith", "United Kingdom"],
+  ["88", "IQS – Universitat Ramon Llull", "Spain"],
+  ["89", "Leeds University Business School", "United Kingdom"],
+  ["90", "Aston Business School", "United Kingdom"],
+  ["91", "University of Amsterdam – Amsterdam Business School", "Netherlands"],
+  ["92", "Deusto Business School", "Spain"],
+  ["93", "EM Normandie Business School", "France"],
+  ["94", "TBS Education", "France"],
+  ["95", "Lancaster University Management School", "United Kingdom"],
+  ["=95", "ESDES Business School", "France"],
+  ["97", "Clermont School of Business", "France"],
+  ["98", "University of Strathclyde Business School", "United Kingdom"],
+  ["99", "University of Antwerp Faculty of Business and Economics", "Belgium"],
+  ["100", "SGH Warsaw School of Economics", "Poland"],
+];
+
+const businessSchools: BusinessSchool[] = businessSchoolRows.map(([rank, name, location, programId], index) => ({
+  id: `ft-school-${index + 1}`,
+  rank,
+  name,
+  location,
+  programId,
+}));
+
+const rankingSource = "https://rankings.ft.com/rankings/3042/european-business-school-rankings-2025";
+
 const navItems = [
   { id: "dashboard" as View, label: "Dashboard", icon: LayoutDashboard },
   { id: "explore" as View, label: "Explore", icon: Search },
@@ -326,21 +449,19 @@ function Dashboard({ go, completed, toggleTask, openProgram, target }: { go: (v:
   </div>;
 }
 
-function ProgramCard({ p, open, saved, toggleSaved, compared, toggleCompare, addPath }: { p: Program; open: () => void; saved: boolean; toggleSaved: () => void; compared: boolean; toggleCompare: () => void; addPath: () => void }) {
-  return <article className="card program-card">
-    <div className="program-card-head">
-      <button type="button" className="program-identity" onClick={open}><UniversityLogo program={p} size="small" /><span><strong>{p.university}</strong><small><MapPin size={11} />{p.location}</small></span></button>
-      <button type="button" className={"program-save " + (saved ? "selected" : "")} onClick={toggleSaved} aria-label={saved ? `Remove ${p.university} from saved programs` : `Save ${p.university}`}><Bookmark size={16} fill={saved ? "currentColor" : "none"} /></button>
-    </div>
-    <button type="button" className="program-main-copy" onClick={open}>
-      <span className="program-match"><strong>{p.fitScore}<small>%</small></strong><em>match</em></span>
-      <span className={"fit " + fitClass(p.fit)}>{p.fit}</span>
-      <b>{p.title}</b>
-    </button>
-    <div className="program-meta"><span><Clock3 size={13} />{p.duration}</span><span><Languages size={13} />{p.language}</span></div>
-    <div className="program-evidence"><span><small>Management</small><strong>{p.management}</strong></span><span><small>Quantitative</small><strong>{p.math}</strong></span></div>
-    <p><CircleCheck size={14} /> <span>{p.why[0]}</span></p>
-    <div className="program-actions"><button type="button" className={"compact-action " + (compared ? "selected" : "")} onClick={toggleCompare}><Scale size={14} />{compared ? "Compared" : "Compare"}</button><button type="button" className="compact-action" onClick={addPath}><Plus size={14} />Pathway</button><button type="button" className="primary-button compact-view" onClick={open}>View <ChevronRight size={14} /></button></div>
+function BusinessSchoolCard({ school, program, open, saved, toggleSaved, compared, toggleCompare, addPath }: { school: BusinessSchool; program?: Program; open?: () => void; saved: boolean; toggleSaved: () => void; compared: boolean; toggleCompare?: () => void; addPath?: () => void }) {
+  const initials = school.name.split(/\s+/).filter((word) => /^[A-ZÀ-Ž]/.test(word)).slice(0, 2).map((word) => word[0]).join("") || school.name.slice(0, 2).toUpperCase();
+  return <article className={"card school-card " + (program ? "program-verified" : "directory-only")}>
+    <div className="school-card-top"><span className="rank-badge"><small>FT Europe</small><strong>{school.rank.startsWith("=") ? school.rank : `#${school.rank}`}</strong></span><button type="button" className={"program-save " + (saved ? "selected" : "")} onClick={toggleSaved} aria-label={saved ? `Remove ${school.name} from saved schools` : `Save ${school.name}`}><Bookmark size={16} fill={saved ? "currentColor" : "none"} /></button></div>
+    <div className="school-identity">{program ? <UniversityLogo program={program} size="small" /> : <span className="crest small school-initials">{initials}</span>}<span><strong>{school.name}</strong><small><MapPin size={11} />{school.location}</small></span></div>
+    {program ? <>
+      <div className="verified-program"><CircleCheck size={13} /><span>Official bachelor page checked {program.verified}</span></div>
+      <button type="button" className="school-program-copy" onClick={open}><strong>{program.title}</strong><span><Clock3 size={12} />{program.duration}</span><span><Languages size={12} />{program.language}</span></button>
+      <div className="school-actions"><button type="button" className={"compact-action " + (compared ? "selected" : "")} onClick={toggleCompare}><Scale size={14} />{compared ? "Compared" : "Compare"}</button><button type="button" className="compact-action" onClick={addPath}><Plus size={14} />Pathway</button><button type="button" className="primary-button compact-view" onClick={open}>View bachelor <ChevronRight size={14} /></button></div>
+    </> : <>
+      <div className="school-directory-note"><GraduationCap size={17} /><span><strong>School listing verified</strong><small>Bachelor facts will appear only after its official degree page is checked.</small></span></div>
+      <a className="ranking-link" href={rankingSource} target="_blank" rel="noreferrer">View ranking source <ExternalLink size={13} /></a>
+    </>}
   </article>;
 }
 
@@ -348,18 +469,17 @@ function Explore({ open, saved, setSaved, compared, toggleCompare, addPath }: { 
   const [query, setQuery] = useState("");
   const [refineOpen, setRefineOpen] = useState(false);
   const [filters, setFilters] = useState<string[]>([]);
-  const [sort, setSort] = useState("Best match");
+  const [sort, setSort] = useState("FT ranking");
   const filterGroups = [
-    { label: "Location", note: "Where you want to study", options: ["Finland", "France", "Multi-country Europe"] },
+    { label: "Location", note: "Where you want to study", options: ["Austria", "Belgium", "Czechia", "Denmark", "Finland", "France", "Germany", "Ireland", "Italy", "Netherlands", "Norway", "Poland", "Portugal", "Slovenia", "Spain", "Sweden", "Switzerland", "Türkiye", "United Kingdom", "Multi-country Europe"] },
     { label: "Business area", note: "What you want to study", options: ["Business Administration", "Management", "International Business", "Entrepreneurship", "Marketing", "Finance", "Accounting", "Economics", "Business Analytics", "Supply Chain & Operations", "Human Resources", "Hospitality & Tourism"] },
-    { label: "Study details", note: "How the degree is structured", options: ["English-taught", "Direct entry", "3 years", "4 years"] },
+    { label: "Study details", note: "Uses checked official degree pages", options: ["Bachelor details verified", "English-taught", "Direct entry", "3 years", "4 years"] },
     { label: "Math level", note: "Based only on verified curricula", options: ["Lower quantitative load", "Moderate quantitative load", "Not yet verified"] },
     { label: "Opportunities", note: "Experiences included or available", options: ["Exchange or study abroad", "Internship", "Multi-country study", "Career services"] },
   ];
   const toggleFilter = (item: string) => setFilters((current) => current.includes(item) ? current.filter((value) => value !== item) : [...current, item]);
-  const matchesFilter = (p: Program, item: string) => {
-    if (["Finland", "France"].includes(item)) return p.location.includes(item);
-    if (item === "Multi-country Europe") return /multi-campus|europe/i.test(p.location);
+  const locationFilters = filterGroups[0].options;
+  const matchesProgramFilter = (p: Program, item: string) => {
     const curriculum = [p.title, ...p.curriculum].join(" ");
     if (item === "Business Administration") return /business management|bba|business administration/i.test(curriculum);
     if (item === "Management") return /management/i.test(p.title) || p.management === "Strong";
@@ -376,6 +496,7 @@ function Explore({ open, saved, setSaved, compared, toggleCompare, addPath }: { 
     if (item === "Lower quantitative load") return /low|lower/i.test(p.math);
     if (item === "Moderate quantitative load") return /moderate/i.test(p.math);
     if (item === "Not yet verified") return /not yet verified/i.test(p.math);
+    if (item === "Bachelor details verified") return true;
     if (item === "English-taught") return /english/i.test(p.language);
     if (item === "3 years" || item === "4 years") return p.duration.startsWith(item);
     if (item === "Exchange or study abroad") return /international|exchange|abroad/i.test(p.experience);
@@ -384,21 +505,27 @@ function Explore({ open, saved, setSaved, compared, toggleCompare, addPath }: { 
     if (item === "Career services") return /career services/i.test(p.experience);
     return p.entry.toLowerCase().includes("direct");
   };
-  const filtered = useMemo(() => programs.filter((p) => {
-    const haystack = [p.university, p.title, p.location, p.management, p.enterprise, p.marketing, p.math].join(" ").toLowerCase();
+  const filtered = businessSchools.filter((school) => {
+    const program = school.programId ? programs.find((item) => item.id === school.programId) : undefined;
+    const haystack = [school.name, school.location, program?.title, program?.curriculum.join(" ")].filter(Boolean).join(" ").toLowerCase();
     const matchesQuery = haystack.includes(query.toLowerCase());
-    return matchesQuery && filters.every((item) => matchesFilter(p, item));
-  }).sort((a, b) => sort === "A–Z" ? a.university.localeCompare(b.university) : b.fitScore - a.fitScore), [query, filters, sort]);
+    const matchesSelected = filters.every((item) => {
+      if (item === "Multi-country Europe") return /multi-country|international/i.test(school.location);
+      if (locationFilters.includes(item)) return school.location.includes(item);
+      return program ? matchesProgramFilter(program, item) : false;
+    });
+    return matchesQuery && matchesSelected;
+  }).sort((a, b) => sort === "A–Z" ? a.name.localeCompare(b.name) : Number(a.rank.replace("=", "")) - Number(b.rank.replace("=", "")));
   return <div className="page-enter">
-    <section className="page-intro"><div><span className="eyebrow">Europe-first discovery</span><h2>Find your business program</h2><p>Explore verified bachelor’s programs across Europe’s business universities and schools.</p></div><span className="source-stamp"><CircleCheck size={15} /> Official pages checked 21 Aug 2026</span></section>
+    <section className="page-intro"><div><span className="eyebrow">Europe-first discovery</span><h2>Explore 100 business schools</h2><p>Start with the full directory. Your preferences are applied only when you choose filters.</p></div><a className="source-stamp" href={rankingSource} target="_blank" rel="noreferrer"><CircleCheck size={15} /> FT European Business Schools 2025 <ExternalLink size={12} /></a></section>
     <section className="card search-card">
       <label className="search-box"><Search size={18} /><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search programs, universities, specializations, or countries…" />{query && <button onClick={() => setQuery("")} aria-label="Clear search"><X size={15} /></button>}</label>
       <button type="button" className={"refine-toggle " + (refineOpen ? "open" : "")} onClick={() => setRefineOpen(!refineOpen)} aria-expanded={refineOpen}><span className="refine-toggle-icon"><SlidersHorizontal size={17} /></span><span className="refine-toggle-copy"><strong>Filters</strong><small>{filters.length ? `${filters.length} active filter${filters.length === 1 ? "" : "s"}` : "Country, business area, study details, math, and opportunities"}</small></span>{filters.length > 0 && <em>{filters.length}</em>}<ChevronDown size={17} /></button>
-      {refineOpen && <div className="refine-panel"><header><div><span className="section-label">Build your shortlist</span><h3>What matters to you?</h3><p>Select any combination. Results update immediately.</p></div>{filters.length > 0 && <button type="button" onClick={() => setFilters([])}>Reset</button>}</header><div className="refine-groups">{filterGroups.map((group) => <fieldset key={group.label}><legend>{group.label}<small>{group.note}</small></legend><div>{group.options.map((item) => <label key={item} className={filters.includes(item) ? "selected" : ""}><input type="checkbox" checked={filters.includes(item)} onChange={() => toggleFilter(item)} /><span className="filter-check">{filters.includes(item) && <Check size={12} />}</span><span>{item}</span></label>)}</div></fieldset>)}</div><footer><span>{filters.length ? `${filters.length} filters selected` : "No filters selected"}</span><button type="button" className="primary-button" onClick={() => setRefineOpen(false)}>Show {filtered.length} program{filtered.length === 1 ? "" : "s"}</button></footer></div>}
+      {refineOpen && <div className="refine-panel"><header><div><span className="section-label">Build your shortlist</span><h3>What matters to you?</h3><p>Nothing is preselected. Results update only from choices you make here.</p></div>{filters.length > 0 && <button type="button" onClick={() => setFilters([])}>Reset</button>}</header><div className="refine-groups">{filterGroups.map((group) => <fieldset key={group.label}><legend>{group.label}<small>{group.note}</small></legend><div>{group.options.map((item) => <label key={item} className={filters.includes(item) ? "selected" : ""}><input type="checkbox" checked={filters.includes(item)} onChange={() => toggleFilter(item)} /><span className="filter-check">{filters.includes(item) && <Check size={12} />}</span><span>{item}</span></label>)}</div></fieldset>)}</div><footer><span>{filters.length ? `${filters.length} filters selected` : "No filters selected"}</span><button type="button" className="primary-button" onClick={() => setRefineOpen(false)}>Show {filtered.length} school{filtered.length === 1 ? "" : "s"}</button></footer></div>}
       {filters.length > 0 && <div className="active-filters">{filters.map((item) => <button key={item} onClick={() => toggleFilter(item)}>{item}<X size={12} /></button>)}<button className="clear-all" onClick={() => setFilters([])}>Clear all</button></div>}
     </section>
-    <div className="results-head"><div><strong>{filtered.length} verified European program{filtered.length === 1 ? "" : "s"}</strong><span>Only programs with checked official pages are shown</span></div><button className="sort-button" onClick={() => setSort(sort === "Best match" ? "A–Z" : "Best match")}>Sort: {sort} <ChevronDown size={14} /></button></div>
-    <section className="program-list">{filtered.map((p) => <ProgramCard key={p.id} p={p} open={() => open(p)} saved={saved.includes(p.id)} toggleSaved={() => setSaved(p.id)} compared={compared.includes(p.id)} toggleCompare={() => toggleCompare(p.id)} addPath={() => addPath(p)} />)}{filtered.length === 0 && <div className="card empty"><Search /><h3>No exact matches</h3><p>Try a broader search or remove a preference.</p><button className="outline-button" onClick={() => { setQuery(""); setFilters([]); }}>Reset search</button></div>}</section>
+    <div className="results-head"><div><strong>{filtered.length} European business school{filtered.length === 1 ? "" : "s"}</strong><span>{filters.length ? "Filtered from your selected criteria" : "No personal preferences applied"}</span></div><button className="sort-button" onClick={() => setSort(sort === "FT ranking" ? "A–Z" : "FT ranking")}>Sort: {sort} <ChevronDown size={14} /></button></div>
+    <section className="program-list">{filtered.map((school) => { const program = school.programId ? programs.find((item) => item.id === school.programId) : undefined; const saveId = program?.id ?? school.id; return <BusinessSchoolCard key={school.id} school={school} program={program} open={program ? () => open(program) : undefined} saved={saved.includes(saveId)} toggleSaved={() => setSaved(saveId)} compared={program ? compared.includes(program.id) : false} toggleCompare={program ? () => toggleCompare(program.id) : undefined} addPath={program ? () => addPath(program) : undefined} />; })}{filtered.length === 0 && <div className="card empty"><Search /><h3>No exact matches</h3><p>Try a broader search or remove a preference.</p><button className="outline-button" onClick={() => { setQuery(""); setFilters([]); }}>Reset search</button></div>}</section>
   </div>;
 }
 
