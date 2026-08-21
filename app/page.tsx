@@ -452,26 +452,46 @@ function ProgramCard({ p, open, saved, toggleSaved, compared, toggleCompare, add
 
 function Explore({ open, saved, setSaved, compared, toggleCompare, addPath }: { open: (p: Program) => void; saved: string[]; setSaved: (id: string) => void; compared: string[]; toggleCompare: (id: string) => void; addPath: (p: Program) => void }) {
   const [query, setQuery] = useState("");
-  const [filter, setFilter] = useState("All");
-  const [tab, setTab] = useState("Programs");
+  const [refineOpen, setRefineOpen] = useState(false);
+  const [filters, setFilters] = useState<string[]>([]);
   const [sort, setSort] = useState("Best match");
+  const filterGroups = [
+    { label: "Country", options: ["Finland", "France", "Canada", "USA", "Netherlands"] },
+    { label: "Study focus", options: ["Management", "Entrepreneurship", "Marketing", "International Business"] },
+    { label: "Math level", options: ["Low math", "Low–moderate", "Moderate math"] },
+    { label: "Opportunities", options: ["English-taught", "Exchange", "Internship", "Career services", "Direct entry"] },
+  ];
+  const toggleFilter = (item: string) => setFilters((current) => current.includes(item) ? current.filter((value) => value !== item) : [...current, item]);
+  const matchesFilter = (p: Program, item: string) => {
+    if (["Finland", "France", "Canada", "USA", "Netherlands"].includes(item)) return p.location.includes(item);
+    if (item === "Management") return /management/i.test(p.title) || p.management === "Strong";
+    if (item === "Entrepreneurship") return /strong|available/i.test(p.enterprise);
+    if (item === "Marketing") return /strong|available/i.test(p.marketing);
+    if (item === "International Business") return /international|global bba/i.test(p.title) || /international/i.test(p.experience);
+    if (item === "Low math") return /low|lower/i.test(p.math);
+    if (item === "Low–moderate") return !/high|not yet verified/i.test(p.math);
+    if (item === "Moderate math") return /moderate/i.test(p.math);
+    if (item === "English-taught") return /english/i.test(p.language);
+    if (item === "Exchange") return /international|exchange|countries|abroad/i.test(p.experience);
+    if (item === "Internship") return /internship/i.test(p.experience);
+    if (item === "Career services") return /career services/i.test(p.experience);
+    return p.entry.toLowerCase().includes("direct");
+  };
   const filtered = useMemo(() => programs.filter((p) => {
     const haystack = [p.university, p.title, p.location, p.management, p.enterprise, p.marketing, p.math].join(" ").toLowerCase();
     const matchesQuery = haystack.includes(query.toLowerCase());
-    const matchesFilter = filter === "All" || (filter === "Good fit" && p.fit === "Good Fit") || (filter === "Direct entry" && p.entry.toLowerCase().includes("direct")) || (filter === "Moderate math" && !p.math.toLowerCase().includes("high")) || (filter === "Exchange" && /(international|exchange|countries|abroad)/i.test(p.experience));
-    return matchesQuery && matchesFilter;
-  }).sort((a, b) => sort === "A–Z" ? a.university.localeCompare(b.university) : b.fitScore - a.fitScore), [query, filter, sort]);
-  const display = tab === "Universities" ? filtered.filter((p, index) => filtered.findIndex((item) => item.university === p.university) === index) : filtered;
-  const showUniversityPrograms = (university: string) => { setQuery(university); setFilter("All"); setTab("Programs"); };
+    return matchesQuery && filters.every((item) => matchesFilter(p, item));
+  }).sort((a, b) => sort === "A–Z" ? a.university.localeCompare(b.university) : b.fitScore - a.fitScore), [query, filters, sort]);
   return <div className="page-enter">
     <section className="page-intro"><div><span className="eyebrow">Evidence-backed discovery</span><h2>Business programs</h2><p>Best matches for Alif · Management first · Low-to-moderate math</p></div><span className="source-stamp"><CircleCheck size={15} /> Official sources checked 19 Aug 2026</span></section>
     <section className="card search-card">
       <label className="search-box"><Search size={18} /><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search programs, universities, specializations, or countries…" />{query && <button onClick={() => setQuery("")} aria-label="Clear search"><X size={15} /></button>}</label>
-      <div className="tabs"><button className={tab === "Programs" ? "active" : ""} onClick={() => setTab("Programs")}>Programs</button><button className={tab === "Universities" ? "active" : ""} onClick={() => setTab("Universities")}>Universities</button></div>
-      <div className="filter-row"><SlidersHorizontal size={16} />{["All", "Good fit", "Direct entry", "Moderate math", "Exchange"].map((item) => <button className={filter === item ? "active" : ""} onClick={() => setFilter(item)} key={item}>{item}</button>)}</div>
+      <button type="button" className={"refine-toggle " + (refineOpen ? "open" : "")} onClick={() => setRefineOpen(!refineOpen)}><span><SlidersHorizontal size={16} /><strong>Refine your search</strong><small>{filters.length ? `${filters.length} selected` : "Country, focus, math level, and more"}</small></span><ChevronDown size={17} /></button>
+      {refineOpen && <div className="refine-panel">{filterGroups.map((group) => <fieldset key={group.label}><legend>{group.label}</legend>{group.options.map((item) => <label key={item}><input type="checkbox" checked={filters.includes(item)} onChange={() => toggleFilter(item)} /><span>{item}</span></label>)}</fieldset>)}</div>}
+      {filters.length > 0 && <div className="active-filters">{filters.map((item) => <button key={item} onClick={() => toggleFilter(item)}>{item}<X size={12} /></button>)}<button className="clear-all" onClick={() => setFilters([])}>Clear all</button></div>}
     </section>
-    <div className="results-head"><div><strong>{display.length} {tab.toLowerCase()}</strong><span>Matched at program level</span></div><button className="sort-button" onClick={() => setSort(sort === "Best match" ? "A–Z" : "Best match")}>Sort: {sort} <ChevronDown size={14} /></button></div>
-    <section className="program-list">{display.map((p) => <ProgramCard key={p.id} p={p} open={() => tab === "Universities" ? showUniversityPrograms(p.university) : open(p)} saved={saved.includes(p.id)} toggleSaved={() => setSaved(p.id)} compared={compared.includes(p.id)} toggleCompare={() => toggleCompare(p.id)} addPath={() => addPath(p)} />)}{display.length === 0 && <div className="card empty"><Search /><h3>No exact matches</h3><p>Try a broader term or remove a filter.</p><button className="outline-button" onClick={() => { setQuery(""); setFilter("All"); }}>Reset filters</button></div>}</section>
+    <div className="results-head"><div><strong>{filtered.length} programs</strong><span>Matched to your search and preferences</span></div><button className="sort-button" onClick={() => setSort(sort === "Best match" ? "A–Z" : "Best match")}>Sort: {sort} <ChevronDown size={14} /></button></div>
+    <section className="program-list">{filtered.map((p) => <ProgramCard key={p.id} p={p} open={() => open(p)} saved={saved.includes(p.id)} toggleSaved={() => setSaved(p.id)} compared={compared.includes(p.id)} toggleCompare={() => toggleCompare(p.id)} addPath={() => addPath(p)} />)}{filtered.length === 0 && <div className="card empty"><Search /><h3>No exact matches</h3><p>Try a broader search or remove a preference.</p><button className="outline-button" onClick={() => { setQuery(""); setFilters([]); }}>Reset search</button></div>}</section>
   </div>;
 }
 
