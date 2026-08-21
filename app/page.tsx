@@ -434,10 +434,19 @@ function Dashboard({ go, completed, toggleTask, openProgram, target }: { go: (v:
 
 function ProgramCard({ p, open, saved, toggleSaved, compared, toggleCompare, addPath }: { p: Program; open: () => void; saved: boolean; toggleSaved: () => void; compared: boolean; toggleCompare: () => void; addPath: () => void }) {
   return <article className="card program-card">
-    <button className="program-copy" onClick={open}><UniversityLogo program={p} /><span><span className="program-title"><strong>{p.university}</strong><em className={"fit " + fitClass(p.fit)}>{p.fit}</em></span><small><MapPin size={12} />{p.location}</small><b>{p.title}</b><small>{p.duration} · {p.language}</small></span></button>
-    <div className="program-evidence"><span><strong>{p.math}</strong><small>Quantitative fit</small></span><span><strong>{p.management}</strong><small>Management</small></span><span><strong>{p.experience.split(" · ")[0]}</strong><small>Experience</small></span></div>
-    <p><CircleCheck size={14} /> {p.why[0]}</p>
-    <div className="program-actions"><button className={"icon-label " + (saved ? "selected" : "")} onClick={toggleSaved}><Bookmark size={15} />{saved ? "Saved" : "Save"}</button><button className={"outline-button " + (compared ? "selected" : "")} onClick={toggleCompare}><Scale size={15} />{compared ? "Compared" : "Compare"}</button><button className="outline-button" onClick={open}>View evidence</button><button className="primary-button" onClick={addPath}><Plus size={15} />Pathway</button></div>
+    <div className="program-card-head">
+      <button className="program-identity" onClick={open}><UniversityLogo program={p} size="small" /><span><strong>{p.university}</strong><small><MapPin size={11} />{p.location}</small></span></button>
+      <button className={"program-save " + (saved ? "selected" : "")} onClick={toggleSaved} aria-label={saved ? `Remove ${p.university} from saved programs` : `Save ${p.university}`}><Bookmark size={16} fill={saved ? "currentColor" : "none"} /></button>
+    </div>
+    <button className="program-main-copy" onClick={open}>
+      <span className="program-match"><strong>{p.fitScore}<small>%</small></strong><em>match</em></span>
+      <span className={"fit " + fitClass(p.fit)}>{p.fit}</span>
+      <b>{p.title}</b>
+    </button>
+    <div className="program-meta"><span><Clock3 size={13} />{p.duration}</span><span><Languages size={13} />{p.language}</span></div>
+    <div className="program-evidence"><span><small>Management</small><strong>{p.management}</strong></span><span><small>Quantitative</small><strong>{p.math}</strong></span></div>
+    <p><CircleCheck size={14} /> <span>{p.why[0]}</span></p>
+    <div className="program-actions"><button className={"compact-action " + (compared ? "selected" : "")} onClick={toggleCompare}><Scale size={14} />{compared ? "Compared" : "Compare"}</button><button className="compact-action" onClick={addPath}><Plus size={14} />Pathway</button><button className="primary-button compact-view" onClick={open}>View <ChevronRight size={14} /></button></div>
   </article>;
 }
 
