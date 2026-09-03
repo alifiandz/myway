@@ -505,7 +505,7 @@ function SchoolLogo({ school, program, size = "small" }: { school: BusinessSchoo
 }
 
 function Brand() {
-  return <div className="brand"><span className="brand-mark"><Map size={20} /></span><span><strong>Pathway</strong><small>Plan with evidence</small></span></div>;
+  return <div className="brand"><span className="brand-mark"><Map size={20} /></span><span><strong>MyWay</strong><small>Plan with evidence</small></span></div>;
 }
 
 function Navigation({ active, go, openGuide, progress, hasTarget }: { active: View; go: (v: View) => void; openGuide: () => void; progress: number; hasTarget: boolean }) {
