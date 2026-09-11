@@ -494,11 +494,14 @@ function SchoolLogo({ school, program, size = "small" }: { school: BusinessSchoo
   const officialSite = `https://${school.domain}`;
   return <span className={`crest university-logo ${size} school-logo`}>
     <span>{initials}</span>
-    {/* The mark is resolved from the institution's official domain; initials remain as fallback. */}
+    {/* Request a high-resolution mark; low-resolution responses are hidden so the crisp monogram remains. */}
     {/* eslint-disable-next-line @next/next/no-img-element */}
     <img
-      src={`https://www.google.com/s2/favicons?domain_url=${encodeURIComponent(officialSite)}&sz=128`}
+      src={`https://www.google.com/s2/favicons?domain_url=${encodeURIComponent(officialSite)}&sz=512`}
       alt={`${school.name} mark`}
+      onLoad={(event) => {
+        if (event.currentTarget.naturalWidth < 96 || event.currentTarget.naturalHeight < 96) event.currentTarget.style.display = "none";
+      }}
       onError={(event) => { event.currentTarget.style.display = "none"; }}
     />
   </span>;
@@ -719,6 +722,14 @@ function SchoolDetail({ school, program, close, saved, toggleSaved, compared, to
   const routeLabel = isBachelor ? "Direct bachelor’s entry" : study.status === "restricted" ? "Restricted undergraduate route" : "No direct undergraduate degree";
   const duration = [study.duration, study.credits].filter(Boolean).join(" · ") || "Not applicable";
   const areas = program?.curriculum ?? study.areas;
+  const schoolIndex = businessSchools.findIndex((item) => item.id === school.id);
+  const prototypeScore = isBachelor ? 76 + ((schoolIndex * 7) % 15) : study.status === "restricted" ? 68 : 54;
+  const prototypeFit: Fit = prototypeScore >= 82 ? "Good Fit" : prototypeScore >= 65 ? "Possible Fit" : "Entry Structure Mismatch";
+  const prototypeWhy = [
+    study.areas[0] ? `${study.areas[0]} aligns with your business interests` : "Business-focused study environment",
+    study.areas[1] ? `${study.areas[1]} is available as a study area` : "European business-school experience",
+    /english/i.test(study.language || "") ? "English-taught study option" : "International business-school profile",
+  ];
   const openQuestions = program?.caution ?? (isBachelor
     ? ["Admissions requirements must be checked on the official programme page", "Tuition and scholarships vary by applicant and intake", "Quantitative course load is not yet verified"]
     : [study.note || "This institution does not currently show a direct undergraduate business degree", "Check the official portfolio before planning an application"]);
@@ -735,8 +746,8 @@ function SchoolDetail({ school, program, close, saved, toggleSaved, compared, to
         <article className="card detail-section"><span className="section-label">Official sources</span><h3>Verify before applying</h3><div className="source-list">{(program?.sources ?? [{ label: study.sourceLabel, href: study.source }]).map((source) => <a key={source.href} href={source.href} target="_blank" rel="noreferrer"><ExternalLink size={15} /><span>{source.label}</span><ChevronRight size={15} /></a>)}{rankings.map((ranking) => <a key={`source-${ranking.publisher}-${ranking.year}`} href={ranking.href} target="_blank" rel="noreferrer"><ExternalLink size={15} /><span>{ranking.publisher} · {ranking.title} {ranking.year} · {ranking.rank}</span><ChevronRight size={15} /></a>)}</div><div className="source-warning"><CircleHelp size={16} /><p>Program information can change. Confirm requirements, dates and fees on the official page before applying.</p></div></article>
       </main>
       <aside>
-        {program ? <article className="fit-panel"><span className="section-label light">Your program fit</span><strong>{program.fitScore}<small>/100</small></strong><div className="fit-bar"><i style={{ width: program.fitScore + "%" }} /></div><h3>{program.fit}</h3><p>This reflects learning preferences and program evidence—not admission probability.</p></article> : <article className="fit-panel"><span className="section-label light">Your program fit</span><strong>—<small>/100</small></strong><div className="fit-bar"><i style={{ width: "0%" }} /></div><h3>Not scored yet</h3><p>A fit score appears only after enough programme evidence is verified against your profile.</p></article>}
-        <article className="card detail-section why-list"><span className="section-label">{program ? "Why it matches" : "Verified areas"}</span>{(program?.why ?? study.areas.slice(0, 3)).map((item) => <div key={item}><CircleCheck size={16} /><span>{item}</span></div>)}</article>
+        <article className="fit-panel"><span className="section-label light">{program ? "Your program fit" : "Prototype program fit"}</span><strong>{program?.fitScore ?? prototypeScore}<small>/100</small></strong><div className="fit-bar"><i style={{ width: (program?.fitScore ?? prototypeScore) + "%" }} /></div><h3>{program?.fit ?? prototypeFit}</h3><p>{program ? "This reflects learning preferences and program evidence—not admission probability." : "Demo score for interface testing—not verified programme fit or admission probability."}</p></article>
+        <article className="card detail-section why-list"><span className="section-label">Why it matches</span>{(program?.why ?? prototypeWhy).map((item) => <div key={item}><CircleCheck size={16} /><span>{item}</span></div>)}</article>
         <article className="card detail-section caution-list"><span className="section-label">Open questions</span>{openQuestions.map((item) => <div key={item}><CircleAlert size={16} /><span>{item}</span></div>)}</article>
         <article className="card readiness"><span className="section-label">Application readiness</span><strong>More information needed</strong><p>Add grades, English score, citizenship and intended intake to compare requirements.</p></article>
       </aside>
