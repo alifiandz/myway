@@ -529,6 +529,7 @@ function SchoolLogo({ school, program, size = "small" }: { school: BusinessSchoo
     <img
       src={`https://www.google.com/s2/favicons?domain_url=${encodeURIComponent(officialSite)}&sz=512`}
       alt={`${school.name} mark`}
+      onLoad={(event) => { if (event.currentTarget.naturalWidth < 64 || event.currentTarget.naturalHeight < 64) event.currentTarget.style.display = "none"; }}
       onError={(event) => { event.currentTarget.style.display = "none"; }}
     />
   </span>;
@@ -545,7 +546,7 @@ function Navigation({ active, go, openGuide, progress, hasTarget }: { active: Vi
       <nav className="nav-list" aria-label="Main navigation">
         {navItems.map(({ id, label, icon: Icon }) => <button key={id} className={"nav-item " + (active === id ? "active" : "")} onClick={() => go(id)}><Icon size={19} /><span>{label}</span></button>)}
       </nav>
-      <article className="sidebar-progress"><span className="mini-icon"><Sparkles size={16} /></span><strong>{hasTarget ? progress + "% prepared" : "Choose a target"}</strong><small>{hasTarget ? "Your plan updates as you complete actions." : "Your readiness tracker starts after a target is added."}</small><div className="bar"><i style={{ width: progress + "%" }} /></div></article>
+      <article className="sidebar-progress"><span className="mini-icon"><Sparkles size={16} /></span><strong>{hasTarget ? progress + "% prepared" : "Choose a Dream"}</strong><small>{hasTarget ? "Your Dream plan updates as you complete actions." : "Progress starts after a Dream university is added."}</small><div className="bar"><i style={{ width: progress + "%" }} /></div></article>
       <button className="guide-link" onClick={openGuide}><BookOpen size={17} /> Planning guide</button>
     </aside>
     <nav className="mobile-nav" aria-label="Mobile navigation">
