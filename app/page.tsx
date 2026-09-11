@@ -524,12 +524,11 @@ function SchoolLogo({ school, program, size = "small" }: { school: BusinessSchoo
   const officialSite = `https://${school.domain}`;
   return <span className={`crest university-logo ${size} school-logo`}>
     <span>{initials}</span>
-    {/* Request a high-resolution mark; low-resolution responses are hidden so the crisp monogram remains. */}
+    {/* Show the institution's real domain mark; initials remain only if loading fails. */}
     {/* eslint-disable-next-line @next/next/no-img-element */}
     <img
       src={`https://www.google.com/s2/favicons?domain_url=${encodeURIComponent(officialSite)}&sz=512`}
       alt={`${school.name} mark`}
-      onLoad={(event) => { if (event.currentTarget.naturalWidth < 64 || event.currentTarget.naturalHeight < 64) event.currentTarget.style.display = "none"; }}
       onError={(event) => { event.currentTarget.style.display = "none"; }}
     />
   </span>;
