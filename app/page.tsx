@@ -7,7 +7,7 @@ import {
   CircleHelp, CircleUserRound, ClipboardCheck, Clock3, ExternalLink,
   Flag, Flame, Globe2, GraduationCap, Languages, LayoutDashboard, Map, MapPin, Plus,
   RefreshCw, Scale, Search, Settings2, SlidersHorizontal, Sparkles, Star, Target,
-  Trophy, WalletCards, X,
+  Trophy, X,
 } from "lucide-react";
 import { schoolStudyRows, type SchoolStudySummary } from "./school-data";
 
@@ -414,6 +414,36 @@ function schoolStudy(school: BusinessSchool) {
   return schoolStudySummaries[school.id];
 }
 
+function schoolAsProgram(school: BusinessSchool): Program {
+  const study = schoolStudy(school);
+  const index = businessSchools.findIndex((item) => item.id === school.id);
+  const score = study.status === "bachelor" ? 76 + ((index * 7) % 15) : study.status === "restricted" ? 68 : 54;
+  return {
+    id: `school:${school.id}`,
+    university: school.name,
+    initials: school.name.split(/\s+/).filter((word) => /^[A-ZÀ-Ž]/.test(word)).slice(0, 2).map((word) => word[0]).join("") || school.name.slice(0, 2).toUpperCase(),
+    logo: `https://www.google.com/s2/favicons?domain_url=${encodeURIComponent(`https://${school.domain}`)}&sz=512`,
+    title: study.title,
+    location: school.location,
+    duration: [study.duration, study.credits].filter(Boolean).join(" · ") || "Not applicable",
+    language: study.language || "See official programme page",
+    entry: study.status === "bachelor" ? "Direct bachelor’s entry" : study.status === "restricted" ? "Restricted undergraduate route" : "No direct undergraduate degree",
+    fit: score >= 82 ? "Good Fit" : score >= 65 ? "Possible Fit" : "Entry Structure Mismatch",
+    fitScore: score,
+    management: study.areas.some((area) => /management|business/i.test(area)) ? "Available" : "Not highlighted",
+    enterprise: study.areas.some((area) => /entrepreneur/i.test(area)) ? "Available" : "Not highlighted",
+    marketing: study.areas.some((area) => /marketing/i.test(area)) ? "Available" : "Not highlighted",
+    math: "Not yet verified",
+    experience: "Check the official programme page",
+    tuition: "See the current official fee schedule",
+    verified: "Prototype record",
+    why: study.areas.slice(0, 3).map((area) => `${area} matches a selected business interest`),
+    caution: ["Admissions requirements must be checked", "Tuition and scholarships depend on applicant status", "Quantitative course load needs verification"],
+    curriculum: study.areas,
+    sources: [{ label: study.sourceLabel, href: study.source }],
+  };
+}
+
 const rankingSource = "https://rankings.ft.com/rankings/3042/european-business-school-rankings-2025";
 const qsBusinessSource = "https://www.topuniversities.com/university-subject-rankings/business-management-studies";
 const theBusinessSource = "https://www.timeshighereducation.com/world-university-rankings/2026/subject-ranking/business-and-economics";
@@ -499,9 +529,6 @@ function SchoolLogo({ school, program, size = "small" }: { school: BusinessSchoo
     <img
       src={`https://www.google.com/s2/favicons?domain_url=${encodeURIComponent(officialSite)}&sz=512`}
       alt={`${school.name} mark`}
-      onLoad={(event) => {
-        if (event.currentTarget.naturalWidth < 96 || event.currentTarget.naturalHeight < 96) event.currentTarget.style.display = "none";
-      }}
       onError={(event) => { event.currentTarget.style.display = "none"; }}
     />
   </span>;
@@ -616,8 +643,8 @@ function Dashboard({ go, completed, toggleTask, openProgram, target }: { go: (v:
   const weeklyGain = 4 + doneToday * 4;
 
   if (!target) return <div className="page-enter">
-    <section className="welcome-row"><div><span className="eyebrow">Your preparation workspace</span><h2>Choose a target to start tracking</h2><p>Readiness is always measured against a specific program—not a generic profile score.</p></div></section>
-    <article className="card no-target-gate"><span className="large-icon"><Target /></span><div><span className="section-label">Tracker locked</span><h3>Add one program as your target university</h3><p>Until then, you can explore and compare programs. Your daily actions, readiness goals, and milestones will appear here after a target is chosen.</p><button className="primary-button" onClick={() => go("explore")}><Search size={15} /> Explore programs</button></div></article>
+    <section className="welcome-row"><div><span className="eyebrow">Your preparation workspace</span><h2>Choose a Dream university to start tracking</h2><p>Preparation progress is always connected to a specific university—not an admission prediction.</p></div></section>
+    <article className="card no-target-gate"><span className="large-icon"><Target /></span><div><span className="section-label">Tracker ready</span><h3>Add one university as your Dream</h3><p>Your daily actions, readiness goals, and milestones will appear here after a Dream option is chosen. Target and Alternative options remain together on My Pathway.</p><button className="primary-button" onClick={() => go("explore")}><Search size={15} /> Explore programs</button></div></article>
     <section className="section-space dashboard-recommendations"><div className="section-head"><div><span className="section-label">Start here</span><h3>Strong current matches</h3></div></div><div className="recommend-grid">{programs.slice(0, 3).map((p) => <button className="card recommendation" key={p.id} onClick={() => openProgram(p)}><UniversityLogo program={p} /><span><strong>{p.university}</strong><small>{p.title}</small><em className={"fit " + fitClass(p.fit)}>{p.fit}</em></span><ChevronRight /></button>)}</div></section>
   </div>;
 
@@ -627,7 +654,7 @@ function Dashboard({ go, completed, toggleTask, openProgram, target }: { go: (v:
       <div className="main-column">
         <article className="card hero-progress"><div><span className="section-label">Preparation progress</span><strong>{overallReadiness}%</strong><p>Based on your readiness categories and completed actions. Not an admission prediction.</p><button className="text-link" onClick={() => go("progress")}>Open full pathway <ChevronRight size={15} /></button></div><div className="hero-readiness-visual"><div className="ring" style={{ background: `conic-gradient(var(--blue) ${overallReadiness}%, #e9ebf2 0)` }}><span>{overallReadiness}<small>%</small></span></div><em className="hero-weekly-gain">+{weeklyGain}% this week</em></div></article>
         <section className="section-space"><div className="section-head"><div><span className="section-label">Today’s actions</span><h3>Close the most useful gaps</h3></div><span className="badge amber">{actions.length - doneToday} open</span></div><article className="card action-list">{actions.map(({ id, title, meta, points, icon: Icon }) => { const done = completed.includes(id); return <button key={id} className={"action-row " + (done ? "done" : "")} onClick={() => toggleTask(id)}><span className={"check " + (done ? "checked" : "")}>{done && <Check size={13} />}</span><span className="row-icon"><Icon size={17} /></span><span><strong>{title}</strong><small>{meta}</small></span><em>{done ? "Complete" : points}</em><ChevronRight size={15} /></button>; })}</article></section>
-        <article className="card readiness-overview"><div className="section-head"><div><span className="section-label">Overall overview</span><h3>Target readiness</h3></div><button className="text-link" onClick={() => go("progress")}>View all <ChevronRight size={15} /></button></div><p className="readiness-context">Progress toward the evidence needed for {target.university}. This is not an admission prediction.</p><div className="readiness-grid">{readiness.map(({ label, note, value, gain, status, icon: Icon, tone }) => <div className="readiness-item" key={label}><span className={"readiness-icon " + tone}><Icon size={19} /></span><span><span><strong>{label}</strong><em>{value}%</em></span><small>{note}</small><div className={"goal-bar " + tone}><i style={{ width: value + "%" }} /></div><span className="readiness-momentum"><b>{status}</b><em>+{gain}% this week</em></span></span></div>)}</div></article>
+        <article className="card readiness-overview"><div className="section-head"><div><span className="section-label">Overall overview</span><h3>Pathway readiness</h3></div><button className="text-link" onClick={() => go("progress")}>View all <ChevronRight size={15} /></button></div><p className="readiness-context">Progress toward the evidence needed for {target.university}. This is not an admission prediction.</p><div className="readiness-grid">{readiness.map(({ label, note, value, gain, status, icon: Icon, tone }) => <div className="readiness-item" key={label}><span className={"readiness-icon " + tone}><Icon size={19} /></span><span><span><strong>{label}</strong><em>{value}%</em></span><small>{note}</small><div className={"goal-bar " + tone}><i style={{ width: value + "%" }} /></div><span className="readiness-momentum"><b>{status}</b><em>+{gain}% this week</em></span></span></div>)}</div></article>
         <section className="section-space"><div className="section-head"><div><span className="section-label">Recommended for you</span><h3>Best current program matches</h3></div><button className="text-link" onClick={() => go("explore")}>View all <ChevronRight size={15} /></button></div><div className="recommend-grid" aria-label="Best current program matches">{[...programs].sort((a, b) => b.fitScore - a.fitScore).slice(0, 3).map((p) => <button className="card recommendation" key={p.id} onClick={() => openProgram(p)}><UniversityLogo program={p} /><span><strong>{p.university}</strong><small>{p.title}</small><em className={"fit " + fitClass(p.fit)}>{p.fit}</em></span><ChevronRight /></button>)}</div></section>
       </div>
       <aside className="right-column">
@@ -711,16 +738,16 @@ function Explore({ openSchool, saved, setSaved, compared, toggleCompare, schoolP
       {filters.length > 0 && <div className="active-filters">{filters.map((item) => <button key={item} onClick={() => toggleFilter(item)}>{item}<X size={12} /></button>)}<button className="clear-all" onClick={() => setFilters([])}>Clear all</button></div>}
     </section>
     <div className="results-head"><div><strong>{filtered.length} European business school{filtered.length === 1 ? "" : "s"}</strong><span>{filters.length ? "Filtered from your selected criteria" : "No personal preferences applied"}</span></div><button className="sort-button" onClick={() => setSort(sort === "FT ranking" ? "A–Z" : "FT ranking")}>Sort: {sort} <ChevronDown size={14} /></button></div>
-    <section className="program-list">{filtered.map((school) => { const program = school.programId ? programs.find((item) => item.id === school.programId) : undefined; return <BusinessSchoolCard key={school.id} school={school} program={program} openSchool={() => openSchool(school)} saved={saved.includes(school.id)} toggleSaved={() => setSaved(school.id)} compared={compared.includes(school.id)} toggleCompare={() => toggleCompare(school.id)} inPathway={schoolPathwayIds.includes(school.id)} togglePathway={() => toggleSchoolPathway(school)} />; })}{filtered.length === 0 && <div className="card empty"><Search /><h3>No exact matches</h3><p>Try a broader search or remove a preference.</p><button className="outline-button" onClick={() => { setQuery(""); setFilters([]); }}>Reset search</button></div>}</section>
+    <section className="program-list">{filtered.map((school) => { const program = school.programId ? programs.find((item) => item.id === school.programId) : undefined; return <BusinessSchoolCard key={school.id} school={school} program={program} openSchool={() => openSchool(school)} saved={saved.includes(school.id)} toggleSaved={() => setSaved(school.id)} compared={compared.includes(school.id)} toggleCompare={() => toggleCompare(school.id)} inPathway={schoolPathwayIds.includes(program?.id ?? `school:${school.id}`)} togglePathway={() => toggleSchoolPathway(school)} />; })}{filtered.length === 0 && <div className="card empty"><Search /><h3>No exact matches</h3><p>Try a broader search or remove a preference.</p><button className="outline-button" onClick={() => { setQuery(""); setFilters([]); }}>Reset search</button></div>}</section>
   </div>;
 }
 
-function SchoolDetail({ school, program, close, saved, toggleSaved, compared, toggleCompare, inPathway, togglePathway }: { school: BusinessSchool; program?: Program; close: () => void; saved: boolean; toggleSaved: () => void; compared: boolean; toggleCompare: () => void; inPathway: boolean; togglePathway: () => void }) {
+function SchoolDetail({ school, program, close, saved, toggleSaved, compared, toggleCompare, pathwayRole, addPath }: { school: BusinessSchool; program?: Program; close: () => void; saved: boolean; toggleSaved: () => void; compared: boolean; toggleCompare: () => void; pathwayRole?: Role; addPath: (role: Role) => void }) {
+  const [roleOpen, setRoleOpen] = useState(false);
   const rankings = schoolRankings(school);
   const study = schoolStudy(school);
   const isBachelor = study.status === "bachelor";
   const routeLabel = isBachelor ? "Direct bachelor’s entry" : study.status === "restricted" ? "Restricted undergraduate route" : "No direct undergraduate degree";
-  const duration = [study.duration, study.credits].filter(Boolean).join(" · ") || "Not applicable";
   const areas = program?.curriculum ?? study.areas;
   const schoolIndex = businessSchools.findIndex((item) => item.id === school.id);
   const prototypeScore = isBachelor ? 76 + ((schoolIndex * 7) % 15) : study.status === "restricted" ? 68 : 54;
@@ -737,11 +764,11 @@ function SchoolDetail({ school, program, close, saved, toggleSaved, compared, to
     <button className="back-button" onClick={close}><ChevronLeft size={17} /> Back to universities</button>
     <section className="card detail-hero">
       <SchoolLogo school={school} program={program} size="large" /><div><span className="verified"><CircleCheck size={14} /> {program ? `Source checked ${program.verified}` : study.sourceLabel}</span><h2>{school.name}</h2><p>{study.title} · {school.location}</p></div>
-      <div className="detail-hero-actions"><button className={"outline-button " + (saved ? "selected" : "")} onClick={toggleSaved}><Bookmark size={15} /> {saved ? "Saved" : "Save"}</button><button className={"outline-button " + (compared ? "selected" : "")} onClick={toggleCompare}><Scale size={15} /> Compare</button><button className={"primary-button " + (inPathway ? "selected" : "")} onClick={togglePathway}>{inPathway ? <Check size={15} /> : <Plus size={15} />} {inPathway ? "In pathway" : "Add to pathway"}</button></div>
+      <div className="detail-hero-actions"><button className={"outline-button " + (saved ? "selected" : "")} onClick={toggleSaved}><Bookmark size={15} /> {saved ? "Saved" : "Save"}</button><button className={"outline-button " + (compared ? "selected" : "")} onClick={toggleCompare}><Scale size={15} /> Compare</button><div className="role-menu"><button className="primary-button" onClick={() => setRoleOpen(!roleOpen)}>{pathwayRole ? <Check size={15} /> : <Plus size={15} />} {pathwayRole ? pathwayRole : "Add to pathway"} <ChevronDown size={14} /></button>{roleOpen && <div>{(["Dream", "Target", "Alternative"] as Role[]).map((role) => <button key={role} onClick={() => { addPath(role); setRoleOpen(false); }}>{role}<small>{role === "Dream" ? "Track on your dashboard" : role === "Target" ? "Leading realistic option" : "Keep as a backup"}</small></button>)}</div>}</div></div>
     </section>
     <div className="detail-grid">
       <main>
-        <article className="card detail-section"><div className="section-head"><div><span className="section-label">Program overview</span><h3>What the official sources say</h3></div>{program && <span className={"fit " + fitClass(program.fit)}>{program.fit}</span>}</div><div className="overview-grid"><div><Clock3 /><span><small>Duration</small><strong>{program?.duration ?? duration}</strong></span></div><div><Languages /><span><small>Language</small><strong>{program?.language ?? study.language ?? "See official programme page"}</strong></span></div><div><GraduationCap /><span><small>Entry structure</small><strong>{program?.entry ?? routeLabel}</strong></span></div><div><WalletCards /><span><small>Tuition</small><strong>{program?.tuition ?? (isBachelor ? "See the current official fee schedule" : "Not applicable")}</strong></span></div></div></article>
+        <article className="card detail-section"><div className="section-head"><div><span className="section-label">Program overview</span><h3>What the official sources say</h3></div>{program && <span className={"fit " + fitClass(program.fit)}>{program.fit}</span>}</div><div className="overview-grid"><div><Clock3 /><span><small>Duration</small><strong>{study.duration || program?.duration.split(" · ")[0] || "Not published"}</strong></span></div><div><GraduationCap /><span><small>Credits</small><strong>{study.credits || program?.duration.split(" · ")[1] || "Not published"}</strong></span></div><div><Languages /><span><small>Language</small><strong>{study.language || program?.language || "Not published"}</strong></span></div><div><GraduationCap /><span><small>Entry structure</small><strong>{program?.entry ?? routeLabel}</strong></span></div></div></article>
         <article className="card detail-section"><span className="section-label">Curriculum and fit</span><h3>{program ? "Evidence by preference" : "Verified study areas"}</h3>{program ? <div className="evidence-table"><div><strong>Management</strong><span className="good-text">{program.management}</span></div><div><strong>Entrepreneurship</strong><span>{program.enterprise}</span></div><div><strong>Marketing</strong><span>{program.marketing}</span></div><div><strong>Quantitative course load</strong><span className={program.math.includes("high") ? "amber-text" : ""}>{program.math}</span></div><div><strong>Exchange, internships, career</strong><span>{program.experience}</span></div></div> : <div className="evidence-table"><div><strong>Study access</strong><span>{routeLabel}</span></div><div><strong>Business areas</strong><span>{study.areas.join(" · ")}</span></div><div><strong>Quantitative course load</strong><span>Not yet verified</span></div><div><strong>Exchange, internships, career</strong><span>Check the official programme page</span></div></div>}<div className="curriculum-tags">{areas.map((item) => <span key={item}>{item}</span>)}</div>{study.note && <p className="school-route-note">{study.note}</p>}</article>
         <article className="card detail-section"><span className="section-label">Official sources</span><h3>Verify before applying</h3><div className="source-list">{(program?.sources ?? [{ label: study.sourceLabel, href: study.source }]).map((source) => <a key={source.href} href={source.href} target="_blank" rel="noreferrer"><ExternalLink size={15} /><span>{source.label}</span><ChevronRight size={15} /></a>)}{rankings.map((ranking) => <a key={`source-${ranking.publisher}-${ranking.year}`} href={ranking.href} target="_blank" rel="noreferrer"><ExternalLink size={15} /><span>{ranking.publisher} · {ranking.title} {ranking.year} · {ranking.rank}</span><ChevronRight size={15} /></a>)}</div><div className="source-warning"><CircleHelp size={16} /><p>Program information can change. Confirm requirements, dates and fees on the official page before applying.</p></div></article>
       </main>
@@ -757,6 +784,7 @@ function SchoolDetail({ school, program, close, saved, toggleSaved, compared, to
 
 function ProgramDetail({ p, close, saved, toggleSaved, compared, toggleCompare, addPath }: { p: Program; close: () => void; saved: boolean; toggleSaved: () => void; compared: boolean; toggleCompare: () => void; addPath: (role: Role) => void }) {
   const [roleOpen, setRoleOpen] = useState(false);
+  const [duration, credits] = p.duration.split(" · ");
   return <div className="page-enter detail-page">
     <button className="back-button" onClick={close}><ChevronLeft size={17} /> Back to programs</button>
     <section className="card detail-hero">
@@ -765,7 +793,7 @@ function ProgramDetail({ p, close, saved, toggleSaved, compared, toggleCompare, 
     </section>
     <div className="detail-grid">
       <main>
-        <article className="card detail-section"><div className="section-head"><div><span className="section-label">Program overview</span><h3>What the official sources say</h3></div><span className={"fit " + fitClass(p.fit)}>{p.fit}</span></div><div className="overview-grid"><div><Clock3 /><span><small>Duration</small><strong>{p.duration}</strong></span></div><div><Languages /><span><small>Language</small><strong>{p.language}</strong></span></div><div><GraduationCap /><span><small>Entry structure</small><strong>{p.entry}</strong></span></div><div><WalletCards /><span><small>Tuition</small><strong>{p.tuition}</strong></span></div></div></article>
+        <article className="card detail-section"><div className="section-head"><div><span className="section-label">Program overview</span><h3>What the official sources say</h3></div><span className={"fit " + fitClass(p.fit)}>{p.fit}</span></div><div className="overview-grid"><div><Clock3 /><span><small>Duration</small><strong>{duration}</strong></span></div><div><GraduationCap /><span><small>Credits</small><strong>{credits || "Not published"}</strong></span></div><div><Languages /><span><small>Language</small><strong>{p.language}</strong></span></div><div><GraduationCap /><span><small>Entry structure</small><strong>{p.entry}</strong></span></div></div></article>
         <article className="card detail-section"><span className="section-label">Curriculum and fit</span><h3>Evidence by preference</h3><div className="evidence-table"><div><strong>Management</strong><span className="good-text">{p.management}</span></div><div><strong>Entrepreneurship</strong><span>{p.enterprise}</span></div><div><strong>Marketing</strong><span>{p.marketing}</span></div><div><strong>Quantitative course load</strong><span className={p.math.includes("high") ? "amber-text" : ""}>{p.math}</span></div><div><strong>Exchange, internships, career</strong><span>{p.experience}</span></div></div><div className="curriculum-tags">{p.curriculum.map((item) => <span key={item}>{item}</span>)}</div></article>
         <article className="card detail-section"><span className="section-label">Official sources</span><h3>Verify before applying</h3><div className="source-list">{p.sources.map((s) => <a key={s.href} href={s.href} target="_blank" rel="noreferrer"><ExternalLink size={15} /><span>{s.label}</span><ChevronRight size={15} /></a>)}</div><div className="source-warning"><CircleHelp size={16} /><p>Program information can change. Confirm requirements, dates and fees on the official page before applying.</p></div></article>
       </main>
@@ -945,7 +973,7 @@ function Pathway({ selected, schoolInterests, completed, toggleTask, go, openSch
       <section className="card stage-panel"><div className="section-head"><div><span className="section-label">Milestones</span><h3>From search to enrolment</h3></div><span className="badge green">2 foundations ready</span></div><div className="stage-list">{stages.map((name, i) => <button key={name} onClick={() => setStage(i)} className={i < 2 ? "complete" : i === stage ? "current" : ""}><span>{i < 2 ? <Check size={14} /> : String(i + 1).padStart(2, "0")}</span><strong>{name}</strong><small>{i < 2 ? "Complete" : i === stage ? "In progress" : "Not started"}</small><ChevronRight /></button>)}</div></section>
       <aside className="pathway-side">
         <article className="card active-milestone"><span className="section-label">Current milestone · {String(stage + 1).padStart(2, "0")}</span><h3>{stages[stage]}</h3><p>Complete the highest-value evidence gaps before narrowing your program list.</p><div className="milestone-actions">{actions.map((id) => { const done = completed.includes(id); return <button key={id} onClick={() => toggleTask(id)}><span className={"check " + (done ? "checked" : "")}>{done && <Check size={14} />}</span><span><strong>{actionNames[id]}</strong><small>{id === "quant" ? "25 min · Program fit" : "Profile gap"}</small></span></button>; })}</div></article>
-        <article className="card path-options"><div className="section-head"><h3>Program roles</h3><button onClick={() => go("explore")}>Manage</button></div>{selected.length ? selected.map(({ p, role }) => <div key={p.id}><UniversityLogo program={p} size="small" /><span><strong>{p.university}</strong><small>{p.title}</small></span><em>{role}</em></div>) : <div className="empty-compact"><Bookmark size={18} /><span>No pathway programs yet</span></div>}</article>
+        <article className="card path-options"><div className="section-head"><h3>Dream, Target & Alternatives</h3><button onClick={() => go("explore")}>Manage</button></div>{selected.length ? (["Dream", "Target", "Alternative"] as Role[]).flatMap((group) => selected.filter(({ role }) => role === group).map(({ p, role }) => <div key={p.id}><UniversityLogo program={p} size="small" /><span><strong>{p.university}</strong><small>{p.title}</small></span><em>{role}</em></div>)) : <div className="empty-compact"><Bookmark size={18} /><span>No pathway programs yet</span></div>}</article>
         <article className="card path-options school-research-options"><div className="section-head"><h3>University research</h3><button onClick={() => go("explore")}>Manage</button></div>{schoolInterests.length ? schoolInterests.map((school) => { const program = school.programId ? programs.find((item) => item.id === school.programId) : undefined; return <button type="button" className="school-research-row" key={school.id} onClick={() => openSchool(school)}><SchoolLogo school={school} program={program} size="small" /><span><strong>{school.name}</strong><small>{schoolStudy(school).title}</small></span><ChevronRight size={14} /></button>; }) : <div className="empty-compact"><Bookmark size={18} /><span>No universities added for research</span></div>}</article>
       </aside>
     </div>
@@ -994,7 +1022,6 @@ export default function App() {
   const [compared, setCompared] = useState<string[]>([]);
   const [compareOpen, setCompareOpen] = useState(false);
   const [pathway, setPathway] = useState<{ p: Program; role: Role }[]>([]);
-  const [schoolPathwayIds, setSchoolPathwayIds] = useState<string[]>([]);
   const [completed, setCompleted] = useState<string[]>([]);
   const [notices, setNotices] = useState(false);
   const [toast, setToast] = useState("");
@@ -1021,6 +1048,13 @@ export default function App() {
   };
   const openProgram = (program: Program) => {
     setView("explore");
+    if (program.id.startsWith("school:")) {
+      setSelectedSchoolId(program.id.slice("school:".length));
+      setSelectedProgramId(null);
+      window.history.replaceState(null, "", "#explore");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
     setSelectedProgramId(program.id);
     setSelectedSchoolId(null);
     window.history.replaceState(null, "", "#explore");
@@ -1051,17 +1085,19 @@ export default function App() {
     setCompared([...compared, id]); setToast("Added to comparison");
   };
   const addPath = (p: Program, role: Role = "Target") => {
-    setPathway([...pathway.filter((v) => v.p.id !== p.id), { p, role }]);
+    setPathway((current) => [...current.filter((v) => v.p.id !== p.id), { p, role }]);
     setToast(p.university + " added as " + role);
   };
   const toggleSchoolPathway = (school: BusinessSchool) => {
-    const alreadyAdded = schoolPathwayIds.includes(school.id);
-    setSchoolPathwayIds(alreadyAdded ? schoolPathwayIds.filter((id) => id !== school.id) : [...schoolPathwayIds, school.id]);
-    setToast(alreadyAdded ? `${school.name} removed from pathway research` : `${school.name} added to pathway research`);
+    const program = school.programId ? programs.find((item) => item.id === school.programId) : undefined;
+    const choice = program ?? schoolAsProgram(school);
+    const alreadyAdded = pathway.some((item) => item.p.id === choice.id);
+    setPathway((current) => alreadyAdded ? current.filter((item) => item.p.id !== choice.id) : [...current, { p: choice, role: "Target" }]);
+    setToast(alreadyAdded ? `${school.name} removed from pathway` : `${school.name} added as Target`);
   };
   const toggleTask = (id: string) => setCompleted(completed.includes(id) ? completed.filter((v) => v !== id) : [...completed, id]);
-  const targetProgram = pathway.find((item) => item.role === "Target")?.p;
-  const progress = targetProgram ? Math.min(100, 28 + completed.length * 9) : 0;
+  const dashboardProgram = pathway.find((item) => item.role === "Dream")?.p ?? pathway.find((item) => item.role === "Target")?.p ?? pathway[0]?.p;
+  const progress = dashboardProgram ? Math.min(100, 28 + completed.length * 9) : 0;
   const selectedProgram = selectedProgramId ? programs.find((program) => program.id === selectedProgramId) ?? null : null;
   const selectedSchool = selectedSchoolId ? businessSchools.find((school) => school.id === selectedSchoolId) ?? null : null;
 
@@ -1069,16 +1105,16 @@ export default function App() {
 
   let content;
   if (selectedProgram) { const school = businessSchools.find((item) => item.programId === selectedProgram.id); content = <ProgramDetail p={selectedProgram} close={() => setSelectedProgramId(null)} saved={saved.includes(school?.id ?? selectedProgram.id)} toggleSaved={() => toggleSaved(school?.id ?? selectedProgram.id)} compared={school ? compared.includes(school.id) : false} toggleCompare={() => school && toggleCompare(school.id)} addPath={(role) => addPath(selectedProgram, role)} />; }
-  else if (selectedSchool) { const program = selectedSchool.programId ? programs.find((item) => item.id === selectedSchool.programId) : undefined; content = <SchoolDetail school={selectedSchool} program={program} close={() => setSelectedSchoolId(null)} saved={saved.includes(selectedSchool.id)} toggleSaved={() => toggleSaved(selectedSchool.id)} compared={compared.includes(selectedSchool.id)} toggleCompare={() => toggleCompare(selectedSchool.id)} inPathway={schoolPathwayIds.includes(selectedSchool.id)} togglePathway={() => toggleSchoolPathway(selectedSchool)} />; }
-  else if (view === "dashboard") content = <Dashboard go={go} completed={completed} toggleTask={toggleTask} openProgram={openProgram} target={targetProgram} />;
-  else if (view === "explore") content = <Explore openSchool={openSchool} saved={saved} setSaved={toggleSaved} compared={compared} toggleCompare={toggleCompare} schoolPathwayIds={schoolPathwayIds} toggleSchoolPathway={toggleSchoolPathway} />;
-  else if (view === "pathway") content = <Pathway selected={pathway} schoolInterests={businessSchools.filter((school) => schoolPathwayIds.includes(school.id))} completed={completed} toggleTask={toggleTask} go={go} openSchool={openSchool} />;
+  else if (selectedSchool) { const program = selectedSchool.programId ? programs.find((item) => item.id === selectedSchool.programId) : undefined; const choice = program ?? schoolAsProgram(selectedSchool); const selectedRole = pathway.find((item) => item.p.id === choice.id)?.role; content = <SchoolDetail school={selectedSchool} program={program} close={() => setSelectedSchoolId(null)} saved={saved.includes(selectedSchool.id)} toggleSaved={() => toggleSaved(selectedSchool.id)} compared={compared.includes(selectedSchool.id)} toggleCompare={() => toggleCompare(selectedSchool.id)} pathwayRole={selectedRole} addPath={(role) => addPath(choice, role)} />; }
+  else if (view === "dashboard") content = <Dashboard go={go} completed={completed} toggleTask={toggleTask} openProgram={openProgram} target={dashboardProgram} />;
+  else if (view === "explore") content = <Explore openSchool={openSchool} saved={saved} setSaved={toggleSaved} compared={compared} toggleCompare={toggleCompare} schoolPathwayIds={pathway.map((item) => item.p.id)} toggleSchoolPathway={toggleSchoolPathway} />;
+  else if (view === "pathway") content = <Pathway selected={pathway} schoolInterests={[]} completed={completed} toggleTask={toggleTask} go={go} openSchool={openSchool} />;
   else if (view === "tasks") content = <TasksHabits completed={completed} toggleTask={toggleTask} toast={setToast} />;
   else if (view === "progress") content = <ProgressPage completed={completed} selected={pathway} />;
   else content = <ProfilePage toast={setToast} restart={() => setOnboarded(false)} />;
 
   return <div className="app-shell">
-    <Navigation active={view} go={go} openGuide={() => setOnboarded(false)} progress={progress} hasTarget={Boolean(targetProgram)} />
+    <Navigation active={view} go={go} openGuide={() => setOnboarded(false)} progress={progress} hasTarget={Boolean(dashboardProgram)} />
     <main className="app-main"><Header view={view} go={go} notices={notices} setNotices={setNotices} /><div className="content-wrap">{content}</div></main>
     {compared.length > 0 && !compareOpen && <button className="compare-fab" onClick={() => setCompareOpen(true)}><Scale size={17} /><span>Compare {compared.length}</span><small>of 4</small></button>}
     {compareOpen && <ComparePanel ids={compared} close={() => setCompareOpen(false)} remove={toggleCompare} open={openSchool} />}
