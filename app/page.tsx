@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import {
   BarChart3, Bell, BookOpen, Bookmark, BriefcaseBusiness,
   Check, ChevronDown, ChevronLeft, ChevronRight, CircleAlert, CircleCheck,
-  CircleHelp, CircleUserRound, ClipboardCheck, Clock3, ExternalLink,
+  CircleHelp, CircleUserRound, ClipboardCheck, Clock3, Database, ExternalLink, FileText,
   Flag, Flame, Globe2, GraduationCap, Languages, LayoutDashboard, Map, MapPin, Plus,
   RefreshCw, Scale, Search, Settings2, ShieldCheck, SlidersHorizontal, Sparkles, Star, Target,
-  Trophy, X,
+  Trophy, Upload, X,
 } from "lucide-react";
 import { schoolStudyRows, type SchoolStudySummary } from "./school-data";
 
@@ -981,8 +981,9 @@ function PathwayChoice({ item, openProgram, changeRole, removePath }: { item: { 
   </article>;
 }
 
-function Pathway({ selected, completed, toggleTask, go, openProgram, changeRole, removePath }: { selected: { p: Program; role: Role }[]; completed: string[]; toggleTask: (v: string) => void; go: (v: View) => void; openProgram: (p: Program) => void; changeRole: (p: Program, role: Role) => void; removePath: (p: Program) => void }) {
+function Pathway({ selected, completed, toggleTask, go, openProgram, changeRole, removePath, records, updateRecord }: { selected: { p: Program; role: Role }[]; completed: string[]; toggleTask: (v: string) => void; go: (v: View) => void; openProgram: (p: Program) => void; changeRole: (p: Program, role: Role) => void; removePath: (p: Program) => void; records: Record<string, string>; updateRecord: (key: string, value: string) => void }) {
   const [expandedStage, setExpandedStage] = useState(0);
+  const [stageTab, setStageTab] = useState<"overview" | "requirements" | "evidence" | "actions">("overview");
   const dream = selected.find((item) => item.role === "Dream");
   const targets = selected.filter((item) => item.role === "Target");
   const alternatives = selected.filter((item) => item.role === "Alternative");
@@ -999,10 +1000,36 @@ function Pathway({ selected, completed, toggleTask, go, openProgram, changeRole,
   const actionIds = stages.flatMap((stage) => stage.actions.map(([id]) => id));
   const doneCount = completed.filter((id) => actionIds.includes(id)).length;
   const progress = dream ? Math.round(doneCount / actionIds.length * 100) : 0;
+  const requirementData = [
+    [["Programme", dream?.p.title || "Choose a Dream university"], ["Intended intake", records.intake || "Not recorded"], ["Study location", dream?.p.location || "Not recorded"]],
+    [["Entry route", dream?.p.entry || "Check official programme page"], ["Academic qualification", records.qualification || "Not recorded"], ["Application deadline", records.deadline || "Not recorded"]],
+    [["English requirement", records.englishRequirement || "Check official source"], ["Current English score", records.englishScore || "Not recorded"], ["Quantitative preparation", records.mathEvidence || "Not recorded"]],
+    [["Relevant experience", records.experience || "Not recorded"], ["Portfolio requirement", records.portfolioRequirement || "Check official source"], ["Portfolio file", records["file-3"] || "No file selected"]],
+    [["CV", records["file-cv"] || "No file selected"], ["Transcript", records["file-transcript"] || "No file selected"], ["Motivation letter", records["file-4"] || "No file selected"]],
+    [["Tuition", dream?.p.tuition || "Check official fee schedule"], ["Budget", records.budget || "Not recorded"], ["Scholarships", records.scholarshipNotes || "Not researched"]],
+    [["Application portal", "Use the official university portal"], ["Submission date", records.submissionDate || "Not submitted"], ["Confirmation", records["file-6"] || "No file selected"]],
+    [["Offer status", records.offerStatus || "No decision recorded"], ["Enrolment deadline", records.enrolmentDeadline || "Not recorded"], ["Transition plan", records.transitionPlan || "Not started"]],
+  ];
+  const evidenceFields = [
+    [["intake", "Intended intake", "e.g. September 2027"], ["qualification", "Current qualification", "e.g. Indonesian SMA"]],
+    [["deadline", "Application deadline", "e.g. 15 January 2027"], ["eligibilityNotes", "Eligibility notes", "Record questions or decisions"]],
+    [["englishScore", "Current English score", "e.g. IELTS 6.0"], ["mathEvidence", "Academic evidence", "e.g. Grade 11 mathematics"]],
+    [["experience", "Relevant experience", "e.g. Business competition"], ["portfolioNotes", "Portfolio notes", "What evidence will you include?"]],
+    [["cvStatus", "CV status", "Draft / Ready"], ["documentNotes", "Document notes", "Missing versions or translations"]],
+    [["budget", "Annual budget", "Amount and currency"], ["scholarshipNotes", "Funding notes", "Scholarships to investigate"]],
+    [["submissionDate", "Submission date", "Not submitted"], ["applicationId", "Application reference", "Reference number"]],
+    [["offerStatus", "Offer status", "Pending / Conditional / Confirmed"], ["enrolmentDeadline", "Enrolment deadline", "Date"]],
+  ];
+  const fileLabels = ["Programme notes", "Requirements evidence", "English certificate", "Portfolio or certificate", "Application document", "Funding document", "Submission confirmation", "Offer or enrolment document"];
   return <div className="page-enter pathway-page">
     <section className="page-intro"><div><span className="eyebrow">Your university plan</span><h2>My Pathway</h2><p>{selected.length ? `${selected.length} university option${selected.length === 1 ? "" : "s"} organised by role` : "Build a shortlist, then choose one Dream university to track."}</p></div><button className="secondary-button" onClick={() => go("explore")}><Plus size={15} /> Add university</button></section>
     {dream ? <article className="card dream-pathway-card"><div className="dream-pathway-identity"><span className="dream-label"><Sparkles size={13} /> Dream university</span><div><UniversityLogo program={dream.p} size="large" /><span><h3>{dream.p.university}</h3><p>{dream.p.title} · {dream.p.location}</p><button className="text-link" onClick={() => openProgram(dream.p)}>View university <ChevronRight size={14} /></button></span></div></div><div className="dream-progress"><span><strong>Preparation progress</strong><em>{progress}%</em></span><div className="bar"><i style={{ width: progress + "%" }} /></div><small>{doneCount} of {actionIds.length} pathway actions completed · not an admission score</small></div><div className="dream-controls"><label><span>Change role</span><select value="Dream" onChange={(event) => changeRole(dream.p, event.target.value as Role)}><option>Dream</option><option>Target</option><option>Alternative</option></select></label><button className="outline-button danger-action" onClick={() => removePath(dream.p)}><X size={14} /> Remove</button></div></article> : <article className="card pathway-empty-dream"><span className="large-icon"><Sparkles /></span><div><span className="section-label">Dream tracker</span><h3>Choose one Dream university</h3><p>Your preparation progress and application stages begin only after a Dream is selected. Targets and Alternatives remain available below.</p><button className="primary-button" onClick={() => go("explore")}><Search size={15} /> Explore universities</button></div></article>}
-    <section className={"card pathway-stages " + (!dream ? "disabled" : "")}><div className="section-head"><div><span className="section-label">Application pathway</span><h3>From decision to enrolment</h3></div><span className="badge blue">{doneCount} of {actionIds.length} actions</span></div><div className="pathway-stage-list">{stages.map((stage, index) => { const stageDone = stage.actions.every(([id]) => completed.includes(id)); const stageStarted = stage.actions.some(([id]) => completed.includes(id)); const open = expandedStage === index; return <article className={"pathway-stage " + (stageDone ? "complete" : stageStarted ? "started" : "")} key={stage.title}><button className="pathway-stage-toggle" onClick={() => dream && setExpandedStage(open ? -1 : index)} disabled={!dream} aria-expanded={open}><span>{stageDone ? <Check size={14} /> : String(index + 1).padStart(2, "0")}</span><span><strong>{stage.title}</strong><small>{stageDone ? "Complete" : stageStarted ? "In progress" : index === 0 && dream ? "Start here" : "Not started"}</small></span><ChevronDown size={15} /></button>{open && dream && <div className="pathway-stage-body"><p>{stage.note}</p>{stage.actions.map(([id, title, meta]) => { const done = completed.includes(id); return <button key={id} className={done ? "done" : ""} onClick={() => toggleTask(id)}><span className={"check " + (done ? "checked" : "")}>{done && <Check size={13} />}</span><span><strong>{title}</strong><small>{meta}</small></span><em>{done ? "Completed" : "Mark complete"}</em></button>; })}</div>}</article>; })}</div></section>
+    <section className={"card pathway-stages " + (!dream ? "disabled" : "")}><div className="section-head"><div><span className="section-label">Application workspace</span><h3>Your preparation database</h3><p className="pathway-helper">Store requirements, personal evidence, documents, and next actions. Submit the final application through the university’s official portal.</p></div><span className="badge blue"><Database size={12} /> {doneCount} of {actionIds.length} actions</span></div><div className="pathway-stage-list">{stages.map((stage, index) => { const stageDone = stage.actions.every(([id]) => completed.includes(id)); const stageStarted = stage.actions.some(([id]) => completed.includes(id)) || evidenceFields[index].some(([key]) => Boolean(records[key])); const open = expandedStage === index; return <article className={"pathway-stage " + (stageDone ? "complete" : stageStarted ? "started" : "")} key={stage.title}><button className="pathway-stage-toggle" onClick={() => { if (!dream) return; setExpandedStage(open ? -1 : index); setStageTab("overview"); }} disabled={!dream} aria-expanded={open}><span>{stageDone ? <Check size={14} /> : String(index + 1).padStart(2, "0")}</span><span><strong>{stage.title}</strong><small>{stageDone ? "Ready" : stageStarted ? "Information added" : index === 0 && dream ? "Start here" : "No information yet"}</small></span><em>{requirementData[index].filter(([, value]) => !/Not recorded|No file|Not submitted|No decision|Not started/.test(value)).length} of {requirementData[index].length} details</em><ChevronDown size={15} /></button>{open && dream && <div className="pathway-stage-workspace"><nav aria-label={stage.title + " sections"}>{(["overview", "requirements", "evidence", "actions"] as const).map((tab) => <button key={tab} className={stageTab === tab ? "active" : ""} onClick={() => setStageTab(tab)}>{tab === "evidence" ? "My evidence" : tab[0].toUpperCase() + tab.slice(1)}</button>)}</nav>
+      {stageTab === "overview" && <div className="stage-overview"><div><span className="row-icon"><Database size={16} /></span><span><strong>{stage.title}</strong><p>{stage.note}</p></span></div><dl>{requirementData[index].slice(0, 3).map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>{dream.p.sources[0] && <a href={dream.p.sources[0].href} target="_blank" rel="noreferrer"><ExternalLink size={13} /> Open official programme source</a>}</div>}
+      {stageTab === "requirements" && <div className="stage-requirements"><header><span>Requirement</span><span>Current record</span><span>Status</span></header>{requirementData[index].map(([label, value]) => { const missing = /Not recorded|No file|Not submitted|No decision|Not started|Check official/.test(value); return <div key={label}><strong>{label}</strong><span>{value}</span><em className={missing ? "attention" : "green"}>{missing ? "Needs review" : "Recorded"}</em></div>; })}</div>}
+      {stageTab === "evidence" && <div className="stage-evidence"><div className="evidence-form">{evidenceFields[index].map(([key, label, placeholder]) => <label key={key}><span>{label}</span><input value={records[key] || ""} onChange={(event) => updateRecord(key, event.target.value)} placeholder={placeholder} /></label>)}</div><label className="file-drop"><Upload size={18} /><span><strong>{fileLabels[index]}</strong><small>{records[`file-${index}`] || "Choose a file for this prototype record"}</small></span><input type="file" onChange={(event) => updateRecord(`file-${index}`, event.currentTarget.files?.[0]?.name || "")} /></label>{index === 4 && <div className="document-quick-files"><label><FileText size={14} /><span>CV</span><input type="file" onChange={(event) => updateRecord("file-cv", event.currentTarget.files?.[0]?.name || "")} /></label><label><FileText size={14} /><span>Transcript</span><input type="file" onChange={(event) => updateRecord("file-transcript", event.currentTarget.files?.[0]?.name || "")} /></label></div>}<p className="prototype-file-note"><CircleHelp size={13} /> Prototype mode stores the filename only. Secure private file storage will be connected with the backend.</p></div>}
+      {stageTab === "actions" && <div className="pathway-stage-body"><p>{stage.note}</p>{stage.actions.map(([id, title, meta]) => { const done = completed.includes(id); return <button key={id} className={done ? "done" : ""} onClick={() => toggleTask(id)}><span className={"check " + (done ? "checked" : "")}>{done && <Check size={13} />}</span><span><strong>{title}</strong><small>{meta}</small></span><em>{done ? "Completed" : "Mark complete"}</em></button>; })}</div>}
+    </div>}</article>; })}</div></section>
     <section className="pathway-shortlists"><div className="section-head"><div><span className="section-label">Your shortlist</span><h3>Targets and alternatives</h3></div><button className="text-link" onClick={() => go("explore")}>Manage in Explore <ChevronRight size={14} /></button></div><div className="pathway-shortlist-grid"><article className="card pathway-role-card"><header><span className="role-symbol target"><Target size={16} /></span><span><h3>Target universities</h3><p>Your leading realistic options</p></span><em>{targets.length}</em></header>{targets.length ? targets.map((item) => <PathwayChoice key={item.p.id} item={item} openProgram={openProgram} changeRole={changeRole} removePath={removePath} />) : <div className="empty-compact"><Target size={17} /><span>No Target universities yet</span></div>}</article><article className="card pathway-role-card"><header><span className="role-symbol alternative"><ShieldCheck size={16} /></span><span><h3>Alternative universities</h3><p>Strong backup options</p></span><em>{alternatives.length}</em></header>{alternatives.length ? alternatives.map((item) => <PathwayChoice key={item.p.id} item={item} openProgram={openProgram} changeRole={changeRole} removePath={removePath} />) : <div className="empty-compact"><ShieldCheck size={17} /><span>No Alternative universities yet</span></div>}</article></div></section>
     <section className="gap-section"><div className="section-head"><div><span className="section-label">Questions to resolve</span><h3>Information still needed</h3></div></div><div className="gap-grid">{[["Intended intake", completed.includes("intake") ? "Added" : "Not provided", completed.includes("intake") ? "green" : "attention"], ["Entry requirements", completed.includes("requirements") ? "Checked" : "Needs review", completed.includes("requirements") ? "green" : "attention"], ["English evidence", completed.includes("english") ? "Added" : "Not provided", completed.includes("english") ? "green" : "attention"], ["Funding plan", completed.includes("scholarship") ? "Started" : "Not researched", completed.includes("scholarship") ? "green" : "attention"]].map(([label, value, tone]) => <article className="card gap-card" key={label}><span className="row-icon">{tone === "green" ? <CircleCheck /> : <CircleAlert />}</span><span><small>{label}</small><strong>{value}</strong><em className={tone}>{tone === "green" ? "On track" : "Needs action"}</em></span></article>)}</div></section>
   </div>;
@@ -1050,6 +1077,7 @@ export default function App() {
   const [compareOpen, setCompareOpen] = useState(false);
   const [pathway, setPathway] = useState<{ p: Program; role: Role }[]>([]);
   const [completed, setCompleted] = useState<string[]>([]);
+  const [pathwayRecords, setPathwayRecords] = useState<Record<string, string>>({});
   const [notices, setNotices] = useState(false);
   const [toast, setToast] = useState("");
 
@@ -1059,6 +1087,7 @@ export default function App() {
       setOnboarded(complete === "complete");
       const hash = window.location.hash.replace("#", "") as View;
       if (navItems.some((item) => item.id === hash)) setView(hash);
+      try { setPathwayRecords(JSON.parse(window.localStorage.getItem("myway-pathway-records") || "{}")); } catch { setPathwayRecords({}); }
     }, 0);
     return () => window.clearTimeout(timer);
   }, []);
@@ -1131,6 +1160,13 @@ export default function App() {
     setToast(alreadyAdded ? `${school.name} removed from pathway` : `${school.name} added as Target`);
   };
   const toggleTask = (id: string) => setCompleted(completed.includes(id) ? completed.filter((v) => v !== id) : [...completed, id]);
+  const updatePathwayRecord = (key: string, value: string) => {
+    setPathwayRecords((current) => {
+      const next = { ...current, [key]: value };
+      window.localStorage.setItem("myway-pathway-records", JSON.stringify(next));
+      return next;
+    });
+  };
   const dashboardProgram = pathway.find((item) => item.role === "Dream")?.p;
   const progress = dashboardProgram ? Math.min(100, 28 + completed.length * 9) : 0;
   const selectedProgram = selectedProgramId ? programs.find((program) => program.id === selectedProgramId) ?? null : null;
@@ -1143,7 +1179,7 @@ export default function App() {
   else if (selectedSchool) { const program = selectedSchool.programId ? programs.find((item) => item.id === selectedSchool.programId) : undefined; const choice = program ?? schoolAsProgram(selectedSchool); const selectedRole = pathway.find((item) => item.p.id === choice.id)?.role; content = <SchoolDetail school={selectedSchool} program={program} close={() => setSelectedSchoolId(null)} saved={saved.includes(selectedSchool.id)} toggleSaved={() => toggleSaved(selectedSchool.id)} compared={compared.includes(selectedSchool.id)} toggleCompare={() => toggleCompare(selectedSchool.id)} pathwayRole={selectedRole} addPath={(role) => addPath(choice, role)} removePath={() => removePath(choice)} />; }
   else if (view === "dashboard") content = <Dashboard go={go} completed={completed} toggleTask={toggleTask} openProgram={openProgram} target={dashboardProgram} selected={pathway} />;
   else if (view === "explore") content = <Explore openSchool={openSchool} saved={saved} setSaved={toggleSaved} compared={compared} toggleCompare={toggleCompare} schoolPathwayIds={pathway.map((item) => item.p.id)} toggleSchoolPathway={toggleSchoolPathway} />;
-  else if (view === "pathway") content = <Pathway selected={pathway} completed={completed} toggleTask={toggleTask} go={go} openProgram={openProgram} changeRole={addPath} removePath={removePath} />;
+  else if (view === "pathway") content = <Pathway selected={pathway} completed={completed} toggleTask={toggleTask} go={go} openProgram={openProgram} changeRole={addPath} removePath={removePath} records={pathwayRecords} updateRecord={updatePathwayRecord} />;
   else if (view === "tasks") content = <TasksHabits completed={completed} toggleTask={toggleTask} toast={setToast} />;
   else if (view === "progress") content = <ProgressPage completed={completed} selected={pathway} />;
   else content = <ProfilePage toast={setToast} restart={() => setOnboarded(false)} />;
