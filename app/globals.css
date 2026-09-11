@@ -619,7 +619,7 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .pathway-stage.started .pathway-stage-toggle > span:first-child { color: #fff; border-color: var(--blue); background: var(--blue); }
 .pathway-stage-body { padding: 0 7px 12px 46px; }
 .pathway-stage-body > p { margin: 0 0 7px; color: var(--muted); font-size: 9px; }
-.pathway-stage-body > button { width: 100%; min-height: 50px; padding: 0 10px; border: 1px solid var(--line); border-radius: 9px; background: #fff; display: grid; grid-template-columns: 20px minmax(0, 1fr) auto; align-items: center; gap: 9px; text-align: left; cursor: pointer; }
+.pathway-stage-body > button { width: 100%; min-height: 50px; padding: 10px; border: 1px solid var(--line); border-radius: 9px; background: #fff; display: grid; grid-template-columns: 20px minmax(0, 1fr) auto; align-items: start; gap: 9px; text-align: left; cursor: pointer; }
 .pathway-stage-body > button + button { margin-top: 6px; }
 .pathway-stage-body > button:hover { border-color: #bdc7ed; background: #fafbff; }
 .pathway-stage-body > button > span:nth-child(2) { display: grid; gap: 2px; }
@@ -627,6 +627,13 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .pathway-stage-body small { color: var(--muted); font-size: 8px; }
 .pathway-stage-body em { color: var(--blue-dark); font-size: 8px; font-style: normal; font-weight: 700; }
 .pathway-stage-body button.done em { color: var(--green); }
+.pathway-stage-body .check { margin-top: 1px; }
+.action-record-copy { display: grid; gap: 6px; }
+.action-record-copy > small { display: grid; grid-template-columns: 74px minmax(0, 1fr); gap: 8px; line-height: 1.45; }
+.action-record-copy > small b, .action-detail-grid b { color: #68748f; font-size: 7px; font-weight: 760; text-transform: uppercase; letter-spacing: .045em; }
+.action-detail-grid { display: grid; grid-template-columns: .65fr 1fr 1.45fr 1fr; gap: 6px; }
+.action-detail-grid small { min-width: 0; padding: 7px 8px; border: 1px solid #e5e9f3; border-radius: 7px; background: #f8faff; display: grid; align-content: start; gap: 3px; color: #4f5b76; line-height: 1.35; }
+.pathway-stage-body > button.done .action-detail-grid small { background: #f6fbf8; }
 .pathway-stage-workspace { margin: 0 7px 12px 46px; border: 1px solid var(--line); border-radius: 11px; overflow: hidden; background: #fbfcff; }
 .pathway-stage-workspace > nav { min-height: 39px; padding: 5px; border-bottom: 1px solid var(--line); display: flex; gap: 3px; background: #fff; }
 .pathway-stage-workspace > nav button { min-height: 29px; padding: 0 10px; border: 0; border-radius: 7px; color: var(--muted); background: transparent; font-size: 8px; font-weight: 720; cursor: pointer; }
@@ -713,6 +720,7 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 @media (max-width: 900px) {
   .dream-pathway-card { grid-template-columns: 1fr 1fr; }
   .dream-controls { grid-column: 1 / -1; grid-template-columns: 1fr auto; align-items: end; }
+  .action-detail-grid { grid-template-columns: 1fr 1fr; }
 }
 
 @media (max-width: 760px) {
@@ -725,12 +733,15 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
   .stage-overview dl div:last-child { border-bottom: 0; }
   .stage-requirements > header, .stage-requirements > div { grid-template-columns: 1fr; gap: 3px; padding: 8px 0; }
   .stage-requirements > header { display: none; }
+  .pathway-stage-body > button { grid-template-columns: 20px minmax(0, 1fr); }
+  .pathway-stage-body > button > em { grid-column: 2; }
 }
 
 @media (max-width: 500px) {
   .pathway-empty-dream { grid-template-columns: 1fr; justify-items: start; }
   .dream-pathway-identity > div { grid-template-columns: 58px minmax(0, 1fr); }
   .pathway-choice-actions { margin-left: 0; flex-wrap: wrap; }
+  .action-detail-grid { grid-template-columns: 1fr; }
 }
 .gap-card strong { font-size: 9px; }
 .gap-card em { font-size: 8px; font-style: normal; }
