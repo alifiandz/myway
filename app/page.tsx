@@ -625,7 +625,20 @@ function Onboarding({ finish, saveLater }: { finish: () => void; saveLater: () =
   </main>;
 }
 
-function Dashboard({ go, completed, toggleTask, openProgram, target }: { go: (v: View) => void; completed: string[]; toggleTask: (v: string) => void; openProgram: (p: Program) => void; target?: Program }) {
+function DashboardShortlists({ selected, openProgram }: { selected: { p: Program; role: Role }[]; openProgram: (p: Program) => void }) {
+  const groups = [
+    { role: "Target" as Role, label: "Target universities", note: "Your leading realistic options" },
+    { role: "Alternative" as Role, label: "Alternative universities", note: "Strong backup options" },
+  ];
+  const visible = groups.filter((group) => selected.some((item) => item.role === group.role));
+  if (!visible.length) return null;
+  return <section className="section-space dashboard-recommendations">
+    <div className="section-head"><div><span className="section-label">Your shortlist</span><h3>Targets and alternatives</h3></div><span className="badge blue">{visible.reduce((sum, group) => sum + selected.filter((item) => item.role === group.role).length, 0)} saved</span></div>
+    {visible.map((group) => <div className="section-space" key={group.role}><div className="section-head"><div><h3>{group.label}</h3><p>{group.note}</p></div></div><div className="recommend-grid">{selected.filter((item) => item.role === group.role).map(({ p }) => <button className="card recommendation" key={p.id} onClick={() => openProgram(p)}><UniversityLogo program={p} /><span><strong>{p.university}</strong><small>{p.title}</small><em className="fit possible">{group.role}</em></span><ChevronRight /></button>)}</div></div>)}
+  </section>;
+}
+
+function Dashboard({ go, completed, toggleTask, openProgram, target, selected }: { go: (v: View) => void; completed: string[]; toggleTask: (v: string) => void; openProgram: (p: Program) => void; target?: Program; selected: { p: Program; role: Role }[] }) {
   const actions = [
     { id: "ielts-practice", title: "Complete an IELTS speaking drill", meta: "20 min · IELTS 6.5 goal", points: "+20 pts", icon: Languages },
     { id: "documents", title: "Upload your semester grade report", meta: "10 min · Documents", points: "+15 pts", icon: ClipboardCheck },
@@ -645,6 +658,7 @@ function Dashboard({ go, completed, toggleTask, openProgram, target }: { go: (v:
   if (!target) return <div className="page-enter">
     <section className="welcome-row"><div><span className="eyebrow">Your preparation workspace</span><h2>Choose a Dream university to start tracking</h2><p>Preparation progress is always connected to a specific university—not an admission prediction.</p></div></section>
     <article className="card no-target-gate"><span className="large-icon"><Target /></span><div><span className="section-label">Tracker ready</span><h3>Add one university as your Dream</h3><p>Your daily actions, readiness goals, and milestones will appear here after a Dream option is chosen. Target and Alternative options remain together on My Pathway.</p><button className="primary-button" onClick={() => go("explore")}><Search size={15} /> Explore programs</button></div></article>
+    <DashboardShortlists selected={selected} openProgram={openProgram} />
     <section className="section-space dashboard-recommendations"><div className="section-head"><div><span className="section-label">Start here</span><h3>Strong current matches</h3></div></div><div className="recommend-grid">{programs.slice(0, 3).map((p) => <button className="card recommendation" key={p.id} onClick={() => openProgram(p)}><UniversityLogo program={p} /><span><strong>{p.university}</strong><small>{p.title}</small><em className={"fit " + fitClass(p.fit)}>{p.fit}</em></span><ChevronRight /></button>)}</div></section>
   </div>;
 
@@ -663,6 +677,7 @@ function Dashboard({ go, completed, toggleTask, openProgram, target }: { go: (v:
         <article className="card dashboard-milestone"><div className="milestone-symbol"><Flag size={20} /></div><span className="section-label">Next milestone</span><h3>Application essentials ready</h3><p>Reach the three core evidence goals before reviewing your final application shortlist.</p><div className="milestone-progress"><span><strong>{milestoneProgress}%</strong><small>toward milestone</small></span><div className="goal-bar blue"><i style={{ width: milestoneProgress + "%" }} /></div></div><ul><li className={readiness[0].value >= 100 ? "done" : ""}><CircleCheck size={15} /><span>IELTS 6.5</span><em>{readiness[0].value}%</em></li><li className={readiness[1].value >= 100 ? "done" : ""}><CircleCheck size={15} /><span>4 portfolio projects</span><em>{readiness[1].value}%</em></li><li className={readiness[2].value >= 100 ? "done" : ""}><CircleCheck size={15} /><span>6 core documents</span><em>{readiness[2].value}%</em></li></ul><button className="text-link" onClick={() => go("pathway")}>See milestone plan <ChevronRight size={14} /></button></article>
       </aside>
     </div>
+    <DashboardShortlists selected={selected} openProgram={openProgram} />
   </div>;
 }
 
@@ -742,7 +757,7 @@ function Explore({ openSchool, saved, setSaved, compared, toggleCompare, schoolP
   </div>;
 }
 
-function SchoolDetail({ school, program, close, saved, toggleSaved, compared, toggleCompare, pathwayRole, addPath }: { school: BusinessSchool; program?: Program; close: () => void; saved: boolean; toggleSaved: () => void; compared: boolean; toggleCompare: () => void; pathwayRole?: Role; addPath: (role: Role) => void }) {
+function SchoolDetail({ school, program, close, saved, toggleSaved, compared, toggleCompare, pathwayRole, addPath, removePath }: { school: BusinessSchool; program?: Program; close: () => void; saved: boolean; toggleSaved: () => void; compared: boolean; toggleCompare: () => void; pathwayRole?: Role; addPath: (role: Role) => void; removePath: () => void }) {
   const [roleOpen, setRoleOpen] = useState(false);
   const rankings = schoolRankings(school);
   const study = schoolStudy(school);
@@ -764,7 +779,7 @@ function SchoolDetail({ school, program, close, saved, toggleSaved, compared, to
     <button className="back-button" onClick={close}><ChevronLeft size={17} /> Back to universities</button>
     <section className="card detail-hero">
       <SchoolLogo school={school} program={program} size="large" /><div><span className="verified"><CircleCheck size={14} /> {program ? `Source checked ${program.verified}` : study.sourceLabel}</span><h2>{school.name}</h2><p>{study.title} · {school.location}</p></div>
-      <div className="detail-hero-actions"><button className={"outline-button " + (saved ? "selected" : "")} onClick={toggleSaved}><Bookmark size={15} /> {saved ? "Saved" : "Save"}</button><button className={"outline-button " + (compared ? "selected" : "")} onClick={toggleCompare}><Scale size={15} /> Compare</button><div className="role-menu"><button className="primary-button" onClick={() => setRoleOpen(!roleOpen)}>{pathwayRole ? <Check size={15} /> : <Plus size={15} />} {pathwayRole ? pathwayRole : "Add to pathway"} <ChevronDown size={14} /></button>{roleOpen && <div>{(["Dream", "Target", "Alternative"] as Role[]).map((role) => <button key={role} onClick={() => { addPath(role); setRoleOpen(false); }}>{role}<small>{role === "Dream" ? "Track on your dashboard" : role === "Target" ? "Leading realistic option" : "Keep as a backup"}</small></button>)}</div>}</div></div>
+      <div className="detail-hero-actions"><button className={"outline-button " + (saved ? "selected" : "")} onClick={toggleSaved}><Bookmark size={15} /> {saved ? "Saved" : "Save"}</button><button className={"outline-button " + (compared ? "selected" : "")} onClick={toggleCompare}><Scale size={15} /> Compare</button><div className="role-menu"><button className="primary-button" onClick={() => setRoleOpen(!roleOpen)}>{pathwayRole ? <Check size={15} /> : <Plus size={15} />} {pathwayRole ? pathwayRole : "Add to pathway"} <ChevronDown size={14} /></button>{roleOpen && <div>{(["Dream", "Target", "Alternative"] as Role[]).map((role) => <button key={role} onClick={() => { addPath(role); setRoleOpen(false); }}>{role}<small>{role === "Dream" ? "Track on your dashboard" : role === "Target" ? "Leading realistic option" : "Keep as a backup"}</small></button>)}{pathwayRole && <button className="remove-role" onClick={() => { removePath(); setRoleOpen(false); }}><X size={14} /> Remove from pathway<small>Remove this university from your shortlist</small></button>}</div>}</div></div>
     </section>
     <div className="detail-grid">
       <main>
@@ -782,14 +797,14 @@ function SchoolDetail({ school, program, close, saved, toggleSaved, compared, to
   </div>;
 }
 
-function ProgramDetail({ p, close, saved, toggleSaved, compared, toggleCompare, addPath }: { p: Program; close: () => void; saved: boolean; toggleSaved: () => void; compared: boolean; toggleCompare: () => void; addPath: (role: Role) => void }) {
+function ProgramDetail({ p, close, saved, toggleSaved, compared, toggleCompare, pathwayRole, addPath, removePath }: { p: Program; close: () => void; saved: boolean; toggleSaved: () => void; compared: boolean; toggleCompare: () => void; pathwayRole?: Role; addPath: (role: Role) => void; removePath: () => void }) {
   const [roleOpen, setRoleOpen] = useState(false);
   const [duration, credits] = p.duration.split(" · ");
   return <div className="page-enter detail-page">
     <button className="back-button" onClick={close}><ChevronLeft size={17} /> Back to programs</button>
     <section className="card detail-hero">
       <UniversityLogo program={p} size="large" /><div><span className="verified"><CircleCheck size={14} /> Source checked {p.verified}</span><h2>{p.university}</h2><p>{p.title} · {p.location}</p></div>
-      <div className="detail-hero-actions"><button className={"outline-button " + (saved ? "selected" : "")} onClick={toggleSaved}><Bookmark size={15} /> {saved ? "Saved" : "Save"}</button><button className={"outline-button " + (compared ? "selected" : "")} onClick={toggleCompare}><Scale size={15} /> Compare</button><div className="role-menu"><button className="primary-button" onClick={() => setRoleOpen(!roleOpen)}><Plus size={15} /> Add to pathway <ChevronDown size={14} /></button>{roleOpen && <div>{(["Dream", "Target", "Alternative"] as Role[]).map((r) => <button key={r} onClick={() => { addPath(r); setRoleOpen(false); }}>{r}<small>{r === "Dream" ? "Aspirational option" : r === "Target" ? "Leading realistic option" : "Keep as a backup"}</small></button>)}</div>}</div></div>
+      <div className="detail-hero-actions"><button className={"outline-button " + (saved ? "selected" : "")} onClick={toggleSaved}><Bookmark size={15} /> {saved ? "Saved" : "Save"}</button><button className={"outline-button " + (compared ? "selected" : "")} onClick={toggleCompare}><Scale size={15} /> Compare</button><div className="role-menu"><button className="primary-button" onClick={() => setRoleOpen(!roleOpen)}>{pathwayRole ? <Check size={15} /> : <Plus size={15} />} {pathwayRole ?? "Add to pathway"} <ChevronDown size={14} /></button>{roleOpen && <div>{(["Dream", "Target", "Alternative"] as Role[]).map((r) => <button key={r} onClick={() => { addPath(r); setRoleOpen(false); }}>{r}<small>{r === "Dream" ? "Track on your dashboard" : r === "Target" ? "Leading realistic option" : "Keep as a backup"}</small></button>)}{pathwayRole && <button className="remove-role" onClick={() => { removePath(); setRoleOpen(false); }}><X size={14} /> Remove from pathway<small>Remove this university from your shortlist</small></button>}</div>}</div></div>
     </section>
     <div className="detail-grid">
       <main>
@@ -1088,6 +1103,10 @@ export default function App() {
     setPathway((current) => [...current.filter((v) => v.p.id !== p.id), { p, role }]);
     setToast(p.university + " added as " + role);
   };
+  const removePath = (p: Program) => {
+    setPathway((current) => current.filter((item) => item.p.id !== p.id));
+    setToast(p.university + " removed from pathway");
+  };
   const toggleSchoolPathway = (school: BusinessSchool) => {
     const program = school.programId ? programs.find((item) => item.id === school.programId) : undefined;
     const choice = program ?? schoolAsProgram(school);
@@ -1096,7 +1115,7 @@ export default function App() {
     setToast(alreadyAdded ? `${school.name} removed from pathway` : `${school.name} added as Target`);
   };
   const toggleTask = (id: string) => setCompleted(completed.includes(id) ? completed.filter((v) => v !== id) : [...completed, id]);
-  const dashboardProgram = pathway.find((item) => item.role === "Dream")?.p ?? pathway.find((item) => item.role === "Target")?.p ?? pathway[0]?.p;
+  const dashboardProgram = pathway.find((item) => item.role === "Dream")?.p;
   const progress = dashboardProgram ? Math.min(100, 28 + completed.length * 9) : 0;
   const selectedProgram = selectedProgramId ? programs.find((program) => program.id === selectedProgramId) ?? null : null;
   const selectedSchool = selectedSchoolId ? businessSchools.find((school) => school.id === selectedSchoolId) ?? null : null;
@@ -1104,9 +1123,9 @@ export default function App() {
   if (!onboarded) return <Onboarding finish={finish} saveLater={saveLater} />;
 
   let content;
-  if (selectedProgram) { const school = businessSchools.find((item) => item.programId === selectedProgram.id); content = <ProgramDetail p={selectedProgram} close={() => setSelectedProgramId(null)} saved={saved.includes(school?.id ?? selectedProgram.id)} toggleSaved={() => toggleSaved(school?.id ?? selectedProgram.id)} compared={school ? compared.includes(school.id) : false} toggleCompare={() => school && toggleCompare(school.id)} addPath={(role) => addPath(selectedProgram, role)} />; }
-  else if (selectedSchool) { const program = selectedSchool.programId ? programs.find((item) => item.id === selectedSchool.programId) : undefined; const choice = program ?? schoolAsProgram(selectedSchool); const selectedRole = pathway.find((item) => item.p.id === choice.id)?.role; content = <SchoolDetail school={selectedSchool} program={program} close={() => setSelectedSchoolId(null)} saved={saved.includes(selectedSchool.id)} toggleSaved={() => toggleSaved(selectedSchool.id)} compared={compared.includes(selectedSchool.id)} toggleCompare={() => toggleCompare(selectedSchool.id)} pathwayRole={selectedRole} addPath={(role) => addPath(choice, role)} />; }
-  else if (view === "dashboard") content = <Dashboard go={go} completed={completed} toggleTask={toggleTask} openProgram={openProgram} target={dashboardProgram} />;
+  if (selectedProgram) { const school = businessSchools.find((item) => item.programId === selectedProgram.id); const selectedRole = pathway.find((item) => item.p.id === selectedProgram.id)?.role; content = <ProgramDetail p={selectedProgram} close={() => setSelectedProgramId(null)} saved={saved.includes(school?.id ?? selectedProgram.id)} toggleSaved={() => toggleSaved(school?.id ?? selectedProgram.id)} compared={school ? compared.includes(school.id) : false} toggleCompare={() => school && toggleCompare(school.id)} pathwayRole={selectedRole} addPath={(role) => addPath(selectedProgram, role)} removePath={() => removePath(selectedProgram)} />; }
+  else if (selectedSchool) { const program = selectedSchool.programId ? programs.find((item) => item.id === selectedSchool.programId) : undefined; const choice = program ?? schoolAsProgram(selectedSchool); const selectedRole = pathway.find((item) => item.p.id === choice.id)?.role; content = <SchoolDetail school={selectedSchool} program={program} close={() => setSelectedSchoolId(null)} saved={saved.includes(selectedSchool.id)} toggleSaved={() => toggleSaved(selectedSchool.id)} compared={compared.includes(selectedSchool.id)} toggleCompare={() => toggleCompare(selectedSchool.id)} pathwayRole={selectedRole} addPath={(role) => addPath(choice, role)} removePath={() => removePath(choice)} />; }
+  else if (view === "dashboard") content = <Dashboard go={go} completed={completed} toggleTask={toggleTask} openProgram={openProgram} target={dashboardProgram} selected={pathway} />;
   else if (view === "explore") content = <Explore openSchool={openSchool} saved={saved} setSaved={toggleSaved} compared={compared} toggleCompare={toggleCompare} schoolPathwayIds={pathway.map((item) => item.p.id)} toggleSchoolPathway={toggleSchoolPathway} />;
   else if (view === "pathway") content = <Pathway selected={pathway} schoolInterests={[]} completed={completed} toggleTask={toggleTask} go={go} openSchool={openSchool} />;
   else if (view === "tasks") content = <TasksHabits completed={completed} toggleTask={toggleTask} toast={setToast} />;
