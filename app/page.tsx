@@ -6,7 +6,7 @@ import {
   Check, ChevronDown, ChevronLeft, ChevronRight, CircleAlert, CircleCheck,
   CircleHelp, CircleUserRound, ClipboardCheck, Clock3, Database, ExternalLink, FileText,
   Flag, Flame, Globe2, GraduationCap, Languages, LayoutDashboard, Map, MapPin, Plus,
-  RefreshCw, Scale, Search, Settings2, ShieldCheck, SlidersHorizontal, Sparkles, Star, Target,
+  Scale, Search, Settings2, ShieldCheck, SlidersHorizontal, Sparkles, Star, Target,
   Trophy, X,
 } from "lucide-react";
 import { schoolStudyRows, type SchoolStudySummary } from "./school-data";
@@ -978,8 +978,8 @@ function PathwayChoice({ item, openProgram, changeRole, removePath }: { item: { 
   </article>;
 }
 
-function Pathway({ selected, completed, toggleTask, go, openProgram, changeRole, removePath, records, updateRecord, pathwayReadiness, readinessStages }: { selected: { p: Program; role: Role }[]; completed: string[]; toggleTask: (v: string) => void; go: (v: View) => void; openProgram: (p: Program) => void; changeRole: (p: Program, role: Role) => void; removePath: (p: Program) => void; records: Record<string, string>; updateRecord: (key: string, value: string) => void; pathwayReadiness: number; readinessStages: ReadinessStage[] }) {
-  const [expandedStage, setExpandedStage] = useState(0);
+function Pathway({ selected, completed, toggleTask, go, openProgram, changeRole, removePath, records, updateRecord, pathwayReadiness, readinessStages, initialStage = 0 }: { selected: { p: Program; role: Role }[]; completed: string[]; toggleTask: (v: string) => void; go: (v: View) => void; openProgram: (p: Program) => void; changeRole: (p: Program, role: Role) => void; removePath: (p: Program) => void; records: Record<string, string>; updateRecord: (key: string, value: string) => void; pathwayReadiness: number; readinessStages: ReadinessStage[]; initialStage?: number }) {
+  const [expandedStage, setExpandedStage] = useState(initialStage);
   const [stageTab, setStageTab] = useState<"overview" | "requirements" | "evidence" | "actions">("overview");
   const dream = selected.find((item) => item.role === "Dream");
   const isEscp = dream?.p.id === "escp";
@@ -1067,12 +1067,19 @@ function Pathway({ selected, completed, toggleTask, go, openProgram, changeRole,
   </div>;
 }
 
-function ProgressPage({ selected, pathwayReadiness, readinessStages }: { selected: { p: Program; role: Role }[]; pathwayReadiness: number; readinessStages: ReadinessStage[] }) {
-  const pathwayActionsDone = readinessStages.reduce((sum, stage) => sum + stage.completedActions, 0);
-  const pathwayActionsTotal = readinessStages.reduce((sum, stage) => sum + stage.totalActions, 0);
-  return <div className="page-enter"><section className="page-intro"><div><span className="eyebrow">Planning, not prediction</span><h2>Your progress</h2><p>Track research and preparation across your business pathway.</p></div><span className="source-stamp"><RefreshCw size={14} /> Recalculates as you act</span></section>
-    <div className="metric-grid"><article className="card metric"><span className="metric-icon"><BarChart3 /></span><span><small>Pathway readiness</small><strong>{pathwayReadiness}%</strong><em>Whole Dream pathway</em></span></article><article className="card metric"><span className="metric-icon"><ClipboardCheck /></span><span><small>Pathway actions</small><strong>{pathwayActionsDone}/{pathwayActionsTotal}</strong><em>Daily habits excluded</em></span></article><article className="card metric"><span className="metric-icon"><Bookmark /></span><span><small>Pathway programs</small><strong>{selected.length}</strong><em>Dream, Targets and Alternatives</em></span></article><article className="card metric"><span className="metric-icon"><Flag /></span><span><small>Stages ready</small><strong>{readinessStages.filter((stage) => stage.value === 100).length}/9</strong><em>Not an admission prediction</em></span></article></div>
-    <section className="card progress-board"><div className="section-head"><div><span className="section-label">Complete pathway</span><h3>Readiness by stage</h3></div><span className="badge amber">Not an admission score</span></div>{readinessStages.map((stage) => <div className="progress-row" key={stage.label}><span><strong>{stage.label}</strong><small>Requirements {stage.requirements}% · records {stage.records}% · evidence {stage.evidence}% · actions {stage.actions}%</small></span><div className="bar"><i style={{ width: stage.value + "%" }} /></div><em>{stage.value}%</em></div>)}</section>
+function ProgressPage({ selected, pathwayReadiness, readinessStages, openStage, openProgram, go }: { selected: { p: Program; role: Role }[]; pathwayReadiness: number; readinessStages: ReadinessStage[]; openStage: (index: number) => void; openProgram: (p: Program) => void; go: (v: View) => void }) {
+  const dream = selected.find((item) => item.role === "Dream");
+  const others = selected.filter((item) => item.role !== "Dream");
+  const readyCount = readinessStages.filter((stage) => stage.value === 100).length;
+  const average = (key: "requirements" | "records" | "evidence" | "actions") => readinessStages.length ? Math.round(readinessStages.reduce((sum, stage) => sum + stage[key], 0) / readinessStages.length) : 0;
+  const components = [["Requirements", 30, average("requirements")], ["Student records", 25, average("records")], ["Evidence & documents", 25, average("evidence")], ["Pathway actions", 20, average("actions")]] as const;
+  const priorities = readinessStages.map((stage, index) => ({ stage, index, weakest: [["requirements", stage.requirements], ["student records", stage.records], ["evidence", stage.evidence], ["actions", stage.actions]].sort((a, b) => Number(a[1]) - Number(b[1]))[0][0] })).filter(({ stage }) => stage.value < 100).sort((a, b) => a.stage.value - b.stage.value || a.index - b.index).slice(0, 3);
+  if (!dream) return <div className="page-enter"><section className="page-intro"><div><span className="eyebrow">Progress</span><h2>Overall readiness</h2><p>Add one Dream programme to start measuring your complete application pathway.</p></div></section><article className="card progress-empty"><Flag size={24} /><h3>Choose your Dream programme</h3><p>Targets and Alternatives remain other choices and do not receive readiness scores.</p><button className="primary-button" onClick={() => go("explore")}>Explore universities</button></article></div>;
+  return <div className="page-enter progress-page"><section className="page-intro"><div><span className="eyebrow">Progress</span><h2>Overall readiness</h2><p>Your complete Dream application preparation—not an admission prediction.</p></div></section>
+    <section className="card progress-hero"><div className="progress-hero-score"><strong>{pathwayReadiness}%</strong><span><b>{readyCount} of 9 stages ready</b><small>Daily tasks and habits are not included</small></span></div><div className="progress-hero-target"><UniversityLogo program={dream.p} size="small" /><span><small>Dream programme</small><strong>{dream.p.university}</strong><em>{dream.p.title}</em></span><button className="text-link" onClick={() => openProgram(dream.p)}>View <ChevronRight size={14} /></button></div></section>
+    <div className="progress-layout"><section className="card progress-stages"><div className="section-head"><div><span className="section-label">Pathway stages</span><h3>Preparation by stage</h3></div><span className="badge blue">All 9 stages</span></div><div className="progress-stage-list">{readinessStages.map((stage, index) => { const Icon = stageIcons[index]; const status = stage.value === 100 ? "Ready" : stage.value ? "In progress" : "Not started"; return <button className="progress-stage" key={stage.label} onClick={() => openStage(index)}><span className="progress-stage-icon"><Icon size={17} /></span><span className="progress-stage-copy"><span><strong>{stage.label}</strong><em>{status}</em></span><small>{stage.completedActions} of {stage.totalActions} actions complete</small><span className="bar"><i style={{ width: stage.value + "%" }} /></span></span><b>{stage.value}%</b><ChevronRight size={15} /></button>; })}</div></section>
+      <aside className="progress-side"><section className="card score-breakdown"><div className="section-head"><div><span className="section-label">Score breakdown</span><h3>How it is calculated</h3></div></div>{components.map(([label, weight, value]) => <div className="score-part" key={label}><span><strong>{label}</strong><small>{weight}% of total score</small></span><div className="bar"><i style={{ width: value + "%" }} /></div><em>{value}% ready</em></div>)}</section><section className="card priority-card"><div className="section-head"><div><span className="section-label">Next priorities</span><h3>What to complete next</h3></div></div>{priorities.length ? priorities.map(({ stage, index, weakest }, rank) => <button key={stage.label} onClick={() => openStage(index)}><span>{rank + 1}</span><span><strong>{stage.label}</strong><small>Strengthen {weakest} · {stage.value}% ready</small></span><ChevronRight size={14} /></button>) : <div className="all-ready"><CircleCheck size={20} /><span><strong>All stages are ready</strong><small>Review the Pathway before submission.</small></span></div>}</section></aside></div>
+    <section className="card other-choices"><div className="section-head"><div><span className="section-label">Other choices</span><h3>Targets and Alternatives</h3></div><button className="text-link" onClick={() => go("pathway")}>Manage choices <ChevronRight size={14} /></button></div>{others.length ? <div className="other-choice-grid">{others.map((item) => <button key={item.p.id} onClick={() => openProgram(item.p)}><UniversityLogo program={item.p} size="small" /><span><small>{item.role}</small><strong>{item.p.university}</strong><em>{item.p.title}</em></span><ChevronRight size={15} /></button>)}</div> : <p className="empty-copy">No Targets or Alternatives added yet.</p>}</section>
   </div>;
 }
 
@@ -1106,6 +1113,7 @@ export default function App() {
   const [pathwayRecords, setPathwayRecords] = useState<Record<string, string>>({});
   const [notices, setNotices] = useState(false);
   const [toast, setToast] = useState("");
+  const [pathwayStage, setPathwayStage] = useState(0);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -1143,6 +1151,7 @@ export default function App() {
     window.history.replaceState(null, "", "#" + next);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+  const openPathwayStage = (index: number) => { setPathwayStage(index); go("pathway"); };
   const openProgram = (program: Program) => {
     setView("explore");
     if (program.id.startsWith("school:")) {
@@ -1245,9 +1254,9 @@ export default function App() {
   else if (selectedSchool) { const program = selectedSchool.programId ? programs.find((item) => item.id === selectedSchool.programId) : undefined; const choice = program ?? schoolAsProgram(selectedSchool); const selectedRole = pathway.find((item) => item.p.id === choice.id)?.role; content = <SchoolDetail school={selectedSchool} program={program} close={() => setSelectedSchoolId(null)} saved={saved.includes(selectedSchool.id)} toggleSaved={() => toggleSaved(selectedSchool.id)} compared={compared.includes(selectedSchool.id)} toggleCompare={() => toggleCompare(selectedSchool.id)} pathwayRole={selectedRole} addPath={(role) => addPath(choice, role)} removePath={() => removePath(choice)} />; }
   else if (view === "dashboard") content = <Dashboard go={go} completed={completed} toggleTask={toggleTask} openProgram={openProgram} target={dashboardProgram} selected={pathway} pathwayReadiness={progress} readinessStages={readinessStages} />;
   else if (view === "explore") content = <Explore openSchool={openSchool} saved={saved} setSaved={toggleSaved} compared={compared} toggleCompare={toggleCompare} schoolPathwayIds={pathway.map((item) => item.p.id)} toggleSchoolPathway={toggleSchoolPathway} />;
-  else if (view === "pathway") content = <Pathway selected={pathway} completed={completed} toggleTask={toggleTask} go={go} openProgram={openProgram} changeRole={addPath} removePath={removePath} records={pathwayRecords} updateRecord={updatePathwayRecord} pathwayReadiness={progress} readinessStages={readinessStages} />;
+  else if (view === "pathway") content = <Pathway selected={pathway} completed={completed} toggleTask={toggleTask} go={go} openProgram={openProgram} changeRole={addPath} removePath={removePath} records={pathwayRecords} updateRecord={updatePathwayRecord} pathwayReadiness={progress} readinessStages={readinessStages} initialStage={pathwayStage} />;
   else if (view === "tasks") content = <TasksHabits completed={completed} toggleTask={toggleTask} toast={setToast} />;
-  else if (view === "progress") content = <ProgressPage selected={pathway} pathwayReadiness={progress} readinessStages={readinessStages} />;
+  else if (view === "progress") content = <ProgressPage selected={pathway} pathwayReadiness={progress} readinessStages={readinessStages} openStage={openPathwayStage} openProgram={openProgram} go={go} />;
   else content = <ProfilePage toast={setToast} restart={() => setOnboarded(false)} />;
 
   return <div className="app-shell">
