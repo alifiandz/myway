@@ -929,6 +929,24 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .onboard-content { width: min(720px, 100%); margin: 45px auto 35px; animation: pageIn .32s ease both; }
 .onboard-content h2 { margin: 8px 0 8px; font-size: clamp(27px, 3vw, 38px); line-height: 1.08; letter-spacing: -.05em; }
 .onboard-content > p { margin: 0 0 25px; color: var(--muted); font-size: 11px; line-height: 1.5; }
+.study-goal-basics { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.study-goal-basics > label, .study-goal-basics > div { min-height: 78px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: #fff; display: grid; align-content: center; gap: 6px; }
+.study-goal-basics span { color: var(--muted); font-size: 8px; font-weight: 650; }
+.study-goal-basics select, .study-interest-block select { width: 100%; border: 0; outline: 0; color: var(--ink); background: transparent; font: inherit; font-size: 11px; font-weight: 720; cursor: pointer; }
+.study-goal-basics strong { display: flex; align-items: center; gap: 6px; font-size: 11px; }
+.study-goal-basics strong svg { color: var(--wine); }
+.study-goal-basics small { color: var(--muted); font-size: 7.5px; line-height: 1.4; }
+.study-interest-block { margin-top: 10px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+.study-interest-block > div:first-child { display: grid; gap: 3px; }
+.study-interest-block > div:first-child strong { font-size: 10px; }
+.study-interest-block > div:first-child small { color: var(--muted); font-size: 8px; }
+.study-interest-block > select { min-height: 36px; margin-top: 8px; padding: 0 9px; border: 1px solid var(--line); border-radius: 8px; background: #fafbfe; }
+.study-area-chips { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
+.study-area-chips button { min-height: 29px; padding: 0 9px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); background: #fff; display: inline-flex; align-items: center; gap: 4px; cursor: pointer; font-size: 8px; font-weight: 690; }
+.study-area-chips button:hover:not(:disabled) { color: var(--blue-dark); border-color: #b9c8fb; }
+.study-area-chips button.selected { color: var(--blue); border-color: #b9c8fb; background: var(--soft-blue); }
+.study-area-chips.avoid button.selected, .preference-chip-grid.avoid button.selected { color: #9c4d45; border-color: #dfbbb5; background: #fff4f2; }
+.study-area-chips button:disabled { cursor: not-allowed; opacity: .38; }
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .form-grid label { min-height: 64px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 11px; background: #fff; display: grid; gap: 6px; transition: .18s; }
 .form-grid label:focus-within { border-color: #93a3ea; box-shadow: 0 0 0 3px rgba(95, 118, 232, .08); }
@@ -1249,6 +1267,7 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
   .onboard-content { margin: 30px auto 25px; }
   .onboard-content h2 { font-size: 27px; }
   .form-grid, .preference-cards { grid-template-columns: 1fr; }
+  .study-goal-basics { grid-template-columns: 1fr; }
   .onboard-actions { align-items: stretch; flex-direction: column-reverse; }
   .onboard-actions > .text-link { justify-content: center; }
   .onboard-actions > div { display: grid; grid-template-columns: auto 1fr; }
