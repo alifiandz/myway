@@ -1091,7 +1091,7 @@ function ProgressPage({ selected, applicationReadiness, openStage, openProgram, 
   </div>;
 }
 
-function ProfilePage({ toast, restart }: { toast: (s: string) => void; restart: () => void }) {
+function ProfilePage({ toast }: { toast: (s: string) => void }) {
   type ProfileTab = "education" | "tests" | "preferences" | "experience" | "documents";
   const [editing, setEditing] = useState(false);
   const [tab, setTab] = useState<ProfileTab>("education");
@@ -1114,7 +1114,7 @@ function ProfilePage({ toast, restart }: { toast: (s: string) => void; restart: 
         {tab === "experience" && <section className="profile-tab-panel"><div className="section-head"><div><span className="section-label">Experience</span><h3>Activities and evidence</h3><p>Record the experience first; attach supporting files in Documents.</p></div><BriefcaseBusiness size={19} /></div><div className="profile-form-grid">{field("activities", "Activities", "Clubs, projects and responsibilities")}{field("leadership", "Leadership", "Role, contribution and impact")}{field("volunteering", "Volunteering", "Organisation, work and result")}{field("competitions", "Competitions", "Event, level and achievement")}{field("work", "Work / internships", "Organisation, role and dates")}{field("portfolio", "Portfolio link", "Public portfolio URL")}</div></section>}
         {tab === "documents" && <section className="profile-tab-panel"><div className="section-head"><div><span className="section-label">Shared documents</span><h3>Reusable files</h3><p>Keep general evidence here. University-specific letters belong in Pathway.</p></div><FileText size={19} /></div><div className="profile-document-list">{upload("passport", "Passport / identity document", "PDF or image")}{upload("transcript", "Academic transcript", "Latest official or school-issued record")}{upload("certificate", "School certificate", "Completed or expected qualification")}{upload("cv", "CV / résumé", "Current general version")}{upload("english", "English certificate", "Official result document")}{upload("portfolio", "Portfolio evidence", "Certificates, outputs or supporting work")}</div><p className="prototype-file-note"><CircleHelp size={13} /> Prototype mode records filenames only. Files are not uploaded or stored yet.</p></section>}
       </main>
-    </div><article className="card profile-privacy"><ShieldCheck size={18} /><div><strong>Your profile is separate from your account</strong><p>Profile contains reusable study information. Login, password, notifications, exports and deletion controls will belong to Account.</p></div><button className="text-link" onClick={restart}>Review onboarding <ChevronRight size={13} /></button></article>
+    </div>
   </div>;
 }
 
@@ -1284,7 +1284,7 @@ export default function App() {
   else if (view === "pathway") content = <Pathway selected={pathway} completed={completed} toggleTask={toggleTask} go={go} openProgram={openProgram} changeRole={addPath} removePath={removePath} records={pathwayRecords} updateRecord={updatePathwayRecord} pathwayReadiness={progress} readinessStages={readinessStages} initialStage={pathwayStage} />;
   else if (view === "tasks") content = <TasksHabits completed={completed} toggleTask={toggleTask} toast={setToast} />;
   else if (view === "progress") content = <ProgressPage selected={pathway} applicationReadiness={applicationReadiness} openStage={openPathwayStage} openProgram={openProgram} go={go} />;
-  else content = <ProfilePage toast={setToast} restart={() => setOnboarded(false)} />;
+  else content = <ProfilePage toast={setToast} />;
 
   return <div className="app-shell">
     <Navigation active={view} go={go} openGuide={() => setOnboarded(false)} progress={progress} hasTarget={Boolean(dashboardProgram)} />
