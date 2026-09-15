@@ -632,9 +632,10 @@ function DashboardShortlists({ selected, openProgram }: { selected: { p: Program
   ];
   const visible = groups.filter((group) => selected.some((item) => item.role === group.role));
   if (!visible.length) return null;
-  return <section className="section-space dashboard-recommendations">
-    <div className="section-head"><div><span className="section-label">Your shortlist</span><h3>Targets and alternatives</h3></div><span className="badge blue">{visible.reduce((sum, group) => sum + selected.filter((item) => item.role === group.role).length, 0)} saved</span></div>
-    {visible.map((group) => <div className="section-space" key={group.role}><div className="section-head"><div><h3>{group.label}</h3><p>{group.note}</p></div></div><div className="recommend-grid">{selected.filter((item) => item.role === group.role).map(({ p }) => <button className="card recommendation" key={p.id} onClick={() => openProgram(p)}><UniversityLogo program={p} /><span><strong>{p.university}</strong><small>{p.title}</small><em className="fit possible">{group.role}</em></span><ChevronRight /></button>)}</div></div>)}
+  const total = visible.reduce((sum, group) => sum + selected.filter((item) => item.role === group.role).length, 0);
+  return <section className="card dashboard-shortlist-panel">
+    <header className="section-head"><div><span className="section-label">Other applications</span><h3>Targets and Alternatives</h3><p>Keep backup applications organised without replacing your Dream.</p></div><span className="badge blue">{total} {total === 1 ? "application" : "applications"}</span></header>
+    <div className="dashboard-shortlist-columns">{visible.map((group) => { const items = selected.filter((item) => item.role === group.role); return <section className="dashboard-shortlist-group" key={group.role}><div className="shortlist-group-head"><span className={`role-symbol ${group.role.toLowerCase()}`}>{group.role === "Target" ? <Target size={15} /> : <ShieldCheck size={15} />}</span><span><strong>{group.label}</strong><small>{group.note}</small></span><em>{items.length}</em></div><div className="dashboard-shortlist-list">{items.map(({ p }) => <button key={p.id} onClick={() => openProgram(p)}><UniversityLogo program={p} size="small" /><span><strong>{p.university}</strong><small>{p.title}</small></span><span className="shortlist-open">View <ChevronRight size={13} /></span></button>)}</div></section>; })}</div>
   </section>;
 }
 
