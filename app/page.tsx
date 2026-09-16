@@ -431,6 +431,10 @@ function schoolStudy(school: BusinessSchool) {
   return schoolStudySummaries[school.id];
 }
 
+// MyWay is an undergraduate planning product. Postgraduate-only and restricted-entry
+// institutions remain in the source dataset for auditability, but never enter discovery.
+const undergraduateBusinessSchools = businessSchools.filter((school) => schoolStudy(school).status === "bachelor");
+
 function schoolAsProgram(school: BusinessSchool): Program {
   const study = schoolStudy(school);
   return {
@@ -610,22 +614,35 @@ function UniversityLogo({ program, size = "" }: { program: Program; size?: "" | 
 
 function SchoolLogo({ school, program, size = "small" }: { school: BusinessSchool; program?: Program; size?: "large" | "small" }) {
   if (program) return <UniversityLogo program={program} size={size} />;
+  return <OfficialSchoolLogo school={school} size={size} />;
+}
+
+function OfficialSchoolLogo({ school, size }: { school: BusinessSchool; size: "large" | "small" }) {
+  const [sourceIndex, setSourceIndex] = useState(0);
   const initials = school.name.split(/\s+/).filter((word) => /^[A-ZÀ-Ž]/.test(word)).slice(0, 2).map((word) => word[0]).join("") || school.name.slice(0, 2).toUpperCase();
   const officialSite = `https://${school.domain}`;
+  const sources = [
+    `${officialSite}/favicon.svg`,
+    `${officialSite}/apple-touch-icon.png`,
+    `https://www.google.com/s2/favicons?domain_url=${encodeURIComponent(officialSite)}&sz=256`,
+  ];
+  const advanceSource = () => setSourceIndex((current) => Math.min(current + 1, sources.length));
   return <span className={`crest university-logo ${size} school-logo`}>
     <span>{initials}</span>
-    {/* Prefer the institution-hosted touch icon, then fall back to the domain favicon. */}
+    {/* Official institution-hosted assets first; initials appear only when no usable mark loads. */}
     {/* eslint-disable-next-line @next/next/no-img-element */}
-    <img
-      src={`${officialSite}/apple-touch-icon.png`}
-      alt={`${school.name} mark`}
-      onError={(event) => {
-        if (!event.currentTarget.dataset.fallback) {
-          event.currentTarget.dataset.fallback = "domain";
-          event.currentTarget.src = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(school.domain)}&sz=256`;
-        } else event.currentTarget.style.display = "none";
+    {sourceIndex < sources.length && <img
+      key={sources[sourceIndex]}
+      src={sources[sourceIndex]}
+      alt={`${school.name} official mark`}
+      loading="lazy"
+      decoding="async"
+      onError={advanceSource}
+      onLoad={(event) => {
+        const image = event.currentTarget;
+        if (sourceIndex < sources.length - 1 && image.naturalWidth > 0 && image.naturalWidth < 64) advanceSource();
       }}
-    />
+    />}
   </span>;
 }
 
@@ -809,7 +826,6 @@ function Explore({ openSchool, saved, setSaved, compared, toggleCompare, schoolP
   const filterGroups = [
     { label: "Location", note: "Where you want to study", options: ["Austria", "Belgium", "Czechia", "Denmark", "Finland", "France", "Germany", "Ireland", "Italy", "Netherlands", "Norway", "Poland", "Portugal", "Slovenia", "Spain", "Sweden", "Switzerland", "Türkiye", "United Kingdom", "Multi-country Europe"] },
     { label: "Business area", note: "What you want to study", options: ["Business Administration", "Management", "International Business", "Entrepreneurship", "Marketing", "Finance", "Accounting", "Economics", "Business Analytics", "Supply Chain & Operations", "Human Resources", "Hospitality & Tourism", "Real Estate", "Sports Business", "Luxury Management", "Sustainability & Social Enterprise"] },
-    { label: "Study access", note: "How you can enter", options: ["Direct undergraduate route", "Restricted undergraduate route", "Graduate-only school"] },
     { label: "Study details", note: "From current official pages", options: ["English-taught", "3 years", "4 years", "Credits published"] },
   ];
   const toggleFilter = (item: string) => setFilters((current) => current.includes(item) ? current.filter((value) => value !== item) : [...current, item]);
@@ -832,15 +848,12 @@ function Explore({ openSchool, saved, setSaved, compared, toggleCompare, schoolP
     if (item === "Sports Business") return /sport/i.test(content);
     if (item === "Luxury Management") return /luxury/i.test(content);
     if (item === "Sustainability & Social Enterprise") return /sustainab|social enterprise|social impact/i.test(content);
-    if (item === "Direct undergraduate route") return study.status === "bachelor";
-    if (item === "Restricted undergraduate route") return study.status === "restricted";
-    if (item === "Graduate-only school") return study.status === "graduate-only";
     if (item === "English-taught") return /english/i.test(study.language || "");
     if (item === "3 years" || item === "4 years") return study.duration?.startsWith(item) || false;
     if (item === "Credits published") return Boolean(study.credits);
     return true;
   };
-  const filtered = businessSchools.filter((school) => {
+  const filtered = undergraduateBusinessSchools.filter((school) => {
     const program = school.programId ? programs.find((item) => item.id === school.programId) : undefined;
     const study = schoolStudy(school);
     const haystack = [school.name, school.location, study.title, study.areas.join(" "), program?.curriculum.join(" ")].filter(Boolean).join(" ").toLowerCase();
@@ -853,10 +866,10 @@ function Explore({ openSchool, saved, setSaved, compared, toggleCompare, schoolP
     return matchesQuery && matchesSelected;
   }).sort((a, b) => sort === "A–Z" ? a.name.localeCompare(b.name) : Number(a.rank.replace("=", "")) - Number(b.rank.replace("=", "")));
   return <div className="page-enter">
-    <section className="page-intro"><div><span className="eyebrow">Europe-first discovery</span><h2>Explore 100 business schools</h2><p>Start with the full directory. Your preferences are applied only when you choose filters.</p></div><a className="source-stamp" href={rankingSource} target="_blank" rel="noreferrer"><CircleCheck size={15} /> FT base · QS, THE and Shanghai where verified <ExternalLink size={12} /></a></section>
+    <section className="page-intro"><div><span className="eyebrow">Europe-first discovery</span><h2>Explore {undergraduateBusinessSchools.length} business schools</h2><p>Every school shown has a current undergraduate business route. Preferences apply only when you choose filters.</p></div><a className="source-stamp" href={rankingSource} target="_blank" rel="noreferrer"><CircleCheck size={15} /> FT base · QS, THE and Shanghai where verified <ExternalLink size={12} /></a></section>
     <section className="card search-card">
       <label className="search-box"><Search size={18} /><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search programs, universities, specializations, or countries…" />{query && <button onClick={() => setQuery("")} aria-label="Clear search"><X size={15} /></button>}</label>
-      <button type="button" className={"refine-toggle " + (refineOpen ? "open" : "")} onClick={() => setRefineOpen(!refineOpen)} aria-expanded={refineOpen}><span className="refine-toggle-icon"><SlidersHorizontal size={17} /></span><span className="refine-toggle-copy"><strong>Filters</strong><small>{filters.length ? `${filters.length} active filter${filters.length === 1 ? "" : "s"}` : "Country, business area, study access, and degree details"}</small></span>{filters.length > 0 && <em>{filters.length}</em>}<ChevronDown size={17} /></button>
+      <button type="button" className={"refine-toggle " + (refineOpen ? "open" : "")} onClick={() => setRefineOpen(!refineOpen)} aria-expanded={refineOpen}><span className="refine-toggle-icon"><SlidersHorizontal size={17} /></span><span className="refine-toggle-copy"><strong>Filters</strong><small>{filters.length ? `${filters.length} active filter${filters.length === 1 ? "" : "s"}` : "Country, business area, language, duration, and credits"}</small></span>{filters.length > 0 && <em>{filters.length}</em>}<ChevronDown size={17} /></button>
       {refineOpen && <div className="refine-panel"><header><div><span className="section-label">Build your shortlist</span><h3>What matters to you?</h3><p>Nothing is preselected. Results update only from choices you make here.</p></div>{filters.length > 0 && <button type="button" onClick={() => setFilters([])}>Reset</button>}</header><div className="refine-groups">{filterGroups.map((group) => <fieldset key={group.label}><legend>{group.label}<small>{group.note}</small></legend><div>{group.options.map((item) => <label key={item} className={filters.includes(item) ? "selected" : ""}><input type="checkbox" checked={filters.includes(item)} onChange={() => toggleFilter(item)} /><span className="filter-check">{filters.includes(item) && <Check size={12} />}</span><span>{item}</span></label>)}</div></fieldset>)}</div><footer><span>{filters.length ? `${filters.length} filters selected` : "No filters selected"}</span><button type="button" className="primary-button" onClick={() => setRefineOpen(false)}>Show {filtered.length} school{filtered.length === 1 ? "" : "s"}</button></footer></div>}
       {filters.length > 0 && <div className="active-filters">{filters.map((item) => <button key={item} onClick={() => toggleFilter(item)}>{item}<X size={12} /></button>)}<button className="clear-all" onClick={() => setFilters([])}>Clear all</button></div>}
     </section>
@@ -925,9 +938,9 @@ function ProgramDetail({ p, close, saved, toggleSaved, compared, toggleCompare, 
 }
 
 function ComparePanel({ ids, close, remove, open }: { ids: string[]; close: () => void; remove: (id: string) => void; open: (school: BusinessSchool) => void }) {
-  const items = businessSchools.filter((school) => ids.includes(school.id));
+  const items = undergraduateBusinessSchools.filter((school) => ids.includes(school.id));
   const rows: [string, (school: BusinessSchool) => string][] = [
-    ["Study access", (school) => { const study = schoolStudy(school); return study.status === "bachelor" ? "Direct undergraduate route" : study.status === "restricted" ? "Restricted undergraduate route" : "No direct undergraduate degree"; }],
+    ["Study access", () => "Undergraduate route"],
     ["Current route", (school) => schoolStudy(school).title],
     ["Length and credits", (school) => [schoolStudy(school).duration, schoolStudy(school).credits].filter(Boolean).join(" · ") || "Not applicable"],
     ["Language", (school) => schoolStudy(school).language || "Not applicable"],
@@ -1285,7 +1298,7 @@ export default function App() {
           if (program) return [{ p: program, role }];
           if (id.startsWith("school:")) {
             const school = businessSchools.find((item) => item.id === id.slice("school:".length));
-            if (school) return [{ p: schoolAsProgram(school), role }];
+            if (school && schoolStudy(school).status === "bachelor") return [{ p: schoolAsProgram(school), role }];
           }
           return [];
         }));

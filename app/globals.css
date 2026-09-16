@@ -385,9 +385,9 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .school-identity > span:last-child { min-width: 0; display: grid; gap: 4px; }
 .school-identity strong { font-size: 11px; line-height: 1.28; }
 .school-identity small { color: var(--muted); display: flex; align-items: center; gap: 3px; font-size: 8px; line-height: 1.3; }
-.school-logo { color: var(--navy); background: #fff; border-color: #dfe4f0; font-family: inherit; }
-.school-logo { padding: 0; }
-.school-logo img, .school-logo.large img { width: 100%; height: 100%; object-fit: contain; image-rendering: auto; }
+.school-logo { color: var(--navy); background: #fff; border-color: #dfe4f0; font-family: inherit; padding: 5px; isolation: isolate; }
+.school-logo.large { padding: 8px; }
+.school-logo img, .school-logo.large img { width: 100%; height: 100%; object-fit: contain; object-position: center; image-rendering: auto; }
 .school-meta-strip { min-height: 25px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px; }
 .rank-chip { min-height: 22px; padding: 0 7px; border: 1px solid #dfe5f7; border-radius: 999px; color: var(--blue-dark); background: #f6f8ff; display: inline-flex; align-items: center; font-size: 7px; font-weight: 760; letter-spacing: .01em; }
 .ranking-menu { position: relative; }
