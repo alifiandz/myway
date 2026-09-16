@@ -386,8 +386,8 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .school-identity strong { font-size: 11px; line-height: 1.28; }
 .school-identity small { color: var(--muted); display: flex; align-items: center; gap: 3px; font-size: 8px; line-height: 1.3; }
 .school-logo { color: var(--navy); background: #fff; border-color: #dfe4f0; font-family: inherit; }
-.school-logo { padding: 2px; }
-.school-logo img, .school-logo.large img { width: 100%; height: 100%; object-fit: contain; }
+.school-logo { padding: 0; }
+.school-logo img, .school-logo.large img { width: 100%; height: 100%; object-fit: contain; image-rendering: auto; }
 .school-meta-strip { min-height: 25px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px; }
 .rank-chip { min-height: 22px; padding: 0 7px; border: 1px solid #dfe5f7; border-radius: 999px; color: var(--blue-dark); background: #f6f8ff; display: inline-flex; align-items: center; font-size: 7px; font-weight: 760; letter-spacing: .01em; }
 .ranking-menu { position: relative; }
@@ -434,6 +434,7 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .ranking-link { margin-top: auto; color: var(--blue-dark); display: inline-flex; align-items: center; gap: 5px; text-decoration: none; font-size: 8px; font-weight: 720; }
 .ranking-link:hover { gap: 8px; }
 .school-actions { margin-top: auto; display: grid; grid-template-columns: auto auto 1fr; align-items: center; gap: 4px; }
+.school-actions button:disabled { cursor: not-allowed; opacity: .48; }
 .program-save { width: 32px; height: 32px; flex: 0 0 auto; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 9px; color: var(--muted); background: #fff; cursor: pointer; }
 .program-save:hover, .program-save.selected { color: var(--blue-dark); border-color: #b8c3ee; background: var(--blue-soft); }
 .program-meta { display: flex; flex-wrap: wrap; gap: 7px 11px; color: var(--muted); font-size: 8px; }
@@ -531,6 +532,13 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .fit-bar i { height: 100%; display: block; background: #fff; border-radius: inherit; }
 .fit-panel h3 { margin: 12px 0 5px; font-size: 14px; }
 .fit-panel p { margin: 0; color: rgba(255, 255, 255, .68); font-size: 9px; line-height: 1.5; }
+.fit-breakdown > div { display: flex; justify-content: space-between; gap: 14px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.fit-breakdown > div:last-child { border-bottom: 0; }
+.fit-breakdown > div > span { display: grid; gap: 3px; }
+.fit-breakdown strong { font-size: 10px; }
+.fit-breakdown small { color: var(--muted); font-size: 8px; line-height: 1.4; }
+.fit-breakdown em { color: var(--blue); font-size: 10px; font-style: normal; font-weight: 800; white-space: nowrap; }
+.pathway-application-switcher { margin-bottom: 12px; }
 .why-list > div, .caution-list > div { min-height: 47px; display: grid; grid-template-columns: 20px 1fr; align-items: center; gap: 7px; border-bottom: 1px solid var(--line); font-size: 9px; line-height: 1.4; }
 .why-list > div:last-child, .caution-list > div:last-child { border-bottom: 0; }
 .why-list svg { color: var(--green); }

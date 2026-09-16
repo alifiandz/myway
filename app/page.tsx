@@ -12,8 +12,37 @@ import {
 import { schoolStudyRows, type SchoolStudySummary } from "./school-data";
 
 type View = "dashboard" | "explore" | "pathway" | "tasks" | "progress" | "profile";
-type Fit = "Good Fit" | "Possible Fit" | "Entry Structure Mismatch";
 type Role = "Dream" | "Target" | "Alternative";
+
+type ProfileSnapshot = {
+  citizenship?: string;
+  curriculum?: string;
+  average?: string;
+  score?: string;
+  testDate?: string;
+  degree?: string;
+  fields?: string;
+  avoidedFields?: string;
+  countries?: string;
+  language?: string;
+  budget?: string;
+  math?: string;
+  intake?: string;
+  activities?: string;
+  leadership?: string;
+  volunteering?: string;
+  competitions?: string;
+  work?: string;
+  portfolio?: string;
+};
+
+type FitResult = {
+  score: number | null;
+  label: "Strong fit" | "Good fit" | "Possible fit" | "Low fit" | "Complete profile";
+  confidence: number;
+  reasons: string[];
+  breakdown: { label: string; weight: number; score: number; note: string }[];
+};
 
 type Program = {
   id: string;
@@ -25,8 +54,6 @@ type Program = {
   duration: string;
   language: string;
   entry: string;
-  fit: Fit;
-  fitScore: number;
   management: string;
   enterprise: string;
   marketing: string;
@@ -51,8 +78,6 @@ const programs: Program[] = [
     duration: "3 years · 180 ECTS",
     language: "English",
     entry: "Direct bachelor’s entry",
-    fit: "Good Fit",
-    fitScore: 88,
     management: "Strong",
     enterprise: "Available",
     marketing: "Strong",
@@ -78,8 +103,6 @@ const programs: Program[] = [
     duration: "3 years · 180 ECTS",
     language: "Mostly English",
     entry: "Direct bachelor’s entry",
-    fit: "Good Fit",
-    fitScore: 86,
     management: "Strong",
     enterprise: "Strong",
     marketing: "Strong",
@@ -102,8 +125,6 @@ const programs: Program[] = [
     duration: "4 years",
     language: "English tracks available",
     entry: "Direct bachelor’s entry",
-    fit: "Good Fit",
-    fitScore: 83,
     management: "Strong",
     enterprise: "Strong",
     marketing: "Available",
@@ -126,8 +147,6 @@ const programs: Program[] = [
     duration: "4 years",
     language: "English / French",
     entry: "Direct bachelor’s entry",
-    fit: "Good Fit",
-    fitScore: 81,
     management: "Strong",
     enterprise: "Available",
     marketing: "Available",
@@ -153,8 +172,6 @@ const programs: Program[] = [
     duration: "4 years",
     language: "English / French",
     entry: "Direct bachelor’s entry",
-    fit: "Good Fit",
-    fitScore: 80,
     management: "Strong",
     enterprise: "Strong",
     marketing: "Strong",
@@ -416,8 +433,6 @@ function schoolStudy(school: BusinessSchool) {
 
 function schoolAsProgram(school: BusinessSchool): Program {
   const study = schoolStudy(school);
-  const index = businessSchools.findIndex((item) => item.id === school.id);
-  const score = study.status === "bachelor" ? 76 + ((index * 7) % 15) : study.status === "restricted" ? 68 : 54;
   return {
     id: `school:${school.id}`,
     university: school.name,
@@ -428,8 +443,6 @@ function schoolAsProgram(school: BusinessSchool): Program {
     duration: [study.duration, study.credits].filter(Boolean).join(" · ") || "Not applicable",
     language: study.language || "See official programme page",
     entry: study.status === "bachelor" ? "Direct bachelor’s entry" : study.status === "restricted" ? "Restricted undergraduate route" : "No direct undergraduate degree",
-    fit: score >= 82 ? "Good Fit" : score >= 65 ? "Possible Fit" : "Entry Structure Mismatch",
-    fitScore: score,
     management: study.areas.some((area) => /management|business/i.test(area)) ? "Available" : "Not highlighted",
     enterprise: study.areas.some((area) => /entrepreneur/i.test(area)) ? "Available" : "Not highlighted",
     marketing: study.areas.some((area) => /marketing/i.test(area)) ? "Available" : "Not highlighted",
@@ -442,6 +455,83 @@ function schoolAsProgram(school: BusinessSchool): Program {
     curriculum: study.areas,
     sources: [{ label: study.sourceLabel, href: study.source }],
   };
+}
+
+function calculateProgramFit(program: Program, study: SchoolStudySummary | undefined, profile: ProfileSnapshot, priorities: Record<string, string>): FitResult {
+  const selectedFields = (profile.fields || "").split(",").map((item) => item.trim().toLowerCase()).filter(Boolean);
+  const avoidedFields = (profile.avoidedFields || "").split(",").map((item) => item.trim().toLowerCase()).filter(Boolean);
+  const areas = (study?.areas ?? program.curriculum).map((item) => item.toLowerCase());
+  const searchable = [program.title, ...areas].join(" ").toLowerCase();
+  const breakdown: FitResult["breakdown"] = [];
+
+  if (study?.status === "graduate-only" || /no direct undergraduate/i.test(program.entry)) {
+    return { score: 0, label: "Low fit", confidence: 100, reasons: ["This institution does not currently offer a direct undergraduate route."], breakdown: [{ label: "Study access", weight: 25, score: 0, note: "No direct undergraduate degree" }] };
+  }
+
+  if (selectedFields.length) {
+    const selectedMatches = selectedFields.filter((field) => searchable.includes(field) || areas.some((area) => area.includes(field) || field.includes(area)));
+    const avoidedMatches = avoidedFields.filter((field) => searchable.includes(field));
+    const score = avoidedMatches.length ? 25 : selectedMatches.length ? Math.min(100, 78 + selectedMatches.length * 8) : 55;
+    breakdown.push({ label: "Business interests", weight: 25, score, note: avoidedMatches.length ? `Includes an avoided area: ${avoidedMatches[0]}` : selectedMatches.length ? `Matches ${selectedMatches.slice(0, 2).join(" and ")}` : "Broad business overlap" });
+  }
+
+  const degree = (profile.degree || "").toLowerCase();
+  const directBachelor = study?.status === "bachelor" || /direct bachelor/i.test(program.entry);
+  const restricted = study?.status === "restricted" || /restricted/i.test(program.entry);
+  const accessScore = restricted ? 40 : directBachelor ? 95 : 65;
+  breakdown.push({ label: "Study access", weight: 25, score: accessScore, note: restricted ? "Restricted undergraduate eligibility" : degree.includes("bachelor") || !degree ? "Direct bachelor route" : "Check degree-route compatibility" });
+
+  const mathPreference = (profile.math || "").toLowerCase();
+  const mathEvidence = (program.math || "").toLowerCase();
+  if (mathPreference && !/not yet verified/.test(mathEvidence)) {
+    const wantsLow = /low|light/.test(mathPreference);
+    const isHigh = /high|heavy/.test(mathEvidence);
+    const isModerate = /moderate/.test(mathEvidence);
+    const score = wantsLow ? (isHigh ? 25 : isModerate ? 68 : 95) : 88;
+    breakdown.push({ label: "Math comfort", weight: 15, score, note: `${profile.math} preference · ${program.math} programme load` });
+  }
+
+  const practicalScores: number[] = [];
+  const practicalNotes: string[] = [];
+  if (profile.countries) {
+    const countries = profile.countries.toLowerCase().split(",").map((item) => item.trim()).filter(Boolean);
+    const match = countries.some((country) => program.location.toLowerCase().includes(country));
+    practicalScores.push(match ? 100 : 45);
+    practicalNotes.push(match ? "Preferred location" : "Outside preferred locations");
+  }
+  if (profile.language) {
+    const match = program.language.toLowerCase().includes(profile.language.toLowerCase()) || (/english/i.test(profile.language) && /english/i.test(program.language));
+    practicalScores.push(match ? 100 : 40);
+    practicalNotes.push(match ? "Preferred teaching language" : "Language needs review");
+  }
+  if (practicalScores.length) breakdown.push({ label: "Location & language", weight: 15, score: Math.round(practicalScores.reduce((sum, value) => sum + value, 0) / practicalScores.length), note: practicalNotes.join(" · ") });
+
+  const budgetText = profile.budget || "";
+  const budget = Number(budgetText.replace(/[^0-9.]/g, ""));
+  const tuition = Number((program.tuition || "").replace(/[^0-9.]/g, ""));
+  if (/(€|eur)/i.test(budgetText) && budget > 0 && tuition > 0 && !/not yet verified|see the current/i.test(program.tuition)) {
+    breakdown.push({ label: "Budget", weight: 10, score: tuition <= budget ? 100 : tuition <= budget * 1.2 ? 60 : 25, note: tuition <= budget ? "Within the recorded tuition limit" : "Above the recorded tuition limit" });
+  }
+
+  const activePriorities = Object.entries(priorities).filter(([, value]) => value === "Must have" || value === "Prefer");
+  if (activePriorities.length) {
+    const evidence = `${program.experience} ${program.curriculum.join(" ")}`.toLowerCase();
+    const matches = activePriorities.filter(([key]) => {
+      const pattern = key === "Career services" ? /career|employer/ : key === "Entrepreneurship support" ? /entrepreneur|incubat|venture/ : key === "Industry projects" ? /project|company|consult/ : new RegExp(key.replace(/s$/, ""), "i");
+      return pattern.test(evidence);
+    });
+    breakdown.push({ label: "Opportunities", weight: 10, score: Math.round(matches.length / activePriorities.length * 100), note: matches.length ? `${matches.length} selected priorit${matches.length === 1 ? "y" : "ies"} evidenced` : "Selected priorities need verification" });
+  }
+
+  if (!selectedFields.length && !profile.countries && !profile.language && !profile.math && !activePriorities.length) {
+    return { score: null, label: "Complete profile", confidence: 0, reasons: ["Add study interests and preferences to calculate a personal match."], breakdown };
+  }
+
+  const availableWeight = breakdown.reduce((sum, item) => sum + item.weight, 0);
+  const score = Math.round(breakdown.reduce((sum, item) => sum + item.score * item.weight, 0) / Math.max(availableWeight, 1));
+  const label: FitResult["label"] = score >= 88 ? "Strong fit" : score >= 75 ? "Good fit" : score >= 60 ? "Possible fit" : "Low fit";
+  const reasons = [...breakdown].sort((a, b) => b.score - a.score).slice(0, 3).map((item) => `${item.label}: ${item.note}`);
+  return { score, label, confidence: Math.min(100, availableWeight), reasons, breakdown };
 }
 
 const rankingSource = "https://rankings.ft.com/rankings/3042/european-business-school-rankings-2025";
@@ -501,8 +591,8 @@ const navItems = [
   { id: "profile" as View, label: "Profile", icon: CircleUserRound },
 ];
 
-function fitClass(fit: Fit) {
-  return fit === "Good Fit" ? "good" : fit === "Possible Fit" ? "possible" : "mismatch";
+function fitResultClass(result: FitResult) {
+  return result.score === null ? "possible" : result.score >= 75 ? "good" : result.score >= 60 ? "possible" : "mismatch";
 }
 
 function UniversityLogo({ program, size = "" }: { program: Program; size?: "" | "large" | "small" }) {
@@ -524,12 +614,17 @@ function SchoolLogo({ school, program, size = "small" }: { school: BusinessSchoo
   const officialSite = `https://${school.domain}`;
   return <span className={`crest university-logo ${size} school-logo`}>
     <span>{initials}</span>
-    {/* Show the institution's real domain mark; initials remain only if loading fails. */}
+    {/* Prefer the institution-hosted touch icon, then fall back to the domain favicon. */}
     {/* eslint-disable-next-line @next/next/no-img-element */}
     <img
-      src={`https://www.google.com/s2/favicons?domain_url=${encodeURIComponent(officialSite)}&sz=512`}
+      src={`${officialSite}/apple-touch-icon.png`}
       alt={`${school.name} mark`}
-      onError={(event) => { event.currentTarget.style.display = "none"; }}
+      onError={(event) => {
+        if (!event.currentTarget.dataset.fallback) {
+          event.currentTarget.dataset.fallback = "domain";
+          event.currentTarget.src = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(school.domain)}&sz=256`;
+        } else event.currentTarget.style.display = "none";
+      }}
     />
   </span>;
 }
@@ -570,7 +665,17 @@ const onboardingSteps = ["About you", "Study goals", "Preferences", "Preparation
 
 function Onboarding({ finish, saveLater }: { finish: () => void; saveLater: () => void }) {
   const [step, setStep] = useState(1);
-  const [name, setName] = useState("");
+  const [preferredName, setPreferredName] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [citizenship, setCitizenship] = useState("");
+  const [intake, setIntake] = useState("");
+  const [countries, setCountries] = useState("");
+  const [budget, setBudget] = useState("");
+  const [average, setAverage] = useState("");
+  const [test, setTest] = useState("");
+  const [score, setScore] = useState("");
+  const [graduation, setGraduation] = useState("");
+  const [curriculum, setCurriculum] = useState("");
   const [selected, setSelected] = useState<string[]>([]);
   const [degreeRoute, setDegreeRoute] = useState("Bachelor’s");
   const [mainInterest, setMainInterest] = useState("");
@@ -582,7 +687,9 @@ function Onboarding({ finish, saveLater }: { finish: () => void; saveLater: () =
   const businessAreas = ["Business Administration", "Management", "International Business", "Entrepreneurship", "Marketing", "Finance", "Accounting", "Economics", "Business Analytics", "Supply Chain & Operations", "Human Resources", "Hospitality & Tourism", "Real Estate", "Sports Business", "Luxury Management", "Sustainability & Social Enterprise"];
   const toggleAdditional = (item: string) => { if (item === mainInterest || avoidedInterests.includes(item)) return; setAdditionalInterests((current) => current.includes(item) ? current.filter((value) => value !== item) : [...current, item]); };
   const toggleAvoided = (item: string) => { if (item === mainInterest || additionalInterests.includes(item)) return; setAvoidedInterests((current) => current.includes(item) ? current.filter((value) => value !== item) : [...current, item]); };
-  const completeOnboarding = () => { let existing = {}; try { existing = JSON.parse(window.localStorage.getItem("myway-profile") || "{}"); } catch {} window.localStorage.setItem("myway-profile", JSON.stringify({ ...existing, name, degree: degreeRoute, fields: [mainInterest, ...additionalInterests].filter(Boolean).join(", "), avoidedFields: avoidedInterests.join(", "), math: selected.includes("Low-to-moderate math") ? "Low-to-moderate" : "" })); window.localStorage.setItem("myway-preference-priorities", JSON.stringify(priorities)); finish(); };
+  const saveOnboardingProfile = () => { let existing = {}; try { existing = JSON.parse(window.localStorage.getItem("myway-profile") || "{}"); } catch {} window.localStorage.setItem("myway-profile", JSON.stringify({ ...existing, name: fullName.trim() || preferredName.trim(), preferredName: preferredName.trim(), citizenship, intake, countries, budget, average, test, score, graduation, curriculum, degree: degreeRoute, fields: [mainInterest, ...additionalInterests].filter(Boolean).join(", "), avoidedFields: avoidedInterests.join(", "), language: selected.includes("English-taught") ? "English" : "", math: selected.includes("Low-to-moderate math") ? "Low-to-moderate" : "" })); window.localStorage.setItem("myway-preference-priorities", JSON.stringify(priorities)); window.dispatchEvent(new Event("myway-profile-updated")); };
+  const completeOnboarding = () => { saveOnboardingProfile(); finish(); };
+  const finishLater = () => { saveOnboardingProfile(); saveLater(); };
   return <main className="onboarding-shell">
     <section className="onboarding-art">
       <Brand />
@@ -596,8 +703,8 @@ function Onboarding({ finish, saveLater }: { finish: () => void; saveLater: () =
       <div className="step-labels">{onboardingSteps.map((label, i) => <button key={label} aria-label={"Go to " + label} onClick={() => setStep(i + 1)} className={i + 1 === step ? "active" : i + 1 < step ? "done" : ""}>{i + 1 < step ? <Check size={12} /> : i + 1}<small>{label}</small></button>)}</div>
       <div className="onboard-content" key={step}>
         {step === 1 && <>
-          <span className="eyebrow">Start with the basics</span><h2>{name.trim() ? `Welcome, ${name.trim()}.` : "Welcome."} Let’s build your profile.</h2><p>We only use the information you provide. You can leave anything incomplete.</p>
-          <div className="form-grid"><label><span>Preferred name</span><input value={name} onChange={(e) => setName(e.target.value)} placeholder="Your preferred name" /></label><label><span>Full name</span><input placeholder="Your full name" /></label><label><span>Country / citizenship</span><input placeholder="Not provided" /></label><label><span>Intended intake</span><input placeholder="Not provided" /></label></div>
+          <span className="eyebrow">Start with the basics</span><h2>{preferredName.trim() ? `Welcome, ${preferredName.trim()}.` : "Welcome."} Let’s build your profile.</h2><p>We only use the information you provide. You can leave anything incomplete.</p>
+          <div className="form-grid"><label><span>Preferred name</span><input value={preferredName} onChange={(e) => setPreferredName(e.target.value)} placeholder="Your preferred name" /></label><label><span>Full name</span><input value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="Your full legal name" /></label><label><span>Country / citizenship</span><input value={citizenship} onChange={(e) => setCitizenship(e.target.value)} placeholder="e.g. Indonesia" /></label><label><span>Intended intake</span><input value={intake} onChange={(e) => setIntake(e.target.value)} placeholder="e.g. September 2027" /></label></div>
         </>}
         {step === 2 && <>
           <span className="eyebrow">Study goals</span><h2>What do you want to study?</h2><p>Your answers shape program matches and stay editable in Profile.</p>
@@ -610,15 +717,15 @@ function Onboarding({ finish, saveLater }: { finish: () => void; saveLater: () =
           <span className="eyebrow">Preferences</span><h2>What matters in your programme?</h2><p>Choose learning preferences and priorities. These improve matching—not admission probability.</p>
           <div className="preference-cards compact">{[{ label: "Low-to-moderate math", note: "Prefer a lighter quantitative load", icon: BarChart3 }, { label: "Projects & cases", note: "Applied business learning", icon: BriefcaseBusiness }, { label: "Flexible electives", note: "Room to shape the degree", icon: Settings2 }, { label: "English-taught", note: "Study primarily in English", icon: Languages }].map(({ label, note, icon: Icon }) => <button key={label} className={selected.includes(label) ? "selected" : ""} onClick={() => toggle(label)}><Icon /><strong>{label}</strong><small>{note}</small></button>)}</div>
           <span className="form-subtitle">Opportunity priorities</span><div className="onboard-priority-list">{[["Exchange", "International study"], ["Internships", "Work experience"], ["Career services", "Employer and career support"], ["Scholarships", "Funding opportunities"]].map(([item, note]) => <button key={item} onClick={() => cyclePriority(item)}><span><strong>{item}</strong><small>{note}</small></span><em className={priorities[item].toLowerCase().replace(" ", "-")}>{priorities[item]}</em></button>)}</div>
-          <div className="form-grid compact-fields"><label><span>Annual tuition budget</span><input placeholder="Optional" /></label><label><span>Preferred intake</span><input placeholder="Optional" /></label></div>
+          <div className="form-grid compact-fields"><label><span>Annual tuition budget</span><input value={budget} onChange={(e) => setBudget(e.target.value)} placeholder="Amount and currency" /></label><label><span>Countries / regions</span><input value={countries} onChange={(e) => setCountries(e.target.value)} placeholder="Optional" /></label></div>
         </>}
         {step === 4 && <>
           <span className="eyebrow">Preparation</span><h2>What information do you already have?</h2><p>Everything here is optional. Missing information creates a profile gap—not a negative judgement.</p>
-          <div className="form-grid"><label><span>Current grades</span><input placeholder="Optional" /></label><label><span>English test / score</span><input placeholder="Optional" /></label><label><span>Expected graduation</span><input placeholder="Optional" /></label><label><span>Current qualification</span><input placeholder="e.g. SMA, IB, A Levels" /></label></div>
+          <div className="form-grid"><label><span>Current grades</span><input value={average} onChange={(e) => setAverage(e.target.value)} placeholder="Include the grading scale" /></label><label><span>English test</span><input value={test} onChange={(e) => setTest(e.target.value)} placeholder="IELTS, TOEFL, Duolingo..." /></label><label><span>English score</span><input value={score} onChange={(e) => setScore(e.target.value)} placeholder="Optional" /></label><label><span>Expected graduation</span><input value={graduation} onChange={(e) => setGraduation(e.target.value)} placeholder="Month and year" /></label><label><span>Current qualification</span><input value={curriculum} onChange={(e) => setCurriculum(e.target.value)} placeholder="e.g. SMA, IB, A Levels" /></label></div>
           <div className="info-callout green"><CircleCheck /><div><strong>Ready to explore</strong><p>Complete detailed education, tests, experience and documents later in Profile.</p></div></div>
         </>}
       </div>
-      <footer className="onboard-actions"><button className="text-link" onClick={saveLater}>Finish later</button><div>{step > 1 && <button className="secondary-button" onClick={() => setStep(step - 1)}><ChevronLeft size={16} /> Back</button>}<button className="primary-button" onClick={() => step < 4 ? setStep(step + 1) : completeOnboarding()}>{step < 4 ? "Continue" : "Explore programmes"} <ChevronRight size={16} /></button></div></footer>
+      <footer className="onboard-actions"><button className="text-link" onClick={finishLater}>Finish later</button><div>{step > 1 && <button className="secondary-button" onClick={() => setStep(step - 1)}><ChevronLeft size={16} /> Back</button>}<button className="primary-button" onClick={() => step < 4 ? setStep(step + 1) : completeOnboarding()}>{step < 4 ? "Continue" : "Explore programmes"} <ChevronRight size={16} /></button></div></footer>
     </section>
   </main>;
 }
@@ -639,23 +746,24 @@ function DashboardShortlists({ selected, openProgram }: { selected: { p: Program
 
 type ReadinessStage = { label: string; value: number; requirements: number; records: number; evidence: number; actions: number; completedActions: number; totalActions: number };
 
-function Dashboard({ go, completed, toggleTask, openProgram, target, selected, pathwayReadiness, readinessStages }: { go: (v: View) => void; completed: string[]; toggleTask: (v: string) => void; openProgram: (p: Program) => void; target?: Program; selected: { p: Program; role: Role }[]; pathwayReadiness: number; readinessStages: ReadinessStage[] }) {
+function Dashboard({ go, completed, toggleTask, openProgram, target, selected, pathwayReadiness, readinessStages, programFits }: { go: (v: View) => void; completed: string[]; toggleTask: (v: string) => void; openProgram: (p: Program) => void; target?: Program; selected: { p: Program; role: Role }[]; pathwayReadiness: number; readinessStages: ReadinessStage[]; programFits: Record<string, FitResult> }) {
   const actions = [
-    { id: "ielts-practice", title: "Complete an IELTS speaking drill", meta: "20 min · Weekly practice", icon: Languages },
-    { id: "documents", title: "Review your semester grade report", meta: "10 min · Weekly task", icon: ClipboardCheck },
-    { id: "portfolio", title: "Outline your next portfolio project", meta: "30 min · Weekly task", icon: BriefcaseBusiness },
+    { id: "english-review", title: "Review your English qualification plan", meta: "20 min · Weekly practice", icon: Languages },
+    { id: "academic-review", title: "Update one academic record", meta: "10 min · Weekly task", icon: ClipboardCheck },
+    { id: "application-review", title: "Review one application requirement", meta: "20 min · Weekly task", icon: BriefcaseBusiness },
   ];
   const doneToday = actions.filter((action) => completed.includes(action.id)).length;
   const completeStages = readinessStages.filter((stage) => stage.value === 100).length;
   const inProgressStages = readinessStages.filter((stage) => stage.value > 0 && stage.value < 100).length;
   const notStartedStages = readinessStages.filter((stage) => stage.value === 0).length;
   const nextStage = readinessStages.find((stage) => stage.value < 100) || readinessStages[readinessStages.length - 1];
+  const targetFit = target ? programFits[target.id] : undefined;
 
   if (!target) return <div className="page-enter">
     <section className="welcome-row"><div><span className="eyebrow">Your preparation workspace</span><h2>Choose a Dream university to start tracking</h2><p>Preparation progress is always connected to a specific university—not an admission prediction.</p></div></section>
     <article className="card no-target-gate"><span className="large-icon"><Target /></span><div><span className="section-label">Tracker ready</span><h3>Add one university as your Dream</h3><p>Your complete nine-stage Pathway Readiness will appear here after a Dream option is chosen. Target and Alternative options remain together on My Pathway.</p><button className="primary-button" onClick={() => go("explore")}><Search size={15} /> Explore programs</button></div></article>
     <DashboardShortlists selected={selected} openProgram={openProgram} />
-    <section className="section-space dashboard-recommendations"><div className="section-head"><div><span className="section-label">Start here</span><h3>Strong current matches</h3></div></div><div className="recommend-grid">{programs.slice(0, 3).map((p) => <button className="card recommendation" key={p.id} onClick={() => openProgram(p)}><UniversityLogo program={p} /><span><strong>{p.university}</strong><small>{p.title}</small><em className={"fit " + fitClass(p.fit)}>{p.fit}</em></span><ChevronRight /></button>)}</div></section>
+    <section className="section-space dashboard-recommendations"><div className="section-head"><div><span className="section-label">Start here</span><h3>Strong current matches</h3></div></div><div className="recommend-grid">{[...programs].sort((a, b) => (programFits[b.id]?.score ?? -1) - (programFits[a.id]?.score ?? -1)).slice(0, 3).map((p) => { const match = programFits[p.id]; return <button className="card recommendation" key={p.id} onClick={() => openProgram(p)}><UniversityLogo program={p} /><span><strong>{p.university}</strong><small>{p.title}</small><em className={"fit " + fitResultClass(match)}>{match.score === null ? "Complete profile" : `${match.score}/100 · ${match.label}`}</em></span><ChevronRight /></button>; })}</div></section>
   </div>;
 
   return <div className="page-enter">
@@ -665,11 +773,11 @@ function Dashboard({ go, completed, toggleTask, openProgram, target, selected, p
         <article className="card hero-progress"><div><span className="section-label">Pathway readiness</span><strong>{pathwayReadiness}%</strong><p>Requirements, records, evidence and actions across your complete Dream pathway. Not an admission prediction.</p><button className="text-link" onClick={() => go("pathway")}>Open full pathway <ChevronRight size={15} /></button></div><div className="hero-readiness-visual"><div className="ring" style={{ background: `conic-gradient(var(--blue) ${pathwayReadiness}%, #e9ebf2 0)` }}><span>{pathwayReadiness}<small>%</small></span></div><em className="hero-weekly-gain">{completeStages} of 9 stages ready</em></div></article>
         <section className="section-space"><div className="section-head"><div><span className="section-label">Today’s actions</span><h3>Keep your weekly rhythm</h3><p>These routines are separate and do not change Pathway Readiness.</p></div><span className="badge amber">{actions.length - doneToday} open</span></div><article className="card action-list">{actions.map(({ id, title, meta, icon: Icon }) => { const done = completed.includes(id); return <button key={id} className={"action-row " + (done ? "done" : "")} onClick={() => toggleTask(id)}><span className={"check " + (done ? "checked" : "")}>{done && <Check size={13} />}</span><span className="row-icon"><Icon size={17} /></span><span><strong>{title}</strong><small>{meta}</small></span><em>{done ? "Complete" : "Weekly only"}</em><ChevronRight size={15} /></button>; })}</article></section>
         <article className="card readiness-overview compact-readiness"><div className="section-head"><div><span className="section-label">Complete journey</span><h3>Pathway stages</h3></div><button className="text-link" onClick={() => go("progress")}>View progress <ChevronRight size={15} /></button></div><p className="readiness-context">A compact overview of all nine preparation stages for {target.university}.</p><div className="readiness-status-summary"><div><strong>{completeStages}</strong><span>Ready</span></div><div><strong>{inProgressStages}</strong><span>In progress</span></div><div><strong>{notStartedStages}</strong><span>Not started</span></div></div><button className="outline-button" onClick={() => go("pathway")}>Open full pathway</button></article>
-        <section className="section-space"><div className="section-head"><div><span className="section-label">Recommended for you</span><h3>Best current program matches</h3></div><button className="text-link" onClick={() => go("explore")}>View all <ChevronRight size={15} /></button></div><div className="recommend-grid" aria-label="Best current program matches">{[...programs].sort((a, b) => b.fitScore - a.fitScore).slice(0, 3).map((p) => <button className="card recommendation" key={p.id} onClick={() => openProgram(p)}><UniversityLogo program={p} /><span><strong>{p.university}</strong><small>{p.title}</small><em className={"fit " + fitClass(p.fit)}>{p.fit}</em></span><ChevronRight /></button>)}</div></section>
+        <section className="section-space"><div className="section-head"><div><span className="section-label">Recommended for you</span><h3>Best current program matches</h3></div><button className="text-link" onClick={() => go("explore")}>View all <ChevronRight size={15} /></button></div><div className="recommend-grid" aria-label="Best current program matches">{[...programs].sort((a, b) => (programFits[b.id]?.score ?? -1) - (programFits[a.id]?.score ?? -1)).slice(0, 3).map((p) => { const match = programFits[p.id]; return <button className="card recommendation" key={p.id} onClick={() => openProgram(p)}><UniversityLogo program={p} /><span><strong>{p.university}</strong><small>{p.title}</small><em className={"fit " + fitResultClass(match)}>{match.score === null ? "Complete profile" : `${match.score}/100 · ${match.label}`}</em></span><ChevronRight /></button>; })}</div></section>
       </div>
       <aside className="right-column">
         <article className="card chosen-university-card"><span className="section-label">Chosen university</span><div className="chosen-university-main"><UniversityLogo program={target} size="large" /><span><strong>{target.university}</strong><small><MapPin size={12} /> {target.location}</small><em>{target.title}</em></span></div><button className="text-link" onClick={() => openProgram(target)}>View university <ChevronRight size={14} /></button></article>
-        <article className="card priority-card"><span className="section-label">Current priority</span><div className="priority-title"><span className="large-icon"><Languages /></span><span><strong>Reach IELTS 6.5</strong><small>Current estimate 5.5 · Target 6.5</small></span></div><div className="priority-measure"><div className="goal-bar blue"><i style={{ width: "64%" }} /></div><span><small>Current 5.5</small><small>Target 6.5</small></span></div><button className="outline-button" onClick={() => go("pathway")}>Open action plan</button></article>
+        <article className="card priority-card"><span className="section-label">Personal match</span><div className="priority-title"><span className="large-icon"><Target /></span><span><strong>{targetFit?.score === null ? "Complete your profile" : `${targetFit?.score ?? 0}/100 program fit`}</strong><small>{targetFit?.score === null ? "Add preferences to calculate a personal match" : `${targetFit?.label} · ${targetFit?.confidence ?? 0}% data confidence`}</small></span></div><div className="priority-measure"><div className="goal-bar blue"><i style={{ width: `${targetFit?.score ?? 0}%` }} /></div><span><small>Preferences</small><small>Programme evidence</small></span></div><button className="outline-button" onClick={() => targetFit?.score === null ? go("profile") : openProgram(target)}>View match details</button></article>
         {nextStage && <article className="card dashboard-milestone"><div className="milestone-symbol"><Flag size={20} /></div><span className="section-label">Next pathway stage</span><h3>{nextStage.label}</h3><p>Finish the missing requirements, records, evidence and actions in this stage.</p><div className="milestone-progress"><span><strong>{nextStage.value}%</strong><small>stage readiness</small></span><div className="goal-bar blue"><i style={{ width: nextStage.value + "%" }} /></div></div><ul><li className={nextStage.requirements >= 100 ? "done" : ""}><CircleCheck size={15} /><span>Requirements verified</span><em>{nextStage.requirements}%</em></li><li className={nextStage.records >= 100 ? "done" : ""}><CircleCheck size={15} /><span>Student records added</span><em>{nextStage.records}%</em></li><li className={nextStage.evidence >= 100 ? "done" : ""}><CircleCheck size={15} /><span>Evidence prepared</span><em>{nextStage.evidence}%</em></li><li className={nextStage.actions >= 100 ? "done" : ""}><CircleCheck size={15} /><span>Actions completed</span><em>{nextStage.actions}%</em></li></ul><button className="text-link" onClick={() => go("pathway")}>Open this stage <ChevronRight size={14} /></button></article>}
       </aside>
     </div>
@@ -689,7 +797,7 @@ function BusinessSchoolCard({ school, program, openSchool, saved, toggleSaved, c
     <button type="button" className="school-program-copy" onClick={openSchool}><span className={`school-route-status ${routeTone}`}>{study.status === "bachelor" ? <CircleCheck size={11} /> : study.status === "restricted" ? <CircleAlert size={11} /> : <GraduationCap size={11} />}{study.status === "bachelor" ? "Undergraduate route" : study.status === "restricted" ? "Restricted undergraduate route" : "Postgraduate institution"}</span><strong>{study.title}</strong><span className="school-study-meta">{study.duration && <em><Clock3 size={12} />{study.duration}</em>}{study.credits && <em>{study.credits}</em>}{study.language && <em><Languages size={12} />{study.language}</em>}</span></button>
     <div className="school-area-tags">{study.areas.slice(0, 3).map((area) => <span key={area}>{area}</span>)}{study.areas.length > 3 && <span>+{study.areas.length - 3}</span>}</div>
     <a className="school-source-line" href={study.source} target="_blank" rel="noreferrer"><CircleCheck size={12} />{study.sourceLabel}<ExternalLink size={11} /></a>
-    <div className="school-actions"><button type="button" className={"compact-action " + (compared ? "selected" : "")} onClick={toggleCompare}><Scale size={14} />{compared ? "Compared" : "Compare"}</button><button type="button" className={"compact-action " + (inPathway ? "selected" : "")} onClick={togglePathway}>{inPathway ? <Check size={14} /> : <Plus size={14} />}{inPathway ? "Added" : "Pathway"}</button><button type="button" className="primary-button compact-view" onClick={openSchool}>View <ChevronRight size={14} /></button></div>
+    <div className="school-actions"><button type="button" className={"compact-action " + (compared ? "selected" : "")} onClick={toggleCompare}><Scale size={14} />{compared ? "Compared" : "Compare"}</button><button type="button" disabled={study.status !== "bachelor"} className={"compact-action " + (inPathway ? "selected" : "")} onClick={togglePathway}>{inPathway ? <Check size={14} /> : study.status === "bachelor" ? <Plus size={14} /> : <CircleAlert size={14} />}{inPathway ? "Added" : study.status === "bachelor" ? "Pathway" : "No bachelor"}</button><button type="button" className="primary-button compact-view" onClick={openSchool}>View <ChevronRight size={14} /></button></div>
   </article>;
 }
 
@@ -757,21 +865,13 @@ function Explore({ openSchool, saved, setSaved, compared, toggleCompare, schoolP
   </div>;
 }
 
-function SchoolDetail({ school, program, close, saved, toggleSaved, compared, toggleCompare, pathwayRole, addPath, removePath }: { school: BusinessSchool; program?: Program; close: () => void; saved: boolean; toggleSaved: () => void; compared: boolean; toggleCompare: () => void; pathwayRole?: Role; addPath: (role: Role) => void; removePath: () => void }) {
+function SchoolDetail({ school, program, close, saved, toggleSaved, compared, toggleCompare, pathwayRole, addPath, removePath, fitResult, readinessScore }: { school: BusinessSchool; program?: Program; close: () => void; saved: boolean; toggleSaved: () => void; compared: boolean; toggleCompare: () => void; pathwayRole?: Role; addPath: (role: Role) => void; removePath: () => void; fitResult: FitResult; readinessScore?: number }) {
   const [roleOpen, setRoleOpen] = useState(false);
   const rankings = schoolRankings(school);
   const study = schoolStudy(school);
   const isBachelor = study.status === "bachelor";
   const routeLabel = isBachelor ? "Direct bachelor’s entry" : study.status === "restricted" ? "Restricted undergraduate route" : "No direct undergraduate degree";
   const areas = program?.curriculum ?? study.areas;
-  const schoolIndex = businessSchools.findIndex((item) => item.id === school.id);
-  const prototypeScore = isBachelor ? 76 + ((schoolIndex * 7) % 15) : study.status === "restricted" ? 68 : 54;
-  const prototypeFit: Fit = prototypeScore >= 82 ? "Good Fit" : prototypeScore >= 65 ? "Possible Fit" : "Entry Structure Mismatch";
-  const prototypeWhy = [
-    study.areas[0] ? `${study.areas[0]} aligns with your business interests` : "Business-focused study environment",
-    study.areas[1] ? `${study.areas[1]} is available as a study area` : "European business-school experience",
-    /english/i.test(study.language || "") ? "English-taught study option" : "International business-school profile",
-  ];
   const openQuestions = program?.caution ?? (isBachelor
     ? ["Admissions requirements must be checked on the official programme page", "Tuition and scholarships vary by applicant and intake", "Quantitative course load is not yet verified"]
     : [study.note || "This institution does not currently show a direct undergraduate business degree", "Check the official portfolio before planning an application"]);
@@ -779,25 +879,26 @@ function SchoolDetail({ school, program, close, saved, toggleSaved, compared, to
     <button className="back-button" onClick={close}><ChevronLeft size={17} /> Back to universities</button>
     <section className="card detail-hero">
       <SchoolLogo school={school} program={program} size="large" /><div><span className="verified"><CircleCheck size={14} /> {program ? `Source checked ${program.verified}` : study.sourceLabel}</span><h2>{school.name}</h2><p>{study.title} · {school.location}</p></div>
-      <div className="detail-hero-actions"><button className={"outline-button " + (saved ? "selected" : "")} onClick={toggleSaved}><Bookmark size={15} /> {saved ? "Saved" : "Save"}</button><button className={"outline-button " + (compared ? "selected" : "")} onClick={toggleCompare}><Scale size={15} /> Compare</button><div className="role-menu"><button className="primary-button" onClick={() => setRoleOpen(!roleOpen)}>{pathwayRole ? <Check size={15} /> : <Plus size={15} />} {pathwayRole ? pathwayRole : "Add to pathway"} <ChevronDown size={14} /></button>{roleOpen && <div>{(["Dream", "Target", "Alternative"] as Role[]).map((role) => <button key={role} onClick={() => { addPath(role); setRoleOpen(false); }}>{role}<small>{role === "Dream" ? "Track on your dashboard" : role === "Target" ? "Leading realistic option" : "Keep as a backup"}</small></button>)}{pathwayRole && <button className="remove-role" onClick={() => { removePath(); setRoleOpen(false); }}><X size={14} /> Remove from pathway<small>Remove this university from your shortlist</small></button>}</div>}</div></div>
+      <div className="detail-hero-actions"><button className={"outline-button " + (saved ? "selected" : "")} onClick={toggleSaved}><Bookmark size={15} /> {saved ? "Saved" : "Save"}</button><button className={"outline-button " + (compared ? "selected" : "")} onClick={toggleCompare}><Scale size={15} /> Compare</button><div className="role-menu"><button className="primary-button" disabled={!isBachelor} onClick={() => isBachelor && setRoleOpen(!roleOpen)}>{pathwayRole ? <Check size={15} /> : isBachelor ? <Plus size={15} /> : <CircleAlert size={15} />} {pathwayRole ? pathwayRole : isBachelor ? "Add to pathway" : "No bachelor pathway"} {isBachelor && <ChevronDown size={14} />}</button>{roleOpen && <div>{(["Dream", "Target", "Alternative"] as Role[]).map((role) => <button key={role} onClick={() => { addPath(role); setRoleOpen(false); }}>{role}<small>{role === "Dream" ? "Track on your dashboard" : role === "Target" ? "Leading realistic option" : "Keep as a backup"}</small></button>)}{pathwayRole && <button className="remove-role" onClick={() => { removePath(); setRoleOpen(false); }}><X size={14} /> Remove from pathway<small>Remove this university from your shortlist</small></button>}</div>}</div></div>
     </section>
     <div className="detail-grid">
       <main>
-        <article className="card detail-section"><div className="section-head"><div><span className="section-label">Program overview</span><h3>What the official sources say</h3></div>{program && <span className={"fit " + fitClass(program.fit)}>{program.fit}</span>}</div><div className="overview-grid"><div><Clock3 /><span><small>Duration</small><strong>{study.duration || program?.duration.split(" · ")[0] || "Not published"}</strong></span></div><div><GraduationCap /><span><small>Credits</small><strong>{study.credits || program?.duration.split(" · ")[1] || "Not published"}</strong></span></div><div><Languages /><span><small>Language</small><strong>{study.language || program?.language || "Not published"}</strong></span></div><div><GraduationCap /><span><small>Entry structure</small><strong>{program?.entry ?? routeLabel}</strong></span></div></div></article>
+        <article className="card detail-section"><div className="section-head"><div><span className="section-label">Program overview</span><h3>What the official sources say</h3></div><span className={"fit " + fitResultClass(fitResult)}>{fitResult.score === null ? "Complete profile" : `${fitResult.score}/100 fit`}</span></div><div className="overview-grid"><div><Clock3 /><span><small>Duration</small><strong>{study.duration || program?.duration.split(" · ")[0] || "Not published"}</strong></span></div><div><GraduationCap /><span><small>Credits</small><strong>{study.credits || program?.duration.split(" · ")[1] || "Not published"}</strong></span></div><div><Languages /><span><small>Language</small><strong>{study.language || program?.language || "Not published"}</strong></span></div><div><GraduationCap /><span><small>Entry structure</small><strong>{program?.entry ?? routeLabel}</strong></span></div></div></article>
         <article className="card detail-section"><span className="section-label">Curriculum and fit</span><h3>{program ? "Evidence by preference" : "Verified study areas"}</h3>{program ? <div className="evidence-table"><div><strong>Management</strong><span className="good-text">{program.management}</span></div><div><strong>Entrepreneurship</strong><span>{program.enterprise}</span></div><div><strong>Marketing</strong><span>{program.marketing}</span></div><div><strong>Quantitative course load</strong><span className={program.math.includes("high") ? "amber-text" : ""}>{program.math}</span></div><div><strong>Exchange, internships, career</strong><span>{program.experience}</span></div></div> : <div className="evidence-table"><div><strong>Study access</strong><span>{routeLabel}</span></div><div><strong>Business areas</strong><span>{study.areas.join(" · ")}</span></div><div><strong>Quantitative course load</strong><span>Not yet verified</span></div><div><strong>Exchange, internships, career</strong><span>Check the official programme page</span></div></div>}<div className="curriculum-tags">{areas.map((item) => <span key={item}>{item}</span>)}</div>{study.note && <p className="school-route-note">{study.note}</p>}</article>
         <article className="card detail-section"><span className="section-label">Official sources</span><h3>Verify before applying</h3><div className="source-list">{(program?.sources ?? [{ label: study.sourceLabel, href: study.source }]).map((source) => <a key={source.href} href={source.href} target="_blank" rel="noreferrer"><ExternalLink size={15} /><span>{source.label}</span><ChevronRight size={15} /></a>)}{rankings.map((ranking) => <a key={`source-${ranking.publisher}-${ranking.year}`} href={ranking.href} target="_blank" rel="noreferrer"><ExternalLink size={15} /><span>{ranking.publisher} · {ranking.title} {ranking.year} · {ranking.rank}</span><ChevronRight size={15} /></a>)}</div><div className="source-warning"><CircleHelp size={16} /><p>Program information can change. Confirm requirements, dates and fees on the official page before applying.</p></div></article>
       </main>
       <aside>
-        <article className="fit-panel"><span className="section-label light">{program ? "Your program fit" : "Prototype program fit"}</span><strong>{program?.fitScore ?? prototypeScore}<small>/100</small></strong><div className="fit-bar"><i style={{ width: (program?.fitScore ?? prototypeScore) + "%" }} /></div><h3>{program?.fit ?? prototypeFit}</h3><p>{program ? "This reflects learning preferences and program evidence—not admission probability." : "Demo score for interface testing—not verified programme fit or admission probability."}</p></article>
-        <article className="card detail-section why-list"><span className="section-label">Why it matches</span>{(program?.why ?? prototypeWhy).map((item) => <div key={item}><CircleCheck size={16} /><span>{item}</span></div>)}</article>
+        <article className="fit-panel"><span className="section-label light">Your program fit</span><strong>{fitResult.score === null ? "—" : fitResult.score}<small>/100</small></strong><div className="fit-bar"><i style={{ width: (fitResult.score ?? 0) + "%" }} /></div><h3>{fitResult.label}</h3><p>{fitResult.score === null ? "Complete your study preferences to calculate a personal match." : `${fitResult.confidence}% of the matching model currently has usable evidence. This is not admission probability.`}</p></article>
+        <article className="card detail-section why-list"><span className="section-label">Why it matches</span>{fitResult.reasons.map((item) => <div key={item}><CircleCheck size={16} /><span>{item}</span></div>)}</article>
+        {fitResult.breakdown.length > 0 && <article className="card detail-section fit-breakdown"><span className="section-label">Match breakdown</span>{fitResult.breakdown.map((item) => <div key={item.label}><span><strong>{item.label}</strong><small>{item.note}</small></span><em>{item.score}/100</em></div>)}</article>}
         <article className="card detail-section caution-list"><span className="section-label">Open questions</span>{openQuestions.map((item) => <div key={item}><CircleAlert size={16} /><span>{item}</span></div>)}</article>
-        <article className="card readiness"><span className="section-label">Application readiness</span><strong>More information needed</strong><p>Add grades, English score, citizenship and intended intake to compare requirements.</p></article>
+        <article className="card readiness"><span className="section-label">Application readiness</span><strong>{pathwayRole ? `${readinessScore ?? 0}% prepared` : "Not in your pathway"}</strong><p>{pathwayRole ? "Based on this university’s own requirements, records, evidence and completed actions." : "Add this bachelor programme as Dream, Target or Alternative to begin its separate tracker."}</p></article>
       </aside>
     </div>
   </div>;
 }
 
-function ProgramDetail({ p, close, saved, toggleSaved, compared, toggleCompare, pathwayRole, addPath, removePath }: { p: Program; close: () => void; saved: boolean; toggleSaved: () => void; compared: boolean; toggleCompare: () => void; pathwayRole?: Role; addPath: (role: Role) => void; removePath: () => void }) {
+function ProgramDetail({ p, close, saved, toggleSaved, compared, toggleCompare, pathwayRole, addPath, removePath, fitResult, readinessScore }: { p: Program; close: () => void; saved: boolean; toggleSaved: () => void; compared: boolean; toggleCompare: () => void; pathwayRole?: Role; addPath: (role: Role) => void; removePath: () => void; fitResult: FitResult; readinessScore?: number }) {
   const [roleOpen, setRoleOpen] = useState(false);
   const [duration, credits] = p.duration.split(" · ");
   return <div className="page-enter detail-page">
@@ -808,15 +909,16 @@ function ProgramDetail({ p, close, saved, toggleSaved, compared, toggleCompare, 
     </section>
     <div className="detail-grid">
       <main>
-        <article className="card detail-section"><div className="section-head"><div><span className="section-label">Program overview</span><h3>What the official sources say</h3></div><span className={"fit " + fitClass(p.fit)}>{p.fit}</span></div><div className="overview-grid"><div><Clock3 /><span><small>Duration</small><strong>{duration}</strong></span></div><div><GraduationCap /><span><small>Credits</small><strong>{credits || "Not published"}</strong></span></div><div><Languages /><span><small>Language</small><strong>{p.language}</strong></span></div><div><GraduationCap /><span><small>Entry structure</small><strong>{p.entry}</strong></span></div></div></article>
+        <article className="card detail-section"><div className="section-head"><div><span className="section-label">Program overview</span><h3>What the official sources say</h3></div><span className={"fit " + fitResultClass(fitResult)}>{fitResult.score === null ? "Complete profile" : `${fitResult.score}/100 fit`}</span></div><div className="overview-grid"><div><Clock3 /><span><small>Duration</small><strong>{duration}</strong></span></div><div><GraduationCap /><span><small>Credits</small><strong>{credits || "Not published"}</strong></span></div><div><Languages /><span><small>Language</small><strong>{p.language}</strong></span></div><div><GraduationCap /><span><small>Entry structure</small><strong>{p.entry}</strong></span></div></div></article>
         <article className="card detail-section"><span className="section-label">Curriculum and fit</span><h3>Evidence by preference</h3><div className="evidence-table"><div><strong>Management</strong><span className="good-text">{p.management}</span></div><div><strong>Entrepreneurship</strong><span>{p.enterprise}</span></div><div><strong>Marketing</strong><span>{p.marketing}</span></div><div><strong>Quantitative course load</strong><span className={p.math.includes("high") ? "amber-text" : ""}>{p.math}</span></div><div><strong>Exchange, internships, career</strong><span>{p.experience}</span></div></div><div className="curriculum-tags">{p.curriculum.map((item) => <span key={item}>{item}</span>)}</div></article>
         <article className="card detail-section"><span className="section-label">Official sources</span><h3>Verify before applying</h3><div className="source-list">{p.sources.map((s) => <a key={s.href} href={s.href} target="_blank" rel="noreferrer"><ExternalLink size={15} /><span>{s.label}</span><ChevronRight size={15} /></a>)}</div><div className="source-warning"><CircleHelp size={16} /><p>Program information can change. Confirm requirements, dates and fees on the official page before applying.</p></div></article>
       </main>
       <aside>
-        <article className="fit-panel"><span className="section-label light">Your program fit</span><strong>{p.fitScore}<small>/100</small></strong><div className="fit-bar"><i style={{ width: p.fitScore + "%" }} /></div><h3>{p.fit}</h3><p>This reflects learning preferences and program evidence—not admission probability.</p></article>
-        <article className="card detail-section why-list"><span className="section-label">Why it matches</span>{p.why.map((item) => <div key={item}><CircleCheck size={16} /><span>{item}</span></div>)}</article>
+        <article className="fit-panel"><span className="section-label light">Your program fit</span><strong>{fitResult.score === null ? "—" : fitResult.score}<small>/100</small></strong><div className="fit-bar"><i style={{ width: (fitResult.score ?? 0) + "%" }} /></div><h3>{fitResult.label}</h3><p>{fitResult.score === null ? "Complete your study preferences to calculate a personal match." : `${fitResult.confidence}% of the matching model currently has usable evidence. This is not admission probability.`}</p></article>
+        <article className="card detail-section why-list"><span className="section-label">Why it matches</span>{fitResult.reasons.map((item) => <div key={item}><CircleCheck size={16} /><span>{item}</span></div>)}</article>
+        {fitResult.breakdown.length > 0 && <article className="card detail-section fit-breakdown"><span className="section-label">Match breakdown</span>{fitResult.breakdown.map((item) => <div key={item.label}><span><strong>{item.label}</strong><small>{item.note}</small></span><em>{item.score}/100</em></div>)}</article>}
         <article className="card detail-section caution-list"><span className="section-label">Open questions</span>{p.caution.map((item) => <div key={item}><CircleAlert size={16} /><span>{item}</span></div>)}</article>
-        <article className="card readiness"><span className="section-label">Application readiness</span><strong>More information needed</strong><p>Add grades, English score, citizenship and intended intake to compare requirements.</p></article>
+        <article className="card readiness"><span className="section-label">Application readiness</span><strong>{pathwayRole ? `${readinessScore ?? 0}% prepared` : "Not in your pathway"}</strong><p>{pathwayRole ? "Based on this university’s own requirements, records, evidence and completed actions." : "Add this programme as Dream, Target or Alternative to begin its separate tracker."}</p></article>
       </aside>
     </div>
   </div>;
@@ -840,16 +942,16 @@ type Routine = { id: string; title: string; focus: string; weeklyGoal: number; m
 type TaskGuide = { source: string; sourceDetail: string; outcome: string; steps: string[]; materials: string[]; doneWhen: string[] };
 
 const initialRoutines: Routine[] = [
-  { id: "speaking", title: "IELTS speaking practice", focus: "Part 2 responses and fluency", weeklyGoal: 3, minutes: 20 },
-  { id: "reading", title: "IELTS reading practice", focus: "Skimming and True/False/Not Given", weeklyGoal: 3, minutes: 20 },
-  { id: "math", title: "Mathematics review", focus: "Algebra, percentages, and basic functions", weeklyGoal: 2, minutes: 30 },
+  { id: "english-plan", title: "English qualification practice", focus: "Practise the skill required by your chosen test", weeklyGoal: 3, minutes: 20 },
+  { id: "programme-research", title: "Programme research", focus: "Verify one requirement using an official source", weeklyGoal: 2, minutes: 20 },
+  { id: "academic-preparation", title: "Academic preparation", focus: "Strengthen one subject connected to your applications", weeklyGoal: 2, minutes: 30 },
   { id: "pathway-review", title: "Weekly pathway review", focus: "Review university choices and next requirements", weeklyGoal: 1, minutes: 25 },
 ];
 
 const taskGuides: Record<string, TaskGuide> = {
-  speaking: { source: "Progress · English readiness", sourceDetail: "Suggested because speaking is the clearest gap between your current IELTS estimate and target 6.5.", outcome: "Record one confident two-minute Part 2 response with fewer pauses and clearer linking phrases.", steps: ["Choose one IELTS Part 2 cue card", "Plan four short notes for 60 seconds", "Speak for two minutes without restarting", "Listen back and note one fluency improvement"], materials: ["Cue-card prompt", "Voice recorder", "Notebook or notes app"], doneWhen: ["One full response is recorded", "You spoke for at least 1 minute 40 seconds", "One improvement is saved for the next session"] },
-  reading: { source: "Progress · English readiness", sourceDetail: "Suggested to strengthen the reading evidence needed for your IELTS 6.5 target.", outcome: "Complete one timed passage using skimming and a reliable True/False/Not Given method.", steps: ["Skim the passage for structure", "Underline keywords in each statement", "Match each statement to evidence", "Review every incorrect answer"], materials: ["One IELTS reading passage", "Timer", "Answer key"], doneWhen: ["The passage is completed within 20 minutes", "Every answer has supporting evidence", "Mistakes are added to your review notes"] },
-  math: { source: "Pathway · Quantitative requirement", sourceDetail: "Suggested from the quantitative modules found in your chosen business pathway.", outcome: "Finish a focused review of algebra, percentages, or basic functions and explain the method clearly.", steps: ["Choose one topic from the weekly focus", "Review one worked example", "Solve five practice questions", "Correct and explain any mistakes"], materials: ["Practice set", "Calculator if allowed", "Formula notes"], doneWhen: ["Five questions are attempted", "At least four answers are correct", "One difficult method is written in your own words"] },
+  "english-plan": { source: "Profile · English qualification", sourceDetail: "Use the test and score recorded in your profile. If no test is chosen yet, compare accepted tests before practising.", outcome: "Complete one focused English session that supports your current qualification plan.", steps: ["Choose the skill required by your test plan", "Complete one timed practice activity", "Check the result against the official scoring method", "Record one improvement for the next session"], materials: ["Official test format", "Practice material", "Notebook or notes app"], doneWhen: ["One complete practice activity is finished", "The result is reviewed", "One next step is recorded"] },
+  "programme-research": { source: "Pathway · Official requirements", sourceDetail: "Suggested to keep programme facts, requirements and deadlines tied to current official sources.", outcome: "Verify one application fact and record it in the correct university workspace.", steps: ["Open one application in Pathway", "Choose a missing requirement", "Check the official university source", "Record the fact and source date"], materials: ["My Pathway", "Official university page", "Application notes"], doneWhen: ["One fact is verified", "The value is recorded", "The next unresolved question is clear"] },
+  "academic-preparation": { source: "Pathway · Academic gaps", sourceDetail: "Suggested from the subjects and quantitative requirements attached to your shortlisted programmes.", outcome: "Finish one focused academic session connected to a real programme requirement.", steps: ["Choose one relevant subject", "Review one worked example or concept", "Complete a short practice set", "Record any remaining gap"], materials: ["Course material", "Practice set", "Notes"], doneWhen: ["The planned practice is complete", "Mistakes are reviewed", "The next topic is identified"] },
   "pathway-review": { source: "My Pathway · Weekly planning", sourceDetail: "Suggested to keep your university choices, requirements, and next decisions current.", outcome: "Leave your pathway with one verified update and one clear next action.", steps: ["Open your current target university", "Check one requirement or deadline", "Update the pathway if anything changed", "Choose next week’s highest-value action"], materials: ["My Pathway", "Official university page", "Application notes"], doneWhen: ["One fact is verified", "Your next action is clear", "Any outdated note is corrected"] },
 };
 
@@ -871,17 +973,13 @@ function TaskWorkspace({ routine, isDone, close, toggleTask }: { routine: Routin
   return <div className="page-enter task-workspace"><button className="back-button" onClick={close}><ChevronLeft size={17} /> Back to weekly actions</button><section className="task-workspace-head"><div><span className="eyebrow">Focused task</span><h2>{routine.title}</h2><p>{routine.focus}</p><span className="task-source"><Sparkles size={14} /> {guide.source}</span></div><button className={isDone ? "outline-button selected" : "primary-button"} onClick={() => toggleTask(routine.id)}>{isDone ? <><CircleCheck size={16} /> Completed</> : <><Check size={16} /> Mark complete</>}</button></section><div className="task-workspace-grid"><main><article className="card task-guide-card"><span className="section-label">Your outcome</span><h3>{guide.outcome}</h3><p>{guide.sourceDetail}</p></article><article className="card task-guide-card"><div className="section-head"><div><span className="section-label">Do this now</span><h3>Step-by-step session</h3></div><span className="today-count">{checkedSteps.length} of {guide.steps.length}</span></div><div className="task-step-list">{guide.steps.map((step, index) => { const checked = checkedSteps.includes(index); return <button key={step} className={checked ? "checked" : ""} onClick={() => setCheckedSteps((current) => checked ? current.filter((item) => item !== index) : [...current, index])}><span>{checked ? <Check size={15} /> : index + 1}</span><strong>{step}</strong></button>; })}</div></article><div className="task-info-grid"><article className="card task-guide-card"><span className="section-label">What you need</span><ul>{guide.materials.map((item) => <li key={item}><CircleCheck size={15} /> {item}</li>)}</ul></article><article className="card task-guide-card"><span className="section-label">Done when</span><ul>{guide.doneWhen.map((item) => <li key={item}><Target size={15} /> {item}</li>)}</ul></article></div></main><aside className="card task-timer-card"><span className="section-label">Focus timer</span><div className="task-timer-ring"><strong>{minutes}:{seconds}</strong><small>{routine.minutes} minute session</small></div><button className="primary-button" onClick={() => setRunning((current) => !current)}>{running ? "Pause timer" : secondsLeft === 0 ? "Session finished" : "Start timer"}</button><button className="text-link" onClick={() => { setRunning(false); setSecondsLeft(routine.minutes * 60); }}>Reset</button><div className="task-related"><small>Connected to</small><strong>{guide.source}</strong><p>This link explains why the task appears in your week.</p></div></aside></div></div>;
 }
 
-const habitSeed: Record<string, number[]> = {
-  "2026-7-speaking": [1, 3, 5, 7, 10, 12, 14, 17, 19],
-  "2026-7-reading": [2, 4, 6, 9, 11, 13, 16, 18],
-  "2026-7-math": [3, 6, 10, 13, 17],
-  "2026-7-pathway-review": [2, 9, 16],
-};
+const habitSeed: Record<string, number[]> = {};
 
 function TasksHabits({ completed, toggleTask, toast }: { completed: string[]; toggleTask: (v: string) => void; toast: (s: string) => void }) {
   const [tab, setTab] = useState<"actions" | "habits">("actions");
   const [routines, setRoutines] = useState<Routine[]>(initialRoutines);
   const [habitChecks, setHabitChecks] = useState<Record<string, number[]>>(habitSeed);
+  const [routineDataLoaded, setRoutineDataLoaded] = useState(false);
   const [periodMode, setPeriodMode] = useState<"week" | "month">("week");
   const [weekOffset, setWeekOffset] = useState(0);
   const [monthOffset, setMonthOffset] = useState(0);
@@ -891,14 +989,26 @@ function TasksHabits({ completed, toggleTask, toast }: { completed: string[]; to
   const [editingId, setEditingId] = useState<string | null>(null);
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
   const [editDraft, setEditDraft] = useState({ title: "", focus: "", weeklyGoal: 1 });
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      try { const stored = JSON.parse(window.localStorage.getItem("myway-routines") || "null"); if (Array.isArray(stored) && stored.length) setRoutines(stored); } catch {}
+      try { const stored = JSON.parse(window.localStorage.getItem("myway-habit-checks") || "null"); if (stored && typeof stored === "object") setHabitChecks(stored); } catch {}
+      setRoutineDataLoaded(true);
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, []);
+  useEffect(() => { if (routineDataLoaded) window.localStorage.setItem("myway-routines", JSON.stringify(routines)); }, [routineDataLoaded, routines]);
+  useEffect(() => { if (routineDataLoaded) window.localStorage.setItem("myway-habit-checks", JSON.stringify(habitChecks)); }, [routineDataLoaded, habitChecks]);
   const done = routines.filter((routine) => completed.includes(routine.id)).length;
-  const shownMonth = new Date(2026, 7 + monthOffset, 1);
+  const today = new Date();
+  const currentMonday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - ((today.getDay() + 6) % 7));
+  const shownMonth = new Date(today.getFullYear(), today.getMonth() + monthOffset, 1);
   const shownYear = shownMonth.getFullYear();
   const shownMonthIndex = shownMonth.getMonth();
   const monthLabel = new Intl.DateTimeFormat("en", { month: "long", year: "numeric" }).format(shownMonth);
   const daysInMonth = new Date(shownYear, shownMonthIndex + 1, 0).getDate();
   const monthDates = Array.from({ length: daysInMonth }, (_, index) => new Date(shownYear, shownMonthIndex, index + 1));
-  const shownWeekStart = new Date(2026, 7, 17 + weekOffset * 7);
+  const shownWeekStart = new Date(currentMonday.getFullYear(), currentMonday.getMonth(), currentMonday.getDate() + weekOffset * 7);
   const weekDates = Array.from({ length: 7 }, (_, index) => new Date(shownWeekStart.getFullYear(), shownWeekStart.getMonth(), shownWeekStart.getDate() + index));
   const shownWeekEnd = weekDates[6];
   const weekLabel = `${new Intl.DateTimeFormat("en", { day: "numeric", month: "short" }).format(shownWeekStart)} – ${new Intl.DateTimeFormat("en", { day: "numeric", month: "short", year: "numeric" }).format(shownWeekEnd)}`;
@@ -908,7 +1018,7 @@ function TasksHabits({ completed, toggleTask, toast }: { completed: string[]; to
   const dateKey = (date: Date, habitId: string) => `${date.getFullYear()}-${date.getMonth()}-${habitId}`;
   const isChecked = (habitId: string, date: Date) => (habitChecks[dateKey(date, habitId)] || []).includes(date.getDate());
   const countChecks = (habitId: string, dates: Date[]) => dates.filter((date) => isChecked(habitId, date)).length;
-  const currentWeekDates = Array.from({ length: 7 }, (_, index) => new Date(2026, 7, 17 + index));
+  const currentWeekDates = Array.from({ length: 7 }, (_, index) => new Date(currentMonday.getFullYear(), currentMonday.getMonth(), currentMonday.getDate() + index));
   const currentHabitSessions = routines.reduce((total, routine) => total + countChecks(routine.id, currentWeekDates), 0);
   const currentHabitGoal = routines.reduce((total, routine) => total + routine.weeklyGoal, 0);
   const executionTotal = routines.length + currentHabitGoal;
@@ -981,11 +1091,22 @@ function PathwayChoice({ item, openProgram, changeRole, removePath }: { item: { 
   </article>;
 }
 
-function Pathway({ selected, completed, toggleTask, go, openProgram, changeRole, removePath, records, updateRecord, pathwayReadiness, readinessStages, initialStage = 0 }: { selected: { p: Program; role: Role }[]; completed: string[]; toggleTask: (v: string) => void; go: (v: View) => void; openProgram: (p: Program) => void; changeRole: (p: Program, role: Role) => void; removePath: (p: Program) => void; records: Record<string, string>; updateRecord: (key: string, value: string) => void; pathwayReadiness: number; readinessStages: ReadinessStage[]; initialStage?: number }) {
+function Pathway({ selected, completed: allCompleted, toggleTask: toggleStoredTask, go, openProgram, changeRole, removePath, records: allRecords, updateRecord: updateStoredRecord, applicationReadiness, initialStage = 0, initialApplicationId = "" }: { selected: { p: Program; role: Role }[]; completed: string[]; toggleTask: (v: string) => void; go: (v: View) => void; openProgram: (p: Program) => void; changeRole: (p: Program, role: Role) => void; removePath: (p: Program) => void; records: Record<string, string>; updateRecord: (key: string, value: string) => void; applicationReadiness: Record<string, { score: number; stages: ReadinessStage[] }>; initialStage?: number; initialApplicationId?: string }) {
   const [expandedStage, setExpandedStage] = useState(initialStage);
   const [stageTab, setStageTab] = useState<"overview" | "requirements" | "evidence" | "actions">("overview");
   const dream = selected.find((item) => item.role === "Dream");
-  const isEscp = dream?.p.id === "escp";
+  const [activeId, setActiveId] = useState(initialApplicationId || dream?.p.id || selected[0]?.p.id || "");
+  const active = selected.find((item) => item.p.id === activeId) || dream || selected[0];
+  const isEscp = active?.p.id === "escp";
+  const readinessStages = active ? applicationReadiness[active.p.id]?.stages || [] : [];
+  const pathwayReadiness = active ? applicationReadiness[active.p.id]?.score || 0 : 0;
+  const completed = active ? [
+    ...allCompleted.filter((id) => id.startsWith(`${active.p.id}:`)).map((id) => id.slice(active.p.id.length + 1)),
+    ...(active.role === "Dream" ? allCompleted.filter((id) => !id.includes(":")) : []),
+  ] : [];
+  const toggleTask = (id: string) => { if (active) toggleStoredTask(`${active.p.id}:${id}`); };
+  const records = new Proxy({} as Record<string, string>, { get: (_target, property) => typeof property === "string" && active ? allRecords[`${active.p.id}:${property}`] || (active.role === "Dream" ? allRecords[property] : "") || "" : "" });
+  const updateRecord = (key: string, value: string) => { if (active) updateStoredRecord(`${active.p.id}:${key}`, value); };
   const targets = selected.filter((item) => item.role === "Target");
   const alternatives = selected.filter((item) => item.role === "Alternative");
   const stages = [
@@ -1003,13 +1124,13 @@ function Pathway({ selected, completed, toggleTask, go, openProgram, changeRole,
   const doneCount = completed.filter((id) => actionIds.includes(id)).length;
   const readyStages = readinessStages.filter((stage) => stage.value === 100).length;
   const requirementData = [
-    [["Programme", dream?.p.title || "Choose a Dream university"], ["Intended intake", records.intake || (isEscp ? "September 2027" : "Not recorded")], ["Application route", records.applicationRoute || (isEscp ? "Choose one: Direct / Parcoursup / UCAS / Common App" : "Not recorded")], ["Preferred first-year campus", records.firstCampus || "Not recorded"], ["Study location", dream?.p.location || "Not recorded"]],
-    [["Entry eligibility", dream?.p.entry || "Check official programme page"], ["Academic qualification", records.qualification || "Not recorded"], ["Application deadline", records.deadline || (isEscp ? "Rolling deadlines; exact date must be checked" : "Not recorded")], ["Translation rules", records.translationPlan || (isEscp ? "Academic transcripts: English translation required" : "Check official admissions page")], ["Selection process", records.selectionNotes || (isEscp ? "Online interview after successful application review" : "Check official admissions page")]],
+    [["Programme", active?.p.title || "Choose an application"], ["Intended intake", records.intake || "Not recorded"], ["Application route", records.applicationRoute || "Not recorded"], ["Preferred first-year campus", records.firstCampus || "Not recorded"], ["Study location", active?.p.location || "Not recorded"]],
+    [["Entry eligibility", active?.p.entry || "Check official programme page"], ["Academic qualification", records.qualification || "Not recorded"], ["Application deadline", records.deadline || "Not recorded"], ["Translation rules", records.translationPlan || "Check official admissions page"], ["Selection process", records.selectionNotes || "Check official admissions page"]],
     [["Current academic evidence", records["file-academic-evidence"] || "No file selected"], ["Current grades", records.currentGrades || "Not recorded"], ["Subject prerequisites", records.prerequisiteNotes || "Check official admissions page"], ["Quantitative course load", records.mathEvidence || "Not recorded"], ["Academic gap plan", records.academicGapPlan || "Not started"]],
-    [["English requirement", records.englishRequirement || (isEscp ? "IELTS 6.5 or another accepted certificate; exemptions may apply" : "Check official admissions page")], ["Current English result", records.englishScore || "Not recorded"], ["Test date / validity", records.englishTestDate || "Not recorded"], ["Language certificate", records["file-language-certificate"] || "No file selected"], ["English preparation plan", records.englishStudyPlan || "Not started"]],
+    [["English requirement", records.englishRequirement || "Check official admissions page"], ["Current English result", records.englishScore || "Not recorded"], ["Test date / validity", records.englishTestDate || "Not recorded"], ["Language certificate", records["file-language-certificate"] || "No file selected"], ["English preparation plan", records.englishStudyPlan || "Not started"]],
     [["Relevant experience", records.experience || "Not recorded"], ["Role and measurable impact", records.experienceImpact || "Not recorded"], ["Portfolio requirement", records.portfolioRequirement || (isEscp ? "Not listed for ESCP direct application" : "Check official admissions page")], ["Portfolio link", records.portfolioLink || "Not recorded"], ["Supporting evidence", records["file-portfolio-evidence"] || records["file-3"] || "No file selected"]],
     [["Academic transcripts", records["file-transcript"] || "No file selected"], ["Secondary-school certificate", records["file-school-certificate"] || "No file selected"], ["Personal statement / motivation letter", records["file-motivation"] || records["file-4"] || "No file selected"], ["CV / résumé", records["file-cv"] || "No file selected"], ["Language certificate", records["file-language-certificate"] || "No file selected"], ["Academic reference (optional)", records["file-reference"] || "No file selected"], ["ID / passport copy", records["file-passport"] || "No file selected"]],
-    [["Tuition and required fees", dream?.p.tuition || "Check official fee schedule"], ["Application fee", records.applicationFee || (isEscp ? "€80 · non-refundable" : "Check official fee schedule")], ["Seat deposit", records.seatDeposit || (isEscp ? "€3,500 · deducted from enrolment fee after admission" : "Check official enrolment information")], ["Personal budget", records.budget || "Not recorded"], ["Scholarship plan", records.scholarshipNotes || (isEscp ? "ESCP scholarships may cover 10–50% of tuition; service and administrative charges excluded" : "Not researched")], ["Living and travel costs", records.livingCostBudget || (isEscp ? "Campus-dependent; travel and accommodation are not included in programme fees" : "Not recorded")]],
+    [["Tuition and required fees", active?.p.tuition || "Check official fee schedule"], ["Application fee", records.applicationFee || "Check official fee schedule"], ["Seat deposit", records.seatDeposit || "Check official enrolment information"], ["Personal budget", records.budget || "Not recorded"], ["Scholarship plan", records.scholarshipNotes || "Not researched"], ["Living and travel costs", records.livingCostBudget || "Not recorded"]],
     [["Application portal / route", records.applicationRoute || (isEscp ? "Choose one official route only" : "Use the official university portal")], ["Final review", records.finalReviewStatus || "Not started"], ["Submission date", records.submissionDate || "Not submitted"], ["Application reference", records.applicationId || "Not recorded"], ["Submission confirmation", records["file-submission-confirmation"] || records["file-6"] || "No file selected"]],
     [["Offer status", records.offerStatus || "No decision recorded"], ["Offer conditions", records.offerConditions || "Not recorded"], ["Response / enrolment deadline", records.enrolmentDeadline || "Not recorded"], ["Deposit status", records.depositStatus || "Not recorded"], ["Visa / residence plan", records.visaPlan || (isEscp ? "Start after admission; confirm rules with the destination government" : "Not started")], ["Housing and arrival plan", records.transitionPlan || "Not started"]],
   ];
@@ -1058,11 +1179,11 @@ function Pathway({ selected, completed, toggleTask, go, openProgram, changeRole,
   ];
   return <div className="page-enter pathway-page">
     <section className="page-intro"><div><span className="eyebrow">Your university plan</span><h2>My Pathway</h2><p>{selected.length ? `${selected.length} university option${selected.length === 1 ? "" : "s"} organised by role` : "Build a shortlist, then choose one Dream university to track."}</p></div><button className="secondary-button" onClick={() => go("explore")}><Plus size={15} /> Add university</button></section>
-    {dream ? <article className="card dream-pathway-card"><div className="dream-pathway-identity"><span className="dream-label"><Sparkles size={13} /> Dream university</span><div><UniversityLogo program={dream.p} size="large" /><span><h3>{dream.p.university}</h3><p>{dream.p.title} · {dream.p.location}</p><button className="text-link" onClick={() => openProgram(dream.p)}>View university <ChevronRight size={14} /></button></span></div></div><div className="dream-progress"><span><strong>Pathway readiness</strong><em>{pathwayReadiness}%</em></span><div className="bar"><i style={{ width: pathwayReadiness + "%" }} /></div><small>{readyStages} of 9 stages ready · requirements, records, evidence and actions · not an admission score</small></div><div className="dream-controls"><label><span>Change role</span><select value="Dream" onChange={(event) => changeRole(dream.p, event.target.value as Role)}><option>Dream</option><option>Target</option><option>Alternative</option></select></label><button className="outline-button danger-action" onClick={() => removePath(dream.p)}><X size={14} /> Remove</button></div></article> : <article className="card pathway-empty-dream"><span className="large-icon"><Sparkles /></span><div><span className="section-label">Dream tracker</span><h3>Choose one Dream university</h3><p>Your preparation progress and application stages begin only after a Dream is selected. Targets and Alternatives remain available below.</p><button className="primary-button" onClick={() => go("explore")}><Search size={15} /> Explore universities</button></div></article>}
-    <section className={"card pathway-stages " + (!dream ? "disabled" : "")}><div className="section-head"><div><span className="section-label">Application workspace</span><h3>Your preparation database</h3><p className="pathway-helper">Store requirements, personal evidence, documents, and next actions. Submit the final application through the university’s official portal.</p></div><span className="badge blue"><Database size={12} /> {doneCount} of {actionIds.length} actions</span></div><div className="pathway-stage-list">{stages.map((stage, index) => { const stageDone = stage.actions.every(([id]) => completed.includes(id)); const stageFiles = stageEvidenceFiles[index]; const hasStageFile = stageFiles.some(([key]) => Boolean(records[key] || (key === "file-motivation" && records["file-4"]))); const stageStarted = stage.actions.some(([id]) => completed.includes(id)) || evidenceFields[index].some(([key]) => Boolean(records[key])) || hasStageFile; const open = expandedStage === index; return <article className={"pathway-stage " + (stageDone ? "complete" : stageStarted ? "started" : "")} key={stage.title}><button className="pathway-stage-toggle" onClick={() => { if (!dream) return; setExpandedStage(open ? -1 : index); setStageTab("overview"); }} disabled={!dream} aria-expanded={open}><span>{stageDone ? <Check size={14} /> : String(index + 1).padStart(2, "0")}</span><span><strong>{stage.title}</strong><small>{stageDone ? "Ready" : stageStarted ? "Information added" : index === 0 && dream ? "Start here" : "No information yet"}</small></span><em>{requirementData[index].filter(([, value]) => !/Not recorded|No file|Not submitted|No decision|Not started|Not researched|Check official/.test(value)).length} of {requirementData[index].length} details</em><ChevronDown size={15} /></button>{open && dream && <div className="pathway-stage-workspace"><nav aria-label={stage.title + " sections"}>{(["overview", "requirements", "evidence", "actions"] as const).map((tab) => <button key={tab} className={stageTab === tab ? "active" : ""} onClick={() => setStageTab(tab)}>{tab === "evidence" ? "My evidence" : tab[0].toUpperCase() + tab.slice(1)}</button>)}</nav>
-      {stageTab === "overview" && <div className="stage-overview"><div><span className="row-icon"><Database size={16} /></span><span><strong>{stage.title}</strong><p>{stage.note}</p></span></div><dl>{requirementData[index].slice(0, 3).map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>{dream.p.sources[0] && <a href={dream.p.sources[0].href} target="_blank" rel="noreferrer"><ExternalLink size={13} /> Open official programme source</a>}</div>}
+    {active ? <><section className="application-switcher pathway-application-switcher"><label><span>Application workspace</span><select value={active.p.id} onChange={(event) => { setActiveId(event.target.value); setExpandedStage(0); setStageTab("overview"); }}>{selected.map((item) => <option key={item.p.id} value={item.p.id}>{item.p.university} — {item.role}</option>)}</select></label><small>Each university keeps separate requirements, evidence, actions and readiness.</small></section><article className="card dream-pathway-card"><div className="dream-pathway-identity"><span className="dream-label"><Sparkles size={13} /> {active.role} application</span><div><UniversityLogo program={active.p} size="large" /><span><h3>{active.p.university}</h3><p>{active.p.title} · {active.p.location}</p><button className="text-link" onClick={() => openProgram(active.p)}>View university <ChevronRight size={14} /></button></span></div></div><div className="dream-progress"><span><strong>Application readiness</strong><em>{pathwayReadiness}%</em></span><div className="bar"><i style={{ width: pathwayReadiness + "%" }} /></div><small>{readyStages} of 9 stages ready · specific to this application · not an admission score</small></div><div className="dream-controls"><label><span>Change role</span><select value={active.role} onChange={(event) => changeRole(active.p, event.target.value as Role)}><option>Dream</option><option>Target</option><option>Alternative</option></select></label><button className="outline-button danger-action" onClick={() => removePath(active.p)}><X size={14} /> Remove</button></div></article></> : <article className="card pathway-empty-dream"><span className="large-icon"><Sparkles /></span><div><span className="section-label">Application tracker</span><h3>Add a university to begin</h3><p>Every Dream, Target and Alternative university receives its own preparation workspace.</p><button className="primary-button" onClick={() => go("explore")}><Search size={15} /> Explore universities</button></div></article>}
+    <section className={"card pathway-stages " + (!active ? "disabled" : "")}><div className="section-head"><div><span className="section-label">Application workspace</span><h3>Your preparation database</h3><p className="pathway-helper">Store requirements, personal evidence, documents, and next actions. Submit the final application through the university’s official portal.</p></div><span className="badge blue"><Database size={12} /> {doneCount} of {actionIds.length} actions</span></div><div className="pathway-stage-list">{stages.map((stage, index) => { const stageDone = stage.actions.every(([id]) => completed.includes(id)); const stageFiles = stageEvidenceFiles[index]; const hasStageFile = stageFiles.some(([key]) => Boolean(records[key] || (key === "file-motivation" && records["file-4"]))); const stageStarted = stage.actions.some(([id]) => completed.includes(id)) || evidenceFields[index].some(([key]) => Boolean(records[key])) || hasStageFile; const open = expandedStage === index; return <article className={"pathway-stage " + (stageDone ? "complete" : stageStarted ? "started" : "")} key={stage.title}><button className="pathway-stage-toggle" onClick={() => { if (!active) return; setExpandedStage(open ? -1 : index); setStageTab("overview"); }} disabled={!active} aria-expanded={open}><span>{stageDone ? <Check size={14} /> : String(index + 1).padStart(2, "0")}</span><span><strong>{stage.title}</strong><small>{stageDone ? "Ready" : stageStarted ? "Information added" : index === 0 && active ? "Start here" : "No information yet"}</small></span><em>{requirementData[index].filter(([, value]) => !/Not recorded|No file|Not submitted|No decision|Not started|Not researched|Check official/.test(value)).length} of {requirementData[index].length} details</em><ChevronDown size={15} /></button>{open && active && <div className="pathway-stage-workspace"><nav aria-label={stage.title + " sections"}>{(["overview", "requirements", "evidence", "actions"] as const).map((tab) => <button key={tab} className={stageTab === tab ? "active" : ""} onClick={() => setStageTab(tab)}>{tab === "evidence" ? "My evidence" : tab[0].toUpperCase() + tab.slice(1)}</button>)}</nav>
+      {stageTab === "overview" && <div className="stage-overview"><div><span className="row-icon"><Database size={16} /></span><span><strong>{stage.title}</strong><p>{stage.note}</p></span></div><dl>{requirementData[index].slice(0, 3).map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>{active.p.sources[0] && <a href={active.p.sources[0].href} target="_blank" rel="noreferrer"><ExternalLink size={13} /> Open official programme source</a>}</div>}
       {stageTab === "requirements" && <div className="stage-requirements"><p className="requirements-note">The checklist below is tied to this stage. “Recorded” means MyWay has a value or file; it does not replace the university’s decision.</p><header><span>Requirement</span><span>Your current record</span><span>Status</span></header>{requirementData[index].map(([label, value]) => { const missing = /Not recorded|No file|Not submitted|No decision|Not started|Check official|Not researched/.test(value); const optional = label.includes("(optional)"); return <div key={label}><strong>{label}</strong><span>{value}</span><em className={!missing ? "green" : optional ? "neutral" : "attention"}>{!missing ? "Recorded" : optional ? "Optional" : "Needs action"}</em></div>; })}</div>}
-      {stageTab === "evidence" && <div className="stage-evidence"><div className="evidence-form">{evidenceFields[index].map(([key, label, placeholder]) => <label key={key}><span>{label}</span><input value={records[key] || ""} onChange={(event) => updateRecord(key, event.target.value)} placeholder={placeholder} /></label>)}</div><div className="application-document-panel"><div className="document-panel-head"><span><strong>{evidencePanelTitles[index]}</strong><small>{evidencePanelNotes[index]}</small></span><em>{stageFiles.filter(([key]) => Boolean(records[key] || (key === "file-motivation" && records["file-4"]))).length} of {stageFiles.length} files selected</em></div><div className="document-file-list">{stageFiles.map(([key, label, help]) => { const filename = records[key] || (key === "file-motivation" ? records["file-4"] : ""); return <label key={key} className={filename ? "has-file" : ""}><span className="document-file-icon"><FileText size={15} /></span><span><strong>{label}</strong><small>{filename || help}</small></span><em>{filename ? "Replace" : "Choose file"}</em><input type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xlsx,.xls" onChange={(event) => updateRecord(key, event.currentTarget.files?.[0]?.name || "")} /></label>; })}</div>{dream.p.sources[0] && <a className="document-source-link" href={dream.p.sources[0].href} target="_blank" rel="noreferrer"><ExternalLink size={13} /> Verify this stage on the official programme page</a>}</div><p className="prototype-file-note"><CircleHelp size={13} /> Prototype mode stores filenames only—not the files themselves. Secure private storage will be added with the backend.</p></div>}
+      {stageTab === "evidence" && <div className="stage-evidence"><div className="evidence-form">{evidenceFields[index].map(([key, label, placeholder]) => <label key={key}><span>{label}</span><input value={records[key] || ""} onChange={(event) => updateRecord(key, event.target.value)} placeholder={placeholder} /></label>)}</div><div className="application-document-panel"><div className="document-panel-head"><span><strong>{evidencePanelTitles[index]}</strong><small>{evidencePanelNotes[index]}</small></span><em>{stageFiles.filter(([key]) => Boolean(records[key] || (key === "file-motivation" && records["file-4"]))).length} of {stageFiles.length} files selected</em></div><div className="document-file-list">{stageFiles.map(([key, label, help]) => { const filename = records[key] || (key === "file-motivation" ? records["file-4"] : ""); return <label key={key} className={filename ? "has-file" : ""}><span className="document-file-icon"><FileText size={15} /></span><span><strong>{label}</strong><small>{filename || help}</small></span><em>{filename ? "Replace" : "Choose file"}</em><input type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xlsx,.xls" onChange={(event) => updateRecord(key, event.currentTarget.files?.[0]?.name || "")} /></label>; })}</div>{active.p.sources[0] && <a className="document-source-link" href={active.p.sources[0].href} target="_blank" rel="noreferrer"><ExternalLink size={13} /> Verify this stage on the official programme page</a>}</div><p className="prototype-file-note"><CircleHelp size={13} /> Prototype mode stores filenames only—not the files themselves. Secure private storage will be added with the backend.</p></div>}
       {stageTab === "actions" && <div className="pathway-stage-body"><p>Each action is tied to the matching requirement. Estimates and target timing are planning guidance; university-specific facts must come from the named source.</p>{stage.actions.map(([id, , source, effort, timing, why], actionIndex) => { const done = completed.includes(id); const [requirement, value] = requirementData[index][actionIndex]; return <button key={id} className={done ? "done" : ""} onClick={() => toggleTask(id)}><span className={"check " + (done ? "checked" : "")}>{done && <Check size={13} />}</span><span className="action-record-copy"><strong>{requirement}</strong><small><b>Current record</b>{value}</small><span className="action-detail-grid"><small><b>Estimated effort</b>{effort}</small><small><b>Target timing</b>{timing}</small><small><b>Why it matters</b>{why}</small><small><b>Evidence source</b>{source}</small></span></span><em>{done ? "Completed" : "Mark complete"}</em></button>; })}</div>}
     </div>}</article>; })}</div></section>
     <section className="pathway-shortlists"><div className="section-head"><div><span className="section-label">Your shortlist</span><h3>Targets and alternatives</h3></div><button className="text-link" onClick={() => go("explore")}>Manage in Explore <ChevronRight size={14} /></button></div><div className="pathway-shortlist-grid"><article className="card pathway-role-card"><header><span className="role-symbol target"><Target size={16} /></span><span><h3>Target universities</h3><p>Your leading realistic options</p></span><em>{targets.length}</em></header>{targets.length ? targets.map((item) => <PathwayChoice key={item.p.id} item={item} openProgram={openProgram} changeRole={changeRole} removePath={removePath} />) : <div className="empty-compact"><Target size={17} /><span>No Target universities yet</span></div>}</article><article className="card pathway-role-card"><header><span className="role-symbol alternative"><ShieldCheck size={16} /></span><span><h3>Alternative universities</h3><p>Strong backup options</p></span><em>{alternatives.length}</em></header>{alternatives.length ? alternatives.map((item) => <PathwayChoice key={item.p.id} item={item} openProgram={openProgram} changeRole={changeRole} removePath={removePath} />) : <div className="empty-compact"><ShieldCheck size={17} /><span>No Alternative universities yet</span></div>}</article></div></section>
@@ -1070,7 +1191,7 @@ function Pathway({ selected, completed, toggleTask, go, openProgram, changeRole,
   </div>;
 }
 
-function ProgressPage({ selected, applicationReadiness, openStage, openProgram, go }: { selected: { p: Program; role: Role }[]; applicationReadiness: Record<string, { score: number; stages: ReadinessStage[] }>; openStage: (index: number) => void; openProgram: (p: Program) => void; go: (v: View) => void }) {
+function ProgressPage({ selected, applicationReadiness, openStage, openProgram, go }: { selected: { p: Program; role: Role }[]; applicationReadiness: Record<string, { score: number; stages: ReadinessStage[] }>; openStage: (index: number, programId: string) => void; openProgram: (p: Program) => void; go: (v: View) => void }) {
   const progressStageIcons = [Map, ShieldCheck, BarChart3, Languages, BriefcaseBusiness, FileText, Trophy, ClipboardCheck, Flag];
   const dream = selected.find((item) => item.role === "Dream");
   const [activeId, setActiveId] = useState(dream?.p.id || selected[0]?.p.id || "");
@@ -1087,8 +1208,8 @@ function ProgressPage({ selected, applicationReadiness, openStage, openProgram, 
   return <div className="page-enter progress-page"><section className="page-intro"><div><span className="eyebrow">Progress</span><h2>Application readiness</h2><p>Track preparation for every shortlisted programme—not admission probability.</p></div></section>
     <section className="application-switcher"><label><span>Application</span><select value={active.p.id} onChange={(event) => setActiveId(event.target.value)}>{selected.map((item) => <option key={item.p.id} value={item.p.id}>{item.p.university} — {item.role}</option>)}</select></label><small>Shared records and documents are reused. University-specific requirements remain separate.</small></section>
     <section className="card progress-hero"><div className="progress-hero-score"><strong>{pathwayReadiness}%</strong><span><b>{readyCount} of 9 stages ready</b><small>Preparation progress · not admission probability</small></span></div><div className="progress-hero-target"><UniversityLogo program={active.p} size="small" /><span><small>{active.role} application</small><strong>{active.p.university}</strong><em>{active.p.title}</em></span><button className="text-link" onClick={() => openProgram(active.p)}>View <ChevronRight size={14} /></button></div></section>
-    <div className="progress-layout"><section className="card progress-stages"><div className="section-head"><div><span className="section-label">Pathway stages</span><h3>Preparation by stage</h3></div><span className="badge blue">All 9 stages</span></div><div className="progress-stage-list">{readinessStages.map((stage, index) => { const Icon = progressStageIcons[index]; const status = stage.value === 100 ? "Ready" : stage.value ? "In progress" : "Not started"; return <button className="progress-stage" key={stage.label} onClick={() => openStage(index)}><span className="progress-stage-icon"><Icon size={17} /></span><span className="progress-stage-copy"><span><strong>{stage.label}</strong><em>{status}</em></span><small>{stage.completedActions} of {stage.totalActions} actions complete</small><span className="bar"><i style={{ width: stage.value + "%" }} /></span></span><b>{stage.value}%</b><ChevronRight size={15} /></button>; })}</div></section>
-      <aside className="progress-side"><section className="card score-breakdown"><div className="section-head"><div><span className="section-label">Score breakdown</span><h3>How it is calculated</h3></div></div>{components.map(([label, weight, value]) => <div className="score-part" key={label}><span><strong>{label}</strong><small>{weight}% of total score</small></span><div className="bar"><i style={{ width: value + "%" }} /></div><em>{value}% ready</em></div>)}</section><section className="card priority-card"><div className="section-head"><div><span className="section-label">Next priorities</span><h3>What to complete next</h3></div></div>{priorities.length ? priorities.map(({ stage, index, weakest }, rank) => <button key={stage.label} onClick={() => openStage(index)}><span>{rank + 1}</span><span><strong>{stage.label}</strong><small>Strengthen {weakest} · {stage.value}% ready</small></span><ChevronRight size={14} /></button>) : <div className="all-ready"><CircleCheck size={20} /><span><strong>All stages are ready</strong><small>Review the Pathway before submission.</small></span></div>}</section></aside></div>
+    <div className="progress-layout"><section className="card progress-stages"><div className="section-head"><div><span className="section-label">Pathway stages</span><h3>Preparation by stage</h3></div><span className="badge blue">All 9 stages</span></div><div className="progress-stage-list">{readinessStages.map((stage, index) => { const Icon = progressStageIcons[index]; const status = stage.value === 100 ? "Ready" : stage.value ? "In progress" : "Not started"; return <button className="progress-stage" key={stage.label} onClick={() => openStage(index, active.p.id)}><span className="progress-stage-icon"><Icon size={17} /></span><span className="progress-stage-copy"><span><strong>{stage.label}</strong><em>{status}</em></span><small>{stage.completedActions} of {stage.totalActions} actions complete</small><span className="bar"><i style={{ width: stage.value + "%" }} /></span></span><b>{stage.value}%</b><ChevronRight size={15} /></button>; })}</div></section>
+      <aside className="progress-side"><section className="card score-breakdown"><div className="section-head"><div><span className="section-label">Score breakdown</span><h3>How it is calculated</h3></div></div>{components.map(([label, weight, value]) => <div className="score-part" key={label}><span><strong>{label}</strong><small>{weight}% of total score</small></span><div className="bar"><i style={{ width: value + "%" }} /></div><em>{value}% ready</em></div>)}</section><section className="card priority-card"><div className="section-head"><div><span className="section-label">Next priorities</span><h3>What to complete next</h3></div></div>{priorities.length ? priorities.map(({ stage, index, weakest }, rank) => <button key={stage.label} onClick={() => openStage(index, active.p.id)}><span>{rank + 1}</span><span><strong>{stage.label}</strong><small>Strengthen {weakest} · {stage.value}% ready</small></span><ChevronRight size={14} /></button>) : <div className="all-ready"><CircleCheck size={20} /><span><strong>All stages are ready</strong><small>Review the Pathway before submission.</small></span></div>}</section></aside></div>
     <section className="card other-choices"><div className="section-head"><div><span className="section-label">Other applications</span><h3>Your shortlist</h3></div><button className="text-link" onClick={() => go("pathway")}>Manage choices <ChevronRight size={14} /></button></div>{others.length ? <div className="other-choice-grid">{others.map((item) => <button key={item.p.id} onClick={() => { setActiveId(item.p.id); window.scrollTo({ top: 0, behavior: "smooth" }); }}><UniversityLogo program={item.p} size="small" /><span><small>{item.role}</small><strong>{item.p.university}</strong><em>{item.p.title} · {applicationReadiness[item.p.id]?.score ?? 0}% ready</em></span><ChevronRight size={15} /></button>)}</div> : <p className="empty-copy">No other applications added yet.</p>}</section>
   </div>;
 }
@@ -1102,11 +1223,11 @@ function ProfilePage({ toast }: { toast: (s: string) => void }) {
   const [preferencePriorities, setPreferencePriorities] = useState<Record<string, "Must have" | "Prefer" | "No preference">>({ Internships: "No preference", Exchange: "No preference", "Career services": "No preference", "Entrepreneurship support": "No preference", Scholarships: "No preference", "Industry projects": "No preference" });
   useEffect(() => { const timer = window.setTimeout(() => { try { const saved = JSON.parse(window.localStorage.getItem("myway-profile") || "null"); if (saved) setData((current) => ({ ...current, ...saved })); } catch {} try { setDocuments(JSON.parse(window.localStorage.getItem("myway-profile-documents") || "{}")); } catch {} try { const savedPriorities = JSON.parse(window.localStorage.getItem("myway-preference-priorities") || "null"); if (savedPriorities) setPreferencePriorities(savedPriorities); } catch {} }, 0); return () => window.clearTimeout(timer); }, []);
   const update = (key: keyof typeof data, value: string) => setData((current) => ({ ...current, [key]: value }));
-  const save = () => { window.localStorage.setItem("myway-profile", JSON.stringify(data)); window.localStorage.setItem("myway-profile-documents", JSON.stringify(documents)); window.localStorage.setItem("myway-preference-priorities", JSON.stringify(preferencePriorities)); setEditing(false); toast("Profile saved"); };
+  const save = () => { window.localStorage.setItem("myway-profile", JSON.stringify(data)); window.localStorage.setItem("myway-profile-documents", JSON.stringify(documents)); window.localStorage.setItem("myway-preference-priorities", JSON.stringify(preferencePriorities)); window.dispatchEvent(new Event("myway-profile-updated")); setEditing(false); toast("Profile saved · matches recalculated"); };
   const completedFields = [data.citizenship, data.school, data.curriculum, data.graduation, data.average, data.score, data.intake, data.budget, data.activities, documents.passport, documents.transcript, documents.cv, documents.english].filter(Boolean).length;
   const completion = Math.round(completedFields / 13 * 100);
   const field = (key: keyof typeof data, label: string, placeholder: string) => <label className="profile-field"><span>{label}</span>{editing ? <input value={data[key]} onChange={(event) => update(key, event.target.value)} placeholder={placeholder} /> : <strong className={!data[key] ? "missing" : ""}>{data[key] || "Not added"}</strong>}</label>;
-  const upload = (key: string, label: string, note: string) => <label className={`profile-document ${documents[key] ? "ready" : ""}`}><span className="document-file-icon"><FileText size={15} /></span><span><strong>{label}</strong><small>{documents[key] || note}</small></span><em>{documents[key] ? "Replace" : "Choose file"}</em><input type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" onChange={(event) => { const filename = event.currentTarget.files?.[0]?.name || ""; setDocuments((current) => { const next = { ...current, [key]: filename }; window.localStorage.setItem("myway-profile-documents", JSON.stringify(next)); return next; }); toast(filename ? `${label} recorded` : `${label} cleared`); }} /></label>;
+  const upload = (key: string, label: string, note: string) => <label className={`profile-document ${documents[key] ? "ready" : ""}`}><span className="document-file-icon"><FileText size={15} /></span><span><strong>{label}</strong><small>{documents[key] || note}</small></span><em>{documents[key] ? "Replace" : "Choose file"}</em><input type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" onChange={(event) => { const filename = event.currentTarget.files?.[0]?.name || ""; setDocuments((current) => { const next = { ...current, [key]: filename }; window.localStorage.setItem("myway-profile-documents", JSON.stringify(next)); window.dispatchEvent(new Event("myway-profile-updated")); return next; }); toast(filename ? `${label} recorded` : `${label} cleared`); }} /></label>;
   const selectedFields = data.fields.split(",").map((item) => item.trim()).filter(Boolean);
   const avoidedFields = data.avoidedFields.split(",").map((item) => item.trim()).filter(Boolean);
   const toggleField = (item: string) => { if (!editing || avoidedFields.includes(item)) return; const next = selectedFields.includes(item) ? selectedFields.filter((value) => value !== item) : [...selectedFields, item]; update("fields", next.join(", ")); };
@@ -1137,13 +1258,22 @@ export default function App() {
   const [pathway, setPathway] = useState<{ p: Program; role: Role }[]>([]);
   const [completed, setCompleted] = useState<string[]>([]);
   const [pathwayRecords, setPathwayRecords] = useState<Record<string, string>>({});
+  const [profileSnapshot, setProfileSnapshot] = useState<ProfileSnapshot>({});
+  const [profileDocuments, setProfileDocuments] = useState<Record<string, string>>({});
+  const [preferencePriorities, setPreferencePriorities] = useState<Record<string, string>>({});
   const [notices, setNotices] = useState(false);
   const [toast, setToast] = useState("");
   const [pathwayStage, setPathwayStage] = useState(0);
+  const [pathwayApplicationId, setPathwayApplicationId] = useState("");
 
   useEffect(() => {
+    const loadProfile = () => {
+      try { setProfileSnapshot(JSON.parse(window.localStorage.getItem("myway-profile") || "{}")); } catch { setProfileSnapshot({}); }
+      try { setProfileDocuments(JSON.parse(window.localStorage.getItem("myway-profile-documents") || "{}")); } catch { setProfileDocuments({}); }
+      try { setPreferencePriorities(JSON.parse(window.localStorage.getItem("myway-preference-priorities") || "{}")); } catch { setPreferencePriorities({}); }
+    };
     const timer = window.setTimeout(() => {
-      const complete = window.localStorage.getItem("alif-pathway-business-v1");
+      const complete = window.localStorage.getItem("myway-onboarding-v1") || window.localStorage.getItem("alif-pathway-business-v1");
       setOnboarded(complete === "complete");
       const hash = window.location.hash.replace("#", "") as View;
       if (navItems.some((item) => item.id === hash)) setView(hash);
@@ -1163,8 +1293,10 @@ export default function App() {
       try { setCompleted(JSON.parse(window.localStorage.getItem("myway-pathway-actions") || "[]")); } catch { setCompleted([]); }
       try { setSaved(JSON.parse(window.localStorage.getItem("myway-saved") || "[]")); } catch { setSaved([]); }
       try { setCompared(JSON.parse(window.localStorage.getItem("myway-compared") || "[]")); } catch { setCompared([]); }
+      loadProfile();
     }, 0);
-    return () => window.clearTimeout(timer);
+    window.addEventListener("myway-profile-updated", loadProfile);
+    return () => { window.clearTimeout(timer); window.removeEventListener("myway-profile-updated", loadProfile); };
   }, []);
   useEffect(() => {
     if (!toast) return;
@@ -1177,7 +1309,7 @@ export default function App() {
     window.history.replaceState(null, "", "#" + next);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
-  const openPathwayStage = (index: number) => { setPathwayStage(index); go("pathway"); };
+  const openPathwayStage = (index: number, programId: string) => { setPathwayStage(index); setPathwayApplicationId(programId); go("pathway"); };
   const openProgram = (program: Program) => {
     setView("explore");
     if (program.id.startsWith("school:")) {
@@ -1200,11 +1332,13 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
   const finish = () => {
-    window.localStorage.setItem("alif-pathway-business-v1", "complete");
+    window.localStorage.setItem("myway-onboarding-v1", "complete");
+    try { setProfileSnapshot(JSON.parse(window.localStorage.getItem("myway-profile") || "{}")); } catch {}
+    try { setPreferencePriorities(JSON.parse(window.localStorage.getItem("myway-preference-priorities") || "{}")); } catch {}
     setOnboarded(true); setView("explore"); setToast("Profile ready · verified European programs loaded");
   };
   const saveLater = () => {
-    window.localStorage.setItem("alif-pathway-business-v1", "complete");
+    window.localStorage.setItem("myway-onboarding-v1", "complete");
     setOnboarded(true); setView("dashboard"); setToast("Progress saved · complete your profile anytime");
   };
   const toggleSaved = (id: string) => {
@@ -1219,6 +1353,7 @@ export default function App() {
     const next = [...compared, id]; setCompared(next); window.localStorage.setItem("myway-compared", JSON.stringify(next)); setToast("Added to comparison");
   };
   const addPath = (p: Program, role: Role = "Target") => {
+    if (/no direct undergraduate/i.test(p.entry)) { setToast(`${p.university} has no direct bachelor pathway`); return; }
     setPathway((current) => {
       const withoutCurrent = current.filter((v) => v.p.id !== p.id);
       const singleDream = role === "Dream" ? withoutCurrent.map((item) => item.role === "Dream" ? { ...item, role: "Target" as Role } : item) : withoutCurrent;
@@ -1233,6 +1368,7 @@ export default function App() {
     setToast(p.university + " removed from pathway");
   };
   const toggleSchoolPathway = (school: BusinessSchool) => {
+    if (schoolStudy(school).status !== "bachelor") { setToast(`${school.name} is not available as a direct bachelor application`); return; }
     const program = school.programId ? programs.find((item) => item.id === school.programId) : undefined;
     const choice = program ?? schoolAsProgram(school);
     const alreadyAdded = pathway.some((item) => item.p.id === choice.id);
@@ -1248,21 +1384,41 @@ export default function App() {
     });
   };
   const dashboardProgram = pathway.find((item) => item.role === "Dream")?.p;
-  const recordFilled = (key: string, programId?: string) => Boolean((programId && pathwayRecords[`${programId}:${key}`])?.trim() || pathwayRecords[key]?.trim());
+  const sharedRecord = (key: string) => {
+    const profileMap: Record<string, string | undefined> = {
+      intake: profileSnapshot.intake,
+      qualification: profileSnapshot.curriculum,
+      currentGrades: profileSnapshot.average,
+      englishScore: profileSnapshot.score,
+      englishTestDate: profileSnapshot.testDate,
+      experience: profileSnapshot.activities || profileSnapshot.work || profileSnapshot.volunteering,
+      portfolioLink: profileSnapshot.portfolio,
+      budget: profileSnapshot.budget,
+    };
+    const documentMap: Record<string, string | undefined> = {
+      "file-transcript": profileDocuments.transcript,
+      "file-school-certificate": profileDocuments.certificate,
+      "file-cv": profileDocuments.cv,
+      "file-language-certificate": profileDocuments.english,
+      "file-passport": profileDocuments.passport,
+      "file-portfolio-evidence": profileDocuments.portfolio,
+    };
+    return profileMap[key] || documentMap[key] || "";
+  };
+  const recordFilled = (key: string, programId?: string) => Boolean((programId && pathwayRecords[`${programId}:${key}`])?.trim() || (programId === dashboardProgram?.id ? pathwayRecords[key]?.trim() : "") || sharedRecord(key).trim());
   const percentage = (checks: boolean[]) => checks.length ? Math.round(checks.filter(Boolean).length / checks.length * 100) : 0;
   const readinessFor = (program?: Program) => {
     if (!program) return { score: 0, stages: [] as ReadinessStage[] };
     const knownProgramme = !program.id.startsWith("school:") && program.sources.length > 0;
-    const isEscp = program.id === "escp";
     const filled = (key: string) => recordFilled(key, program.id);
     const readinessBlueprint = [
     { label: "Programme & intake", requirements: [knownProgramme, filled("intake"), filled("applicationRoute"), filled("firstCampus"), Boolean(program.location)], records: ["intake", "applicationRoute", "firstCampus", "programmeNotes"], evidence: [filled("file-programme-notes") || filled("programmeNotes")], actions: ["programme", "intake", "application-route", "first-campus", "study-location"] },
-    { label: "Entry requirements", requirements: [Boolean(program.entry && !/not verified|not available/i.test(program.entry)), filled("qualification"), filled("deadline") || isEscp, filled("translationPlan") || isEscp, filled("selectionNotes") || isEscp], records: ["qualification", "deadline", "translationPlan", "selectionNotes", "eligibilityNotes"], evidence: [filled("file-requirements") || filled("eligibilityNotes")], actions: ["entry-route", "qualification", "deadline", "translation", "selection-step"] },
+    { label: "Entry requirements", requirements: [Boolean(program.entry && !/not verified|not available/i.test(program.entry)), filled("qualification"), filled("deadline"), filled("translationPlan"), filled("selectionNotes")], records: ["qualification", "deadline", "translationPlan", "selectionNotes", "eligibilityNotes"], evidence: [filled("file-requirements") || filled("eligibilityNotes")], actions: ["entry-route", "qualification", "deadline", "translation", "selection-step"] },
     { label: "Academic gaps", requirements: [filled("file-academic-evidence"), filled("currentGrades"), filled("prerequisiteNotes"), filled("mathEvidence"), filled("academicGapPlan")], records: ["currentGrades", "prerequisiteNotes", "mathEvidence", "academicGapPlan"], evidence: [filled("file-academic-evidence"), filled("file-math-evidence")], actions: ["academic-evidence", "academic-grades", "subject-prerequisites", "quant", "academic-gap-plan"] },
-    { label: "English qualification", requirements: [filled("englishRequirement") || isEscp, filled("englishScore"), filled("englishTestDate"), filled("file-language-certificate"), filled("englishStudyPlan")], records: ["englishRequirement", "englishScore", "englishTestDate", "englishStudyPlan"], evidence: [filled("file-language-certificate"), filled("file-english-plan") || filled("englishStudyPlan")], actions: ["english-requirement", "english", "english-date", "english-certificate", "english-plan"] },
-    { label: "Experience & portfolio", requirements: [filled("experience"), filled("experienceImpact"), filled("portfolioRequirement") || isEscp, filled("portfolioLink"), filled("file-portfolio-evidence")], records: ["experience", "experienceImpact", "portfolioRequirement", "portfolioLink", "portfolioNotes"], evidence: [filled("file-portfolio-evidence")], actions: ["experience", "experience-impact", "portfolio-requirement", "portfolio-link", "portfolio"] },
-    { label: "Application documents", requirements: Array(7).fill(Boolean(isEscp)), records: ["cvStatus", "documentNotes"], evidence: ["file-transcript", "file-school-certificate", "file-motivation", "file-cv", "file-language-certificate", "file-reference", "file-passport"].map((key) => filled(key) || (key === "file-motivation" && filled("file-4"))), actions: ["doc-transcript", "doc-school-certificate", "doc-motivation", "doc-cv", "doc-language", "doc-reference", "doc-passport"] },
-    { label: "Costs & funding", requirements: [Boolean(program.tuition && !/not verified|official fee/i.test(program.tuition)), filled("applicationFee") || isEscp, filled("seatDeposit") || isEscp, filled("budget"), filled("scholarshipNotes") || isEscp, filled("livingCostBudget")], records: ["applicationFee", "seatDeposit", "budget", "scholarshipNotes", "livingCostBudget"], evidence: [filled("file-budget"), filled("file-scholarship")], actions: ["tuition", "application-fee", "seat-deposit", "budget", "scholarship", "living-costs"] },
+    { label: "English qualification", requirements: [filled("englishRequirement"), filled("englishScore"), filled("englishTestDate"), filled("file-language-certificate"), filled("englishStudyPlan")], records: ["englishRequirement", "englishScore", "englishTestDate", "englishStudyPlan"], evidence: [filled("file-language-certificate"), filled("file-english-plan") || filled("englishStudyPlan")], actions: ["english-requirement", "english", "english-date", "english-certificate", "english-plan"] },
+    { label: "Experience & portfolio", requirements: [filled("experience"), filled("experienceImpact"), filled("portfolioRequirement"), filled("portfolioLink"), filled("file-portfolio-evidence")], records: ["experience", "experienceImpact", "portfolioRequirement", "portfolioLink", "portfolioNotes"], evidence: [filled("file-portfolio-evidence")], actions: ["experience", "experience-impact", "portfolio-requirement", "portfolio-link", "portfolio"] },
+    { label: "Application documents", requirements: ["file-transcript", "file-school-certificate", "file-motivation", "file-cv", "file-language-certificate", "file-reference", "file-passport"].map(filled), records: ["cvStatus", "documentNotes"], evidence: ["file-transcript", "file-school-certificate", "file-motivation", "file-cv", "file-language-certificate", "file-reference", "file-passport"].map((key) => filled(key) || (key === "file-motivation" && filled("file-4"))), actions: ["doc-transcript", "doc-school-certificate", "doc-motivation", "doc-cv", "doc-language", "doc-reference", "doc-passport"] },
+    { label: "Costs & funding", requirements: [Boolean(program.tuition && !/not verified|official fee/i.test(program.tuition)), filled("applicationFee"), filled("seatDeposit"), filled("budget"), filled("scholarshipNotes"), filled("livingCostBudget")], records: ["applicationFee", "seatDeposit", "budget", "scholarshipNotes", "livingCostBudget"], evidence: [filled("file-budget"), filled("file-scholarship")], actions: ["tuition", "application-fee", "seat-deposit", "budget", "scholarship", "living-costs"] },
     { label: "Submission", requirements: [filled("applicationRoute"), filled("finalReviewStatus"), filled("submissionDate"), filled("applicationId"), filled("file-submission-confirmation")], records: ["applicationRoute", "finalReviewStatus", "submissionDate", "applicationId"], evidence: [filled("file-submitted-application"), filled("file-submission-confirmation") || filled("file-6")], actions: ["application-portal", "final-review", "submit", "application-reference", "confirmation"] },
     { label: "Offer & enrolment", requirements: [filled("offerStatus"), filled("offerConditions"), filled("enrolmentDeadline"), filled("depositStatus"), filled("visaPlan"), filled("transitionPlan")], records: ["offerStatus", "offerConditions", "enrolmentDeadline", "depositStatus", "visaPlan", "transitionPlan"], evidence: [filled("file-offer"), filled("file-enrolment"), filled("file-visa")], actions: ["decision", "offer-conditions", "enrolment-deadline", "deposit-status", "visa-plan", "enrolment"] },
   ];
@@ -1270,12 +1426,21 @@ export default function App() {
     const requirements = percentage(stage.requirements);
     const records = percentage(stage.records.map(filled));
     const evidence = percentage(stage.evidence);
-    const actions = percentage(stage.actions.map((id) => completed.includes(id)));
-    return { label: stage.label, value: Math.round(requirements * .3 + records * .25 + evidence * .25 + actions * .2), requirements, records, evidence, actions, completedActions: stage.actions.filter((id) => completed.includes(id)).length, totalActions: stage.actions.length };
+    const actionComplete = (id: string) => completed.includes(`${program.id}:${id}`) || (program.id === dashboardProgram?.id && completed.includes(id));
+    const actions = percentage(stage.actions.map(actionComplete));
+    return { label: stage.label, value: Math.round(requirements * .3 + records * .25 + evidence * .25 + actions * .2), requirements, records, evidence, actions, completedActions: stage.actions.filter(actionComplete).length, totalActions: stage.actions.length };
   });
   return { score: stages.length ? Math.round(stages.reduce((sum, stage) => sum + stage.value, 0) / stages.length) : 0, stages };
   };
   const applicationReadiness = Object.fromEntries(pathway.map((item) => [item.p.id, readinessFor(item.p)])) as Record<string, { score: number; stages: ReadinessStage[] }>;
+  const programFits = Object.fromEntries(programs.map((program) => {
+    const school = businessSchools.find((item) => item.programId === program.id);
+    return [program.id, calculateProgramFit(program, school ? schoolStudy(school) : undefined, profileSnapshot, preferencePriorities)];
+  })) as Record<string, FitResult>;
+  const fitFor = (program: Program, school?: BusinessSchool) => {
+    const linkedSchool = school ?? businessSchools.find((item) => item.programId === program.id);
+    return calculateProgramFit(program, linkedSchool ? schoolStudy(linkedSchool) : undefined, profileSnapshot, preferencePriorities);
+  };
   const dreamReadiness = readinessFor(dashboardProgram);
   const readinessStages = dreamReadiness.stages;
   const progress = dreamReadiness.score;
@@ -1285,11 +1450,11 @@ export default function App() {
   if (!onboarded) return <Onboarding finish={finish} saveLater={saveLater} />;
 
   let content;
-  if (selectedProgram) { const school = businessSchools.find((item) => item.programId === selectedProgram.id); const selectedRole = pathway.find((item) => item.p.id === selectedProgram.id)?.role; content = <ProgramDetail p={selectedProgram} close={() => setSelectedProgramId(null)} saved={saved.includes(school?.id ?? selectedProgram.id)} toggleSaved={() => toggleSaved(school?.id ?? selectedProgram.id)} compared={school ? compared.includes(school.id) : false} toggleCompare={() => school && toggleCompare(school.id)} pathwayRole={selectedRole} addPath={(role) => addPath(selectedProgram, role)} removePath={() => removePath(selectedProgram)} />; }
-  else if (selectedSchool) { const program = selectedSchool.programId ? programs.find((item) => item.id === selectedSchool.programId) : undefined; const choice = program ?? schoolAsProgram(selectedSchool); const selectedRole = pathway.find((item) => item.p.id === choice.id)?.role; content = <SchoolDetail school={selectedSchool} program={program} close={() => setSelectedSchoolId(null)} saved={saved.includes(selectedSchool.id)} toggleSaved={() => toggleSaved(selectedSchool.id)} compared={compared.includes(selectedSchool.id)} toggleCompare={() => toggleCompare(selectedSchool.id)} pathwayRole={selectedRole} addPath={(role) => addPath(choice, role)} removePath={() => removePath(choice)} />; }
-  else if (view === "dashboard") content = <Dashboard go={go} completed={completed} toggleTask={toggleTask} openProgram={openProgram} target={dashboardProgram} selected={pathway} pathwayReadiness={progress} readinessStages={readinessStages} />;
+  if (selectedProgram) { const school = businessSchools.find((item) => item.programId === selectedProgram.id); const selectedRole = pathway.find((item) => item.p.id === selectedProgram.id)?.role; content = <ProgramDetail p={selectedProgram} close={() => setSelectedProgramId(null)} saved={saved.includes(school?.id ?? selectedProgram.id)} toggleSaved={() => toggleSaved(school?.id ?? selectedProgram.id)} compared={school ? compared.includes(school.id) : false} toggleCompare={() => school && toggleCompare(school.id)} pathwayRole={selectedRole} addPath={(role) => addPath(selectedProgram, role)} removePath={() => removePath(selectedProgram)} fitResult={fitFor(selectedProgram, school)} readinessScore={applicationReadiness[selectedProgram.id]?.score} />; }
+  else if (selectedSchool) { const program = selectedSchool.programId ? programs.find((item) => item.id === selectedSchool.programId) : undefined; const choice = program ?? schoolAsProgram(selectedSchool); const selectedRole = pathway.find((item) => item.p.id === choice.id)?.role; content = <SchoolDetail school={selectedSchool} program={program} close={() => setSelectedSchoolId(null)} saved={saved.includes(selectedSchool.id)} toggleSaved={() => toggleSaved(selectedSchool.id)} compared={compared.includes(selectedSchool.id)} toggleCompare={() => toggleCompare(selectedSchool.id)} pathwayRole={selectedRole} addPath={(role) => addPath(choice, role)} removePath={() => removePath(choice)} fitResult={fitFor(choice, selectedSchool)} readinessScore={applicationReadiness[choice.id]?.score} />; }
+  else if (view === "dashboard") content = <Dashboard go={go} completed={completed} toggleTask={toggleTask} openProgram={openProgram} target={dashboardProgram} selected={pathway} pathwayReadiness={progress} readinessStages={readinessStages} programFits={programFits} />;
   else if (view === "explore") content = <Explore openSchool={openSchool} saved={saved} setSaved={toggleSaved} compared={compared} toggleCompare={toggleCompare} schoolPathwayIds={pathway.map((item) => item.p.id)} toggleSchoolPathway={toggleSchoolPathway} />;
-  else if (view === "pathway") content = <Pathway selected={pathway} completed={completed} toggleTask={toggleTask} go={go} openProgram={openProgram} changeRole={addPath} removePath={removePath} records={pathwayRecords} updateRecord={updatePathwayRecord} pathwayReadiness={progress} readinessStages={readinessStages} initialStage={pathwayStage} />;
+  else if (view === "pathway") content = <Pathway selected={pathway} completed={completed} toggleTask={toggleTask} go={go} openProgram={openProgram} changeRole={addPath} removePath={removePath} records={pathwayRecords} updateRecord={updatePathwayRecord} applicationReadiness={applicationReadiness} initialStage={pathwayStage} initialApplicationId={pathwayApplicationId} />;
   else if (view === "tasks") content = <TasksHabits completed={completed} toggleTask={toggleTask} toast={setToast} />;
   else if (view === "progress") content = <ProgressPage selected={pathway} applicationReadiness={applicationReadiness} openStage={openPathwayStage} openProgram={openProgram} go={go} />;
   else content = <ProfilePage toast={setToast} />;
