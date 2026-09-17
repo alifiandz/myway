@@ -9,7 +9,7 @@ import {
   Scale, Search, Settings2, ShieldCheck, SlidersHorizontal, Sparkles, Target,
   Trophy, X,
 } from "lucide-react";
-import { schoolStudyRows, type SchoolStudySummary } from "./school-data";
+import { additionalSchoolStudyRows, schoolStudyRows, type SchoolStudySummary } from "./school-data";
 
 type View = "dashboard" | "explore" | "pathway" | "tasks" | "progress" | "profile";
 type Role = "Dream" | "Target" | "Alternative";
@@ -193,10 +193,12 @@ type BusinessSchool = {
   location: string;
   domain: string;
   programId?: string;
+  directorySource?: "FT" | "Official";
+  order?: number;
 };
 
 type SchoolRanking = {
-  publisher: "FT" | "QS" | "THE" | "ShanghaiRanking";
+  publisher: "FT" | "QS" | "THE" | "ShanghaiRanking" | "Official";
   title: string;
   year: string;
   rank: string;
@@ -421,11 +423,31 @@ const businessSchools: BusinessSchool[] = businessSchoolRows.map(([rank, name, l
   location,
   domain: businessSchoolDomains[index],
   programId,
+  directorySource: "FT",
+  order: index + 1,
 }));
+
+const additionalBusinessSchoolRows: [string, string, string, string][] = [
+  ["verified-school-lse", "London School of Economics and Political Science", "London, United Kingdom", "lse.ac.uk"],
+  ["verified-school-kings", "King’s College London", "London, United Kingdom", "kcl.ac.uk"],
+  ["verified-school-birmingham", "University of Birmingham", "Birmingham, United Kingdom", "birmingham.ac.uk"],
+  ["verified-school-sheffield", "University of Sheffield", "Sheffield, United Kingdom", "sheffield.ac.uk"],
+  ["verified-school-liverpool", "University of Liverpool", "Liverpool, United Kingdom", "liverpool.ac.uk"],
+  ["verified-school-groningen", "University of Groningen", "Groningen, Netherlands", "rug.nl"],
+  ["verified-school-twente", "University of Twente", "Enschede, Netherlands", "utwente.nl"],
+  ["verified-school-southampton", "University of Southampton", "Southampton, United Kingdom", "southampton.ac.uk"],
+  ["verified-school-sussex", "University of Sussex", "Brighton, United Kingdom", "sussex.ac.uk"],
+  ["verified-school-qmul", "Queen Mary University of London", "London, United Kingdom", "qmul.ac.uk"],
+  ["verified-school-radboud", "Radboud University", "Nijmegen, Netherlands", "ru.nl"],
+  ["verified-school-newcastle", "Newcastle University", "Newcastle upon Tyne, United Kingdom", "ncl.ac.uk"],
+  ["verified-school-cardiff", "Cardiff University", "Cardiff, United Kingdom", "cardiff.ac.uk"],
+];
+const additionalBusinessSchools: BusinessSchool[] = additionalBusinessSchoolRows.map(([id, name, location, domain], index) => ({ id, rank: "Verified", name, location, domain, directorySource: "Official", order: 101 + index }));
 
 const schoolStudySummaries: Record<string, SchoolStudySummary> = Object.fromEntries(
   businessSchools.map((school, index) => [school.id, schoolStudyRows[index]])
 );
+Object.assign(schoolStudySummaries, additionalSchoolStudyRows);
 
 function schoolStudy(school: BusinessSchool) {
   return schoolStudySummaries[school.id];
@@ -433,7 +455,7 @@ function schoolStudy(school: BusinessSchool) {
 
 // MyWay is an undergraduate planning product. Postgraduate-only and restricted-entry
 // institutions remain in the source dataset for auditability, but never enter discovery.
-const undergraduateBusinessSchools = businessSchools.filter((school) => schoolStudy(school).status === "bachelor");
+const undergraduateBusinessSchools = [...businessSchools.filter((school) => schoolStudy(school).status === "bachelor"), ...additionalBusinessSchools];
 
 function schoolAsProgram(school: BusinessSchool): Program {
   const study = schoolStudy(school);
@@ -578,7 +600,10 @@ const shanghaiBusinessRanks: Record<string, { rank: string; href: string }> = {
 };
 
 function schoolRankings(school: BusinessSchool): SchoolRanking[] {
-  const rankings: SchoolRanking[] = [{ publisher: "FT", title: "European Business Schools", year: "2025", rank: school.rank.startsWith("=") ? school.rank : `#${school.rank}`, scope: "Postgraduate and executive business-school performance", href: rankingSource }];
+  const study = schoolStudy(school);
+  const rankings: SchoolRanking[] = school.directorySource === "Official"
+    ? [{ publisher: "Official", title: "Undergraduate programme", year: "2026", rank: "Verified", scope: "Current official university programme page", href: study.source }]
+    : [{ publisher: "FT", title: "European Business Schools", year: "2025", rank: school.rank.startsWith("=") ? school.rank : `#${school.rank}`, scope: "Postgraduate and executive business-school performance", href: rankingSource }];
   if (qsBusinessRanks[school.name]) rankings.push({ publisher: "QS", title: "Business & Management Studies", year: "2026", rank: qsBusinessRanks[school.name], scope: "Business education across all study levels", href: qsBusinessSource });
   if (theBusinessRanks[school.name]) rankings.push({ publisher: "THE", title: "Business & Economics", year: "2026", rank: theBusinessRanks[school.name], scope: "Teaching, research, industry and international outlook", href: theBusinessSource });
   const shanghai = shanghaiBusinessRanks[school.name];
@@ -822,7 +847,7 @@ function Explore({ openSchool, saved, setSaved, compared, toggleCompare, schoolP
   const [query, setQuery] = useState("");
   const [refineOpen, setRefineOpen] = useState(false);
   const [filters, setFilters] = useState<string[]>([]);
-  const [sort, setSort] = useState("FT ranking");
+  const [sort, setSort] = useState("Directory order");
   const filterGroups = [
     { label: "Location", note: "Where you want to study", options: ["Austria", "Belgium", "Czechia", "Denmark", "Finland", "France", "Germany", "Ireland", "Italy", "Netherlands", "Norway", "Poland", "Portugal", "Slovenia", "Spain", "Sweden", "Switzerland", "Türkiye", "United Kingdom", "Multi-country Europe"] },
     { label: "Business area", note: "What you want to study", options: ["Business Administration", "Management", "International Business", "Entrepreneurship", "Marketing", "Finance", "Accounting", "Economics", "Business Analytics", "Supply Chain & Operations", "Human Resources", "Hospitality & Tourism", "Real Estate", "Sports Business", "Luxury Management", "Sustainability & Social Enterprise"] },
@@ -864,16 +889,16 @@ function Explore({ openSchool, saved, setSaved, compared, toggleCompare, schoolP
       return matchesStudyFilter(study, item);
     });
     return matchesQuery && matchesSelected;
-  }).sort((a, b) => sort === "A–Z" ? a.name.localeCompare(b.name) : Number(a.rank.replace("=", "")) - Number(b.rank.replace("=", "")));
+  }).sort((a, b) => sort === "A–Z" ? a.name.localeCompare(b.name) : (a.order ?? 999) - (b.order ?? 999));
   return <div className="page-enter">
-    <section className="page-intro"><div><span className="eyebrow">Europe-first discovery</span><h2>Explore {undergraduateBusinessSchools.length} business schools</h2><p>Every school shown has a current undergraduate business route. Preferences apply only when you choose filters.</p></div><a className="source-stamp" href={rankingSource} target="_blank" rel="noreferrer"><CircleCheck size={15} /> FT base · QS, THE and Shanghai where verified <ExternalLink size={12} /></a></section>
+    <section className="page-intro"><div><span className="eyebrow">Europe-first discovery</span><h2>Explore {undergraduateBusinessSchools.length} business schools</h2><p>Every school shown has a current undergraduate business route. Preferences apply only when you choose filters.</p></div><a className="source-stamp" href={rankingSource} target="_blank" rel="noreferrer"><CircleCheck size={15} /> FT base · verified undergraduate additions <ExternalLink size={12} /></a></section>
     <section className="card search-card">
       <label className="search-box"><Search size={18} /><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search programs, universities, specializations, or countries…" />{query && <button onClick={() => setQuery("")} aria-label="Clear search"><X size={15} /></button>}</label>
       <button type="button" className={"refine-toggle " + (refineOpen ? "open" : "")} onClick={() => setRefineOpen(!refineOpen)} aria-expanded={refineOpen}><span className="refine-toggle-icon"><SlidersHorizontal size={17} /></span><span className="refine-toggle-copy"><strong>Filters</strong><small>{filters.length ? `${filters.length} active filter${filters.length === 1 ? "" : "s"}` : "Country, business area, language, duration, and credits"}</small></span>{filters.length > 0 && <em>{filters.length}</em>}<ChevronDown size={17} /></button>
       {refineOpen && <div className="refine-panel"><header><div><span className="section-label">Build your shortlist</span><h3>What matters to you?</h3><p>Nothing is preselected. Results update only from choices you make here.</p></div>{filters.length > 0 && <button type="button" onClick={() => setFilters([])}>Reset</button>}</header><div className="refine-groups">{filterGroups.map((group) => <fieldset key={group.label}><legend>{group.label}<small>{group.note}</small></legend><div>{group.options.map((item) => <label key={item} className={filters.includes(item) ? "selected" : ""}><input type="checkbox" checked={filters.includes(item)} onChange={() => toggleFilter(item)} /><span className="filter-check">{filters.includes(item) && <Check size={12} />}</span><span>{item}</span></label>)}</div></fieldset>)}</div><footer><span>{filters.length ? `${filters.length} filters selected` : "No filters selected"}</span><button type="button" className="primary-button" onClick={() => setRefineOpen(false)}>Show {filtered.length} school{filtered.length === 1 ? "" : "s"}</button></footer></div>}
       {filters.length > 0 && <div className="active-filters">{filters.map((item) => <button key={item} onClick={() => toggleFilter(item)}>{item}<X size={12} /></button>)}<button className="clear-all" onClick={() => setFilters([])}>Clear all</button></div>}
     </section>
-    <div className="results-head"><div><strong>{filtered.length} European business school{filtered.length === 1 ? "" : "s"}</strong><span>{filters.length ? "Filtered from your selected criteria" : "No personal preferences applied"}</span></div><button className="sort-button" onClick={() => setSort(sort === "FT ranking" ? "A–Z" : "FT ranking")}>Sort: {sort} <ChevronDown size={14} /></button></div>
+    <div className="results-head"><div><strong>{filtered.length} European business school{filtered.length === 1 ? "" : "s"}</strong><span>{filters.length ? "Filtered from your selected criteria" : "No personal preferences applied"}</span></div><button className="sort-button" onClick={() => setSort(sort === "Directory order" ? "A–Z" : "Directory order")}>Sort: {sort} <ChevronDown size={14} /></button></div>
     <section className="program-list">{filtered.map((school) => { const program = school.programId ? programs.find((item) => item.id === school.programId) : undefined; return <BusinessSchoolCard key={school.id} school={school} program={program} openSchool={() => openSchool(school)} saved={saved.includes(school.id)} toggleSaved={() => setSaved(school.id)} compared={compared.includes(school.id)} toggleCompare={() => toggleCompare(school.id)} inPathway={schoolPathwayIds.includes(program?.id ?? `school:${school.id}`)} togglePathway={() => toggleSchoolPathway(school)} />; })}{filtered.length === 0 && <div className="card empty"><Search /><h3>No exact matches</h3><p>Try a broader search or remove a preference.</p><button className="outline-button" onClick={() => { setQuery(""); setFilters([]); }}>Reset search</button></div>}</section>
   </div>;
 }
@@ -945,7 +970,7 @@ function ComparePanel({ ids, close, remove, open }: { ids: string[]; close: () =
     ["Length and credits", (school) => [schoolStudy(school).duration, schoolStudy(school).credits].filter(Boolean).join(" · ") || "Not applicable"],
     ["Language", (school) => schoolStudy(school).language || "Not applicable"],
     ["Business areas", (school) => schoolStudy(school).areas.join(" · ")],
-    ["FT Europe 2025", (school) => school.rank.startsWith("=") ? school.rank : `#${school.rank}`],
+    ["Directory evidence", (school) => school.directorySource === "Official" ? "Official programme verified" : `FT Europe 2025 · ${school.rank.startsWith("=") ? school.rank : `#${school.rank}`}`],
   ];
   return <div className="modal-backdrop" role="dialog" aria-modal="true"><section className="compare-modal page-enter"><header><div><span className="eyebrow">Side-by-side evidence</span><h2>Compare universities</h2><p>{items.length} of 4 selected</p></div><button className="icon-button" onClick={close}><X /></button></header>{items.length ? <div className="compare-scroll"><div className="compare-grid" style={{ gridTemplateColumns: "170px repeat(" + items.length + ", minmax(210px, 1fr))" }}><strong className="compare-label">University</strong>{items.map((school) => { const program = school.programId ? programs.find((item) => item.id === school.programId) : undefined; return <article key={school.id}><button className="remove-x" onClick={() => remove(school.id)}><X size={13} /></button><SchoolLogo school={school} program={program} /><strong>{school.name}</strong><small>{school.location}</small><button className="text-link" onClick={() => { open(school); close(); }}>View</button></article>; })}{rows.flatMap(([label, value]) => [<strong className="compare-label" key={label}>{label}</strong>, ...items.map((school) => <span className="compare-value" key={label + school.id}>{value(school)}</span>)])}</div></div> : <div className="empty"><Scale /><h3>Select universities to compare</h3></div>}<footer><p><CircleHelp size={14} /> Comparison uses official study pages and keeps ranking methodologies separate.</p><button className="primary-button" onClick={close}>Done</button></footer></section></div>;
 }
