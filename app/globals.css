@@ -113,7 +113,7 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .notice-popover p { margin: 7px 0 12px; color: var(--muted); font-size: 10px; line-height: 1.5; }
 .notice-popover button { width: 100%; border: 0; background: var(--wine-soft); color: var(--wine); border-radius: 9px; padding: 9px 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-size: 10px; font-weight: 730; }
 .content-wrap { width: min(1240px, calc(100% - 56px)); margin: 0 auto; padding: 36px 0 72px; }
-.page-enter { animation: pageIn .38s cubic-bezier(.22, .8, .22, 1) both; }
+.page-enter { animation: pageIn .38s cubic-bezier(.22, .8, .22, 1) backwards; }
 @keyframes pageIn { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
 
 .card {
@@ -938,6 +938,7 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .compare-fab span { font-size: 11px; font-weight: 740; }
 .compare-fab small { color: rgba(255, 255, 255, .65); font-size: 8px; }
 .modal-backdrop { position: fixed; inset: 0; z-index: 100; padding: 30px; background: rgba(29, 21, 18, .5); backdrop-filter: blur(7px); display: grid; place-items: center; }
+body:has(.modal-backdrop) { overflow: hidden; }
 .guide-modal { width: min(720px, 100%); max-height: calc(100vh - 60px); overflow: auto; border-radius: 20px; background: #fff; box-shadow: 0 30px 80px rgba(25, 17, 14, .28); }
 .guide-modal > header { padding: 22px 24px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; gap: 18px; align-items: start; }
 .guide-modal h2 { margin: 5px 0 4px; font-size: 24px; letter-spacing: -.04em; }
