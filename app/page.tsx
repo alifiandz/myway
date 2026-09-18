@@ -744,7 +744,10 @@ function OfficialSchoolLogo({ school, size }: { school: BusinessSchool; size: "l
 }
 
 function Brand() {
-  return <div className="brand"><span className="brand-mark"><Map size={20} /></span><span><strong>MyWay</strong><small>Plan with evidence</small></span></div>;
+  return <div className="brand"><span className="brand-mark">
+    {/* eslint-disable-next-line @next/next/no-img-element */}
+    <img src="/myway-mark.png" alt="" />
+  </span><span><strong><b>My</b><em>Way</em></strong><small>Explore · Plan · Go Further</small></span></div>;
 }
 
 function Navigation({ active, go, openGuide, progress, hasTarget }: { active: View; go: (v: View) => void; openGuide: () => void; progress: number; hasTarget: boolean }) {
@@ -1491,9 +1494,9 @@ export default function App() {
     const timer = window.setTimeout(() => {
       const complete = window.localStorage.getItem("myway-onboarding-v1") || window.localStorage.getItem("alif-pathway-business-v1");
       setOnboarded(complete === "complete");
-      const hash = window.location.hash.replace("#", "") as View;
+      const hash = window.location.hash.replace("#", "");
       if (hash === "account") { setView("profile"); window.history.replaceState(null, "", "#profile"); }
-      else if (navItems.some((item) => item.id === hash)) setView(hash);
+      else if (navItems.some((item) => item.id === hash)) setView(hash as View);
       try { setPathwayRecords(JSON.parse(window.localStorage.getItem("myway-pathway-records") || "{}")); } catch { setPathwayRecords({}); }
       try {
         const storedPathway = JSON.parse(window.localStorage.getItem("myway-pathway-selection") || "[]") as { id: string; role: Role }[];

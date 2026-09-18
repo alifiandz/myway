@@ -16,6 +16,10 @@ export const metadata: Metadata = {
     description: "Plan university choices with evidence.",
     images: ["/og.png"],
   },
+  icons: {
+    icon: "/myway-mark.png",
+    apple: "/myway-mark.png",
+  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

@@ -51,13 +51,15 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .brand { display: flex; align-items: center; gap: 11px; }
 .brand-mark {
   width: 40px; height: 40px; flex: 0 0 auto; border-radius: 13px;
-  display: grid; place-items: center; color: #fff;
-  background: linear-gradient(145deg, var(--blue), var(--navy));
+  display: grid; place-items: center; overflow: hidden; background: #fff;
   box-shadow: 0 9px 20px rgba(50, 70, 135, .22);
 }
+.brand-mark img { width: 100%; height: 100%; display: block; object-fit: cover; }
 .brand > span:last-child { display: grid; gap: 1px; }
-.brand strong { font-size: 17px; letter-spacing: -.03em; }
-.brand small { font-size: 10px; color: var(--muted); }
+.brand strong { font-size: 17px; letter-spacing: -.04em; line-height: 1; }
+.brand strong b { color: var(--navy); }
+.brand strong em { color: #1684ef; font-style: normal; }
+.brand small { font-size: 7px; color: var(--navy); font-weight: 650; letter-spacing: .09em; text-transform: uppercase; white-space: nowrap; }
 .sidebar > .brand { padding: 0 10px 30px; }
 .nav-list { display: grid; gap: 6px; }
 .nav-item {
