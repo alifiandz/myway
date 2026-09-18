@@ -10,6 +10,7 @@ import {
   Trophy, X,
 } from "lucide-react";
 import { additionalSchoolStudyRows, schoolStudyRows, type SchoolStudySummary } from "./school-data";
+import { ftDirectoryIdentities } from "./ft-directory-data";
 
 type View = "dashboard" | "explore" | "pathway" | "tasks" | "progress" | "profile";
 type Role = "Dream" | "Target" | "Alternative";
@@ -195,15 +196,28 @@ type BusinessSchool = {
   programId?: string;
   directorySource?: "FT" | "Official";
   order?: number;
+  institutionType?: "university" | "business-school" | "higher-education-institution" | null;
+  parentUniversity?: string | null;
+  city?: string | null;
+  country?: string | null;
+  region?: string | null;
+  identitySource?: string;
+  identityVerifiedOn?: string;
+  logoUrl?: string;
+  logoSource?: string;
+  logoVerifiedOn?: string;
 };
 
 type SchoolRanking = {
-  publisher: "FT" | "QS" | "THE" | "ShanghaiRanking" | "Official";
+  publisher: "FT" | "QS" | "THE" | "ShanghaiRanking";
   title: string;
   year: string;
   rank: string;
   scope: string;
   href: string;
+  rankedEntity: string;
+  verifiedOn: string | null;
+  status: "verified" | "not-yet-verified";
 };
 
 // Institution list and order follow the FT European Business Schools 2025 table.
@@ -416,6 +430,18 @@ const businessSchoolDomains = [
   "sgh.waw.pl",
 ] as const;
 
+const identityCorrections: Record<string, Partial<BusinessSchool>> = {
+  "ft-school-6": { name: "Bocconi University", domain: "unibocconi.it", location: "Milan, Italy", city: "Milan", country: "Italy", region: "Europe", institutionType: "university", parentUniversity: null, identitySource: "https://www.unibocconi.it/en/programs/bachelor-science/management", identityVerifiedOn: "2026-09-17", logoSource: "https://www.topuniversities.com/universities/bocconi-university" },
+  "ft-school-23": { name: "University College Dublin — Lochlann Quinn School of Business", domain: "ucd.ie", location: "Dublin, Ireland", city: "Dublin", country: "Ireland", region: "Europe", institutionType: "business-school", parentUniversity: "University College Dublin", identitySource: "https://www.ucd.ie/quinn/", identityVerifiedOn: "2026-09-17", logoSource: "https://www.topuniversities.com/universities/university-college-dublin" },
+  "ft-school-36": { domain: "alliancembs.manchester.ac.uk", identitySource: "https://www.alliancembs.manchester.ac.uk/", identityVerifiedOn: "2026-09-17" },
+  "ft-school-42": { logoSource: "https://www.topuniversities.com/universities/kozminski-university" },
+  "ft-school-57": { name: "MBS School of Business", domain: "mbs-education.com", identitySource: "https://www.mbs-education.com/international/en/", identityVerifiedOn: "2026-09-17" },
+  "ft-school-58": { name: "Koç University", domain: "ku.edu.tr", location: "Istanbul, Turkey", city: "Istanbul", country: "Turkey", region: "Europe / Asia", institutionType: "university", parentUniversity: null, identitySource: "https://case.ku.edu.tr/en/programs/business-administration/curriculum/", identityVerifiedOn: "2026-09-18", logoSource: "https://www.topuniversities.com/universities/koc-university" },
+  "ft-school-63": { name: "University of Bologna", domain: "unibo.it", location: "Bologna, Italy · Programme: Forlì", city: "Bologna", country: "Italy", region: "Europe", institutionType: "university", parentUniversity: null, identitySource: "https://www.unibo.it/en/study/first-and-single-cycle-degree/programme/2026/6614", identityVerifiedOn: "2026-09-17", logoSource: "https://www.topuniversities.com/universities/university-bologna" },
+  "ft-school-68": { logoSource: "https://www.topuniversities.com/universities/university-bath" },
+  "ft-school-69": { logoUrl: "/institution-logos/ft-school-69.svg", logoSource: "https://www.psbedu.paris/themes/custom/psbedu_theme/logo.svg" },
+  "ft-school-81": { name: "Católica Porto School of Business and Economics", domain: "cpsbe.porto.ucp.pt", identitySource: "https://cpsbe.porto.ucp.pt/", identityVerifiedOn: "2026-09-17" },
+};
 const businessSchools: BusinessSchool[] = businessSchoolRows.map(([rank, name, location, programId], index) => ({
   id: `ft-school-${index + 1}`,
   rank,
@@ -425,6 +451,15 @@ const businessSchools: BusinessSchool[] = businessSchoolRows.map(([rank, name, l
   programId,
   directorySource: "FT",
   order: index + 1,
+  city: ftDirectoryIdentities[`ft-school-${index + 1}`]?.city ?? null,
+  country: ftDirectoryIdentities[`ft-school-${index + 1}`]?.country ?? null,
+  region: "Europe",
+  identitySource: ftDirectoryIdentities[`ft-school-${index + 1}`]?.source,
+  identityVerifiedOn: "2026-09-18",
+  logoUrl: `/institution-logos/ft-school-${index + 1}.png`,
+  logoSource: ftDirectoryIdentities[`ft-school-${index + 1}`]?.source,
+  logoVerifiedOn: "2026-09-18",
+  ...identityCorrections[`ft-school-${index + 1}`],
 }));
 
 const additionalBusinessSchoolRows: [string, string, string, string][] = [
@@ -441,8 +476,27 @@ const additionalBusinessSchoolRows: [string, string, string, string][] = [
   ["verified-school-radboud", "Radboud University", "Nijmegen, Netherlands", "ru.nl"],
   ["verified-school-newcastle", "Newcastle University", "Newcastle upon Tyne, United Kingdom", "ncl.ac.uk"],
   ["verified-school-cardiff", "Cardiff University", "Cardiff, United Kingdom", "cardiff.ac.uk"],
+  ["verified-school-nus", "National University of Singapore", "Singapore, Singapore", "nus.edu.sg"],
 ];
-const additionalBusinessSchools: BusinessSchool[] = additionalBusinessSchoolRows.map(([id, name, location, domain], index) => ({ id, rank: "Verified", name, location, domain, directorySource: "Official", order: 101 + index }));
+const additionalLogoSources: Record<string, string> = {
+  "verified-school-lse": "https://www.topuniversities.com/universities/london-school-economics-political-science-lse",
+  "verified-school-kings": "https://www.topuniversities.com/universities/kings-college-london",
+  "verified-school-birmingham": "https://www.topuniversities.com/universities/university-birmingham",
+  "verified-school-sheffield": "https://www.topuniversities.com/universities/university-sheffield",
+  "verified-school-liverpool": "https://www.topuniversities.com/universities/university-liverpool",
+  "verified-school-groningen": "https://www.topuniversities.com/universities/university-groningen",
+  "verified-school-twente": "https://www.topuniversities.com/universities/university-twente",
+  "verified-school-southampton": "https://www.topuniversities.com/universities/university-southampton",
+  "verified-school-sussex": "https://www.topuniversities.com/universities/university-sussex",
+  "verified-school-qmul": "https://www.topuniversities.com/universities/queen-mary-university-london",
+  "verified-school-radboud": "https://www.topuniversities.com/universities/radboud-university",
+  "verified-school-newcastle": "https://www.topuniversities.com/universities/newcastle-university",
+  "verified-school-cardiff": "https://www.topuniversities.com/universities/cardiff-university",
+  "verified-school-nus": "https://www.topuniversities.com/universities/national-university-singapore-nus",
+};
+const additionalBusinessSchools: BusinessSchool[] = additionalBusinessSchoolRows.map(([id, name, location, domain], index) => ({ id, rank: "", name, location, domain, directorySource: "Official", order: 101 + index, city: location.split(",")[0], country: location.split(",").slice(1).join(",").trim(), region: id === "verified-school-nus" ? "Asia" : "Europe", institutionType: "university", parentUniversity: null, identitySource: additionalSchoolStudyRows[id].source, identityVerifiedOn: additionalSchoolStudyRows[id].lastVerified ?? "2026-09-17", logoUrl: `/institution-logos/${id}.png`, logoSource: additionalLogoSources[id], logoVerifiedOn: "2026-09-18" }));
+const allBusinessSchools = [...businessSchools, ...additionalBusinessSchools];
+Object.assign(allBusinessSchools.find((school) => school.id === "verified-school-nus")!, { institutionType: "university", parentUniversity: null, city: "Singapore", country: "Singapore", region: "Asia", identitySource: "https://www.moe.gov.sg/post-secondary/overview/autonomous-universities", identityVerifiedOn: "2026-09-17" });
 
 const schoolStudySummaries: Record<string, SchoolStudySummary> = Object.fromEntries(
   businessSchools.map((school, index) => [school.id, schoolStudyRows[index]])
@@ -455,7 +509,18 @@ function schoolStudy(school: BusinessSchool) {
 
 // MyWay is an undergraduate planning product. Postgraduate-only and restricted-entry
 // institutions remain in the source dataset for auditability, but never enter discovery.
-const undergraduateBusinessSchools = [...businessSchools.filter((school) => schoolStudy(school).status === "bachelor"), ...additionalBusinessSchools];
+const undergraduateBusinessSchools = allBusinessSchools.filter((school) => schoolStudy(school).status === "bachelor");
+
+function assertDirectoryIntegrity(schools: BusinessSchool[]) {
+  const duplicateValues = (values: string[]) => values.filter((value, index) => values.indexOf(value) !== index);
+  if (schools.length !== 100) throw new Error(`MyWay directory must expose exactly 100 institutions; found ${schools.length}.`);
+  const duplicateIds = duplicateValues(schools.map((school) => school.id));
+  const duplicateNames = duplicateValues(schools.map((school) => school.name.trim().toLowerCase()));
+  const duplicateDomains = duplicateValues(schools.map((school) => school.domain.trim().toLowerCase()));
+  if (duplicateIds.length || duplicateNames.length || duplicateDomains.length) throw new Error("MyWay directory contains a duplicate institution identity.");
+  if (schools.some((school) => !school.logoUrl || !schoolStudy(school).source)) throw new Error("Every visible institution requires a local logo and an official programme source.");
+}
+assertDirectoryIntegrity(undergraduateBusinessSchools);
 
 function schoolAsProgram(school: BusinessSchool): Program {
   const study = schoolStudy(school);
@@ -463,19 +528,19 @@ function schoolAsProgram(school: BusinessSchool): Program {
     id: `school:${school.id}`,
     university: school.name,
     initials: school.name.split(/\s+/).filter((word) => /^[A-ZÀ-Ž]/.test(word)).slice(0, 2).map((word) => word[0]).join("") || school.name.slice(0, 2).toUpperCase(),
-    logo: `https://www.google.com/s2/favicons?domain_url=${encodeURIComponent(`https://${school.domain}`)}&sz=512`,
+    logo: school.logoUrl ?? "",
     title: study.title,
     location: school.location,
     duration: [study.duration, study.credits].filter(Boolean).join(" · ") || "Not applicable",
     language: study.language || "See official programme page",
-    entry: study.status === "bachelor" ? "Direct bachelor’s entry" : study.status === "restricted" ? "Restricted undergraduate route" : "No direct undergraduate degree",
+    entry: study.status === "bachelor" ? "Bachelor’s programme available" : study.status === "restricted" ? "Restricted undergraduate route" : "No direct undergraduate degree",
     management: study.areas.some((area) => /management|business/i.test(area)) ? "Available" : "Not highlighted",
     enterprise: study.areas.some((area) => /entrepreneur/i.test(area)) ? "Available" : "Not highlighted",
     marketing: study.areas.some((area) => /marketing/i.test(area)) ? "Available" : "Not highlighted",
     math: "Not yet verified",
     experience: "Check the official programme page",
     tuition: "See the current official fee schedule",
-    verified: "Prototype record",
+    verified: study.lastVerified ? study.lastVerified : "official source linked",
     why: study.areas.slice(0, 3).map((area) => `${area} matches a selected business interest`),
     caution: ["Admissions requirements must be checked", "Tuition and scholarships depend on applicant status", "Quantitative course load needs verification"],
     curriculum: study.areas,
@@ -502,10 +567,10 @@ function calculateProgramFit(program: Program, study: SchoolStudySummary | undef
   }
 
   const degree = (profile.degree || "").toLowerCase();
-  const directBachelor = study?.status === "bachelor" || /direct bachelor/i.test(program.entry);
+  const directBachelor = study?.status === "bachelor" || /bachelor.+available|direct bachelor/i.test(program.entry);
   const restricted = study?.status === "restricted" || /restricted/i.test(program.entry);
   const accessScore = restricted ? 40 : directBachelor ? 95 : 65;
-  breakdown.push({ label: "Study access", weight: 25, score: accessScore, note: restricted ? "Restricted undergraduate eligibility" : degree.includes("bachelor") || !degree ? "Direct bachelor route" : "Check degree-route compatibility" });
+  breakdown.push({ label: "Study access", weight: 25, score: accessScore, note: restricted ? "Restricted undergraduate eligibility" : degree.includes("bachelor") || !degree ? "Bachelor’s programme confirmed; admissions vary" : "Check degree-route compatibility" });
 
   const mathPreference = (profile.math || "").toLowerCase();
   const mathEvidence = (program.math || "").toLowerCase();
@@ -562,7 +627,6 @@ function calculateProgramFit(program: Program, study: SchoolStudySummary | undef
 
 const rankingSource = "https://rankings.ft.com/rankings/3042/european-business-school-rankings-2025";
 const qsBusinessSource = "https://www.topuniversities.com/university-subject-rankings/business-management-studies";
-const theBusinessSource = "https://www.timeshighereducation.com/world-university-rankings/2026/subject-ranking/business-and-economics";
 
 // Additional positions are added only when they are visible in the named publisher's current table.
 // Bands and equal signs are preserved exactly as published.
@@ -600,14 +664,41 @@ const shanghaiBusinessRanks: Record<string, { rank: string; href: string }> = {
 };
 
 function schoolRankings(school: BusinessSchool): SchoolRanking[] {
-  const study = schoolStudy(school);
-  const rankings: SchoolRanking[] = school.directorySource === "Official"
-    ? [{ publisher: "Official", title: "Undergraduate programme", year: "2026", rank: "Verified", scope: "Current official university programme page", href: study.source }]
-    : [{ publisher: "FT", title: "European Business Schools", year: "2025", rank: school.rank.startsWith("=") ? school.rank : `#${school.rank}`, scope: "Postgraduate and executive business-school performance", href: rankingSource }];
-  if (qsBusinessRanks[school.name]) rankings.push({ publisher: "QS", title: "Business & Management Studies", year: "2026", rank: qsBusinessRanks[school.name], scope: "Business education across all study levels", href: qsBusinessSource });
-  if (theBusinessRanks[school.name]) rankings.push({ publisher: "THE", title: "Business & Economics", year: "2026", rank: theBusinessRanks[school.name], scope: "Teaching, research, industry and international outlook", href: theBusinessSource });
-  const shanghai = shanghaiBusinessRanks[school.name];
-  if (shanghai) rankings.push({ publisher: "ShanghaiRanking", title: "Business Administration", year: "2025", rank: shanghai.rank, scope: "Research-focused Global Ranking of Academic Subjects", href: shanghai.href });
+  const verifiedOn = "2026-09-17";
+  const rankings: SchoolRanking[] = [];
+  // Ranking entities remain those named by the publisher, even when a study card
+  // represents the parent university's undergraduate route.
+  if (school.directorySource === "FT") rankings.push({
+    publisher: "FT", title: "European Business School Rankings", year: "2025",
+    rank: ["26", "67", "77", "95"].includes(school.rank.replace("=", "")) ? "=" + school.rank.replace("=", "") : "#" + school.rank,
+    scope: "Regional · business school · postgraduate and executive education",
+    href: rankingSource, rankedEntity: businessSchoolRows[Number(school.id.replace("ft-school-", "")) - 1][1],
+    verifiedOn, status: "verified",
+  });
+  const theEntities: Record<string, [string, string]> = {
+    "University of Oxford: Saïd": ["University of Oxford", "university-oxford"],
+    "Warwick Business School": ["University of Warwick", "university-warwick"],
+    "Alliance Manchester Business School": ["University of Manchester", "university-manchester"],
+    "University of Edinburgh Business School": ["University of Edinburgh", "university-edinburgh"],
+  };
+  const theEntity = theEntities[school.name];
+  if (theEntity) rankings.unshift({ publisher: "THE", title: "World University Rankings by Subject: Business and Economics", year: "2026", rank: theBusinessRanks[school.name], scope: "Global · university subject · all study levels", href: "https://www.timeshighereducation.com/world-university-rankings/" + theEntity[1], rankedEntity: theEntity[0], verifiedOn, status: "verified" });
+  const currentShanghai: Record<string, [string, string]> = {
+    "Audencia": ["#29", "Audencia Business School"],
+    "Copenhagen Business School": ["#2", "Copenhagen Business School"],
+    "WHU – Otto Beisheim School of Management": ["201–300", "WHU - Otto Beisheim School of Management"],
+    "Luiss University / Luiss Business School": ["201–300", "Luiss Guido Carli"],
+  };
+  const sr = currentShanghai[school.name];
+  if (sr) rankings.unshift({ publisher: "ShanghaiRanking", title: "Global Ranking of Academic Subjects: Business Administration", year: "2026", rank: sr[0], scope: "Global · institution subject · research", href: shanghaiBusinessRanks[school.name].href, rankedEntity: sr[1], verifiedOn, status: "verified" });
+  // Previous QS subject positions are not retained as confirmed without the exact edition.
+  if (qsBusinessRanks[school.name]) rankings.push({ publisher: "QS", title: "World University Rankings by Subject: Business & Management Studies", year: "2026", rank: "Not yet verified", scope: "Global · subject · exact position and ranked entity awaiting confirmation", href: qsBusinessSource, rankedEntity: "Not yet verified", verifiedOn: null, status: "not-yet-verified" });
+  if (school.id === "verified-school-nus") rankings.push(
+    { publisher: "THE", title: "World University Rankings by Subject: Business and Economics", year: "2026", rank: "=10", scope: "Global · university subject · all study levels", href: "https://www.timeshighereducation.com/world-university-rankings/national-university-singapore", rankedEntity: school.name, verifiedOn, status: "verified" },
+    { publisher: "QS", title: "QS World University Rankings", year: "2027", rank: "#10", scope: "Global · overall university", href: "https://www.topuniversities.com/universities/national-university-singapore-nus", rankedEntity: school.name, verifiedOn, status: "verified" },
+    { publisher: "THE", title: "World University Rankings", year: "2026", rank: "#17", scope: "Global · overall university", href: "https://www.timeshighereducation.com/world-university-rankings/national-university-singapore", rankedEntity: school.name, verifiedOn, status: "verified" },
+    { publisher: "ShanghaiRanking", title: "Academic Ranking of World Universities", year: "2026", rank: "#53", scope: "Global · overall university · research", href: "https://www.shanghairanking.com/universities/national-university-of-singapore", rankedEntity: school.name, verifiedOn, status: "verified" },
+  );
   return rankings;
 }
 
@@ -643,31 +734,10 @@ function SchoolLogo({ school, program, size = "small" }: { school: BusinessSchoo
 }
 
 function OfficialSchoolLogo({ school, size }: { school: BusinessSchool; size: "large" | "small" }) {
-  const [sourceIndex, setSourceIndex] = useState(0);
-  const initials = school.name.split(/\s+/).filter((word) => /^[A-ZÀ-Ž]/.test(word)).slice(0, 2).map((word) => word[0]).join("") || school.name.slice(0, 2).toUpperCase();
-  const officialSite = `https://${school.domain}`;
-  const sources = [
-    `${officialSite}/favicon.svg`,
-    `${officialSite}/apple-touch-icon.png`,
-    `https://www.google.com/s2/favicons?domain_url=${encodeURIComponent(officialSite)}&sz=256`,
-  ];
-  const advanceSource = () => setSourceIndex((current) => Math.min(current + 1, sources.length));
   return <span className={`crest university-logo ${size} school-logo`}>
-    <span>{initials}</span>
-    {/* Official institution-hosted assets first; initials appear only when no usable mark loads. */}
+    {/* Each path is a locally hosted, visually checked institution mark with its source recorded in the audit. */}
     {/* eslint-disable-next-line @next/next/no-img-element */}
-    {sourceIndex < sources.length && <img
-      key={sources[sourceIndex]}
-      src={sources[sourceIndex]}
-      alt={`${school.name} official mark`}
-      loading="lazy"
-      decoding="async"
-      onError={advanceSource}
-      onLoad={(event) => {
-        const image = event.currentTarget;
-        if (sourceIndex < sources.length - 1 && image.naturalWidth > 0 && image.naturalWidth < 64) advanceSource();
-      }}
-    />}
+    {school.logoUrl && <img src={school.logoUrl} alt={`${school.name} logo`} loading="lazy" decoding="async" />}
   </span>;
 }
 
@@ -835,8 +905,8 @@ function BusinessSchoolCard({ school, program, openSchool, saved, toggleSaved, c
   const routeTone = study.status === "bachelor" ? "available" : study.status === "restricted" ? "restricted" : "graduate-only";
   return <article className={`card school-card ${routeTone}`}>
     <div className="school-card-top"><button type="button" className="school-identity" onClick={openSchool}><SchoolLogo school={school} program={program} /><span><strong>{school.name}</strong><small><MapPin size={11} />{school.location}</small></span></button><button type="button" className={"program-save " + (saved ? "selected" : "")} onClick={toggleSaved} aria-label={saved ? `Remove ${school.name} from saved schools` : `Save ${school.name}`}><Bookmark size={16} fill={saved ? "currentColor" : "none"} /></button></div>
-    <div className="school-meta-strip"><span className="rank-chip">{primaryRanking.publisher} {primaryRanking.year} · {primaryRanking.rank}</span><div className="ranking-menu"><button type="button" onClick={() => setRankingsOpen(!rankingsOpen)} aria-expanded={rankingsOpen}>{rankings.length > 1 ? `+${rankings.length - 1} rankings` : "Ranking details"}<ChevronDown size={11} /></button>{rankingsOpen && <div className="ranking-popover"><strong>Published rankings</strong>{rankings.map((ranking) => <a key={`${ranking.publisher}-${ranking.year}`} href={ranking.href} target="_blank" rel="noreferrer"><span><b>{ranking.publisher} · {ranking.title}</b><small>{ranking.scope}</small></span><em>{ranking.rank}</em></a>)}<p>Different methodologies are shown separately and are never averaged.</p></div>}</div></div>
-    <button type="button" className="school-program-copy" onClick={openSchool}><span className={`school-route-status ${routeTone}`}>{study.status === "bachelor" ? <CircleCheck size={11} /> : study.status === "restricted" ? <CircleAlert size={11} /> : <GraduationCap size={11} />}{study.status === "bachelor" ? "Undergraduate route" : study.status === "restricted" ? "Restricted undergraduate route" : "Postgraduate institution"}</span><strong>{study.title}</strong><span className="school-study-meta">{study.duration && <em><Clock3 size={12} />{study.duration}</em>}{study.credits && <em>{study.credits}</em>}{study.language && <em><Languages size={12} />{study.language}</em>}</span></button>
+    <div className="school-meta-strip"><span className="rank-chip">{primaryRanking ? `${primaryRanking.publisher} ${primaryRanking.year} · ${primaryRanking.rank}` : "Rankings: Not yet verified"}</span><div className="ranking-menu"><button type="button" onClick={() => setRankingsOpen(!rankingsOpen)} aria-expanded={rankingsOpen}>{rankings.length > 1 ? `+${rankings.length - 1} rankings` : "Ranking details"}<ChevronDown size={11} /></button>{rankingsOpen && <div className="ranking-popover"><strong>Ranking sources</strong>{rankings.length === 0 && <p>Not yet verified. Programme evidence is listed separately below.</p>}{rankings.map((ranking) => <a key={`${ranking.publisher}-${ranking.title}-${ranking.year}`} href={ranking.href} target="_blank" rel="noreferrer"><span><b>{ranking.publisher} · {ranking.title}</b><small>{ranking.year} · {ranking.scope}</small><small>Ranked entity: {ranking.rankedEntity}</small><small>{ranking.verifiedOn ? `Checked ${ranking.verifiedOn}` : "Not yet verified"}</small></span><em>{ranking.rank}</em></a>)}<p>Different methodologies are shown separately and are never averaged.</p></div>}</div></div>
+    <button type="button" className="school-program-copy" onClick={openSchool}><span className={`school-route-status ${routeTone}`}>{study.status === "bachelor" ? <CircleCheck size={11} /> : study.status === "restricted" ? <CircleAlert size={11} /> : <GraduationCap size={11} />}{study.status === "bachelor" ? "Undergraduate route" : study.status === "restricted" ? "Restricted undergraduate route" : "Postgraduate institution"}</span><strong>{study.title}</strong><span className="school-study-meta"><em><Clock3 size={12} />{study.duration ?? "Duration not yet verified"}</em><em>{study.credits ?? "Credits not yet verified"}</em><em><Languages size={12} />{study.language ?? "Language not yet verified"}</em></span></button>
     <div className="school-area-tags">{study.areas.slice(0, 3).map((area) => <span key={area}>{area}</span>)}{study.areas.length > 3 && <span>+{study.areas.length - 3}</span>}</div>
     <a className="school-source-line" href={study.source} target="_blank" rel="noreferrer"><CircleCheck size={12} />{study.sourceLabel}<ExternalLink size={11} /></a>
     <div className="school-actions"><button type="button" className={"compact-action " + (compared ? "selected" : "")} onClick={toggleCompare}><Scale size={14} />{compared ? "Compared" : "Compare"}</button><button type="button" disabled={study.status !== "bachelor"} className={"compact-action " + (inPathway ? "selected" : "")} onClick={togglePathway}>{inPathway ? <Check size={14} /> : study.status === "bachelor" ? <Plus size={14} /> : <CircleAlert size={14} />}{inPathway ? "Added" : study.status === "bachelor" ? "Pathway" : "No bachelor"}</button><button type="button" className="primary-button compact-view" onClick={openSchool}>View <ChevronRight size={14} /></button></div>
@@ -849,7 +919,7 @@ function Explore({ openSchool, saved, setSaved, compared, toggleCompare, schoolP
   const [filters, setFilters] = useState<string[]>([]);
   const [sort, setSort] = useState("Directory order");
   const filterGroups = [
-    { label: "Location", note: "Where you want to study", options: ["Austria", "Belgium", "Czechia", "Denmark", "Finland", "France", "Germany", "Ireland", "Italy", "Netherlands", "Norway", "Poland", "Portugal", "Slovenia", "Spain", "Sweden", "Switzerland", "Türkiye", "United Kingdom", "Multi-country Europe"] },
+    { label: "Location", note: "Where you want to study", options: ["Singapore", "Austria", "Belgium", "Czechia", "Denmark", "Finland", "France", "Germany", "Ireland", "Italy", "Netherlands", "Norway", "Poland", "Portugal", "Slovenia", "Spain", "Sweden", "Switzerland", "Türkiye", "United Kingdom", "Multi-country Europe"] },
     { label: "Business area", note: "What you want to study", options: ["Business Administration", "Management", "International Business", "Entrepreneurship", "Marketing", "Finance", "Accounting", "Economics", "Business Analytics", "Supply Chain & Operations", "Human Resources", "Hospitality & Tourism", "Real Estate", "Sports Business", "Luxury Management", "Sustainability & Social Enterprise"] },
     { label: "Study details", note: "From current official pages", options: ["English-taught", "3 years", "4 years", "Credits published"] },
   ];
@@ -863,7 +933,7 @@ function Explore({ openSchool, saved, setSaved, compared, toggleCompare, schoolP
     if (item === "Entrepreneurship") return /entrepreneur/i.test(content);
     if (item === "Marketing") return /marketing|branding|communication/i.test(content);
     if (item === "Finance") return /finance/i.test(content);
-    if (item === "Accounting") return /accounting/i.test(content);
+    if (item === "Accounting") return /accounting|accountancy/i.test(content);
     if (item === "Economics") return /economics/i.test(content);
     if (item === "Business Analytics") return /analytics|data science|data$/i.test(content);
     if (item === "Supply Chain & Operations") return /supply chain|operations|logistics/i.test(content);
@@ -891,14 +961,14 @@ function Explore({ openSchool, saved, setSaved, compared, toggleCompare, schoolP
     return matchesQuery && matchesSelected;
   }).sort((a, b) => sort === "A–Z" ? a.name.localeCompare(b.name) : (a.order ?? 999) - (b.order ?? 999));
   return <div className="page-enter">
-    <section className="page-intro"><div><span className="eyebrow">Europe-first discovery</span><h2>Explore {undergraduateBusinessSchools.length} business schools</h2><p>Every school shown has a current undergraduate business route. Preferences apply only when you choose filters.</p></div><a className="source-stamp" href={rankingSource} target="_blank" rel="noreferrer"><CircleCheck size={15} /> FT base · verified undergraduate additions <ExternalLink size={12} /></a></section>
+    <section className="page-intro"><div><span className="eyebrow">Business study discovery</span><h2>Explore {undergraduateBusinessSchools.length} institutions</h2><p>Explore universities and business schools offering undergraduate routes. Preferences apply only when you choose filters.</p></div><a className="source-stamp" href={rankingSource} target="_blank" rel="noreferrer"><CircleCheck size={15} /> FT directory source <ExternalLink size={12} /></a></section>
     <section className="card search-card">
       <label className="search-box"><Search size={18} /><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search programs, universities, specializations, or countries…" />{query && <button onClick={() => setQuery("")} aria-label="Clear search"><X size={15} /></button>}</label>
       <button type="button" className={"refine-toggle " + (refineOpen ? "open" : "")} onClick={() => setRefineOpen(!refineOpen)} aria-expanded={refineOpen}><span className="refine-toggle-icon"><SlidersHorizontal size={17} /></span><span className="refine-toggle-copy"><strong>Filters</strong><small>{filters.length ? `${filters.length} active filter${filters.length === 1 ? "" : "s"}` : "Country, business area, language, duration, and credits"}</small></span>{filters.length > 0 && <em>{filters.length}</em>}<ChevronDown size={17} /></button>
       {refineOpen && <div className="refine-panel"><header><div><span className="section-label">Build your shortlist</span><h3>What matters to you?</h3><p>Nothing is preselected. Results update only from choices you make here.</p></div>{filters.length > 0 && <button type="button" onClick={() => setFilters([])}>Reset</button>}</header><div className="refine-groups">{filterGroups.map((group) => <fieldset key={group.label}><legend>{group.label}<small>{group.note}</small></legend><div>{group.options.map((item) => <label key={item} className={filters.includes(item) ? "selected" : ""}><input type="checkbox" checked={filters.includes(item)} onChange={() => toggleFilter(item)} /><span className="filter-check">{filters.includes(item) && <Check size={12} />}</span><span>{item}</span></label>)}</div></fieldset>)}</div><footer><span>{filters.length ? `${filters.length} filters selected` : "No filters selected"}</span><button type="button" className="primary-button" onClick={() => setRefineOpen(false)}>Show {filtered.length} school{filtered.length === 1 ? "" : "s"}</button></footer></div>}
       {filters.length > 0 && <div className="active-filters">{filters.map((item) => <button key={item} onClick={() => toggleFilter(item)}>{item}<X size={12} /></button>)}<button className="clear-all" onClick={() => setFilters([])}>Clear all</button></div>}
     </section>
-    <div className="results-head"><div><strong>{filtered.length} European business school{filtered.length === 1 ? "" : "s"}</strong><span>{filters.length ? "Filtered from your selected criteria" : "No personal preferences applied"}</span></div><button className="sort-button" onClick={() => setSort(sort === "Directory order" ? "A–Z" : "Directory order")}>Sort: {sort} <ChevronDown size={14} /></button></div>
+    <div className="results-head"><div><strong>{filtered.length} institution{filtered.length === 1 ? "" : "s"}</strong><span>{filters.length ? "Filtered from your selected criteria" : "No personal preferences applied"}</span></div><button className="sort-button" onClick={() => setSort(sort === "Directory order" ? "A–Z" : "Directory order")}>Sort: {sort} <ChevronDown size={14} /></button></div>
     <section className="program-list">{filtered.map((school) => { const program = school.programId ? programs.find((item) => item.id === school.programId) : undefined; return <BusinessSchoolCard key={school.id} school={school} program={program} openSchool={() => openSchool(school)} saved={saved.includes(school.id)} toggleSaved={() => setSaved(school.id)} compared={compared.includes(school.id)} toggleCompare={() => toggleCompare(school.id)} inPathway={schoolPathwayIds.includes(program?.id ?? `school:${school.id}`)} togglePathway={() => toggleSchoolPathway(school)} />; })}{filtered.length === 0 && <div className="card empty"><Search /><h3>No exact matches</h3><p>Try a broader search or remove a preference.</p><button className="outline-button" onClick={() => { setQuery(""); setFilters([]); }}>Reset search</button></div>}</section>
   </div>;
 }
@@ -908,7 +978,7 @@ function SchoolDetail({ school, program, close, saved, toggleSaved, compared, to
   const rankings = schoolRankings(school);
   const study = schoolStudy(school);
   const isBachelor = study.status === "bachelor";
-  const routeLabel = isBachelor ? "Direct bachelor’s entry" : study.status === "restricted" ? "Restricted undergraduate route" : "No direct undergraduate degree";
+  const routeLabel = isBachelor ? "Bachelor’s programme available" : study.status === "restricted" ? "Restricted undergraduate route" : "No direct undergraduate degree";
   const areas = program?.curriculum ?? study.areas;
   const openQuestions = program?.caution ?? (isBachelor
     ? ["Admissions requirements must be checked on the official programme page", "Tuition and scholarships vary by applicant and intake", "Quantitative course load is not yet verified"]
@@ -921,9 +991,9 @@ function SchoolDetail({ school, program, close, saved, toggleSaved, compared, to
     </section>
     <div className="detail-grid">
       <main>
-        <article className="card detail-section"><div className="section-head"><div><span className="section-label">Program overview</span><h3>What the official sources say</h3></div><span className={"fit " + fitResultClass(fitResult)}>{fitResult.score === null ? "Complete profile" : `${fitResult.score}/100 fit`}</span></div><div className="overview-grid"><div><Clock3 /><span><small>Duration</small><strong>{study.duration || program?.duration.split(" · ")[0] || "Not published"}</strong></span></div><div><GraduationCap /><span><small>Credits</small><strong>{study.credits || program?.duration.split(" · ")[1] || "Not published"}</strong></span></div><div><Languages /><span><small>Language</small><strong>{study.language || program?.language || "Not published"}</strong></span></div><div><GraduationCap /><span><small>Entry structure</small><strong>{program?.entry ?? routeLabel}</strong></span></div></div></article>
+        <article className="card detail-section"><div className="section-head"><div><span className="section-label">Program overview</span><h3>What the official sources say</h3></div><span className={"fit " + fitResultClass(fitResult)}>{fitResult.score === null ? "Complete profile" : `${fitResult.score}/100 fit`}</span></div><div className="overview-grid"><div><Clock3 /><span><small>Duration</small><strong>{study.duration || program?.duration.split(" · ")[0] || "Not yet verified"}</strong></span></div><div><GraduationCap /><span><small>Credits</small><strong>{study.credits || program?.duration.split(" · ")[1] || "Not yet verified"}</strong></span></div><div><Languages /><span><small>Language</small><strong>{study.language || program?.language || "Not yet verified"}</strong></span></div><div><GraduationCap /><span><small>Entry structure</small><strong>{program?.entry ?? routeLabel}</strong></span></div></div></article>
         <article className="card detail-section"><span className="section-label">Curriculum and fit</span><h3>{program ? "Evidence by preference" : "Verified study areas"}</h3>{program ? <div className="evidence-table"><div><strong>Management</strong><span className="good-text">{program.management}</span></div><div><strong>Entrepreneurship</strong><span>{program.enterprise}</span></div><div><strong>Marketing</strong><span>{program.marketing}</span></div><div><strong>Quantitative course load</strong><span className={program.math.includes("high") ? "amber-text" : ""}>{program.math}</span></div><div><strong>Exchange, internships, career</strong><span>{program.experience}</span></div></div> : <div className="evidence-table"><div><strong>Study access</strong><span>{routeLabel}</span></div><div><strong>Business areas</strong><span>{study.areas.join(" · ")}</span></div><div><strong>Quantitative course load</strong><span>Not yet verified</span></div><div><strong>Exchange, internships, career</strong><span>Check the official programme page</span></div></div>}<div className="curriculum-tags">{areas.map((item) => <span key={item}>{item}</span>)}</div>{study.note && <p className="school-route-note">{study.note}</p>}</article>
-        <article className="card detail-section"><span className="section-label">Official sources</span><h3>Verify before applying</h3><div className="source-list">{(program?.sources ?? [{ label: study.sourceLabel, href: study.source }]).map((source) => <a key={source.href} href={source.href} target="_blank" rel="noreferrer"><ExternalLink size={15} /><span>{source.label}</span><ChevronRight size={15} /></a>)}{rankings.map((ranking) => <a key={`source-${ranking.publisher}-${ranking.year}`} href={ranking.href} target="_blank" rel="noreferrer"><ExternalLink size={15} /><span>{ranking.publisher} · {ranking.title} {ranking.year} · {ranking.rank}</span><ChevronRight size={15} /></a>)}</div><div className="source-warning"><CircleHelp size={16} /><p>Program information can change. Confirm requirements, dates and fees on the official page before applying.</p></div></article>
+        <article className="card detail-section"><span className="section-label">Official sources</span><h3>Verify before applying</h3><div className="source-list">{(program?.sources ?? [{ label: study.sourceLabel, href: study.source }]).map((source) => <a key={source.href} href={source.href} target="_blank" rel="noreferrer"><ExternalLink size={15} /><span>{source.label}</span><ChevronRight size={15} /></a>)}{rankings.map((ranking) => <a key={`source-${ranking.publisher}-${ranking.title}-${ranking.year}`} href={ranking.href} target="_blank" rel="noreferrer"><ExternalLink size={15} /><span>{ranking.publisher} · {ranking.title} {ranking.year} · {ranking.rank} · {ranking.rankedEntity} · {ranking.scope}{ranking.verifiedOn ? ` · Checked ${ranking.verifiedOn}` : ""}</span><ChevronRight size={15} /></a>)}</div><div className="source-warning"><CircleHelp size={16} /><p>Program information can change. Confirm requirements, dates and fees on the official page before applying.</p></div></article>
       </main>
       <aside>
         <article className="fit-panel"><span className="section-label light">Your program fit</span><strong>{fitResult.score === null ? "—" : fitResult.score}<small>/100</small></strong><div className="fit-bar"><i style={{ width: (fitResult.score ?? 0) + "%" }} /></div><h3>{fitResult.label}</h3><p>{fitResult.score === null ? "Complete your study preferences to calculate a personal match." : `${fitResult.confidence}% of the matching model currently has usable evidence. This is not admission probability.`}</p></article>
@@ -947,7 +1017,7 @@ function ProgramDetail({ p, close, saved, toggleSaved, compared, toggleCompare, 
     </section>
     <div className="detail-grid">
       <main>
-        <article className="card detail-section"><div className="section-head"><div><span className="section-label">Program overview</span><h3>What the official sources say</h3></div><span className={"fit " + fitResultClass(fitResult)}>{fitResult.score === null ? "Complete profile" : `${fitResult.score}/100 fit`}</span></div><div className="overview-grid"><div><Clock3 /><span><small>Duration</small><strong>{duration}</strong></span></div><div><GraduationCap /><span><small>Credits</small><strong>{credits || "Not published"}</strong></span></div><div><Languages /><span><small>Language</small><strong>{p.language}</strong></span></div><div><GraduationCap /><span><small>Entry structure</small><strong>{p.entry}</strong></span></div></div></article>
+        <article className="card detail-section"><div className="section-head"><div><span className="section-label">Program overview</span><h3>What the official sources say</h3></div><span className={"fit " + fitResultClass(fitResult)}>{fitResult.score === null ? "Complete profile" : `${fitResult.score}/100 fit`}</span></div><div className="overview-grid"><div><Clock3 /><span><small>Duration</small><strong>{duration}</strong></span></div><div><GraduationCap /><span><small>Credits</small><strong>{credits || "Not yet verified"}</strong></span></div><div><Languages /><span><small>Language</small><strong>{p.language}</strong></span></div><div><GraduationCap /><span><small>Entry structure</small><strong>{p.entry}</strong></span></div></div></article>
         <article className="card detail-section"><span className="section-label">Curriculum and fit</span><h3>Evidence by preference</h3><div className="evidence-table"><div><strong>Management</strong><span className="good-text">{p.management}</span></div><div><strong>Entrepreneurship</strong><span>{p.enterprise}</span></div><div><strong>Marketing</strong><span>{p.marketing}</span></div><div><strong>Quantitative course load</strong><span className={p.math.includes("high") ? "amber-text" : ""}>{p.math}</span></div><div><strong>Exchange, internships, career</strong><span>{p.experience}</span></div></div><div className="curriculum-tags">{p.curriculum.map((item) => <span key={item}>{item}</span>)}</div></article>
         <article className="card detail-section"><span className="section-label">Official sources</span><h3>Verify before applying</h3><div className="source-list">{p.sources.map((s) => <a key={s.href} href={s.href} target="_blank" rel="noreferrer"><ExternalLink size={15} /><span>{s.label}</span><ChevronRight size={15} /></a>)}</div><div className="source-warning"><CircleHelp size={16} /><p>Program information can change. Confirm requirements, dates and fees on the official page before applying.</p></div></article>
       </main>
@@ -970,7 +1040,7 @@ function ComparePanel({ ids, close, remove, open }: { ids: string[]; close: () =
     ["Length and credits", (school) => [schoolStudy(school).duration, schoolStudy(school).credits].filter(Boolean).join(" · ") || "Not applicable"],
     ["Language", (school) => schoolStudy(school).language || "Not applicable"],
     ["Business areas", (school) => schoolStudy(school).areas.join(" · ")],
-    ["Directory evidence", (school) => school.directorySource === "Official" ? "Official programme verified" : `FT Europe 2025 · ${school.rank.startsWith("=") ? school.rank : `#${school.rank}`}`],
+    ["Rankings", (school) => schoolRankings(school).filter((r) => r.status === "verified").map((r) => `${r.publisher} ${r.year} · ${r.title} · ${r.rank}`).join("; ") || "Not yet verified"],
   ];
   return <div className="modal-backdrop" role="dialog" aria-modal="true"><section className="compare-modal page-enter"><header><div><span className="eyebrow">Side-by-side evidence</span><h2>Compare universities</h2><p>{items.length} of 4 selected</p></div><button className="icon-button" onClick={close}><X /></button></header>{items.length ? <div className="compare-scroll"><div className="compare-grid" style={{ gridTemplateColumns: "170px repeat(" + items.length + ", minmax(210px, 1fr))" }}><strong className="compare-label">University</strong>{items.map((school) => { const program = school.programId ? programs.find((item) => item.id === school.programId) : undefined; return <article key={school.id}><button className="remove-x" onClick={() => remove(school.id)}><X size={13} /></button><SchoolLogo school={school} program={program} /><strong>{school.name}</strong><small>{school.location}</small><button className="text-link" onClick={() => { open(school); close(); }}>View</button></article>; })}{rows.flatMap(([label, value]) => [<strong className="compare-label" key={label}>{label}</strong>, ...items.map((school) => <span className="compare-value" key={label + school.id}>{value(school)}</span>)])}</div></div> : <div className="empty"><Scale /><h3>Select universities to compare</h3></div>}<footer><p><CircleHelp size={14} /> Comparison uses official study pages and keeps ranking methodologies separate.</p><button className="primary-button" onClick={close}>Done</button></footer></section></div>;
 }
@@ -1322,7 +1392,7 @@ export default function App() {
           const program = programs.find((item) => item.id === id);
           if (program) return [{ p: program, role }];
           if (id.startsWith("school:")) {
-            const school = businessSchools.find((item) => item.id === id.slice("school:".length));
+            const school = allBusinessSchools.find((item) => item.id === id.slice("school:".length));
             if (school && schoolStudy(school).status === "bachelor") return [{ p: schoolAsProgram(school), role }];
           }
           return [];
@@ -1472,23 +1542,23 @@ export default function App() {
   };
   const applicationReadiness = Object.fromEntries(pathway.map((item) => [item.p.id, readinessFor(item.p)])) as Record<string, { score: number; stages: ReadinessStage[] }>;
   const programFits = Object.fromEntries(programs.map((program) => {
-    const school = businessSchools.find((item) => item.programId === program.id);
+    const school = allBusinessSchools.find((item) => item.programId === program.id);
     return [program.id, calculateProgramFit(program, school ? schoolStudy(school) : undefined, profileSnapshot, preferencePriorities)];
   })) as Record<string, FitResult>;
   const fitFor = (program: Program, school?: BusinessSchool) => {
-    const linkedSchool = school ?? businessSchools.find((item) => item.programId === program.id);
+    const linkedSchool = school ?? allBusinessSchools.find((item) => item.programId === program.id);
     return calculateProgramFit(program, linkedSchool ? schoolStudy(linkedSchool) : undefined, profileSnapshot, preferencePriorities);
   };
   const dreamReadiness = readinessFor(dashboardProgram);
   const readinessStages = dreamReadiness.stages;
   const progress = dreamReadiness.score;
   const selectedProgram = selectedProgramId ? programs.find((program) => program.id === selectedProgramId) ?? null : null;
-  const selectedSchool = selectedSchoolId ? businessSchools.find((school) => school.id === selectedSchoolId) ?? null : null;
+  const selectedSchool = selectedSchoolId ? allBusinessSchools.find((school) => school.id === selectedSchoolId) ?? null : null;
 
   if (!onboarded) return <Onboarding finish={finish} saveLater={saveLater} />;
 
   let content;
-  if (selectedProgram) { const school = businessSchools.find((item) => item.programId === selectedProgram.id); const selectedRole = pathway.find((item) => item.p.id === selectedProgram.id)?.role; content = <ProgramDetail p={selectedProgram} close={() => setSelectedProgramId(null)} saved={saved.includes(school?.id ?? selectedProgram.id)} toggleSaved={() => toggleSaved(school?.id ?? selectedProgram.id)} compared={school ? compared.includes(school.id) : false} toggleCompare={() => school && toggleCompare(school.id)} pathwayRole={selectedRole} addPath={(role) => addPath(selectedProgram, role)} removePath={() => removePath(selectedProgram)} fitResult={fitFor(selectedProgram, school)} readinessScore={applicationReadiness[selectedProgram.id]?.score} />; }
+  if (selectedProgram) { const school = allBusinessSchools.find((item) => item.programId === selectedProgram.id); const selectedRole = pathway.find((item) => item.p.id === selectedProgram.id)?.role; content = <ProgramDetail p={selectedProgram} close={() => setSelectedProgramId(null)} saved={saved.includes(school?.id ?? selectedProgram.id)} toggleSaved={() => toggleSaved(school?.id ?? selectedProgram.id)} compared={school ? compared.includes(school.id) : false} toggleCompare={() => school && toggleCompare(school.id)} pathwayRole={selectedRole} addPath={(role) => addPath(selectedProgram, role)} removePath={() => removePath(selectedProgram)} fitResult={fitFor(selectedProgram, school)} readinessScore={applicationReadiness[selectedProgram.id]?.score} />; }
   else if (selectedSchool) { const program = selectedSchool.programId ? programs.find((item) => item.id === selectedSchool.programId) : undefined; const choice = program ?? schoolAsProgram(selectedSchool); const selectedRole = pathway.find((item) => item.p.id === choice.id)?.role; content = <SchoolDetail school={selectedSchool} program={program} close={() => setSelectedSchoolId(null)} saved={saved.includes(selectedSchool.id)} toggleSaved={() => toggleSaved(selectedSchool.id)} compared={compared.includes(selectedSchool.id)} toggleCompare={() => toggleCompare(selectedSchool.id)} pathwayRole={selectedRole} addPath={(role) => addPath(choice, role)} removePath={() => removePath(choice)} fitResult={fitFor(choice, selectedSchool)} readinessScore={applicationReadiness[choice.id]?.score} />; }
   else if (view === "dashboard") content = <Dashboard go={go} completed={completed} toggleTask={toggleTask} openProgram={openProgram} target={dashboardProgram} selected={pathway} pathwayReadiness={progress} readinessStages={readinessStages} programFits={programFits} />;
   else if (view === "explore") content = <Explore openSchool={openSchool} saved={saved} setSaved={toggleSaved} compared={compared} toggleCompare={toggleCompare} schoolPathwayIds={pathway.map((item) => item.p.id)} toggleSchoolPathway={toggleSchoolPathway} />;
