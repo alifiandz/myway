@@ -59,3 +59,7 @@ export async function getVaultDocument(id: string): Promise<StoredVaultDocument 
 export async function deleteVaultDocument(id: string) {
   await runVaultRequest<undefined>("readwrite", (store) => store.delete(id));
 }
+
+export async function clearVaultDocuments() {
+  await runVaultRequest<undefined>("readwrite", (store) => store.clear());
+}
