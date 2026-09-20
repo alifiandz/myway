@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import {
-  BarChart3, Bell, BookOpen, Bookmark, BriefcaseBusiness,
+  BarChart3, Bell, BookOpen, Bookmark, BriefcaseBusiness, Camera,
   Check, ChevronDown, ChevronLeft, ChevronRight, CircleAlert, CircleCheck,
   CircleHelp, CircleUserRound, ClipboardCheck, Clock3, Database, Download, ExternalLink, Eye, FileText,
   Flag, Flame, FolderOpen, GraduationCap, Languages, LayoutDashboard, Map, MapPin, MoreHorizontal, Plus,
@@ -766,13 +766,21 @@ function Navigation({ active, go, openGuide, progress, hasTarget }: { active: Vi
   </>;
 }
 
-function Header({ view, go, notices, setNotices, notice, onNoticeAction }: { view: View; go: (v: View) => void; notices: boolean; setNotices: (v: boolean) => void; notice: { body: string; action: string }; onNoticeAction: () => void }) {
+function UserAvatar({ value, className = "avatar" }: { value: string; className?: string }) {
+  if (value.startsWith("data:image/")) return <span className={className}>
+    {/* eslint-disable-next-line @next/next/no-img-element */}
+    <img src={value} alt="Your profile" />
+  </span>;
+  return <span className={className} aria-hidden="true">{value}</span>;
+}
+
+function Header({ view, go, notices, setNotices, notice, onNoticeAction, avatar }: { view: View; go: (v: View) => void; notices: boolean; setNotices: (v: boolean) => void; notice: { body: string; action: string }; onNoticeAction: () => void; avatar: string }) {
   const title = { dashboard: "Dashboard", explore: "Explore universities", pathway: "My Pathway", tasks: "Tasks & Habits", progress: "Progress", profile: "Profile" }[view];
   return <header className="topbar">
     <div><span className="eyebrow">Business study planner</span><h1>{title}</h1></div>
     <div className="top-actions">
       <button className="icon-button" onClick={() => setNotices(!notices)} aria-label="Notifications"><Bell size={19} /><i /></button>
-      <button className={"avatar " + (view === "profile" ? "active" : "")} onClick={() => go("profile")} aria-label="Open profile">U</button>
+      <button className={`avatar-button ${view === "profile" ? "active" : ""}`} onClick={() => go("profile")} aria-label="Open profile"><UserAvatar value={avatar} /></button>
       {notices && <aside className="notice-popover"><strong>Next best action</strong><p>{notice.body}</p><button onClick={() => { onNoticeAction(); setNotices(false); }}>{notice.action} <ChevronRight size={15} /></button></aside>}
     </div>
   </header>;
@@ -888,7 +896,7 @@ function Dashboard({ go, completed, toggleTask, openProgram, target, selected, p
     <div className="dashboard-grid">
       <div className="main-column">
         <article className="card hero-progress"><div><span className="section-label">Pathway readiness</span><strong>{pathwayReadiness}%</strong><p>Requirements, records, evidence and actions across your complete Dream pathway. Not an admission prediction.</p><button className="text-link" onClick={() => go("pathway")}>Open full pathway <ChevronRight size={15} /></button></div><div className="hero-readiness-visual"><div className="ring" style={{ background: `conic-gradient(var(--blue) ${pathwayReadiness}%, #e9ebf2 0)` }}><span>{pathwayReadiness}<small>%</small></span></div><em className="hero-weekly-gain">{completeStages} of 9 stages ready</em></div></article>
-        <section className="section-space"><div className="section-head"><div><span className="section-label">Today’s actions</span><h3>Keep your weekly rhythm</h3><p>These routines are separate and do not change Pathway Readiness.</p></div><span className="badge amber">{actions.length - doneToday} open</span></div><article className="card action-list">{actions.map(({ id, title, meta, icon: Icon }) => { const done = completed.includes(id); return <button key={id} className={"action-row " + (done ? "done" : "")} onClick={() => toggleTask(id)}><span className={"check " + (done ? "checked" : "")}>{done && <Check size={13} />}</span><span className="row-icon"><Icon size={17} /></span><span><strong>{title}</strong><small>{meta}</small></span><em>{done ? "Complete" : "Weekly only"}</em><ChevronRight size={15} /></button>; })}</article></section>
+        <section className="section-space"><div className="section-head compact-action-heading"><div><span className="section-label">This week</span><h3>Weekly actions</h3></div><span className="dashboard-action-meta"><button className="info-button" title="Personal routines support your preparation but do not directly change Pathway Readiness." aria-label="About weekly actions"><CircleHelp size={15} /></button><span className="badge amber">{actions.length - doneToday} open</span></span></div><article className="card action-list">{actions.map(({ id, title, meta, icon: Icon }) => { const done = completed.includes(id); return <button key={id} className={"action-row " + (done ? "done" : "")} onClick={() => toggleTask(id)}><span className={"check " + (done ? "checked" : "")}>{done && <Check size={13} />}</span><span className="row-icon"><Icon size={17} /></span><span><strong>{title}</strong><small>{meta}</small></span><em>{done ? "Complete" : "Weekly only"}</em><ChevronRight size={15} /></button>; })}</article></section>
         <article className="card readiness-overview compact-readiness"><div className="section-head"><div><span className="section-label">Complete journey</span><h3>Pathway stages</h3></div><button className="text-link" onClick={() => go("progress")}>View progress <ChevronRight size={15} /></button></div><p className="readiness-context">A compact overview of all nine preparation stages for {target.university}.</p><div className="readiness-status-summary"><div><strong>{completeStages}</strong><span>Ready</span></div><div><strong>{inProgressStages}</strong><span>In progress</span></div><div><strong>{notStartedStages}</strong><span>Not started</span></div></div><button className="outline-button" onClick={() => go("pathway")}>Open full pathway</button></article>
         <section className="section-space"><div className="section-head"><div><span className="section-label">Recommended for you</span><h3>Best current program matches</h3></div><button className="text-link" onClick={() => go("explore")}>View all <ChevronRight size={15} /></button></div><div className="recommend-grid" aria-label="Best current program matches">{[...programs].sort((a, b) => (programFits[b.id]?.score ?? -1) - (programFits[a.id]?.score ?? -1)).slice(0, 3).map((p) => { const match = programFits[p.id]; return <button className="card recommendation" key={p.id} onClick={() => openProgram(p)}><UniversityLogo program={p} /><span><strong>{p.university}</strong><small>{p.title}</small><em className={"fit " + fitResultClass(match)}>{match.score === null ? "Complete profile" : `${match.score}/100 · ${match.label}`}</em></span><ChevronRight /></button>; })}</div></section>
       </div>
@@ -1073,10 +1081,10 @@ type Routine = { id: string; title: string; focus: string; weeklyGoal: number; m
 type TaskGuide = { source: string; sourceDetail: string; outcome: string; steps: string[]; materials: string[]; doneWhen: string[] };
 
 const initialRoutines: Routine[] = [
-  { id: "english-plan", title: "English qualification practice", focus: "Practise the skill required by your chosen test", weeklyGoal: 3, minutes: 20 },
-  { id: "programme-research", title: "Programme research", focus: "Verify one requirement using an official source", weeklyGoal: 2, minutes: 20 },
-  { id: "academic-preparation", title: "Academic preparation", focus: "Strengthen one subject connected to your applications", weeklyGoal: 2, minutes: 30 },
-  { id: "pathway-review", title: "Weekly pathway review", focus: "Review university choices and next requirements", weeklyGoal: 1, minutes: 25 },
+  { id: "english-plan", title: "English qualification practice", focus: "Finish one timed 20-minute session and record the result by Sunday", weeklyGoal: 3, minutes: 20 },
+  { id: "programme-research", title: "Programme research", focus: "Verify one missing requirement for one Pathway university from its official source", weeklyGoal: 2, minutes: 20 },
+  { id: "academic-preparation", title: "Academic preparation", focus: "Complete five questions from your largest verified academic gap", weeklyGoal: 2, minutes: 30 },
+  { id: "pathway-review", title: "Weekly pathway review", focus: "Review Dream, Target and Alternative choices, then set one dated next action", weeklyGoal: 1, minutes: 25 },
 ];
 
 const taskGuides: Record<string, TaskGuide> = {
@@ -1410,9 +1418,10 @@ function ProgressPage({ selected, applicationReadiness, openStage, openProgram, 
   </div>;
 }
 
-function ProfilePage({ toast, savedCount, applicationCount }: { toast: (s: string) => void; savedCount: number; applicationCount: number }) {
+function ProfilePage({ toast, savedCount, applicationCount, avatar, setAvatar }: { toast: (s: string) => void; savedCount: number; applicationCount: number; avatar: string; setAvatar: (value: string) => void }) {
   type ProfileTab = "education" | "tests" | "preferences" | "experience" | "documents" | "account";
   const [editing, setEditing] = useState(false);
+  const [avatarOpen, setAvatarOpen] = useState(false);
   const [tab, setTab] = useState<ProfileTab>("education");
   const [data, setData] = useState({ name: "", citizenship: "", school: "", curriculum: "", gradeYear: "", graduation: "", average: "", subjects: "", test: "IELTS", score: "", components: "", testDate: "", expiry: "", retake: "", degree: "Bachelor’s", fields: "", avoidedFields: "", countries: "", language: "", budget: "", math: "", intake: "", activities: "", leadership: "", volunteering: "", competitions: "", work: "", portfolio: "" });
   const [documents, setDocuments] = useState<Record<string, string>>({});
@@ -1423,6 +1432,14 @@ function ProfilePage({ toast, savedCount, applicationCount }: { toast: (s: strin
   const [selectingDocument, setSelectingDocument] = useState<{ key: string; label: string } | null>(null);
   const [previewDocument, setPreviewDocument] = useState<VaultDocument | null>(null);
   const [previewUrl, setPreviewUrl] = useState("");
+  const chooseAvatar = (value: string) => { setAvatar(value); setAvatarOpen(false); toast("Profile picture updated"); };
+  const uploadAvatar = (file?: File) => {
+    if (!file || !["image/jpeg", "image/png", "image/webp"].includes(file.type)) { if (file) toast("Choose a JPG, PNG, or WebP image"); return; }
+    if (file.size > 1_000_000) { toast("Choose an image smaller than 1 MB"); return; }
+    const reader = new FileReader();
+    reader.onload = () => typeof reader.result === "string" && chooseAvatar(reader.result);
+    reader.readAsDataURL(file);
+  };
   useEffect(() => { const timer = window.setTimeout(() => { try { const saved = JSON.parse(window.localStorage.getItem("myway-profile") || "null"); if (saved) setData((current) => ({ ...current, ...saved })); } catch {} try { setDocuments(JSON.parse(window.localStorage.getItem("myway-profile-documents") || "{}")); } catch {} try { setDocumentLinks(JSON.parse(window.localStorage.getItem("myway-document-links") || "{}")); } catch {} listVaultDocuments().then(setVaultDocuments).catch(() => toast("Document storage is unavailable in this browser")); try { const savedPriorities = JSON.parse(window.localStorage.getItem("myway-preference-priorities") || "null"); if (savedPriorities) setPreferencePriorities(savedPriorities); } catch {} }, 0); return () => window.clearTimeout(timer); }, [toast]);
   useEffect(() => () => { if (previewUrl) URL.revokeObjectURL(previewUrl); }, [previewUrl]);
   const update = (key: keyof typeof data, value: string) => setData((current) => ({ ...current, [key]: value }));
@@ -1456,7 +1473,7 @@ function ProfilePage({ toast, savedCount, applicationCount }: { toast: (s: strin
   const importData = async (file: File) => { try { importPrototypeExport(JSON.parse(await file.text())); toast("MyWay data restored · reloading"); window.setTimeout(() => window.location.reload(), 500); } catch { toast("This is not a supported MyWay data file"); } };
   const resetData = async () => { if (!window.confirm("Clear your profile, saved universities, pathway progress, tasks, habits and stored documents from this browser? This cannot be undone.")) return; MYWAY_LOCAL_KEYS.forEach((key) => window.localStorage.removeItem(key)); await clearVaultDocuments(); window.location.reload(); };
   const gaps = [["Citizenship", data.citizenship, "education"], ["Expected graduation", data.graduation, "education"], ["English result", data.score, "tests"], ["Intended intake", data.intake, "preferences"], ["Passport", documents.passport, "documents"]] as const;
-  return <div className="page-enter profile-page"><section className="card profile-hero profile-workspace-hero"><span className="profile-avatar">{data.name.trim().charAt(0).toUpperCase() || "U"}</span><div><span className="eyebrow">Student profile</span><h2>{data.name || "Your profile"}</h2><p>{data.school || "Add your school"} · {data.graduation || "Graduation year not added"}</p><div className="profile-chips"><span>Business</span><span>{data.degree}</span>{data.math && <span>{data.math} math</span>}</div></div><div className="profile-completion"><span><strong>{completion}%</strong><small>profile complete</small></span><div className="bar"><i style={{ width: completion + "%" }} /></div></div><button className="secondary-button" onClick={() => editing ? save() : setEditing(true)}>{editing ? <><Check size={15} /> Save</> : <><Settings2 size={15} /> Edit</>}</button></section>
+  return <div className="page-enter profile-page"><section className="card profile-hero profile-workspace-hero"><button className="profile-avatar-button" onClick={() => setAvatarOpen((open) => !open)} aria-label="Change profile picture"><UserAvatar value={avatar} className="profile-avatar" /><span><Camera size={14} /></span></button><div><span className="eyebrow">Student profile</span><h2>{data.name || "Your profile"}</h2><p>{data.school || "Add your school"} · {data.graduation || "Graduation year not added"}</p><div className="profile-chips"><span>Business</span><span>{data.degree}</span>{data.math && <span>{data.math} math</span>}</div></div><div className="profile-completion"><span><strong>{completion}%</strong><small>profile complete</small></span><div className="bar"><i style={{ width: completion + "%" }} /></div></div><button className="secondary-button" onClick={() => editing ? save() : setEditing(true)}>{editing ? <><Check size={15} /> Save</> : <><Settings2 size={15} /> Edit</>}</button>{avatarOpen && <div className="avatar-picker"><div><strong>Profile picture</strong><button onClick={() => setAvatarOpen(false)} aria-label="Close profile picture options"><X size={15} /></button></div><p>Choose an avatar or upload your own image.</p><div className="avatar-options">{[data.name.trim().slice(0, 2).toUpperCase() || "MW", "A", "MW", "✦"].map((item, index) => <button key={`${item}-${index}`} className={avatar === item ? "selected" : ""} onClick={() => chooseAvatar(item)}>{item}</button>)}</div><label className="avatar-upload"><Camera size={15} /> Upload JPG, PNG or WebP<input type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => uploadAvatar(event.currentTarget.files?.[0])} /></label><button className="text-link" onClick={() => chooseAvatar(data.name.trim().slice(0, 2).toUpperCase() || "MW")}>Reset to initials</button></div>}</section>
     <div className="profile-workspace"><aside className="card profile-summary-panel"><div className="section-head"><div><span className="section-label">Profile gaps</span><h3>Complete next</h3></div><CircleAlert size={18} /></div><div className="profile-gap-list">{gaps.map(([label, value, targetTab]) => <button key={label} onClick={() => { setTab(targetTab); setEditing(true); }}><span className={value ? "complete" : ""}>{value ? <Check size={12} /> : <Plus size={12} />}</span><span><strong>{label}</strong><small>{value || "Not added"}</small></span><ChevronRight size={13} /></button>)}</div><div className="profile-boundary"><Database size={16} /><span><strong>Shared across applications</strong><small>Profile records can support every university. Programme-specific answers stay in Pathway.</small></span></div></aside>
       <main className="card profile-editor"><div className="profile-tabs" role="tablist" aria-label="Profile sections">{[["education", "Education"], ["tests", "Tests"], ["preferences", "Preferences"], ["experience", "Experience"], ["documents", "Documents"], ["account", "Data & privacy"]].map(([id, label]) => <button key={id} role="tab" aria-selected={tab === id} className={tab === id ? "active" : ""} onClick={() => setTab(id as ProfileTab)}>{label}</button>)}</div>
         {tab === "education" && <section className="profile-tab-panel"><div className="section-head"><div><span className="section-label">Education</span><h3>Academic background</h3><p>Reusable information about your current qualification.</p></div><GraduationCap size={19} /></div><div className="profile-form-grid">{field("name", "Full name", "Your full legal name")}{field("citizenship", "Country / citizenship", "e.g. Indonesia")}{field("school", "School", "Current school name")}{field("curriculum", "Curriculum / qualification", "e.g. Indonesian SMA, IB, A Levels")}{field("gradeYear", "Current grade / year", "e.g. Grade 11")}{field("graduation", "Expected graduation", "Month and year")}{field("average", "Current average / GPA", "Include the grading scale")}{field("subjects", "Key subjects", "Business, mathematics, English...")}</div></section>}
@@ -1501,6 +1518,7 @@ export default function App() {
   const [toast, setToast] = useState("");
   const [pathwayStage, setPathwayStage] = useState(0);
   const [pathwayApplicationId, setPathwayApplicationId] = useState("");
+  const [avatar, setAvatarState] = useState("MW");
 
   useEffect(() => {
     const loadProfile = () => {
@@ -1530,11 +1548,13 @@ export default function App() {
       try { setCompleted(JSON.parse(window.localStorage.getItem("myway-pathway-actions") || "[]")); } catch { setCompleted([]); }
       try { setSaved(JSON.parse(window.localStorage.getItem("myway-saved") || "[]")); } catch { setSaved([]); }
       try { setCompared(JSON.parse(window.localStorage.getItem("myway-compared") || "[]")); } catch { setCompared([]); }
+      setAvatarState(window.localStorage.getItem("myway-profile-avatar") || "MW");
       loadProfile();
     }, 0);
     window.addEventListener("myway-profile-updated", loadProfile);
     return () => { window.clearTimeout(timer); window.removeEventListener("myway-profile-updated", loadProfile); };
   }, []);
+  const setAvatar = (value: string) => { setAvatarState(value); window.localStorage.setItem("myway-profile-avatar", value); };
   useEffect(() => {
     if (!toast) return;
     const timer = window.setTimeout(() => setToast(""), 2600);
@@ -1703,11 +1723,11 @@ export default function App() {
   else if (view === "pathway") content = <Pathway selected={pathway} completed={completed} toggleTask={toggleTask} go={go} openProgram={openProgram} changeRole={addPath} removePath={removePath} records={pathwayRecords} updateRecord={updatePathwayRecord} applicationReadiness={applicationReadiness} toast={setToast} initialStage={pathwayStage} initialApplicationId={pathwayApplicationId} />;
   else if (view === "tasks") content = <TasksHabits completed={completed} toggleTask={toggleTask} toast={setToast} />;
   else if (view === "progress") content = <ProgressPage selected={pathway} applicationReadiness={applicationReadiness} openStage={openPathwayStage} openProgram={openProgram} go={go} />;
-  else content = <ProfilePage toast={setToast} savedCount={saved.length} applicationCount={pathway.length} />;
+  else content = <ProfilePage toast={setToast} savedCount={saved.length} applicationCount={pathway.length} avatar={avatar} setAvatar={setAvatar} />;
 
   return <div className="app-shell">
     <Navigation active={view} go={go} openGuide={() => setGuideOpen(true)} progress={progress} hasTarget={Boolean(dashboardProgram)} />
-    <main className="app-main"><Header view={view} go={go} notices={notices} setNotices={setNotices} notice={notice} onNoticeAction={runNoticeAction} /><div className="content-wrap">{content}</div></main>
+    <main className="app-main"><Header view={view} go={go} notices={notices} setNotices={setNotices} notice={notice} onNoticeAction={runNoticeAction} avatar={avatar} /><div className="content-wrap">{content}</div></main>
     {compared.length > 0 && !compareOpen && <button className="compare-fab" onClick={() => setCompareOpen(true)}><Scale size={17} /><span>Compare {compared.length}</span><small>of 4</small></button>}
     {compareOpen && <ComparePanel ids={compared} close={() => setCompareOpen(false)} remove={toggleCompare} open={openSchool} />}
     {guideOpen && <PlanningGuide close={() => setGuideOpen(false)} go={go} />}
