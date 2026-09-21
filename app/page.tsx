@@ -18,10 +18,13 @@ type View = "dashboard" | "explore" | "pathway" | "tasks" | "progress" | "profil
 type Role = "Dream" | "Target" | "Alternative";
 
 type ProfileSnapshot = {
+  name?: string;
   citizenship?: string;
   curriculum?: string;
   average?: string;
   score?: string;
+  test?: string;
+  components?: string;
   testDate?: string;
   degree?: string;
   fields?: string;
@@ -871,18 +874,35 @@ function DashboardShortlists({ selected, openProgram }: { selected: { p: Program
 
 type ReadinessStage = { label: string; value: number; requirements: number; records: number; evidence: number; actions: number; completedActions: number; totalActions: number };
 
-function Dashboard({ go, completed, toggleTask, openProgram, target, selected, pathwayReadiness, readinessStages, programFits }: { go: (v: View) => void; completed: string[]; toggleTask: (v: string) => void; openProgram: (p: Program) => void; target?: Program; selected: { p: Program; role: Role }[]; pathwayReadiness: number; readinessStages: ReadinessStage[]; programFits: Record<string, FitResult> }) {
-  const actions = [
-    { id: "english-review", title: "Review your English qualification plan", meta: "20 min · Weekly practice", icon: Languages },
-    { id: "academic-review", title: "Update one academic record", meta: "10 min · Weekly task", icon: ClipboardCheck },
-    { id: "application-review", title: "Review one application requirement", meta: "20 min · Weekly task", icon: BriefcaseBusiness },
-  ];
-  const doneToday = actions.filter((action) => completed.includes(action.id)).length;
+function Dashboard({ go, completed, toggleTask, openProgram, target, selected, pathwayReadiness, readinessStages, programFits, profile }: { go: (v: View) => void; completed: string[]; toggleTask: (v: string) => void; openProgram: (p: Program) => void; target?: Program; selected: { p: Program; role: Role }[]; pathwayReadiness: number; readinessStages: ReadinessStage[]; programFits: Record<string, FitResult>; profile: ProfileSnapshot }) {
+  const [actionsHelpOpen, setActionsHelpOpen] = useState(false);
   const completeStages = readinessStages.filter((stage) => stage.value === 100).length;
   const inProgressStages = readinessStages.filter((stage) => stage.value > 0 && stage.value < 100).length;
   const notStartedStages = readinessStages.filter((stage) => stage.value === 0).length;
   const nextStage = readinessStages.find((stage) => stage.value < 100) || readinessStages[readinessStages.length - 1];
   const targetFit = target ? programFits[target.id] : undefined;
+  const englishTest = profile.test?.trim();
+  const hasEnglishScore = Boolean(profile.score?.trim());
+  const readingNeedsWork = /reading/i.test(profile.components || "");
+  const englishAction = !englishTest
+    ? { title: "Choose an English test and target score", meta: "20 min · Save your decision in Profile" }
+    : !hasEnglishScore
+      ? { title: `Complete one ${englishTest} diagnostic section`, meta: "45 min · Record your baseline score" }
+      : readingNeedsWork
+        ? { title: `Complete one timed ${englishTest} Reading passage`, meta: "45 min · Record your raw score" }
+        : { title: `Complete one timed ${englishTest} practice section`, meta: "45 min · Record the result" };
+  const academicAction = profile.average?.trim()
+    ? { title: "Check one subject requirement for your Dream programme", meta: "20 min · Record the official source" }
+    : { title: "Add your current grades and grading scale", meta: "15 min · Save them in Profile" };
+  const applicationAction = nextStage
+    ? { title: `Complete one ${nextStage.label.toLowerCase()} requirement`, meta: `20 min · Continue ${target?.university || "your pathway"}` }
+    : { title: "Review your completed application pathway", meta: "20 min · Confirm every official source" };
+  const actions = [
+    { id: "english-review", ...englishAction, icon: Languages },
+    { id: "academic-review", ...academicAction, icon: ClipboardCheck },
+    { id: "application-review", ...applicationAction, icon: BriefcaseBusiness },
+  ];
+  const doneToday = actions.filter((action) => completed.includes(action.id)).length;
 
   if (!target) return <div className="page-enter">
     <section className="welcome-row"><div><span className="eyebrow">Your preparation workspace</span><h2>Choose a Dream university to start tracking</h2><p>Preparation progress is always connected to a specific university—not an admission prediction.</p></div></section>
@@ -896,7 +916,7 @@ function Dashboard({ go, completed, toggleTask, openProgram, target, selected, p
     <div className="dashboard-grid">
       <div className="main-column">
         <article className="card hero-progress"><div><span className="section-label">Pathway readiness</span><strong>{pathwayReadiness}%</strong><p>Requirements, records, evidence and actions across your complete Dream pathway. Not an admission prediction.</p><button className="text-link" onClick={() => go("pathway")}>Open full pathway <ChevronRight size={15} /></button></div><div className="hero-readiness-visual"><div className="ring" style={{ background: `conic-gradient(var(--blue) ${pathwayReadiness}%, #e9ebf2 0)` }}><span>{pathwayReadiness}<small>%</small></span></div><em className="hero-weekly-gain">{completeStages} of 9 stages ready</em></div></article>
-        <section className="section-space"><div className="section-head compact-action-heading"><div><span className="section-label">This week</span><h3>Weekly actions</h3></div><span className="dashboard-action-meta"><button className="info-button" title="Personal routines support your preparation but do not directly change Pathway Readiness." aria-label="About weekly actions"><CircleHelp size={15} /></button><span className="badge amber">{actions.length - doneToday} open</span></span></div><article className="card action-list">{actions.map(({ id, title, meta, icon: Icon }) => { const done = completed.includes(id); return <button key={id} className={"action-row " + (done ? "done" : "")} onClick={() => toggleTask(id)}><span className={"check " + (done ? "checked" : "")}>{done && <Check size={13} />}</span><span className="row-icon"><Icon size={17} /></span><span><strong>{title}</strong><small>{meta}</small></span><em>{done ? "Complete" : "Weekly only"}</em><ChevronRight size={15} /></button>; })}</article></section>
+        <section className="section-space"><div className="section-head compact-action-heading"><div><span className="section-label">This week</span><h3>Weekly actions</h3></div><span className="dashboard-action-meta"><span className="actions-help-wrap"><button className="info-button" onClick={() => setActionsHelpOpen((open) => !open)} aria-expanded={actionsHelpOpen} aria-describedby="weekly-actions-help" aria-label="How weekly actions work"><CircleHelp size={15} /></button>{actionsHelpOpen && <span className="actions-help-popover" id="weekly-actions-help" role="tooltip"><strong>Weekly actions</strong><small>Specific practice goals based on your profile and Dream pathway. They support preparation, but do not directly change Pathway Readiness.</small></span>}</span><span className="badge amber">{actions.length - doneToday} open</span></span></div><article className="card action-list">{actions.map(({ id, title, meta, icon: Icon }) => { const done = completed.includes(id); return <button key={id} className={"action-row " + (done ? "done" : "")} onClick={() => toggleTask(id)}><span className={"check " + (done ? "checked" : "")}>{done && <Check size={13} />}</span><span className="row-icon"><Icon size={17} /></span><span><strong>{title}</strong><small>{meta}</small></span><em>{done ? "Complete" : "Weekly goal"}</em><ChevronRight size={15} /></button>; })}</article></section>
         <article className="card readiness-overview compact-readiness"><div className="section-head"><div><span className="section-label">Complete journey</span><h3>Pathway stages</h3></div><button className="text-link" onClick={() => go("progress")}>View progress <ChevronRight size={15} /></button></div><p className="readiness-context">A compact overview of all nine preparation stages for {target.university}.</p><div className="readiness-status-summary"><div><strong>{completeStages}</strong><span>Ready</span></div><div><strong>{inProgressStages}</strong><span>In progress</span></div><div><strong>{notStartedStages}</strong><span>Not started</span></div></div><button className="outline-button" onClick={() => go("pathway")}>Open full pathway</button></article>
         <section className="section-space"><div className="section-head"><div><span className="section-label">Recommended for you</span><h3>Best current program matches</h3></div><button className="text-link" onClick={() => go("explore")}>View all <ChevronRight size={15} /></button></div><div className="recommend-grid" aria-label="Best current program matches">{[...programs].sort((a, b) => (programFits[b.id]?.score ?? -1) - (programFits[a.id]?.score ?? -1)).slice(0, 3).map((p) => { const match = programFits[p.id]; return <button className="card recommendation" key={p.id} onClick={() => openProgram(p)}><UniversityLogo program={p} /><span><strong>{p.university}</strong><small>{p.title}</small><em className={"fit " + fitResultClass(match)}>{match.score === null ? "Complete profile" : `${match.score}/100 · ${match.label}`}</em></span><ChevronRight /></button>; })}</div></section>
       </div>
@@ -1733,7 +1753,7 @@ export default function App() {
   let content;
   if (selectedProgram) { const school = allBusinessSchools.find((item) => item.programId === selectedProgram.id); const selectedRole = pathway.find((item) => item.p.id === selectedProgram.id)?.role; content = school ? <SchoolDetail school={school} program={selectedProgram} close={() => setSelectedProgramId(null)} saved={saved.includes(school.id)} toggleSaved={() => toggleSaved(school.id)} compared={compared.includes(school.id)} toggleCompare={() => toggleCompare(school.id)} pathwayRole={selectedRole} addPath={(role) => addPath(selectedProgram, role)} removePath={() => removePath(selectedProgram)} fitResult={fitFor(selectedProgram, school)} readinessScore={applicationReadiness[selectedProgram.id]?.score} /> : <ProgramDetail p={selectedProgram} close={() => setSelectedProgramId(null)} saved={saved.includes(selectedProgram.id)} toggleSaved={() => toggleSaved(selectedProgram.id)} compared={false} toggleCompare={() => {}} pathwayRole={selectedRole} addPath={(role) => addPath(selectedProgram, role)} removePath={() => removePath(selectedProgram)} fitResult={fitFor(selectedProgram)} readinessScore={applicationReadiness[selectedProgram.id]?.score} />; }
   else if (selectedSchool) { const program = selectedSchool.programId ? programs.find((item) => item.id === selectedSchool.programId) : undefined; const choice = program ?? schoolAsProgram(selectedSchool); const selectedRole = pathway.find((item) => item.p.id === choice.id)?.role; content = <SchoolDetail school={selectedSchool} program={program} close={() => setSelectedSchoolId(null)} saved={saved.includes(selectedSchool.id)} toggleSaved={() => toggleSaved(selectedSchool.id)} compared={compared.includes(selectedSchool.id)} toggleCompare={() => toggleCompare(selectedSchool.id)} pathwayRole={selectedRole} addPath={(role) => addPath(choice, role)} removePath={() => removePath(choice)} fitResult={fitFor(choice, selectedSchool)} readinessScore={applicationReadiness[choice.id]?.score} />; }
-  else if (view === "dashboard") content = <Dashboard go={go} completed={completed} toggleTask={toggleTask} openProgram={openProgram} target={dashboardProgram} selected={pathway} pathwayReadiness={progress} readinessStages={readinessStages} programFits={programFits} />;
+  else if (view === "dashboard") content = <Dashboard go={go} completed={completed} toggleTask={toggleTask} openProgram={openProgram} target={dashboardProgram} selected={pathway} pathwayReadiness={progress} readinessStages={readinessStages} programFits={programFits} profile={profileSnapshot} />;
   else if (view === "explore") content = <Explore openSchool={openSchool} saved={saved} setSaved={toggleSaved} compared={compared} toggleCompare={toggleCompare} schoolPathwayIds={pathway.map((item) => item.p.id)} toggleSchoolPathway={toggleSchoolPathway} />;
   else if (view === "pathway") content = <Pathway selected={pathway} completed={completed} toggleTask={toggleTask} go={go} openProgram={openProgram} changeRole={addPath} removePath={removePath} records={pathwayRecords} updateRecord={updatePathwayRecord} applicationReadiness={applicationReadiness} toast={setToast} initialStage={pathwayStage} initialApplicationId={pathwayApplicationId} />;
   else if (view === "tasks") content = <TasksHabits completed={completed} toggleTask={toggleTask} toast={setToast} />;
