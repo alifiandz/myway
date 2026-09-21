@@ -7,7 +7,7 @@ import {
   CircleHelp, CircleUserRound, ClipboardCheck, Clock3, Database, Download, ExternalLink, Eye, FileText,
   Flag, Flame, FolderOpen, GraduationCap, Languages, LayoutDashboard, Map, MapPin, MoreHorizontal, Plus,
   Scale, Search, Settings2, ShieldCheck, SlidersHorizontal, Sparkles, Target,
-  Trash2, Trophy, Upload, UserRoundCog, X,
+  Trash2, Trophy, Upload, UserRoundCog, X, Globe2, HardDrive, LifeBuoy, LockKeyhole, Monitor, Moon, Sun,
 } from "lucide-react";
 import { additionalSchoolStudyRows, schoolStudyRows, type SchoolStudySummary } from "./school-data";
 import { ftDirectoryIdentities } from "./ft-directory-data";
@@ -753,18 +753,19 @@ function Brand() {
   </span><span><strong><b>My</b><em>Way</em></strong><small>Explore · Plan · Go Further</small></span></div>;
 }
 
-function Navigation({ active, go, openGuide, progress, hasTarget }: { active: View; go: (v: View) => void; openGuide: () => void; progress: number; hasTarget: boolean }) {
+function Navigation({ active, go, openGuide, progress, hasTarget, language }: { active: View; go: (v: View) => void; openGuide: () => void; progress: number; hasTarget: boolean; language: "en" | "id" }) {
+  const labels: Record<View, string> = language === "id" ? { dashboard: "Beranda", explore: "Jelajahi", pathway: "Jalur Saya", tasks: "Tugas & Kebiasaan", progress: "Progres", profile: "Profil", settings: "Pengaturan" } : { dashboard: "Dashboard", explore: "Explore", pathway: "Pathway", tasks: "Tasks & Habits", progress: "Progress", profile: "Profile", settings: "Settings" };
   return <>
     <aside className="sidebar">
       <Brand />
       <nav className="nav-list" aria-label="Main navigation">
-        {navItems.map(({ id, label, icon: Icon }) => <button key={id} className={"nav-item " + (active === id ? "active" : "")} onClick={() => go(id)}><Icon size={19} /><span>{label}</span></button>)}
+        {navItems.map(({ id, icon: Icon }) => <button key={id} className={"nav-item " + (active === id ? "active" : "")} onClick={() => go(id)}><Icon size={19} /><span>{labels[id]}</span></button>)}
       </nav>
       <article className="sidebar-progress"><span className="mini-icon"><Sparkles size={16} /></span><strong>{hasTarget ? progress + "% pathway ready" : "Choose a Dream"}</strong><small>{hasTarget ? "Across requirements, records, evidence and actions." : "Progress starts after a Dream university is added."}</small><div className="bar"><i style={{ width: progress + "%" }} /></div></article>
-      <button className="guide-link" onClick={openGuide}><BookOpen size={17} /> Planning guide</button>
+      <button className="guide-link" onClick={openGuide}><BookOpen size={17} /> {language === "id" ? "Panduan perencanaan" : "Planning guide"}</button>
     </aside>
     <nav className="mobile-nav" aria-label="Mobile navigation">
-      {navItems.map(({ id, label, icon: Icon }) => <button key={id} className={active === id ? "active" : ""} onClick={() => go(id)}><Icon size={20} /><small>{label}</small></button>)}
+      {navItems.map(({ id, icon: Icon }) => <button key={id} className={active === id ? "active" : ""} onClick={() => go(id)}><Icon size={20} /><small>{labels[id]}</small></button>)}
     </nav>
   </>;
 }
@@ -1521,7 +1522,7 @@ function ProfilePage({ toast, avatar, setAvatar }: { toast: (s: string) => void;
   </div>;
 }
 
-function SettingsPage({ toast, savedCount, applicationCount, replayTutorial, go }: { toast: (s: string) => void; savedCount: number; applicationCount: number; replayTutorial: () => void; go: (view: View) => void }) {
+function SettingsPage({ toast, savedCount, applicationCount, replayTutorial, go, language, setLanguage, theme, setTheme }: { toast: (s: string) => void; savedCount: number; applicationCount: number; replayTutorial: () => void; go: (view: View) => void; language: "en" | "id"; setLanguage: (value: "en" | "id") => void; theme: "light" | "dark" | "system"; setTheme: (value: "light" | "dark" | "system") => void }) {
   const [documentCount, setDocumentCount] = useState(0);
   const [notifications, setNotifications] = useState(() => typeof window !== "undefined" ? window.localStorage.getItem("myway-notifications-enabled") !== "false" : true);
   useEffect(() => { listVaultDocuments().then((items) => setDocumentCount(items.length)).catch(() => setDocumentCount(0)); }, []);
@@ -1529,14 +1530,18 @@ function SettingsPage({ toast, savedCount, applicationCount, replayTutorial, go 
   const importData = async (file: File) => { try { importPrototypeExport(JSON.parse(await file.text())); toast("MyWay data restored · reloading"); window.setTimeout(() => window.location.reload(), 500); } catch { toast("This is not a supported MyWay data file"); } };
   const resetData = async () => { if (!window.confirm("Clear your profile, saved universities, pathway progress, tasks, habits and stored documents from this browser? This cannot be undone.")) return; MYWAY_LOCAL_KEYS.forEach((key) => window.localStorage.removeItem(key)); await clearVaultDocuments(); window.location.reload(); };
   const toggleNotifications = () => { const next = !notifications; setNotifications(next); window.localStorage.setItem("myway-notifications-enabled", String(next)); toast(next ? "In-app notifications enabled" : "In-app notifications paused"); };
+  const id = language === "id";
   return <div className="page-enter settings-page">
-    <section className="card settings-intro"><span className="account-status-icon"><UserRoundCog size={20} /></span><div><span className="eyebrow">Account & data</span><h2>Settings</h2><p>Manage this device, your privacy, backups and guidance. Student information stays in Profile.</p></div></section>
-    <div className="settings-grid">
-      <section className="card settings-card settings-wide"><div className="section-head"><div><span className="section-label">Current prototype</span><h3>Saved on this device</h3><p>Account sign-in and secure cross-device sync will be connected with the production backend.</p></div><ShieldCheck size={19} /></div><div className="settings-stats"><button onClick={() => go("profile")}><strong>{documentCount}</strong><small>Stored files</small></button><span><strong>{savedCount}</strong><small>Saved universities</small></span><span><strong>{applicationCount}</strong><small>Pathway applications</small></span></div></section>
-      <section className="card settings-card"><div className="section-head"><div><span className="section-label">Notifications</span><h3>Planning reminders</h3><p>Controls MyWay’s in-app prompts on this device.</p></div><Bell size={19} /></div><button className={`settings-toggle ${notifications ? "on" : ""}`} onClick={toggleNotifications} role="switch" aria-checked={notifications}><span><strong>In-app reminders</strong><small>{notifications ? "Enabled" : "Paused"}</small></span><i /></button><p className="settings-footnote">Email, push and deadline alerts require an account and backend.</p></section>
-      <section className="card settings-card"><div className="section-head"><div><span className="section-label">Guidance</span><h3>Learn MyWay</h3><p>Replay the short tour whenever you need it.</p></div><Sparkles size={19} /></div><button className="outline-button" onClick={replayTutorial}><BookOpen size={14} /> Replay tutorial</button></section>
-      <section className="card settings-card settings-wide"><div className="section-head"><div><span className="section-label">Backup & restore</span><h3>Your planning data</h3><p>Export your profile, shortlist, readiness, tasks and habits. Document files must be downloaded separately from Profile.</p></div><Database size={19} /></div><div className="settings-actions"><button className="primary-button" onClick={exportData}><Download size={14} /> Export planning data</button><label className="outline-button"><Upload size={14} /> Restore data<input type="file" accept="application/json,.json" onChange={(event) => { const file = event.currentTarget.files?.[0]; if (file) importData(file); event.currentTarget.value = ""; }} /></label><button className="outline-button" onClick={() => go("profile")}><FolderOpen size={14} /> Open Profile documents</button></div></section>
-      <section className="card settings-card settings-wide settings-danger"><div><span className="section-label">Delete local data</span><h3>Clear this device</h3><p>Removes local profile data, lists, pathway progress, tasks, habits and stored documents. This cannot be undone.</p></div><button className="outline-button danger-action" onClick={resetData}><Trash2 size={14} /> Clear local data</button></section>
+    <section className="settings-heading"><div><span className="eyebrow">{id ? "Preferensi MyWay" : "MyWay preferences"}</span><h2>{id ? "Pengaturan" : "Settings"}</h2><p>{id ? "Atur tampilan, bahasa, pengingat, dan data perangkat. Informasi akademik tetap dikelola di Profil." : "Control appearance, language, reminders and device data. Your academic information stays in Profile."}</p></div><button className="outline-button" onClick={() => go("profile")}><CircleUserRound size={15} /> {id ? "Buka Profil" : "Open Profile"}</button></section>
+    <div className="settings-layout">
+      <nav className="settings-section-nav" aria-label="Settings sections"><a href="#general"><Settings2 size={15}/>{id ? "Umum" : "General"}</a><a href="#notifications"><Bell size={15}/>{id ? "Notifikasi" : "Notifications"}</a><a href="#data"><HardDrive size={15}/>{id ? "Data & Penyimpanan" : "Data & Storage"}</a><a href="#privacy"><LockKeyhole size={15}/>{id ? "Privasi & Keamanan" : "Privacy & Security"}</a><a href="#help"><LifeBuoy size={15}/>{id ? "Bantuan" : "Help"}</a></nav>
+      <main className="settings-content">
+        <section id="general" className="card settings-panel"><div className="settings-panel-head"><span><Settings2 size={18}/></span><div><h3>{id ? "Umum" : "General"}</h3><p>{id ? "Pilih bagaimana MyWay terlihat dan berkomunikasi denganmu." : "Choose how MyWay looks and communicates with you."}</p></div></div><div className="setting-row setting-row-stack"><div><strong>{id ? "Tampilan" : "Appearance"}</strong><small>{id ? "Gunakan tema terang, gelap, atau ikuti perangkat." : "Use a light theme, dark theme, or follow your device."}</small></div><div className="theme-picker">{([['light',Sun,id?'Terang':'Light'],['dark',Moon,id?'Gelap':'Dark'],['system',Monitor,id?'Sistem':'System']] as const).map(([value,Icon,label])=><button key={value} className={theme===value?'selected':''} onClick={()=>setTheme(value)}><Icon size={16}/><span>{label}</span>{theme===value&&<Check size={14}/>}</button>)}</div></div><div className="setting-row"><div><strong>{id ? "Bahasa" : "Language"}</strong><small>{id ? "Bahasa navigasi dan pengaturan bersama." : "Language for shared navigation and settings."}</small></div><div className="segmented-control" role="group" aria-label="Language"><button className={language==='en'?'active':''} onClick={()=>setLanguage('en')}>English</button><button className={language==='id'?'active':''} onClick={()=>setLanguage('id')}>Bahasa Indonesia</button></div></div></section>
+        <section id="notifications" className="card settings-panel"><div className="settings-panel-head"><span><Bell size={18}/></span><div><h3>{id ? "Notifikasi" : "Notifications"}</h3><p>{id ? "Pilih apakah MyWay menampilkan pengingat perencanaan di aplikasi." : "Choose whether MyWay shows planning reminders inside the app."}</p></div></div><button className={`settings-toggle ${notifications ? "on" : ""}`} onClick={toggleNotifications} role="switch" aria-checked={notifications}><span><strong>{id ? "Pengingat dalam aplikasi" : "In-app reminders"}</strong><small>{notifications ? (id ? "Aktif" : "Enabled") : (id ? "Dijeda" : "Paused")}</small></span><i /></button><p className="settings-footnote">{id ? "Email, push, dan peringatan tenggat akan tersedia setelah akun dan backend terhubung." : "Email, push and deadline alerts will become available after accounts and the backend are connected."}</p></section>
+        <section id="data" className="card settings-panel"><div className="settings-panel-head"><span><HardDrive size={18}/></span><div><h3>{id ? "Data & Penyimpanan" : "Data & Storage"}</h3><p>{id ? "Lihat data lokal, buat cadangan, atau pulihkan perencanaanmu." : "Review local data, create a backup, or restore your planning workspace."}</p></div></div><div className="settings-stats"><button onClick={() => go("profile")}><strong>{documentCount}</strong><small>{id ? "File tersimpan" : "Stored files"}</small></button><span><strong>{savedCount}</strong><small>{id ? "Universitas tersimpan" : "Saved universities"}</small></span><span><strong>{applicationCount}</strong><small>{id ? "Pilihan di Pathway" : "Pathway choices"}</small></span></div><div className="settings-actions"><button className="primary-button" onClick={exportData}><Download size={14}/>{id ? "Ekspor data" : "Export data"}</button><label className="outline-button"><Upload size={14}/>{id ? "Pulihkan data" : "Restore data"}<input type="file" accept="application/json,.json" onChange={(event)=>{const file=event.currentTarget.files?.[0];if(file)importData(file);event.currentTarget.value="";}}/></label><button className="outline-button" onClick={()=>go("profile")}><FolderOpen size={14}/>{id ? "Buka dokumen" : "Open documents"}</button></div><p className="settings-footnote">{id ? "Cadangan mencakup data perencanaan. File dokumen perlu diunduh terpisah dari Profil." : "Backups include planning data. Document files must be downloaded separately from Profile."}</p></section>
+        <section id="privacy" className="card settings-panel"><div className="settings-panel-head"><span><LockKeyhole size={18}/></span><div><h3>{id ? "Privasi & Keamanan" : "Privacy & Security"}</h3><p>{id ? "Versi prototipe ini menyimpan data hanya di browser perangkat ini." : "This prototype stores your information only in this browser on this device."}</p></div></div><div className="privacy-note"><ShieldCheck size={18}/><span><strong>{id ? "Penyimpanan lokal" : "Local storage"}</strong><small>{id ? "Belum ada akun atau sinkronisasi cloud. Jangan gunakan perangkat bersama untuk dokumen sensitif." : "Accounts and cloud sync are not connected yet. Avoid sensitive documents on a shared device."}</small></span></div><div className="danger-row"><div><strong>{id ? "Hapus data perangkat" : "Clear device data"}</strong><small>{id ? "Menghapus profil, daftar, progres, tugas, kebiasaan, dan dokumen lokal secara permanen." : "Permanently removes the local profile, lists, progress, tasks, habits and documents."}</small></div><button className="outline-button danger-action" onClick={resetData}><Trash2 size={14}/>{id ? "Hapus data" : "Clear data"}</button></div></section>
+        <section id="help" className="card settings-panel"><div className="settings-panel-head"><span><LifeBuoy size={18}/></span><div><h3>{id ? "Bantuan" : "Help"}</h3><p>{id ? "Pelajari kembali alur MyWay kapan pun kamu membutuhkannya." : "Revisit the MyWay workflow whenever you need a refresher."}</p></div></div><div className="help-row"><div><strong>{id ? "Tur terpandu MyWay" : "MyWay Guided Tour"}</strong><small>{id ? "Lihat cara Jelajahi, Bandingkan, Pathway, kesiapan, tugas, dan dokumen saling terhubung." : "See how Explore, Compare, Pathway, readiness, tasks and documents work together."}</small></div><button className="outline-button" onClick={replayTutorial}><BookOpen size={14}/>{id ? "Mulai ulang tur" : "Restart tour"}</button></div></section>
+      </main>
     </div>
   </div>;
 }
@@ -1587,6 +1592,8 @@ export default function App() {
   const [pathwayStage, setPathwayStage] = useState(0);
   const [pathwayApplicationId, setPathwayApplicationId] = useState("");
   const [avatar, setAvatarState] = useState("MW");
+  const [language, setLanguageState] = useState<"en" | "id">("en");
+  const [theme, setThemeState] = useState<"light" | "dark" | "system">("system");
 
   useEffect(() => {
     const loadProfile = () => {
@@ -1619,12 +1626,23 @@ export default function App() {
       try { setSaved(JSON.parse(window.localStorage.getItem("myway-saved") || "[]")); } catch { setSaved([]); }
       try { setCompared(JSON.parse(window.localStorage.getItem("myway-compared") || "[]")); } catch { setCompared([]); }
       setAvatarState(window.localStorage.getItem("myway-profile-avatar") || "MW");
+      const storedLanguage = window.localStorage.getItem("myway-language");
+      if (storedLanguage === "en" || storedLanguage === "id") setLanguageState(storedLanguage);
+      const storedTheme = window.localStorage.getItem("myway-theme");
+      if (storedTheme === "light" || storedTheme === "dark" || storedTheme === "system") setThemeState(storedTheme);
       loadProfile();
     }, 0);
     window.addEventListener("myway-profile-updated", loadProfile);
     return () => { window.clearTimeout(timer); window.removeEventListener("myway-profile-updated", loadProfile); };
   }, []);
   const setAvatar = (value: string) => { setAvatarState(value); window.localStorage.setItem("myway-profile-avatar", value); };
+  const setLanguage = (value: "en" | "id") => { setLanguageState(value); window.localStorage.setItem("myway-language", value); setToast(value === "id" ? "Bahasa Indonesia diterapkan" : "English applied"); };
+  const setTheme = (value: "light" | "dark" | "system") => { setThemeState(value); window.localStorage.setItem("myway-theme", value); };
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    const applyTheme = () => document.documentElement.dataset.theme = theme === "system" ? (media.matches ? "dark" : "light") : theme;
+    applyTheme(); media.addEventListener("change", applyTheme); return () => media.removeEventListener("change", applyTheme);
+  }, [theme]);
   useEffect(() => {
     if (!toast) return;
     const timer = window.setTimeout(() => setToast(""), 2600);
@@ -1794,10 +1812,10 @@ export default function App() {
   else if (view === "tasks") content = <TasksHabits completed={completed} toggleTask={toggleTask} toast={setToast} />;
   else if (view === "progress") content = <ProgressPage selected={pathway} applicationReadiness={applicationReadiness} openStage={openPathwayStage} openProgram={openProgram} go={go} />;
   else if (view === "profile") content = <ProfilePage toast={setToast} avatar={avatar} setAvatar={setAvatar} />;
-  else content = <SettingsPage toast={setToast} savedCount={saved.length} applicationCount={pathway.length} replayTutorial={() => setTutorialOpen(true)} go={go} />;
+  else content = <SettingsPage toast={setToast} savedCount={saved.length} applicationCount={pathway.length} replayTutorial={() => setTutorialOpen(true)} go={go} language={language} setLanguage={setLanguage} theme={theme} setTheme={setTheme} />;
 
   return <div className="app-shell">
-    <Navigation active={view} go={go} openGuide={() => setGuideOpen(true)} progress={progress} hasTarget={Boolean(dashboardProgram)} />
+    <Navigation active={view} go={go} openGuide={() => setGuideOpen(true)} progress={progress} hasTarget={Boolean(dashboardProgram)} language={language} />
     <main className="app-main"><Header view={view} go={go} notices={notices} setNotices={setNotices} notice={notice} onNoticeAction={runNoticeAction} avatar={avatar} /><div className="content-wrap">{content}</div></main>
     {compared.length > 0 && !compareOpen && <button className="compare-fab" onClick={() => setCompareOpen(true)}><Scale size={17} /><span>Compare {compared.length}</span><small>of 4</small></button>}
     {compareOpen && <ComparePanel ids={compared} close={() => setCompareOpen(false)} remove={toggleCompare} open={openSchool} />}
