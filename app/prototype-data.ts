@@ -12,6 +12,8 @@ const EXPORTABLE_KEYS = [
   "myway-pathway-records",
   "myway-routines",
   "myway-habit-checks",
+  "myway-notifications-enabled",
+  "myway-product-tour-v1",
 ] as const;
 
 export const MYWAY_LOCAL_KEYS = [
