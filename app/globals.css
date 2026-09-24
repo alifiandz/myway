@@ -1087,8 +1087,11 @@ body:has(.modal-backdrop) { overflow: hidden; }
 .setting-row small, .help-row small, .danger-row small { color: var(--muted); font-size: 12px; line-height: 1.5; }
 .setting-row-stack { align-items: flex-start; }
 .theme-picker { min-width: 360px; display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.theme-picker-compact { min-width: 300px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .theme-picker button { min-height: 64px; padding: 9px 11px; border: 1px solid var(--line); border-radius: 12px; color: var(--muted); background: var(--paper); cursor: pointer; display: grid; grid-template-columns: 18px 1fr 14px; align-items: center; text-align: left; font-size: 12px; font-weight: 700; }
 .theme-picker button.selected { color: var(--blue-dark); border-color: var(--blue); background: var(--blue-soft); }
+.theme-picker button.coming-soon { cursor: not-allowed; opacity: .72; background: var(--cream); grid-template-columns: 18px 1fr auto; }
+.theme-picker button.coming-soon small { padding: 4px 7px; border-radius: 999px; color: var(--muted); background: var(--line); font-size: 9px; font-weight: 800; letter-spacing: .03em; text-transform: uppercase; }
 .segmented-control { padding: 3px; display: flex; border: 1px solid var(--line); border-radius: 11px; background: var(--cream); }
 .segmented-control button { min-height: 34px; padding: 0 13px; border: 0; border-radius: 8px; color: var(--muted); background: transparent; cursor: pointer; font-size: 12px; font-weight: 700; }
 .segmented-control button.active { color: var(--ink); background: var(--paper); box-shadow: 0 2px 8px rgba(35,49,83,.09); }
