@@ -494,6 +494,192 @@ const idText: Record<string, string> = {
   "Your program fit": "Kecocokan programmu",
   "Your shortlist": "Daftar pilihanmu",
   "Your study pathway": "Jalur studimu",
+  "Must have": "Wajib ada",
+  "No preference": "Tidak ada preferensi",
+  "Career services": "Layanan karier",
+  "Final step": "Langkah terakhir",
+  "Welcome.": "Selamat datang.",
+  "Let’s build your profile.": "Mari susun profilmu.",
+  "Choose one, or continue undecided.": "Pilih satu, atau lanjutkan jika belum memutuskan.",
+  "Select any additional business areas.": "Pilih bidang bisnis tambahan yang kamu minati.",
+  "Optional. Conflicting selections are disabled automatically.": "Opsional. Pilihan yang bertentangan dinonaktifkan secara otomatis.",
+  "Low-to-moderate math": "Matematika tingkat rendah hingga sedang",
+  "Prefer a lighter quantitative load": "Lebih memilih beban kuantitatif yang ringan",
+  "Projects & cases": "Proyek dan studi kasus",
+  "Applied business learning": "Pembelajaran bisnis terapan",
+  "Flexible electives": "Mata kuliah pilihan yang fleksibel",
+  "Room to shape the degree": "Ruang untuk menyesuaikan gelar",
+  "Study primarily in English": "Belajar terutama dalam Bahasa Inggris",
+  "International study": "Studi internasional",
+  "Employer and career support": "Dukungan pemberi kerja dan karier",
+  "Funding opportunities": "Peluang pendanaan",
+  "Everything here is optional. Missing information creates a profile gap—not a negative judgement.": "Semua informasi di sini bersifat opsional. Informasi yang belum diisi akan menjadi kekurangan data profil, bukan penilaian negatif.",
+  "Complete detailed education, tests, experience and documents later in Profile.": "Lengkapi detail pendidikan, tes, pengalaman, dan dokumen nanti di Profil.",
+  "Explore programmes": "Jelajahi program",
+  "Weekly goal": "Target mingguan",
+  "Requirements, records, evidence and actions across your complete Dream pathway. Not an admission prediction.": "Persyaratan, data, bukti, dan tindakan dalam seluruh jalur Dream. Ini bukan prediksi penerimaan.",
+  "Open full pathway": "Buka Jalur lengkap",
+  "Specific practice goals based on your profile and Dream pathway. They support preparation, but do not directly change Pathway Readiness.": "Target latihan khusus berdasarkan profil dan jalur Dream. Target ini mendukung persiapan, tetapi tidak langsung mengubah Kesiapan Jalur.",
+  "A compact overview of all nine preparation stages for": "Ringkasan singkat dari sembilan tahap persiapan untuk",
+  "View all": "Lihat semua",
+  "View university": "Lihat universitas",
+  "Complete your profile": "Lengkapi profilmu",
+  "Add preferences to calculate a personal match": "Tambahkan preferensi untuk menghitung kecocokan pribadi",
+  "View match details": "Lihat detail kecocokan",
+  "Finish the missing requirements, records, evidence and actions in this stage.": "Selesaikan persyaratan, data, bukti, dan tindakan yang masih kurang pada tahap ini.",
+  "Open this stage": "Buka tahap ini",
+  "Rankings: Not yet verified": "Peringkat: Belum terverifikasi",
+  "Not yet verified. Programme evidence is listed separately below.": "Belum terverifikasi. Bukti program dicantumkan secara terpisah di bawah.",
+  "Ranked entity:": "Entitas yang diperingkat:",
+  "Different methodologies are shown separately and are never averaged.": "Metodologi yang berbeda ditampilkan secara terpisah dan tidak pernah dirata ratakan.",
+  "No bachelor": "Tidak ada program sarjana",
+  "Where you want to study": "Lokasi studi yang kamu inginkan",
+  "What you want to study": "Bidang yang ingin kamu pelajari",
+  "Study details": "Detail studi",
+  "From current official pages": "Dari halaman resmi terkini",
+  "Credits published": "Kredit telah dipublikasikan",
+  "Search programs, universities, specializations, or countries…": "Cari program, universitas, spesialisasi, atau negara…",
+  "Save a university first": "Simpan universitas terlebih dahulu",
+  "Show saved universities only": "Tampilkan hanya universitas tersimpan",
+  "Nothing is preselected. Results update only from choices you make here.": "Tidak ada pilihan awal. Hasil hanya berubah berdasarkan pilihan yang kamu buat di sini.",
+  "No filters selected": "Belum ada filter dipilih",
+  "Clear all": "Hapus semua",
+  "Showing your saved universities": "Menampilkan universitas tersimpan",
+  "Filtered from your selected criteria": "Disaring berdasarkan kriteria pilihanmu",
+  "Directory order": "Urutan direktori",
+  "No saved universities match": "Tidak ada universitas tersimpan yang sesuai",
+  "No exact matches": "Tidak ada hasil yang benar benar sesuai",
+  "Save universities or clear the current filters to see them here.": "Simpan universitas atau hapus filter saat ini untuk melihatnya di sini.",
+  "Try a broader search or remove a preference.": "Coba pencarian yang lebih luas atau hapus salah satu preferensi.",
+  "Bachelor’s programme available": "Program sarjana tersedia",
+  "No direct undergraduate degree": "Tidak ada gelar sarjana langsung",
+  "Admissions requirements must be checked on the official programme page": "Persyaratan penerimaan harus diperiksa pada halaman program resmi",
+  "Tuition and scholarships vary by applicant and intake": "Biaya kuliah dan beasiswa berbeda berdasarkan pelamar dan periode masuk",
+  "Quantitative course load is not yet verified": "Beban mata kuliah kuantitatif belum terverifikasi",
+  "This institution does not currently show a direct undergraduate business degree": "Institusi ini saat ini tidak menampilkan gelar sarjana bisnis langsung",
+  "Check the official portfolio before planning an application": "Periksa portofolio resmi sebelum merencanakan pendaftaran",
+  "Official source": "Sumber resmi",
+  "Part of": "Bagian dari",
+  "Undergraduate route verified": "Jalur sarjana terverifikasi",
+  "Add to pathway": "Tambahkan ke Jalur",
+  "No bachelor pathway": "Tidak ada jalur sarjana",
+  "Track on your dashboard": "Pantau di Beranda",
+  "Leading realistic option": "Pilihan realistis utama",
+  "Keep as a backup": "Simpan sebagai cadangan",
+  "Remove this university from your shortlist": "Hapus universitas ini dari daftar pilihanmu",
+  "Admissions & costs": "Penerimaan dan biaya",
+  "Rankings & sources": "Peringkat dan sumber",
+  "1 verified route": "1 jalur terverifikasi",
+  "These areas come from the current official study route linked to this profile. They are not inferred from the institution’s name or ranking.": "Bidang ini berasal dari jalur studi resmi terkini yang terhubung ke profil ini. Informasi tidak disimpulkan dari nama atau peringkat institusi.",
+  "Check programme structure first, then confirm admissions, costs and deadlines before adding it to your application pathway.": "Periksa struktur program terlebih dahulu, lalu konfirmasi penerimaan, biaya, dan tenggat sebelum menambahkannya ke jalur pendaftaranmu.",
+  "View programme": "Lihat program",
+  "What the verified record currently covers": "Cakupan data yang telah terverifikasi saat ini",
+  "Current verified study areas": "Bidang studi yang terverifikasi saat ini",
+  "Deadlines must be verified for the intended intake and applicant category.": "Tenggat harus diverifikasi untuk periode masuk dan kategori pelamar yang dituju.",
+  "MyWay organises preparation, but the official institution portal remains the authority for requirements, fees and submission.": "MyWay mengatur persiapan, tetapi portal resmi institusi tetap menjadi sumber utama untuk persyaratan, biaya, dan pengiriman aplikasi.",
+  "MyWay will not estimate or invent a position.": "MyWay tidak akan memperkirakan atau mengarang posisi.",
+  "Ranking systems measure different entities and outcomes. MyWay displays them separately and never averages them.": "Sistem peringkat mengukur entitas dan hasil yang berbeda. MyWay menampilkannya secara terpisah dan tidak pernah merata ratakannya.",
+  "Complete your study preferences to calculate a personal match.": "Lengkapi preferensi studimu untuk menghitung kecocokan pribadi.",
+  "Add business interests, study locations, language and practical limits to calculate a transparent fit score.": "Tambahkan minat bisnis, lokasi studi, bahasa, dan batas praktis untuk menghitung skor kecocokan secara transparan.",
+  "Not in your pathway": "Belum ada di Jalurmu",
+  "Based on this university’s own requirements, records, evidence and completed actions.": "Berdasarkan persyaratan, data, bukti, dan tindakan yang telah selesai untuk universitas ini.",
+  "Add this bachelor programme as Dream, Target or Alternative to begin its separate tracker.": "Tambahkan program sarjana ini sebagai Dream, Target, atau Alternative untuk memulai pelacak terpisah.",
+  "Source checked": "Sumber diperiksa",
+  "Program information can change. Confirm requirements, dates and fees on the official page before applying.": "Informasi program dapat berubah. Konfirmasi persyaratan, tanggal, dan biaya pada halaman resmi sebelum mendaftar.",
+  "Add this programme as Dream, Target or Alternative to begin its separate tracker.": "Tambahkan program ini sebagai Dream, Target, atau Alternative untuk memulai pelacak terpisah.",
+  "Current route": "Jalur saat ini",
+  "Length and credits": "Durasi dan kredit",
+  "Not applicable": "Tidak berlaku",
+  "Comparison uses official study pages and keeps ranking methodologies separate.": "Perbandingan menggunakan halaman studi resmi dan memisahkan metodologi peringkat.",
+  "Weekly pathway review": "Tinjauan Jalur mingguan",
+  "View, download and reuse documents across university applications.": "Lihat, unduh, dan gunakan kembali dokumen untuk berbagai pendaftaran universitas.",
+  "Choose another saved file": "Pilih file tersimpan lain",
+  "Upload file": "Unggah file",
+  "Upload new": "Unggah baru",
+  "Not linked to a requirement": "Tidak terhubung dengan persyaratan",
+  "Use file": "Gunakan file",
+  "Preview is not available for this file type": "Pratinjau tidak tersedia untuk jenis file ini",
+  "Download the original file to open it in the appropriate application.": "Unduh file asli untuk membukanya di aplikasi yang sesuai.",
+  "Document storage is unavailable in this browser": "Penyimpanan dokumen tidak tersedia di browser ini",
+  "The file could not be saved on this device": "File tidak dapat disimpan di perangkat ini",
+  "This file is no longer available on this device": "File ini tidak lagi tersedia di perangkat ini",
+  "Choose an application": "Pilih pendaftaran",
+  "Not recorded": "Belum dicatat",
+  "No file selected": "Belum ada file dipilih",
+  "Not researched": "Belum diteliti",
+  "Not submitted": "Belum dikirim",
+  "No decision recorded": "Belum ada keputusan yang dicatat",
+  "Each university keeps separate requirements, evidence, actions and readiness.": "Setiap universitas memiliki persyaratan, bukti, tindakan, dan kesiapan yang terpisah.",
+  "Information added": "Informasi ditambahkan",
+  "My evidence": "Bukti saya",
+  "The checklist below is tied to this stage. “Recorded” means MyWay has a value or file; it does not replace the university’s decision.": "Daftar periksa di bawah terhubung dengan tahap ini. “Tercatat” berarti MyWay memiliki nilai atau file, bukan menggantikan keputusan universitas.",
+  "Needs action": "Perlu tindakan",
+  "Verify this stage on the official programme page": "Verifikasi tahap ini pada halaman program resmi",
+  "Each action is tied to the matching requirement. Estimates and target timing are planning guidance; university-specific facts must come from the named source.": "Setiap tindakan terhubung dengan persyaratan yang sesuai. Perkiraan dan waktu target merupakan panduan perencanaan. Fakta khusus universitas harus berasal dari sumber yang disebutkan.",
+  "Manage in Explore": "Kelola di Jelajahi",
+  "Not provided": "Belum diberikan",
+  "All checked": "Semua telah diperiksa",
+  "Needs review": "Perlu ditinjau",
+  "Certificate added": "Sertifikat ditambahkan",
+  "Score added": "Skor ditambahkan",
+  "Funding plan": "Rencana pendanaan",
+  "Budget and funding recorded": "Anggaran dan pendanaan dicatat",
+  "On track": "Sesuai rencana",
+  "Evidence & documents": "Bukti dan dokumen",
+  "Pathway actions": "Tindakan Jalur",
+  "Track preparation for every shortlisted programme—not admission probability.": "Pantau persiapan setiap program dalam daftar pilihan, bukan peluang penerimaan.",
+  "Shared records and documents are reused. University-specific requirements remain separate.": "Data dan dokumen bersama digunakan kembali. Persyaratan khusus universitas tetap terpisah.",
+  "Choose a JPG, PNG, or WebP image": "Pilih gambar JPG, PNG, atau WebP",
+  "Choose an image smaller than 1 MB": "Pilih gambar yang lebih kecil dari 1 MB",
+  "Choose an avatar or upload your own image.": "Pilih avatar atau unggah gambarmu sendiri.",
+  "Reset to initials": "Kembalikan ke inisial",
+  "Current school name": "Nama sekolah saat ini",
+  "Record the result and validity separately from its certificate.": "Catat hasil dan masa berlaku secara terpisah dari sertifikatnya.",
+  "Field: Business. Preferences shape matching—not readiness or admission probability.": "Bidang: Bisnis. Preferensi memengaruhi pencocokan, bukan kesiapan atau peluang penerimaan.",
+  "Select every field you would genuinely consider.": "Pilih setiap bidang yang benar benar akan kamu pertimbangkan.",
+  "Optional. A field cannot be selected and avoided at the same time.": "Opsional. Satu bidang tidak dapat dipilih sekaligus dihindari.",
+  "Leave a field blank when it should not restrict results.": "Kosongkan kolom jika tidak seharusnya membatasi hasil.",
+  "Countries you would consider": "Negara yang akan kamu pertimbangkan",
+  "Preferred language": "Bahasa pilihan",
+  "Maximum annual tuition": "Biaya kuliah tahunan maksimum",
+  "Preferred intake": "Periode masuk pilihan",
+  "Math comfort": "Kenyamanan dalam matematika",
+  "Click a priority while editing to cycle through its importance.": "Klik prioritas saat mengedit untuk mengubah tingkat kepentingannya.",
+  "Work-integrated experience": "Pengalaman terintegrasi dengan pekerjaan",
+  "Incubators and venture support": "Dukungan inkubator dan usaha",
+  "Official funding opportunities": "Peluang pendanaan resmi",
+  "Real company projects": "Proyek perusahaan nyata",
+  "Must-have criteria are checked first. Preferred features improve ordering. No preference does not affect results.": "Kriteria wajib diperiksa terlebih dahulu. Fitur pilihan meningkatkan urutan. Tidak adanya preferensi tidak memengaruhi hasil.",
+  "Record the experience first; attach supporting files in Documents.": "Catat pengalaman terlebih dahulu, lalu lampirkan file pendukung di Dokumen.",
+  "Work / internships": "Pekerjaan / magang",
+  "Portfolio link": "Tautan portofolio",
+  "Passport / identity document": "Paspor / dokumen identitas",
+  "Academic transcript": "Transkrip akademik",
+  "School certificate": "Ijazah sekolah",
+  "English certificate": "Sertifikat Bahasa Inggris",
+  "Portfolio evidence": "Bukti portofolio",
+  "Actual files are stored in this browser on this device and can be viewed, downloaded and reused. Cloud access will be added with the backend.": "File asli disimpan di browser pada perangkat ini dan dapat dilihat, diunduh, serta digunakan kembali. Akses cloud akan ditambahkan bersama sistem backend.",
+  "MyWay planning data downloaded": "Data perencanaan MyWay telah diunduh",
+  "MyWay data restored · reloading": "Data MyWay dipulihkan · memuat ulang",
+  "This is not a supported MyWay data file": "File ini bukan file data MyWay yang didukung",
+  "In-app notifications enabled": "Notifikasi dalam aplikasi diaktifkan",
+  "In-app notifications paused": "Notifikasi dalam aplikasi dijeda",
+  "Open Dashboard": "Buka Beranda",
+  "Open Explore": "Buka Jelajahi",
+  "Open Pathway": "Buka Jalur",
+  "Open Progress": "Buka Progres",
+  "Open Profile": "Buka Profil",
+  "Build your student profile": "Susun profil siswamu",
+  "Record education, English results, business interests and reusable evidence.": "Catat pendidikan, hasil Bahasa Inggris, minat bisnis, dan bukti yang dapat digunakan kembali.",
+  "Explore with evidence": "Jelajahi berdasarkan bukti",
+  "Search and compare undergraduate business routes. Rankings remain separate from programme facts.": "Cari dan bandingkan jalur bisnis sarjana. Peringkat tetap terpisah dari fakta program.",
+  "Create your shortlist": "Susun daftar pilihanmu",
+  "Choose one Dream and add Target or Alternative applications without losing their separate progress.": "Pilih satu Dream dan tambahkan pendaftaran Target atau Alternative tanpa kehilangan progres terpisahnya.",
+  "Prepare each application": "Siapkan setiap pendaftaran",
+  "Complete the nine Pathway stages, store evidence, and submit through the university’s official portal.": "Selesaikan sembilan tahap Jalur, simpan bukti, dan kirim melalui portal resmi universitas.",
+  "MyWay organises preparation. Final applications are submitted through official university portals.": "MyWay mengatur persiapan. Pendaftaran akhir dikirim melalui portal resmi universitas.",
+  "Fit scores describe preference alignment. Readiness tracks preparation—not admission probability.": "Skor kecocokan menggambarkan kesesuaian preferensi. Kesiapan memantau persiapan, bukan peluang penerimaan.",
+  "English applied": "Bahasa Inggris diterapkan",
 };
 
 const patterns: Array<[RegExp, (match: RegExpMatchArray) => string]> = [
@@ -513,6 +699,18 @@ const patterns: Array<[RegExp, (match: RegExpMatchArray) => string]> = [
   [/^(\d+) institutions$/, (m) => `${m[1]} institusi`],
   [/^Context attached for (.+)$/, (m) => `Konteks terlampir untuk ${m[1]}`],
 ];
+
+const enText: Record<string, string> = Object.fromEntries(
+  Object.entries(idText).map(([english, indonesian]) => [indonesian, english]),
+);
+
+function restoreEnglish(value: string) {
+  const leading = value.match(/^\s*/)?.[0] ?? "";
+  const trailing = value.match(/\s*$/)?.[0] ?? "";
+  const clean = value.trim();
+  if (!clean) return value;
+  return leading + (enText[clean] ?? clean) + trailing;
+}
 
 function translate(value: string) {
   const leading = value.match(/^\s*/)?.[0] ?? "";
@@ -536,7 +734,7 @@ function applyLanguage(language: Language) {
   let node = walker.nextNode() as Text | null;
   while (node) {
     if (!originalText.has(node)) originalText.set(node, node.nodeValue ?? "");
-    const original = originalText.get(node) ?? "";
+    const original = restoreEnglish(originalText.get(node) ?? "");
     const next = language === "id" ? translate(original) : original;
     if (node.nodeValue !== next) node.nodeValue = next;
     node = walker.nextNode() as Text | null;
@@ -548,7 +746,7 @@ function applyLanguage(language: Language) {
       const current = element.getAttribute(name);
       if (current === null) return;
       if (!originals!.has(name)) originals!.set(name, current);
-      const original = originals!.get(name) ?? current;
+      const original = restoreEnglish(originals!.get(name) ?? current);
       element.setAttribute(name, language === "id" ? translate(original) : original);
     });
   });
@@ -558,12 +756,17 @@ function applyLanguage(language: Language) {
 
 export function SiteLanguage({ language }: { language: Language }) {
   useEffect(() => {
+    let active = true;
     let frame = 0;
-    const run = () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(() => applyLanguage(language)); };
+    const run = () => {
+      if (!active) return;
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => { if (active) applyLanguage(language); });
+    };
     run();
     const observer = new MutationObserver(run);
     observer.observe(document.body, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ["aria-label", "placeholder", "title"] });
-    return () => { observer.disconnect(); cancelAnimationFrame(frame); };
+    return () => { active = false; observer.disconnect(); cancelAnimationFrame(frame); };
   }, [language]);
   return null;
 }
