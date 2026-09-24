@@ -1099,6 +1099,7 @@ function FeedbackModal({ initialCategory, context, close }: { initialCategory?: 
   const [sending, setSending] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
+  const [screenshotName, setScreenshotName] = useState("");
   const submit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!category) return;
@@ -1128,7 +1129,7 @@ function FeedbackModal({ initialCategory, context, close }: { initialCategory?: 
         {category === "bug" && <div className="feedback-fields"><label><span>What happened?</span><textarea name="details" required rows={3} /></label><label><span>What did you expect to happen?</span><textarea name="expected" required rows={3} /></label><label><span>Page or feature</span><input name="pageFeature" required /></label></div>}
         {category === "incorrect" && <div className="feedback-fields"><label><span>What information looks wrong?</span><textarea name="details" required rows={3} /></label><label><span>Category</span><select name="informationCategory" required defaultValue=""><option value="" disabled>Select a category</option>{["Programme", "Tuition", "Deadline", "Entry requirement", "Ranking", "University details", "Logo", "Other"].map((item) => <option key={item}>{item}</option>)}</select></label><label><span>What should we review?</span><textarea name="reviewRequest" required rows={3} /></label><label><span>Optional source or reference link</span><input name="sourceUrl" type="url" inputMode="url" /></label></div>}
         {category === "suggestion" && <div className="feedback-fields"><label><span>What would you like to tell us?</span><textarea name="details" required rows={5} /></label></div>}
-        <label className="feedback-upload"><Camera size={16} /><span><strong>Optional screenshot</strong><small>PNG, JPG, or WEBP up to 8 MB</small></span><input name="screenshot" type="file" accept="image/png,image/jpeg,image/webp" /></label>
+        <label className="feedback-upload"><Camera size={16} /><span><strong>Optional screenshot</strong><small>PNG, JPG, or WEBP up to 8 MB</small></span><input name="screenshot" type="file" accept="image/png,image/jpeg,image/webp" onChange={(event) => setScreenshotName(event.currentTarget.files?.[0]?.name ?? "")} /><em>{screenshotName || "Choose screenshot"}</em></label>
         <fieldset className="feedback-contact"><legend>Contact details</legend><div><label><span>Name</span><small>Optional</small><input name="name" autoComplete="name" /></label><label><span>Email</span><small>Optional, only if they want a reply</small><input name="email" type="email" autoComplete="email" /></label></div><label className="feedback-consent"><input name="mayContact" value="true" type="checkbox" /><span>You can contact me about this feedback</span></label></fieldset>
         {context.university && <p className="feedback-context"><CircleCheck size={13} /> Context attached for {context.programme || context.university}</p>}
         {error && <p className="feedback-error" role="alert">{error}</p>}

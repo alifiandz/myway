@@ -314,6 +314,7 @@ const idText: Record<string, string> = {
   "What would you like to tell us?": "Apa yang ingin kamu sampaikan?",
   "Optional screenshot": "Tangkapan layar opsional",
   "PNG, JPG, or WEBP up to 8 MB": "PNG, JPG, atau WEBP hingga 8 MB",
+  "Choose screenshot": "Pilih tangkapan layar",
   "Contact details": "Detail kontak",
   "Name": "Nama",
   "Optional": "Opsional",
