@@ -1652,9 +1652,9 @@ body:has(.modal-backdrop) { overflow: hidden; }
 /* Guided product tour */
 .product-tour-layer { position: fixed; inset: 0; z-index: 300; pointer-events: none; }
 .tour-scrim { position: absolute; inset: 0; background: rgba(12, 20, 42, .62); backdrop-filter: blur(2px); pointer-events: auto; }
-.tour-spotlight { position: fixed; z-index: 301; border: 2px solid rgba(255, 255, 255, .95); border-radius: 15px; box-shadow: 0 0 0 9999px rgba(12, 20, 42, .62), 0 0 0 5px rgba(114, 135, 255, .3), 0 16px 45px rgba(9, 17, 38, .28); transition: top .24s ease, left .24s ease, width .24s ease, height .24s ease; pointer-events: none; }
+.tour-spotlight { position: fixed; z-index: 301; border: 2px solid rgba(255, 255, 255, .98); border-radius: 15px; box-shadow: 0 0 0 9999px rgba(12, 20, 42, .64), 0 0 0 5px rgba(114, 135, 255, .32), 0 15px 42px rgba(9, 17, 38, .24); pointer-events: none; animation: tourFocusIn .18s ease both; }
 .tour-coachmark { z-index: 302; width: min(380px, calc(100vw - 32px)); padding: 19px; border: 1px solid rgba(255, 255, 255, .7); border-radius: 17px; background: var(--paper); color: var(--ink); box-shadow: 0 24px 70px rgba(8, 18, 43, .3); pointer-events: auto; animation: tutorialIn .22s ease both; }
-.tour-coachmark.positioned { position: fixed; }
+.tour-coachmark.positioned { position: fixed; right: 24px; bottom: 24px; }
 .tour-coachmark.centered { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
 .tour-coachmark > header, .tour-coachmark > footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .tour-step { color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .03em; }
@@ -1667,6 +1667,7 @@ body:has(.modal-backdrop) { overflow: hidden; }
 .tour-progress i.active { background: var(--blue); }
 .tour-coachmark > footer { padding-top: 15px; border-top: 1px solid var(--line); }
 .tour-coachmark > footer button { min-width: 90px; justify-content: center; }
+@keyframes tourFocusIn { from { opacity: 0; } to { opacity: 1; } }
 
 @media (max-width: 800px) {
   .tour-spotlight { border-radius: 12px; }

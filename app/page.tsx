@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   BarChart3, Bell, BookOpen, Bookmark, BriefcaseBusiness, Camera,
   Check, ChevronDown, ChevronLeft, ChevronRight, CircleAlert, CircleCheck,
@@ -1612,50 +1612,64 @@ function SettingsPage({ toast, savedCount, applicationCount, replayTutorial, go,
 type TutorialStep = { view: View; target?: string; en: { title: string; body: string }; id: { title: string; body: string } };
 const tutorialSteps: TutorialStep[] = [
   { view: "dashboard", en: { title: "Welcome to MyWay", body: "This short tour shows how every part of MyWay works together to support your university journey." }, id: { title: "Selamat datang di MyWay", body: "Tur singkat ini menunjukkan bagaimana setiap bagian MyWay saling terhubung untuk mendukung perjalanan universitasmu." } },
-  { view: "dashboard", target: "dashboard-main", en: { title: "Start from your Dashboard", body: "See your current application readiness, planning overview, and the most useful action to take next." }, id: { title: "Mulai dari Dasbor", body: "Lihat kesiapan aplikasi, ringkasan perencanaan, dan tindakan paling berguna yang perlu kamu lakukan berikutnya." } },
-  { view: "explore", target: "explore-search", en: { title: "Discover the right options", body: "Search and filter universities and undergraduate business programmes using the criteria that matter to you." }, id: { title: "Temukan pilihan yang tepat", body: "Cari dan saring universitas serta program sarjana bisnis berdasarkan kriteria yang penting bagimu." } },
-  { view: "explore", target: "explore-main", en: { title: "Save, compare, and review", body: "Save promising options, compare up to four universities, open verified details, and add a choice to your Pathway." }, id: { title: "Simpan, bandingkan, dan tinjau", body: "Simpan pilihan menarik, bandingkan hingga empat universitas, buka detail terverifikasi, lalu tambahkan pilihan ke Pathway." } },
-  { view: "pathway", target: "pathway-main", en: { title: "Build your Pathway", body: "Organise Dream, Target, and Alternative choices. Each university keeps its own requirements, evidence, and progress." }, id: { title: "Susun Pathway milikmu", body: "Atur pilihan Dream, Target, dan Alternative. Setiap universitas memiliki persyaratan, bukti, dan progres tersendiri." } },
-  { view: "pathway", target: "pathway-main", en: { title: "Follow the application journey", body: "Work through nine preparation stages, attach supporting evidence, and keep university specific actions in one place." }, id: { title: "Ikuti perjalanan aplikasi", body: "Selesaikan sembilan tahap persiapan, lampirkan bukti pendukung, dan simpan tindakan khusus universitas dalam satu tempat." } },
-  { view: "tasks", target: "tasks-main", en: { title: "Turn plans into weekly action", body: "Use Tasks and Habits to create repeatable goals, focused work sessions, and a practical weekly routine." }, id: { title: "Ubah rencana menjadi tindakan mingguan", body: "Gunakan Tugas dan Kebiasaan untuk membuat target berulang, sesi fokus, dan rutinitas mingguan yang praktis." } },
-  { view: "progress", target: "nav-progress", en: { title: "Check your readiness", body: "Progress combines requirements, records, evidence, and actions for each application. It is preparation progress, not an admission prediction." }, id: { title: "Periksa kesiapanmu", body: "Progres menggabungkan persyaratan, catatan, bukti, dan tindakan untuk setiap aplikasi. Ini adalah progres persiapan, bukan prediksi penerimaan." } },
-  { view: "profile", target: "nav-profile", en: { title: "Keep reusable details in Profile", body: "Store education, test results, preferences, experience, and documents once so they can support every application." }, id: { title: "Simpan detail yang dapat digunakan kembali di Profil", body: "Simpan pendidikan, hasil tes, preferensi, pengalaman, dan dokumen sekali agar dapat mendukung setiap aplikasi." } },
-  { view: "settings", target: "settings-main", en: { title: "Make MyWay yours", body: "Settings controls language, appearance, reminders, local data, privacy, and access to this guided tour whenever you need it." }, id: { title: "Sesuaikan MyWay untukmu", body: "Pengaturan mengontrol bahasa, tampilan, pengingat, data lokal, privasi, dan akses ke tur ini kapan pun kamu membutuhkannya." } },
-  { view: "settings", target: "feedback-button", en: { title: "Tell us what could be better", body: "Use Feedback to report a problem, flag incorrect information, or share a suggestion from anywhere in MyWay." }, id: { title: "Beri tahu kami apa yang dapat diperbaiki", body: "Gunakan Masukan untuk melaporkan masalah, menandai informasi yang salah, atau membagikan saran dari mana saja di MyWay." } },
+  { view: "dashboard", target: ".welcome-row", en: { title: "Start from your Dashboard", body: "See your current application readiness, planning overview, and the most useful action to take next." }, id: { title: "Mulai dari Dasbor", body: "Lihat kesiapan aplikasi, ringkasan perencanaan, dan tindakan paling berguna yang perlu kamu lakukan berikutnya." } },
+  { view: "explore", target: ".search-card", en: { title: "Discover the right options", body: "Search and filter universities and undergraduate business programmes using the criteria that matter to you." }, id: { title: "Temukan pilihan yang tepat", body: "Cari dan saring universitas serta program sarjana bisnis berdasarkan kriteria yang penting bagimu." } },
+  { view: "explore", target: ".program-list > article:first-child", en: { title: "Save, compare, and review", body: "Each result lets you save an option, compare it with other universities, review verified details, or add it to your Pathway." }, id: { title: "Simpan, bandingkan, dan tinjau", body: "Setiap hasil dapat disimpan, dibandingkan dengan universitas lain, ditinjau detail terverifikasinya, atau ditambahkan ke Pathway." } },
+  { view: "pathway", target: ".dream-pathway-card, .pathway-empty-dream", en: { title: "Build your Pathway", body: "Organise Dream, Target, and Alternative choices. Each university keeps its own requirements, evidence, and progress." }, id: { title: "Susun Pathway milikmu", body: "Atur pilihan Dream, Target, dan Alternative. Setiap universitas memiliki persyaratan, bukti, dan progres tersendiri." } },
+  { view: "pathway", target: ".pathway-stage:first-child", en: { title: "Follow the application journey", body: "Open each of the nine stages to review requirements, add your evidence, and complete the actions for that application." }, id: { title: "Ikuti perjalanan aplikasi", body: "Buka setiap dari sembilan tahap untuk meninjau persyaratan, menambahkan bukti, dan menyelesaikan tindakan untuk aplikasi tersebut." } },
+  { view: "tasks", target: ".task-tabs", en: { title: "Turn plans into weekly action", body: "Switch between Weekly actions and Habit tracker to complete focused tasks and build a repeatable routine." }, id: { title: "Ubah rencana menjadi tindakan mingguan", body: "Beralih antara Tindakan mingguan dan Pelacak kebiasaan untuk menyelesaikan tugas fokus dan membangun rutinitas berulang." } },
+  { view: "progress", target: ".progress-hero, .progress-empty", en: { title: "Check your readiness", body: "Progress combines requirements, records, evidence, and actions for each application. It measures preparation, not admission probability." }, id: { title: "Periksa kesiapanmu", body: "Progres menggabungkan persyaratan, catatan, bukti, dan tindakan untuk setiap aplikasi. Ini mengukur persiapan, bukan peluang penerimaan." } },
+  { view: "profile", target: ".profile-workspace-hero", en: { title: "Keep reusable details in Profile", body: "Store education, test results, preferences, experience, and documents once so they can support every application." }, id: { title: "Simpan detail yang dapat digunakan kembali di Profil", body: "Simpan pendidikan, hasil tes, preferensi, pengalaman, dan dokumen sekali agar dapat mendukung setiap aplikasi." } },
+  { view: "settings", target: "#general", en: { title: "Make MyWay yours", body: "Choose your language and appearance here. Settings also manages reminders, local data, privacy, and access to this tour." }, id: { title: "Sesuaikan MyWay untukmu", body: "Pilih bahasa dan tampilan di sini. Pengaturan juga mengelola pengingat, data lokal, privasi, dan akses ke tur ini." } },
+  { view: "settings", target: "[data-tour='feedback-button']", en: { title: "Tell us what could be better", body: "Open Feedback from any page to report a problem, flag incorrect information, or share a suggestion." }, id: { title: "Beri tahu kami apa yang dapat diperbaiki", body: "Buka Masukan dari halaman mana pun untuk melaporkan masalah, menandai informasi yang salah, atau membagikan saran." } },
 ];
 
 function ProductTutorial({ close, go, language }: { close: () => void; go: (view: View) => void; language: "en" | "id" }) {
   const [step, setStep] = useState(0);
   const [focus, setFocus] = useState<{ top: number; left: number; width: number; height: number } | null>(null);
+  const targetRef = useRef<HTMLElement | null>(null);
   const current = tutorialSteps[step];
   const copy = current[language];
   const id = language === "id";
   const finish = () => { window.localStorage.setItem("myway-product-tour-v2", "complete"); go("dashboard"); close(); };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     go(current.view);
-    let measureTimer = 0;
-    const findTarget = () => {
-      if (!current.target) return null;
-      const selectors = [`[data-tour="${current.target}"]`, `[data-tour="mobile-${current.target}"]`];
-      const candidates = selectors.flatMap((selector) => Array.from(document.querySelectorAll<HTMLElement>(selector)));
-      return candidates.find((element) => { const box = element.getBoundingClientRect(); return box.width > 0 && box.height > 0; }) ?? null;
-    };
+    setFocus(null);
+    targetRef.current = null;
+    let frame = 0;
+    let observer: ResizeObserver | null = null;
     const measure = () => {
-      const target = findTarget();
+      const target = targetRef.current;
       if (!target) { setFocus(null); return; }
       const box = target.getBoundingClientRect();
-      const padding = 8;
-      setFocus({ top: Math.max(8, box.top - padding), left: Math.max(8, box.left - padding), width: Math.min(window.innerWidth - 16, box.width + padding * 2), height: box.height + padding * 2 });
+      const padding = 7;
+      const top = Math.max(7, box.top - padding);
+      const left = Math.max(7, box.left - padding);
+      const right = Math.min(window.innerWidth - 7, box.right + padding);
+      const bottom = Math.min(window.innerHeight - 7, box.bottom + padding);
+      if (right <= left || bottom <= top) { setFocus(null); return; }
+      setFocus({ top, left, width: right - left, height: bottom - top });
     };
-    const openTimer = window.setTimeout(() => {
-      const target = findTarget();
-      target?.scrollIntoView({ behavior: "smooth", block: "center" });
-      measureTimer = window.setTimeout(measure, 320);
-    }, 80);
+    const settle = () => {
+      frame = window.requestAnimationFrame(() => {
+        frame = window.requestAnimationFrame(() => {
+          const candidates = current.target ? Array.from(document.querySelectorAll<HTMLElement>(current.target)) : [];
+          const target = candidates.find((element) => { const box = element.getBoundingClientRect(); return box.width > 0 && box.height > 0; }) ?? null;
+          targetRef.current = target;
+          if (!target) { setFocus(null); return; }
+          target.scrollIntoView({ behavior: "auto", block: "center", inline: "nearest" });
+          measure();
+          observer = new ResizeObserver(measure);
+          observer.observe(target);
+        });
+      });
+    };
+    const openTimer = window.setTimeout(settle, 40);
     window.addEventListener("resize", measure);
-    return () => { window.clearTimeout(openTimer); window.clearTimeout(measureTimer); window.removeEventListener("resize", measure); };
-  }, [current.target, current.view, go]);
+    window.addEventListener("scroll", measure, true);
+    return () => { window.clearTimeout(openTimer); window.cancelAnimationFrame(frame); observer?.disconnect(); window.removeEventListener("resize", measure); window.removeEventListener("scroll", measure, true); };
+  }, [step, current.target, current.view, go]);
 
   useEffect(() => {
     const keys = (event: KeyboardEvent) => {
@@ -1667,12 +1681,10 @@ function ProductTutorial({ close, go, language }: { close: () => void; go: (view
     return () => window.removeEventListener("keydown", keys);
   });
 
-  const coachTop = focus ? (focus.top + focus.height + 300 < window.innerHeight ? focus.top + focus.height + 16 : Math.max(16, focus.top - 286)) : undefined;
-  const coachLeft = focus ? Math.max(16, Math.min(focus.left, window.innerWidth - 396)) : undefined;
-  return <div className="product-tour-layer" role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
+  return <div className="product-tour-layer" data-no-translate role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
     {!focus && <div className="tour-scrim" />}
-    {focus && <div className="tour-spotlight" style={{ top: focus.top, left: focus.left, width: focus.width, height: focus.height }} />}
-    <section className={`tour-coachmark ${focus ? "positioned" : "centered"}`} style={focus ? { top: coachTop, left: coachLeft } : undefined}>
+    {focus && <div key={`spotlight-${step}`} className="tour-spotlight" style={{ top: focus.top, left: focus.left, width: focus.width, height: focus.height }} />}
+    <section key={`coach-${step}`} className={`tour-coachmark ${focus ? "positioned" : "centered"}`} aria-live="polite">
       <header><span className="tour-step">{id ? "Langkah" : "Step"} {step + 1} {id ? "dari" : "of"} {tutorialSteps.length}</span><button className="text-link" onClick={finish}>{id ? "Lewati tur" : "Skip tour"}</button></header>
       <div className="tour-heading"><span><Sparkles size={18} /></span><div><h2 id="tutorial-title">{copy.title}</h2><p>{copy.body}</p></div></div>
       <div className="tour-progress" aria-hidden="true">{tutorialSteps.map((item, index) => <i key={`${item.view}-${index}`} className={index <= step ? "active" : ""} />)}</div>
@@ -1781,11 +1793,11 @@ export default function App() {
     return () => window.clearTimeout(timer);
   }, [toast]);
 
-  const go = (next: View) => {
+  const go = useCallback((next: View) => {
     setView(next); setSelectedProgramId(null); setSelectedSchoolId(null); setNotices(false);
     window.history.replaceState(null, "", "#" + next);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, []);
   const openPathwayStage = (index: number, programId: string) => { setPathwayStage(index); setPathwayApplicationId(programId); go("pathway"); };
   const openProgram = (program: Program) => {
     setView("explore");

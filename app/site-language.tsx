@@ -806,6 +806,7 @@ function applyLanguage(language: Language) {
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   let node = walker.nextNode() as Text | null;
   while (node) {
+    if (node.parentElement?.closest("[data-no-translate]")) { node = walker.nextNode() as Text | null; continue; }
     if (!originalText.has(node)) originalText.set(node, node.nodeValue ?? "");
     const original = restoreEnglish(originalText.get(node) ?? "");
     const next = language === "id" ? translate(original) : original;
@@ -813,6 +814,7 @@ function applyLanguage(language: Language) {
     node = walker.nextNode() as Text | null;
   }
   document.querySelectorAll("[aria-label],[placeholder],[title]").forEach((element) => {
+    if (element.closest("[data-no-translate]")) return;
     let originals = originalAttributes.get(element);
     if (!originals) { originals = new Map(); originalAttributes.set(element, originals); }
     ["aria-label", "placeholder", "title"].forEach((name) => {
