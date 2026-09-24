@@ -149,7 +149,6 @@ const idText: Record<string, string> = {
   "Habit tracker": "Pelacak kebiasaan",
   "English qualification practice": "Latihan kualifikasi Bahasa Inggris",
   "Finish one timed 20-minute session and record the result by Sunday": "Selesaikan satu sesi 20 menit dengan batas waktu dan catat hasilnya sebelum Minggu",
-  "Profile · English qualification": "Profil · Kualifikasi Bahasa Inggris",
   "Programme research": "Riset program",
   "Verify one missing requirement for one Pathway university from its official source": "Verifikasi satu persyaratan yang belum lengkap untuk satu universitas Jalur dari sumber resminya",
   "Pathway · Official requirements": "Jalur · Persyaratan resmi",
@@ -386,6 +385,9 @@ const idText: Record<string, string> = {
   "Focused task": "Tugas terfokus",
   "From discovery to application": "Dari penemuan hingga pendaftaran",
   "Good afternoon": "Selamat siang",
+  "Good morning": "Selamat pagi",
+  "Good evening": "Selamat malam",
+  "Good night": "Selamat malam",
   "Habit sessions": "Sesi kebiasaan",
   "How MyWay uses this": "Cara MyWay menggunakan ini",
   "How it is calculated": "Cara perhitungannya",
@@ -680,6 +682,18 @@ const idText: Record<string, string> = {
   "MyWay organises preparation. Final applications are submitted through official university portals.": "MyWay mengatur persiapan. Pendaftaran akhir dikirim melalui portal resmi universitas.",
   "Fit scores describe preference alignment. Readiness tracks preparation—not admission probability.": "Skor kecocokan menggambarkan kesesuaian preferensi. Kesiapan memantau persiapan, bukan peluang penerimaan.",
   "English applied": "Bahasa Inggris diterapkan",
+  "Ready to begin": "Siap memulai",
+  "Ahead of plan": "Lebih cepat dari rencana",
+  "Building rhythm": "Membangun ritme",
+  "One small check-in today will move the week forward.": "Satu aktivitas kecil hari ini akan membantu progres minggu ini.",
+  "You are moving at a healthy pace for this week.": "Progresmu berjalan dengan baik untuk minggu ini.",
+  "You went beyond the plan. Keep the routine sustainable.": "Kamu melampaui rencana. Pertahankan rutinitas yang berkelanjutan.",
+  "My Pathway · Weekly planning": "Jalur Saya · Perencanaan mingguan",
+  "Review Dream, Target and Alternative choices, then set one dated next action": "Tinjau pilihan Dream, Target, dan Alternative, lalu tentukan satu tindakan berikutnya beserta tanggalnya",
+  "Profile · English qualification": "Profil · Kualifikasi Bahasa Inggris",
+  "Pathway · Academic gaps": "Jalur · Kesenjangan akademik",
+  "Your routine · Personal target": "Rutinitasmu · Target pribadi",
+  "Complete": "Selesai",
 };
 
 const patterns: Array<[RegExp, (match: RegExpMatchArray) => string]> = [
@@ -698,6 +712,12 @@ const patterns: Array<[RegExp, (match: RegExpMatchArray) => string]> = [
   [/^(\d+) universities$/, (m) => `${m[1]} universitas`],
   [/^(\d+) institutions$/, (m) => `${m[1]} institusi`],
   [/^Context attached for (.+)$/, (m) => `Konteks terlampir untuk ${m[1]}`],
+  [/^(\d+) routine check-ins$/, (m) => `${m[1]} aktivitas rutinitas`],
+  [/^(\d+) active days$/, (m) => `${m[1]} hari aktif`],
+  [/^(\d+) min · (\d+)× weekly$/, (m) => `${m[1]} menit · ${m[2]}× per minggu`],
+  [/^(\d+) of (\d+)$/, (m) => `${m[1]} dari ${m[2]}`],
+  [/^(\d+) open$/, (m) => `${m[1]} terbuka`],
+  [/^(\d+) of 9 stages ready$/, (m) => `${m[1]} dari 9 tahap siap`],
 ];
 
 const enText: Record<string, string> = Object.fromEntries(
