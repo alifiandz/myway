@@ -1,0 +1,22 @@
+CREATE TABLE `feedback_submissions` (
+	`id` text PRIMARY KEY NOT NULL,
+	`category` text NOT NULL,
+	`details` text NOT NULL,
+	`expected` text,
+	`page_feature` text,
+	`information_category` text,
+	`review_request` text,
+	`source_url` text,
+	`name` text,
+	`email` text,
+	`may_contact` integer DEFAULT false NOT NULL,
+	`page_url` text NOT NULL,
+	`university` text,
+	`programme` text,
+	`locale` text,
+	`user_agent` text,
+	`viewport` text,
+	`screenshot_key` text,
+	`screenshot_name` text,
+	`created_at` text NOT NULL
+);

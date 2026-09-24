@@ -7,7 +7,7 @@ import {
   CircleHelp, CircleUserRound, ClipboardCheck, Clock3, Database, Download, ExternalLink, Eye, FileText,
   Flag, Flame, FolderOpen, GraduationCap, Languages, LayoutDashboard, Map, MapPin, MoreHorizontal, Plus,
   Scale, Search, Settings2, ShieldCheck, SlidersHorizontal, Sparkles, Target,
-  Trash2, Trophy, Upload, UserRoundCog, X, Globe2, HardDrive, LifeBuoy, LockKeyhole, Moon, Sun,
+  Trash2, Trophy, Upload, UserRoundCog, X, Globe2, HardDrive, LifeBuoy, LockKeyhole, Moon, Sun, MessageSquare, Bug, Lightbulb,
 } from "lucide-react";
 import { additionalSchoolStudyRows, schoolStudyRows, type SchoolStudySummary } from "./school-data";
 import { ftDirectoryIdentities } from "./ft-directory-data";
@@ -17,6 +17,8 @@ import { SiteLanguage } from "./site-language";
 
 type View = "dashboard" | "explore" | "pathway" | "tasks" | "progress" | "profile" | "settings";
 type Role = "Dream" | "Target" | "Alternative";
+type FeedbackCategory = "bug" | "incorrect" | "suggestion";
+type FeedbackContext = { university?: string; programme?: string };
 
 type ProfileSnapshot = {
   name?: string;
@@ -1010,7 +1012,7 @@ function Explore({ openSchool, saved, setSaved, compared, toggleCompare, schoolP
   </div>;
 }
 
-function SchoolDetail({ school, program, close, saved, toggleSaved, compared, toggleCompare, pathwayRole, addPath, removePath, fitResult, readinessScore }: { school: BusinessSchool; program?: Program; close: () => void; saved: boolean; toggleSaved: () => void; compared: boolean; toggleCompare: () => void; pathwayRole?: Role; addPath: (role: Role) => void; removePath: () => void; fitResult: FitResult; readinessScore?: number }) {
+function SchoolDetail({ school, program, close, saved, toggleSaved, compared, toggleCompare, pathwayRole, addPath, removePath, fitResult, readinessScore, reportIncorrect }: { school: BusinessSchool; program?: Program; close: () => void; saved: boolean; toggleSaved: () => void; compared: boolean; toggleCompare: () => void; pathwayRole?: Role; addPath: (role: Role) => void; removePath: () => void; fitResult: FitResult; readinessScore?: number; reportIncorrect: () => void }) {
   const [roleOpen, setRoleOpen] = useState(false);
   const [tab, setTab] = useState<"overview" | "programmes" | "admissions" | "rankings">("overview");
   const rankings = schoolRankings(school);
@@ -1027,7 +1029,7 @@ function SchoolDetail({ school, program, close, saved, toggleSaved, compared, to
     <button className="back-button" onClick={close}><ChevronLeft size={17} /> Back to Explore</button>
     <section className="card detail-hero university-profile-hero">
       <SchoolLogo school={school} program={program} size="large" /><div><span className="verified"><CircleCheck size={14} /> Official source{checkedLabel ? ` checked ${checkedLabel}` : " attached"}</span><h2>{school.name}</h2><p><MapPin size={12} /> {school.location}</p><div className="university-identity-meta"><span>{school.institutionType === "business-school" ? "Business school" : "University"}</span>{school.parentUniversity && <span>Part of {school.parentUniversity}</span>}<span>{isBachelor ? "Undergraduate route verified" : routeLabel}</span></div></div>
-      <div className="detail-hero-actions"><button className={"outline-button " + (saved ? "selected" : "")} onClick={toggleSaved}><Bookmark size={15} /> {saved ? "Saved" : "Save"}</button><button className={"outline-button " + (compared ? "selected" : "")} onClick={toggleCompare}><Scale size={15} /> Compare</button><div className="role-menu"><button className="primary-button" disabled={!isBachelor} onClick={() => isBachelor && setRoleOpen(!roleOpen)}>{pathwayRole ? <Check size={15} /> : isBachelor ? <Plus size={15} /> : <CircleAlert size={15} />} {pathwayRole ? pathwayRole : isBachelor ? "Add to pathway" : "No bachelor pathway"} {isBachelor && <ChevronDown size={14} />}</button>{roleOpen && <div>{(["Dream", "Target", "Alternative"] as Role[]).map((role) => <button key={role} onClick={() => { addPath(role); setRoleOpen(false); }}>{role}<small>{role === "Dream" ? "Track on your dashboard" : role === "Target" ? "Leading realistic option" : "Keep as a backup"}</small></button>)}{pathwayRole && <button className="remove-role" onClick={() => { removePath(); setRoleOpen(false); }}><X size={14} /> Remove from pathway<small>Remove this university from your shortlist</small></button>}</div>}</div></div>
+      <div className="detail-hero-actions"><button className={"outline-button " + (saved ? "selected" : "")} onClick={toggleSaved}><Bookmark size={15} /> {saved ? "Saved" : "Save"}</button><button className={"outline-button " + (compared ? "selected" : "")} onClick={toggleCompare}><Scale size={15} /> Compare</button><div className="role-menu"><button className="primary-button" disabled={!isBachelor} onClick={() => isBachelor && setRoleOpen(!roleOpen)}>{pathwayRole ? <Check size={15} /> : isBachelor ? <Plus size={15} /> : <CircleAlert size={15} />} {pathwayRole ? pathwayRole : isBachelor ? "Add to pathway" : "No bachelor pathway"} {isBachelor && <ChevronDown size={14} />}</button>{roleOpen && <div>{(["Dream", "Target", "Alternative"] as Role[]).map((role) => <button key={role} onClick={() => { addPath(role); setRoleOpen(false); }}>{role}<small>{role === "Dream" ? "Track on your dashboard" : role === "Target" ? "Leading realistic option" : "Keep as a backup"}</small></button>)}{pathwayRole && <button className="remove-role" onClick={() => { removePath(); setRoleOpen(false); }}><X size={14} /> Remove from pathway<small>Remove this university from your shortlist</small></button>}</div>}</div><button className="report-incorrect" onClick={reportIncorrect}><Flag size={14} /> Report incorrect information</button></div>
     </section>
     <nav className="card university-profile-tabs" aria-label="University information sections">{([["overview", "Overview"], ["programmes", "Business programmes"], ["admissions", "Admissions & costs"], ["rankings", "Rankings & sources"]] as const).map(([id, label]) => <button key={id} className={tab === id ? "active" : ""} onClick={() => setTab(id)}>{label}</button>)}</nav>
     <div className="detail-grid university-profile-grid">
@@ -1060,14 +1062,14 @@ function SchoolDetail({ school, program, close, saved, toggleSaved, compared, to
   </div>;
 }
 
-function ProgramDetail({ p, close, saved, toggleSaved, compared, toggleCompare, pathwayRole, addPath, removePath, fitResult, readinessScore }: { p: Program; close: () => void; saved: boolean; toggleSaved: () => void; compared: boolean; toggleCompare: () => void; pathwayRole?: Role; addPath: (role: Role) => void; removePath: () => void; fitResult: FitResult; readinessScore?: number }) {
+function ProgramDetail({ p, close, saved, toggleSaved, compared, toggleCompare, pathwayRole, addPath, removePath, fitResult, readinessScore, reportIncorrect }: { p: Program; close: () => void; saved: boolean; toggleSaved: () => void; compared: boolean; toggleCompare: () => void; pathwayRole?: Role; addPath: (role: Role) => void; removePath: () => void; fitResult: FitResult; readinessScore?: number; reportIncorrect: () => void }) {
   const [roleOpen, setRoleOpen] = useState(false);
   const [duration, credits] = p.duration.split(" · ");
   return <div className="page-enter detail-page">
     <button className="back-button" onClick={close}><ChevronLeft size={17} /> Back to programs</button>
     <section className="card detail-hero">
       <UniversityLogo program={p} size="large" /><div><span className="verified"><CircleCheck size={14} /> Source checked {p.verified}</span><h2>{p.university}</h2><p>{p.title} · {p.location}</p></div>
-      <div className="detail-hero-actions"><button className={"outline-button " + (saved ? "selected" : "")} onClick={toggleSaved}><Bookmark size={15} /> {saved ? "Saved" : "Save"}</button><button className={"outline-button " + (compared ? "selected" : "")} onClick={toggleCompare}><Scale size={15} /> Compare</button><div className="role-menu"><button className="primary-button" onClick={() => setRoleOpen(!roleOpen)}>{pathwayRole ? <Check size={15} /> : <Plus size={15} />} {pathwayRole ?? "Add to pathway"} <ChevronDown size={14} /></button>{roleOpen && <div>{(["Dream", "Target", "Alternative"] as Role[]).map((r) => <button key={r} onClick={() => { addPath(r); setRoleOpen(false); }}>{r}<small>{r === "Dream" ? "Track on your dashboard" : r === "Target" ? "Leading realistic option" : "Keep as a backup"}</small></button>)}{pathwayRole && <button className="remove-role" onClick={() => { removePath(); setRoleOpen(false); }}><X size={14} /> Remove from pathway<small>Remove this university from your shortlist</small></button>}</div>}</div></div>
+      <div className="detail-hero-actions"><button className={"outline-button " + (saved ? "selected" : "")} onClick={toggleSaved}><Bookmark size={15} /> {saved ? "Saved" : "Save"}</button><button className={"outline-button " + (compared ? "selected" : "")} onClick={toggleCompare}><Scale size={15} /> Compare</button><div className="role-menu"><button className="primary-button" onClick={() => setRoleOpen(!roleOpen)}>{pathwayRole ? <Check size={15} /> : <Plus size={15} />} {pathwayRole ?? "Add to pathway"} <ChevronDown size={14} /></button>{roleOpen && <div>{(["Dream", "Target", "Alternative"] as Role[]).map((r) => <button key={r} onClick={() => { addPath(r); setRoleOpen(false); }}>{r}<small>{r === "Dream" ? "Track on your dashboard" : r === "Target" ? "Leading realistic option" : "Keep as a backup"}</small></button>)}{pathwayRole && <button className="remove-role" onClick={() => { removePath(); setRoleOpen(false); }}><X size={14} /> Remove from pathway<small>Remove this university from your shortlist</small></button>}</div>}</div><button className="report-incorrect" onClick={reportIncorrect}><Flag size={14} /> Report incorrect information</button></div>
     </section>
     <div className="detail-grid">
       <main>
@@ -1083,6 +1085,56 @@ function ProgramDetail({ p, close, saved, toggleSaved, compared, toggleCompare, 
         <article className="card readiness"><span className="section-label">Application readiness</span><strong>{pathwayRole ? `${readinessScore ?? 0}% prepared` : "Not in your pathway"}</strong><p>{pathwayRole ? "Based on this university’s own requirements, records, evidence and completed actions." : "Add this programme as Dream, Target or Alternative to begin its separate tracker."}</p></article>
       </aside>
     </div>
+  </div>;
+}
+
+const feedbackChoices: { id: FeedbackCategory; icon: typeof Bug; title: string; description: string }[] = [
+  { id: "bug", icon: Bug, title: "Something is not working", description: "For bugs, broken buttons, loading problems, or unexpected behavior." },
+  { id: "incorrect", icon: CircleAlert, title: "Information looks incorrect", description: "For incorrect university, programme, tuition, deadline, ranking, requirement, logo, or other factual information." },
+  { id: "suggestion", icon: Lightbulb, title: "Suggestion or feedback", description: "For ideas, feature requests, or general comments." },
+];
+
+function FeedbackModal({ initialCategory, context, close }: { initialCategory?: FeedbackCategory; context: FeedbackContext; close: () => void }) {
+  const [category, setCategory] = useState<FeedbackCategory | undefined>(initialCategory);
+  const [sending, setSending] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
+  const submit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!category) return;
+    setSending(true); setError("");
+    const form = new FormData(event.currentTarget);
+    form.set("category", category);
+    form.set("pageUrl", window.location.href);
+    form.set("university", context.university ?? "");
+    form.set("programme", context.programme ?? "");
+    form.set("locale", document.documentElement.lang || navigator.language);
+    form.set("userAgent", navigator.userAgent);
+    form.set("viewport", `${window.innerWidth} by ${window.innerHeight}`);
+    try {
+      const response = await fetch("/api/feedback", { method: "POST", body: form });
+      if (!response.ok) throw new Error("submit");
+      setSuccess(true);
+    } catch {
+      setError("Feedback could not be submitted. Please try again.");
+    } finally { setSending(false); }
+  };
+  return <div className="modal-backdrop feedback-backdrop" role="dialog" aria-modal="true" aria-labelledby="feedback-title" onMouseDown={(event) => event.target === event.currentTarget && close()}>
+    <section className="feedback-modal page-enter">
+      <header><div><h2 id="feedback-title">Send feedback</h2><p>Help us improve MyWay. Tell us if something is not working, unclear, or inaccurate.</p></div><button className="icon-button" onClick={close} aria-label="Close"><X size={18} /></button></header>
+      {success ? <div className="feedback-success"><CircleCheck size={38} /><h3>Thanks. Your feedback was received. We will review it and use it to improve MyWay.</h3><button className="primary-button" onClick={close}>Close</button></div> : !category ? <div className="feedback-choices">{feedbackChoices.map(({ id, icon: Icon, title, description }) => <button key={id} type="button" onClick={() => setCategory(id)}><Icon size={18} /><span><strong>{title}</strong><small>{description}</small></span><ChevronRight size={16} /></button>)}</div> : <form onSubmit={submit}>
+        <button type="button" className="feedback-back" onClick={() => setCategory(undefined)}><ChevronLeft size={14} /> Back to feedback types</button>
+        <div className="feedback-selected"><strong>{feedbackChoices.find((item) => item.id === category)?.title}</strong></div>
+        {category === "bug" && <div className="feedback-fields"><label><span>What happened?</span><textarea name="details" required rows={3} /></label><label><span>What did you expect to happen?</span><textarea name="expected" required rows={3} /></label><label><span>Page or feature</span><input name="pageFeature" required /></label></div>}
+        {category === "incorrect" && <div className="feedback-fields"><label><span>What information looks wrong?</span><textarea name="details" required rows={3} /></label><label><span>Category</span><select name="informationCategory" required defaultValue=""><option value="" disabled>Select a category</option>{["Programme", "Tuition", "Deadline", "Entry requirement", "Ranking", "University details", "Logo", "Other"].map((item) => <option key={item}>{item}</option>)}</select></label><label><span>What should we review?</span><textarea name="reviewRequest" required rows={3} /></label><label><span>Optional source or reference link</span><input name="sourceUrl" type="url" inputMode="url" /></label></div>}
+        {category === "suggestion" && <div className="feedback-fields"><label><span>What would you like to tell us?</span><textarea name="details" required rows={5} /></label></div>}
+        <label className="feedback-upload"><Camera size={16} /><span><strong>Optional screenshot</strong><small>PNG, JPG, or WEBP up to 8 MB</small></span><input name="screenshot" type="file" accept="image/png,image/jpeg,image/webp" /></label>
+        <fieldset className="feedback-contact"><legend>Contact details</legend><div><label><span>Name</span><small>Optional</small><input name="name" autoComplete="name" /></label><label><span>Email</span><small>Optional, only if they want a reply</small><input name="email" type="email" autoComplete="email" /></label></div><label className="feedback-consent"><input name="mayContact" value="true" type="checkbox" /><span>You can contact me about this feedback</span></label></fieldset>
+        {context.university && <p className="feedback-context"><CircleCheck size={13} /> Context attached for {context.programme || context.university}</p>}
+        {error && <p className="feedback-error" role="alert">{error}</p>}
+        <button className="primary-button feedback-submit" disabled={sending}>{sending ? "Submitting feedback" : "Submit feedback"}</button>
+      </form>}
+    </section>
   </div>;
 }
 
@@ -1589,6 +1641,9 @@ export default function App() {
   const [notices, setNotices] = useState(false);
   const [guideOpen, setGuideOpen] = useState(false);
   const [tutorialOpen, setTutorialOpen] = useState(false);
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
+  const [feedbackCategory, setFeedbackCategory] = useState<FeedbackCategory>();
+  const [feedbackContext, setFeedbackContext] = useState<FeedbackContext>({});
   const [toast, setToast] = useState("");
   const [pathwayStage, setPathwayStage] = useState(0);
   const [pathwayApplicationId, setPathwayApplicationId] = useState("");
@@ -1640,6 +1695,7 @@ export default function App() {
   const setAvatar = (value: string) => { setAvatarState(value); window.localStorage.setItem("myway-profile-avatar", value); };
   const setLanguage = (value: "en" | "id") => { setLanguageState(value); window.localStorage.setItem("myway-language", value); setToast(value === "id" ? "Bahasa Indonesia diterapkan" : "English applied"); };
   const setTheme = (value: "light" | "dark" | "system") => { setThemeState(value); window.localStorage.setItem("myway-theme", value); };
+  const openFeedback = (category?: FeedbackCategory, context: FeedbackContext = {}) => { setFeedbackCategory(category); setFeedbackContext(context); setFeedbackOpen(true); };
   useEffect(() => { document.documentElement.dataset.theme = "light"; }, [theme]);
   useEffect(() => {
     if (!toast) return;
@@ -1802,8 +1858,8 @@ export default function App() {
   if (!onboarded) return <><SiteLanguage language={language} /><Onboarding finish={finish} saveLater={saveLater} /></>;
 
   let content;
-  if (selectedProgram) { const school = allBusinessSchools.find((item) => item.programId === selectedProgram.id); const selectedRole = pathway.find((item) => item.p.id === selectedProgram.id)?.role; content = school ? <SchoolDetail school={school} program={selectedProgram} close={() => setSelectedProgramId(null)} saved={saved.includes(school.id)} toggleSaved={() => toggleSaved(school.id)} compared={compared.includes(school.id)} toggleCompare={() => toggleCompare(school.id)} pathwayRole={selectedRole} addPath={(role) => addPath(selectedProgram, role)} removePath={() => removePath(selectedProgram)} fitResult={fitFor(selectedProgram, school)} readinessScore={applicationReadiness[selectedProgram.id]?.score} /> : <ProgramDetail p={selectedProgram} close={() => setSelectedProgramId(null)} saved={saved.includes(selectedProgram.id)} toggleSaved={() => toggleSaved(selectedProgram.id)} compared={false} toggleCompare={() => {}} pathwayRole={selectedRole} addPath={(role) => addPath(selectedProgram, role)} removePath={() => removePath(selectedProgram)} fitResult={fitFor(selectedProgram)} readinessScore={applicationReadiness[selectedProgram.id]?.score} />; }
-  else if (selectedSchool) { const program = selectedSchool.programId ? programs.find((item) => item.id === selectedSchool.programId) : undefined; const choice = program ?? schoolAsProgram(selectedSchool); const selectedRole = pathway.find((item) => item.p.id === choice.id)?.role; content = <SchoolDetail school={selectedSchool} program={program} close={() => setSelectedSchoolId(null)} saved={saved.includes(selectedSchool.id)} toggleSaved={() => toggleSaved(selectedSchool.id)} compared={compared.includes(selectedSchool.id)} toggleCompare={() => toggleCompare(selectedSchool.id)} pathwayRole={selectedRole} addPath={(role) => addPath(choice, role)} removePath={() => removePath(choice)} fitResult={fitFor(choice, selectedSchool)} readinessScore={applicationReadiness[choice.id]?.score} />; }
+  if (selectedProgram) { const school = allBusinessSchools.find((item) => item.programId === selectedProgram.id); const selectedRole = pathway.find((item) => item.p.id === selectedProgram.id)?.role; content = school ? <SchoolDetail school={school} program={selectedProgram} close={() => setSelectedProgramId(null)} saved={saved.includes(school.id)} toggleSaved={() => toggleSaved(school.id)} compared={compared.includes(school.id)} toggleCompare={() => toggleCompare(school.id)} pathwayRole={selectedRole} addPath={(role) => addPath(selectedProgram, role)} removePath={() => removePath(selectedProgram)} fitResult={fitFor(selectedProgram, school)} readinessScore={applicationReadiness[selectedProgram.id]?.score} reportIncorrect={() => openFeedback("incorrect", { university: school.name, programme: selectedProgram.title })} /> : <ProgramDetail p={selectedProgram} close={() => setSelectedProgramId(null)} saved={saved.includes(selectedProgram.id)} toggleSaved={() => toggleSaved(selectedProgram.id)} compared={false} toggleCompare={() => {}} pathwayRole={selectedRole} addPath={(role) => addPath(selectedProgram, role)} removePath={() => removePath(selectedProgram)} fitResult={fitFor(selectedProgram)} readinessScore={applicationReadiness[selectedProgram.id]?.score} reportIncorrect={() => openFeedback("incorrect", { university: selectedProgram.university, programme: selectedProgram.title })} />; }
+  else if (selectedSchool) { const program = selectedSchool.programId ? programs.find((item) => item.id === selectedSchool.programId) : undefined; const choice = program ?? schoolAsProgram(selectedSchool); const selectedRole = pathway.find((item) => item.p.id === choice.id)?.role; content = <SchoolDetail school={selectedSchool} program={program} close={() => setSelectedSchoolId(null)} saved={saved.includes(selectedSchool.id)} toggleSaved={() => toggleSaved(selectedSchool.id)} compared={compared.includes(selectedSchool.id)} toggleCompare={() => toggleCompare(selectedSchool.id)} pathwayRole={selectedRole} addPath={(role) => addPath(choice, role)} removePath={() => removePath(choice)} fitResult={fitFor(choice, selectedSchool)} readinessScore={applicationReadiness[choice.id]?.score} reportIncorrect={() => openFeedback("incorrect", { university: selectedSchool.name, programme: program?.title ?? schoolStudy(selectedSchool).title })} />; }
   else if (view === "dashboard") content = <Dashboard go={go} completed={completed} toggleTask={toggleTask} openProgram={openProgram} target={dashboardProgram} selected={pathway} pathwayReadiness={progress} readinessStages={readinessStages} programFits={programFits} profile={profileSnapshot} />;
   else if (view === "explore") content = <Explore openSchool={openSchool} saved={saved} setSaved={toggleSaved} compared={compared} toggleCompare={toggleCompare} schoolPathwayIds={pathway.map((item) => item.p.id)} toggleSchoolPathway={toggleSchoolPathway} />;
   else if (view === "pathway") content = <Pathway selected={pathway} completed={completed} toggleTask={toggleTask} go={go} openProgram={openProgram} changeRole={addPath} removePath={removePath} records={pathwayRecords} updateRecord={updatePathwayRecord} applicationReadiness={applicationReadiness} toast={setToast} initialStage={pathwayStage} initialApplicationId={pathwayApplicationId} />;
@@ -1816,10 +1872,12 @@ export default function App() {
     <SiteLanguage language={language} />
     <Navigation active={view} go={go} openGuide={() => setGuideOpen(true)} progress={progress} hasTarget={Boolean(dashboardProgram)} language={language} />
     <main className="app-main"><Header view={view} go={go} notices={notices} setNotices={setNotices} notice={notice} onNoticeAction={runNoticeAction} avatar={avatar} /><div className="content-wrap">{content}</div></main>
+    <button className="feedback-fab" onClick={() => openFeedback()}><MessageSquare size={15} /><span>Feedback</span></button>
     {compared.length > 0 && !compareOpen && <button className="compare-fab" onClick={() => setCompareOpen(true)}><Scale size={17} /><span>Compare {compared.length}</span><small>of 4</small></button>}
     {compareOpen && <ComparePanel ids={compared} close={() => setCompareOpen(false)} remove={toggleCompare} open={openSchool} />}
     {guideOpen && <PlanningGuide close={() => setGuideOpen(false)} go={go} />}
     {tutorialOpen && <ProductTutorial close={() => setTutorialOpen(false)} go={go} />}
+    {feedbackOpen && <FeedbackModal initialCategory={feedbackCategory} context={feedbackContext} close={() => setFeedbackOpen(false)} />}
     {toast && <div className="toast"><CircleCheck size={17} />{toast}</div>}
   </div>;
 }
