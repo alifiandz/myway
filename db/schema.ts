@@ -20,5 +20,8 @@ export const feedbackSubmissions = sqliteTable("feedback_submissions", {
   viewport: text("viewport"),
   screenshotKey: text("screenshot_key"),
   screenshotName: text("screenshot_name"),
+  status: text("status").notNull().default("new"),
+  internalNotes: text("internal_notes"),
+  updatedAt: text("updated_at"),
   createdAt: text("created_at").notNull(),
 });
