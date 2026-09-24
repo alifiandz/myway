@@ -762,13 +762,13 @@ function Navigation({ active, go, openGuide, progress, hasTarget, language }: { 
     <aside className="sidebar">
       <Brand />
       <nav className="nav-list" aria-label="Main navigation">
-        {navItems.map(({ id, icon: Icon }) => <button key={id} className={"nav-item " + (active === id ? "active" : "")} onClick={() => go(id)}><Icon size={19} /><span>{labels[id]}</span></button>)}
+        {navItems.map(({ id, icon: Icon }) => <button key={id} data-tour={`nav-${id}`} className={"nav-item " + (active === id ? "active" : "")} onClick={() => go(id)}><Icon size={19} /><span>{labels[id]}</span></button>)}
       </nav>
       <article className="sidebar-progress"><span className="mini-icon"><Sparkles size={16} /></span><strong>{hasTarget ? progress + "% pathway ready" : "Choose a Dream"}</strong><small>{hasTarget ? "Across requirements, records, evidence and actions." : "Progress starts after a Dream university is added."}</small><div className="bar"><i style={{ width: progress + "%" }} /></div></article>
       <button className="guide-link" onClick={openGuide}><BookOpen size={17} /> {language === "id" ? "Panduan perencanaan" : "Planning guide"}</button>
     </aside>
     <nav className="mobile-nav" aria-label="Mobile navigation">
-      {navItems.map(({ id, icon: Icon }) => <button key={id} className={active === id ? "active" : ""} onClick={() => go(id)}><Icon size={20} /><small>{labels[id]}</small></button>)}
+      {navItems.map(({ id, icon: Icon }) => <button key={id} data-tour={`mobile-nav-${id}`} className={active === id ? "active" : ""} onClick={() => go(id)}><Icon size={20} /><small>{labels[id]}</small></button>)}
     </nav>
   </>;
 }
@@ -917,14 +917,14 @@ function Dashboard({ go, completed, toggleTask, openProgram, target, selected, p
   ];
   const doneToday = actions.filter((action) => completed.includes(action.id)).length;
 
-  if (!target) return <div className="page-enter">
+  if (!target) return <div className="page-enter" data-tour="dashboard-main">
     <section className="welcome-row"><div><span className="eyebrow">Your preparation workspace</span><h2>Choose a Dream university to start tracking</h2><p>Preparation progress is always connected to a specific university—not an admission prediction.</p></div></section>
     <article className="card no-target-gate"><span className="large-icon"><Target /></span><div><span className="section-label">Tracker ready</span><h3>Add one university as your Dream</h3><p>Your complete nine-stage Pathway Readiness will appear here after a Dream option is chosen. Target and Alternative options remain together on My Pathway.</p><button className="primary-button" onClick={() => go("explore")}><Search size={15} /> Explore programs</button></div></article>
     <DashboardShortlists selected={selected} openProgram={openProgram} />
     <section className="section-space dashboard-recommendations"><div className="section-head"><div><span className="section-label">Start here</span><h3>Strong current matches</h3></div></div><div className="recommend-grid">{[...programs].sort((a, b) => (programFits[b.id]?.score ?? -1) - (programFits[a.id]?.score ?? -1)).slice(0, 3).map((p) => { const match = programFits[p.id]; return <button className="card recommendation" key={p.id} onClick={() => openProgram(p)}><UniversityLogo program={p} /><span><strong>{p.university}</strong><small>{p.title}</small><em className={"fit " + fitResultClass(match)}>{match.score === null ? "Complete profile" : `${match.score}/100 · ${match.label}`}</em></span><ChevronRight /></button>; })}</div></section>
   </div>;
 
-  return <div className="page-enter">
+  return <div className="page-enter" data-tour="dashboard-main">
     <section className="welcome-row"><div><span className="eyebrow">Your study pathway</span><h2>{greeting}</h2><p>{target.university} · {target.title}</p></div><button className="secondary-button" onClick={() => go("progress")}><BarChart3 size={16} /> View progress</button></section>
     <div className="dashboard-grid">
       <div className="main-column">
@@ -1007,9 +1007,9 @@ function Explore({ openSchool, saved, setSaved, compared, toggleCompare, schoolP
     });
     return matchesQuery && matchesSelected && (!savedOnly || saved.includes(school.id));
   }).sort((a, b) => sort === "A–Z" ? a.name.localeCompare(b.name) : (a.order ?? 999) - (b.order ?? 999));
-  return <div className="page-enter">
+  return <div className="page-enter" data-tour="explore-main">
     <section className="page-intro"><div><span className="eyebrow">Business study discovery</span><h2>Explore {undergraduateBusinessSchools.length} institutions</h2><p>Explore universities and business schools offering undergraduate routes. Preferences apply only when you choose filters.</p></div><a className="source-stamp" href={rankingSource} target="_blank" rel="noreferrer"><CircleCheck size={15} /> FT directory source <ExternalLink size={12} /></a></section>
-    <section className="card search-card">
+    <section className="card search-card" data-tour="explore-search">
       <label className="search-box"><Search size={18} /><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search programs, universities, specializations, or countries…" />{query && <button onClick={() => setQuery("")} aria-label="Clear search"><X size={15} /></button>}</label>
       <div className="explore-control-row"><button type="button" className={"refine-toggle " + (refineOpen ? "open" : "")} onClick={() => setRefineOpen(!refineOpen)} aria-expanded={refineOpen}><span className="refine-toggle-icon"><SlidersHorizontal size={17} /></span><span className="refine-toggle-copy"><strong>Filters</strong><small>{filters.length ? `${filters.length} active filter${filters.length === 1 ? "" : "s"}` : "Country, business area, language, duration, and credits"}</small></span>{filters.length > 0 && <em>{filters.length}</em>}<ChevronDown size={17} /></button><button type="button" className={"saved-filter " + (savedOnly ? "active" : "")} onClick={() => saved.length > 0 && setSavedOnly(!savedOnly)} aria-pressed={savedOnly} disabled={saved.length === 0} title={saved.length === 0 ? "Save a university first" : "Show saved universities only"}><Bookmark size={16} fill={savedOnly ? "currentColor" : "none"} /><span><strong>Saved</strong><small>{saved.length} universit{saved.length === 1 ? "y" : "ies"}</small></span></button></div>
       {refineOpen && <div className="refine-panel"><header><div><span className="section-label">Build your shortlist</span><h3>What matters to you?</h3><p>Nothing is preselected. Results update only from choices you make here.</p></div>{filters.length > 0 && <button type="button" onClick={() => setFilters([])}>Reset</button>}</header><div className="refine-groups">{filterGroups.map((group) => <fieldset key={group.label}><legend>{group.label}<small>{group.note}</small></legend><div>{group.options.map((item) => <label key={item} className={filters.includes(item) ? "selected" : ""}><input type="checkbox" checked={filters.includes(item)} onChange={() => toggleFilter(item)} /><span className="filter-check">{filters.includes(item) && <Check size={12} />}</span><span>{item}</span></label>)}</div></fieldset>)}</div><footer><span>{filters.length ? `${filters.length} filters selected` : "No filters selected"}</span><button type="button" className="primary-button" onClick={() => setRefineOpen(false)}>Show {filtered.length} school{filtered.length === 1 ? "" : "s"}</button></footer></div>}
@@ -1311,7 +1311,7 @@ function TasksHabits({ completed, toggleTask, toast }: { completed: string[]; to
   const selectedTask = routines.find((routine) => routine.id === selectedTaskId);
   if (selectedTask) return <TaskWorkspace routine={selectedTask} isDone={completed.includes(selectedTask.id)} close={() => setSelectedTaskId(null)} toggleTask={toggleTask} />;
 
-  return <div className="page-enter tasks-page">
+  return <div className="page-enter tasks-page" data-tour="tasks-main">
     <section className="page-intro tasks-intro"><div><span className="eyebrow">This week</span><h2>Tasks & Habits</h2><p>Set weekly targets, then build a routine around them.</p></div><button className="primary-button" onClick={() => setAdding(!adding)}><Plus size={15} /> Add target</button></section>
     {adding && <article className="card add-target-panel"><div><span className="section-label">New target</span><strong>Add a repeatable focus</strong></div><div className="target-fields"><input autoFocus value={newTarget.title} onChange={(event) => setNewTarget((current) => ({ ...current, title: event.target.value }))} placeholder="Target title" /><input value={newTarget.focus} onChange={(event) => setNewTarget((current) => ({ ...current, focus: event.target.value }))} onKeyDown={(event) => event.key === "Enter" && addTarget()} placeholder="What will you practise?" /><label><span>Times per week</span><input type="number" min="1" max="14" value={newTarget.weeklyGoal} onChange={(event) => setNewTarget((current) => ({ ...current, weeklyGoal: Number(event.target.value) || 1 }))} /></label></div><button className="primary-button" onClick={addTarget}>Add target</button><button className="text-link" onClick={() => setAdding(false)}>Cancel</button></article>}
     <div className="task-tabs" role="tablist" aria-label="Tasks and habits views"><button className={tab === "actions" ? "active" : ""} onClick={() => setTab("actions")}>Weekly actions</button><button className={tab === "habits" ? "active" : ""} onClick={() => setTab("habits")}>Habit tracker</button></div>
@@ -1477,7 +1477,7 @@ function Pathway({ selected, completed: allCompleted, toggleTask: toggleStoredTa
     "Keep the exact submitted version and its confirmation",
     "Keep offer and enrolment records together; avoid sensitive data in prototype mode",
   ];
-  return <div className="page-enter pathway-page">
+  return <div className="page-enter pathway-page" data-tour="pathway-main">
     <section className="page-intro"><div><span className="eyebrow">Your university plan</span><h2>My Pathway</h2><p>{selected.length ? `${selected.length} university option${selected.length === 1 ? "" : "s"} organised by role` : "Build a shortlist, then choose one Dream university to track."}</p></div><button className="secondary-button" onClick={() => go("explore")}><Plus size={15} /> Add university</button></section>
     {active ? <><section className="application-switcher pathway-application-switcher"><label><span>Application workspace</span><select value={active.p.id} onChange={(event) => { setActiveId(event.target.value); setExpandedStage(0); setStageTab("overview"); }}>{selected.map((item) => <option key={item.p.id} value={item.p.id}>{item.p.university} — {item.role}</option>)}</select></label><small>Each university keeps separate requirements, evidence, actions and readiness.</small></section><article className="card dream-pathway-card"><div className="dream-pathway-identity"><span className="dream-label"><Sparkles size={13} /> {active.role} application</span><div><UniversityLogo program={active.p} size="large" /><span><h3>{active.p.university}</h3><p>{active.p.title} · {active.p.location}</p><button className="text-link" onClick={() => openProgram(active.p)}>View university <ChevronRight size={14} /></button></span></div></div><div className="dream-progress"><span><strong>Application readiness</strong><em>{pathwayReadiness}%</em></span><div className="bar"><i style={{ width: pathwayReadiness + "%" }} /></div><small>{readyStages} of 9 stages ready · specific to this application · not an admission score</small></div><div className="dream-controls"><label><span>Change role</span><select value={active.role} onChange={(event) => changeRole(active.p, event.target.value as Role)}><option>Dream</option><option>Target</option><option>Alternative</option></select></label><button className="outline-button danger-action" onClick={() => removePath(active.p)}><X size={14} /> Remove</button></div></article></> : <article className="card pathway-empty-dream"><span className="large-icon"><Sparkles /></span><div><span className="section-label">Application tracker</span><h3>Add a university to begin</h3><p>Every Dream, Target and Alternative university receives its own preparation workspace.</p><button className="primary-button" onClick={() => go("explore")}><Search size={15} /> Explore universities</button></div></article>}
     <section className="card document-vault-summary"><span className="vault-summary-icon"><FolderOpen size={19} /></span><span><span className="section-label">Shared across every application</span><strong>My Documents</strong><small>{vaultDocuments.length ? `${vaultDocuments.length} real file${vaultDocuments.length === 1 ? "" : "s"} saved and available for reuse on this device` : "Upload once, then reuse the same file for multiple university requirements"}</small></span><button className="secondary-button" onClick={() => { setSelectingDocument(null); setVaultOpen(true); }}>Open My Documents <ChevronRight size={14} /></button></section>
@@ -1593,7 +1593,7 @@ function SettingsPage({ toast, savedCount, applicationCount, replayTutorial, go,
   const resetData = async () => { if (!window.confirm("Clear your profile, saved universities, pathway progress, tasks, habits and stored documents from this browser? This cannot be undone.")) return; MYWAY_LOCAL_KEYS.forEach((key) => window.localStorage.removeItem(key)); await clearVaultDocuments(); window.location.reload(); };
   const toggleNotifications = () => { const next = !notifications; setNotifications(next); window.localStorage.setItem("myway-notifications-enabled", String(next)); toast(next ? "In-app notifications enabled" : "In-app notifications paused"); };
   const id = language === "id";
-  return <div className="page-enter settings-page">
+  return <div className="page-enter settings-page" data-tour="settings-main">
     <section className="settings-heading"><div><span className="eyebrow">{id ? "Preferensi MyWay" : "MyWay preferences"}</span><h2>{id ? "Pengaturan" : "Settings"}</h2><p>{id ? "Atur tampilan, bahasa, pengingat, dan data perangkat. Informasi akademik tetap dikelola di Profil." : "Control appearance, language, reminders and device data. Your academic information stays in Profile."}</p></div><button className="outline-button" onClick={() => go("profile")}><CircleUserRound size={15} /> {id ? "Buka Profil" : "Open Profile"}</button></section>
     <div className="settings-layout">
       <nav className="settings-section-nav" aria-label="Settings sections"><a href="#general"><Settings2 size={15}/>{id ? "Umum" : "General"}</a><a href="#notifications"><Bell size={15}/>{id ? "Notifikasi" : "Notifications"}</a><a href="#data"><HardDrive size={15}/>{id ? "Data & Penyimpanan" : "Data & Storage"}</a><a href="#privacy"><LockKeyhole size={15}/>{id ? "Privasi & Keamanan" : "Privacy & Security"}</a>{adminVisible && <a href="#admin"><ShieldCheck size={15}/>{id ? "Admin" : "Admin"}</a>}<a href="#help"><LifeBuoy size={15}/>{id ? "Bantuan" : "Help"}</a></nav>
@@ -1609,19 +1609,76 @@ function SettingsPage({ toast, savedCount, applicationCount, replayTutorial, go,
   </div>;
 }
 
-const tutorialSteps: { title: string; body: string; view: View; action: string }[] = [
-  { title: "Start from your Dashboard", body: "See your Dream application readiness and the most useful action to take next.", view: "dashboard", action: "Open Dashboard" },
-  { title: "Explore business study options", body: "Search, filter, save and compare universities before building your shortlist.", view: "explore", action: "Open Explore" },
-  { title: "Build your Pathway", body: "Choose one Dream plus Target and Alternative applications, each with separate progress.", view: "pathway", action: "Open Pathway" },
-  { title: "Prepare and track", body: "Use Tasks for weekly practice and Progress for complete application readiness.", view: "progress", action: "Open Progress" },
-  { title: "Keep reusable information in Profile", body: "Store education, test results, preferences, experience and documents once for every application.", view: "profile", action: "Open Profile" },
+type TutorialStep = { view: View; target?: string; en: { title: string; body: string }; id: { title: string; body: string } };
+const tutorialSteps: TutorialStep[] = [
+  { view: "dashboard", en: { title: "Welcome to MyWay", body: "This short tour shows how every part of MyWay works together to support your university journey." }, id: { title: "Selamat datang di MyWay", body: "Tur singkat ini menunjukkan bagaimana setiap bagian MyWay saling terhubung untuk mendukung perjalanan universitasmu." } },
+  { view: "dashboard", target: "dashboard-main", en: { title: "Start from your Dashboard", body: "See your current application readiness, planning overview, and the most useful action to take next." }, id: { title: "Mulai dari Dasbor", body: "Lihat kesiapan aplikasi, ringkasan perencanaan, dan tindakan paling berguna yang perlu kamu lakukan berikutnya." } },
+  { view: "explore", target: "explore-search", en: { title: "Discover the right options", body: "Search and filter universities and undergraduate business programmes using the criteria that matter to you." }, id: { title: "Temukan pilihan yang tepat", body: "Cari dan saring universitas serta program sarjana bisnis berdasarkan kriteria yang penting bagimu." } },
+  { view: "explore", target: "explore-main", en: { title: "Save, compare, and review", body: "Save promising options, compare up to four universities, open verified details, and add a choice to your Pathway." }, id: { title: "Simpan, bandingkan, dan tinjau", body: "Simpan pilihan menarik, bandingkan hingga empat universitas, buka detail terverifikasi, lalu tambahkan pilihan ke Pathway." } },
+  { view: "pathway", target: "pathway-main", en: { title: "Build your Pathway", body: "Organise Dream, Target, and Alternative choices. Each university keeps its own requirements, evidence, and progress." }, id: { title: "Susun Pathway milikmu", body: "Atur pilihan Dream, Target, dan Alternative. Setiap universitas memiliki persyaratan, bukti, dan progres tersendiri." } },
+  { view: "pathway", target: "pathway-main", en: { title: "Follow the application journey", body: "Work through nine preparation stages, attach supporting evidence, and keep university specific actions in one place." }, id: { title: "Ikuti perjalanan aplikasi", body: "Selesaikan sembilan tahap persiapan, lampirkan bukti pendukung, dan simpan tindakan khusus universitas dalam satu tempat." } },
+  { view: "tasks", target: "tasks-main", en: { title: "Turn plans into weekly action", body: "Use Tasks and Habits to create repeatable goals, focused work sessions, and a practical weekly routine." }, id: { title: "Ubah rencana menjadi tindakan mingguan", body: "Gunakan Tugas dan Kebiasaan untuk membuat target berulang, sesi fokus, dan rutinitas mingguan yang praktis." } },
+  { view: "progress", target: "nav-progress", en: { title: "Check your readiness", body: "Progress combines requirements, records, evidence, and actions for each application. It is preparation progress, not an admission prediction." }, id: { title: "Periksa kesiapanmu", body: "Progres menggabungkan persyaratan, catatan, bukti, dan tindakan untuk setiap aplikasi. Ini adalah progres persiapan, bukan prediksi penerimaan." } },
+  { view: "profile", target: "nav-profile", en: { title: "Keep reusable details in Profile", body: "Store education, test results, preferences, experience, and documents once so they can support every application." }, id: { title: "Simpan detail yang dapat digunakan kembali di Profil", body: "Simpan pendidikan, hasil tes, preferensi, pengalaman, dan dokumen sekali agar dapat mendukung setiap aplikasi." } },
+  { view: "settings", target: "settings-main", en: { title: "Make MyWay yours", body: "Settings controls language, appearance, reminders, local data, privacy, and access to this guided tour whenever you need it." }, id: { title: "Sesuaikan MyWay untukmu", body: "Pengaturan mengontrol bahasa, tampilan, pengingat, data lokal, privasi, dan akses ke tur ini kapan pun kamu membutuhkannya." } },
+  { view: "settings", target: "feedback-button", en: { title: "Tell us what could be better", body: "Use Feedback to report a problem, flag incorrect information, or share a suggestion from anywhere in MyWay." }, id: { title: "Beri tahu kami apa yang dapat diperbaiki", body: "Gunakan Masukan untuk melaporkan masalah, menandai informasi yang salah, atau membagikan saran dari mana saja di MyWay." } },
 ];
 
-function ProductTutorial({ close, go }: { close: () => void; go: (view: View) => void }) {
+function ProductTutorial({ close, go, language }: { close: () => void; go: (view: View) => void; language: "en" | "id" }) {
   const [step, setStep] = useState(0);
+  const [focus, setFocus] = useState<{ top: number; left: number; width: number; height: number } | null>(null);
   const current = tutorialSteps[step];
-  const finish = (destination?: View) => { window.localStorage.setItem("myway-product-tour-v1", "complete"); if (destination) go(destination); close(); };
-  return <div className="modal-backdrop tutorial-backdrop"><section className="tutorial-modal" role="dialog" aria-modal="true" aria-labelledby="tutorial-title"><header><span className="tutorial-count">{String(step + 1).padStart(2, "0")} / {String(tutorialSteps.length).padStart(2, "0")}</span><button className="text-link" onClick={() => finish()}>Skip tour</button></header><div className="tutorial-icon"><Sparkles size={24} /></div><span className="eyebrow">Welcome to MyWay</span><h2 id="tutorial-title">{current.title}</h2><p>{current.body}</p><div className="tutorial-progress">{tutorialSteps.map((item, index) => <i key={item.title} className={index <= step ? "active" : ""} />)}</div><footer><button className="outline-button" disabled={step === 0} onClick={() => setStep((value) => Math.max(0, value - 1))}>Back</button>{step < tutorialSteps.length - 1 ? <button className="primary-button" onClick={() => setStep((value) => value + 1)}>Next <ChevronRight size={14} /></button> : <button className="primary-button" onClick={() => finish(current.view)}>Finish · {current.action}</button>}</footer></section></div>;
+  const copy = current[language];
+  const id = language === "id";
+  const finish = () => { window.localStorage.setItem("myway-product-tour-v2", "complete"); go("dashboard"); close(); };
+
+  useEffect(() => {
+    go(current.view);
+    let measureTimer = 0;
+    const findTarget = () => {
+      if (!current.target) return null;
+      const selectors = [`[data-tour="${current.target}"]`, `[data-tour="mobile-${current.target}"]`];
+      const candidates = selectors.flatMap((selector) => Array.from(document.querySelectorAll<HTMLElement>(selector)));
+      return candidates.find((element) => { const box = element.getBoundingClientRect(); return box.width > 0 && box.height > 0; }) ?? null;
+    };
+    const measure = () => {
+      const target = findTarget();
+      if (!target) { setFocus(null); return; }
+      const box = target.getBoundingClientRect();
+      const padding = 8;
+      setFocus({ top: Math.max(8, box.top - padding), left: Math.max(8, box.left - padding), width: Math.min(window.innerWidth - 16, box.width + padding * 2), height: box.height + padding * 2 });
+    };
+    const openTimer = window.setTimeout(() => {
+      const target = findTarget();
+      target?.scrollIntoView({ behavior: "smooth", block: "center" });
+      measureTimer = window.setTimeout(measure, 320);
+    }, 80);
+    window.addEventListener("resize", measure);
+    return () => { window.clearTimeout(openTimer); window.clearTimeout(measureTimer); window.removeEventListener("resize", measure); };
+  }, [current.target, current.view, go]);
+
+  useEffect(() => {
+    const keys = (event: KeyboardEvent) => {
+      if (event.key === "Escape") finish();
+      if (event.key === "ArrowRight" && step < tutorialSteps.length - 1) setStep((value) => value + 1);
+      if (event.key === "ArrowLeft" && step > 0) setStep((value) => value - 1);
+    };
+    window.addEventListener("keydown", keys);
+    return () => window.removeEventListener("keydown", keys);
+  });
+
+  const coachTop = focus ? (focus.top + focus.height + 300 < window.innerHeight ? focus.top + focus.height + 16 : Math.max(16, focus.top - 286)) : undefined;
+  const coachLeft = focus ? Math.max(16, Math.min(focus.left, window.innerWidth - 396)) : undefined;
+  return <div className="product-tour-layer" role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
+    {!focus && <div className="tour-scrim" />}
+    {focus && <div className="tour-spotlight" style={{ top: focus.top, left: focus.left, width: focus.width, height: focus.height }} />}
+    <section className={`tour-coachmark ${focus ? "positioned" : "centered"}`} style={focus ? { top: coachTop, left: coachLeft } : undefined}>
+      <header><span className="tour-step">{id ? "Langkah" : "Step"} {step + 1} {id ? "dari" : "of"} {tutorialSteps.length}</span><button className="text-link" onClick={finish}>{id ? "Lewati tur" : "Skip tour"}</button></header>
+      <div className="tour-heading"><span><Sparkles size={18} /></span><div><h2 id="tutorial-title">{copy.title}</h2><p>{copy.body}</p></div></div>
+      <div className="tour-progress" aria-hidden="true">{tutorialSteps.map((item, index) => <i key={`${item.view}-${index}`} className={index <= step ? "active" : ""} />)}</div>
+      <footer><button className="outline-button" disabled={step === 0} onClick={() => setStep((value) => Math.max(0, value - 1))}>{id ? "Kembali" : "Back"}</button>{step < tutorialSteps.length - 1 ? <button className="primary-button" onClick={() => setStep((value) => value + 1)}>{id ? "Berikutnya" : "Next"} <ChevronRight size={14} /></button> : <button className="primary-button" onClick={finish}>{id ? "Selesai" : "Finish"} <Check size={14} /></button>}</footer>
+    </section>
+  </div>;
 }
 
 function PlanningGuide({ close, go }: { close: () => void; go: (view: View) => void }) {
@@ -1671,7 +1728,7 @@ export default function App() {
     const timer = window.setTimeout(() => {
       const complete = window.localStorage.getItem("myway-onboarding-v1") || window.localStorage.getItem("alif-pathway-business-v1");
       setOnboarded(complete === "complete");
-      if (complete === "complete" && !window.localStorage.getItem("myway-product-tour-v1")) setTutorialOpen(true);
+      if (complete === "complete" && !window.localStorage.getItem("myway-product-tour-v2")) setTutorialOpen(true);
       const hash = window.location.hash.replace("#", "");
       if (hash === "account") { setView("settings"); window.history.replaceState(null, "", "#settings"); }
       else if (hash === "settings") setView("settings");
@@ -1893,11 +1950,11 @@ export default function App() {
     <SiteLanguage language={language} />
     <Navigation active={view} go={go} openGuide={() => setGuideOpen(true)} progress={progress} hasTarget={Boolean(dashboardProgram)} language={language} />
     <main className="app-main"><Header view={view} go={go} notices={notices} setNotices={setNotices} notice={notice} onNoticeAction={runNoticeAction} avatar={avatar} /><div className="content-wrap">{content}</div></main>
-    <button className="feedback-fab" onClick={() => openFeedback()}><MessageSquare size={15} /><span>Feedback</span></button>
+    <button className="feedback-fab" data-tour="feedback-button" onClick={() => openFeedback()}><MessageSquare size={15} /><span>Feedback</span></button>
     {compared.length > 0 && !compareOpen && <button className="compare-fab" onClick={() => setCompareOpen(true)}><Scale size={17} /><span>Compare {compared.length}</span><small>of 4</small></button>}
     {compareOpen && <ComparePanel ids={compared} close={() => setCompareOpen(false)} remove={toggleCompare} open={openSchool} />}
     {guideOpen && <PlanningGuide close={() => setGuideOpen(false)} go={go} />}
-    {tutorialOpen && <ProductTutorial close={() => setTutorialOpen(false)} go={go} />}
+    {tutorialOpen && <ProductTutorial close={() => setTutorialOpen(false)} go={go} language={language} />}
     {feedbackOpen && <FeedbackModal initialCategory={feedbackCategory} context={feedbackContext} close={() => setFeedbackOpen(false)} />}
     {toast && <div className="toast"><CircleCheck size={17} />{toast}</div>}
   </div>;
