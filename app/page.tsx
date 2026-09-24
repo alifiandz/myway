@@ -1659,7 +1659,13 @@ function ProductTutorial({ close, go, language }: { close: () => void; go: (view
           targetRef.current = target;
           if (!target) { setFocus(null); return; }
           target.scrollIntoView({ behavior: "auto", block: "center", inline: "nearest" });
-          measure();
+          let trackingFrames = 0;
+          const trackEntrance = () => {
+            measure();
+            trackingFrames += 1;
+            if (trackingFrames < 45) frame = window.requestAnimationFrame(trackEntrance);
+          };
+          trackEntrance();
           observer = new ResizeObserver(measure);
           observer.observe(target);
         });
