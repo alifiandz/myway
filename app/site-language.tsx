@@ -137,6 +137,7 @@ const idText: Record<string, string> = {
   "Language not yet verified": "Bahasa belum terverifikasi",
   "Not yet verified": "Belum terverifikasi",
   "Official programme page": "Halaman program resmi",
+  "Official programme structure": "Struktur program resmi",
   "Official page linked": "Halaman resmi terhubung",
   "Verified undergraduate route": "Jalur sarjana terverifikasi",
   "Business programmes": "Program bisnis",
@@ -180,6 +181,7 @@ const idText: Record<string, string> = {
   "English qualification": "Kualifikasi Bahasa Inggris",
   "Experience & portfolio": "Pengalaman & portofolio",
   "Application documents": "Dokumen pendaftaran",
+  "Prepare application documents": "Siapkan dokumen pendaftaran",
   "Costs & funding": "Biaya & pendanaan",
   "Submission": "Pengiriman aplikasi",
   "Offer & enrolment": "Penawaran & pendaftaran ulang",
@@ -750,6 +752,8 @@ const idText: Record<string, string> = {
 };
 
 const patterns: Array<[RegExp, (match: RegExpMatchArray) => string]> = [
+  [/^Sort: (.+)$/, (m) => `Urutkan: ${m[1]}`],
+  [/^(\d+) credits$/, (m) => `${m[1]} kredit`],
   [/^(\d+) of (\d+) done$/, (m) => `${m[1]} dari ${m[2]} selesai`],
   [/^(\d+) of (\d+) actions$/, (m) => `${m[1]} dari ${m[2]} tindakan`],
   [/^(\d+) of (\d+) details$/, (m) => `${m[1]} dari ${m[2]} detail`],
