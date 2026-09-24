@@ -6,6 +6,7 @@ interface Env {
   ASSETS: Fetcher;
   DB: D1Database;
   BUCKET: R2Bucket;
+  MYWAY_ADMIN_SECRET?: string;
   IMAGES: {
     input(stream: ReadableStream): {
       transform(options: Record<string, unknown>): {
@@ -22,10 +23,25 @@ interface ExecutionContext {
 
 const ADMIN_ACCOUNT_IDS = new Set(["11111111-1111-4111-8111-111111111111"]);
 const FEEDBACK_STATUSES = new Set(["new", "reviewing", "resolved"]);
+const ADMIN_ORIGIN = "https://admin.example.com";
 
 function isAdmin(request: Request): boolean {
   const accountId = request.headers.get("oai-authenticated-user-id");
   return Boolean(accountId && ADMIN_ACCOUNT_IDS.has(accountId));
+}
+
+function isAdminRequest(request: Request, env: Env): boolean {
+  const supplied = request.headers.get("x-myway-admin-key");
+  return isAdmin(request) || Boolean(env.MYWAY_ADMIN_SECRET && supplied === env.MYWAY_ADMIN_SECRET);
+}
+
+function adminCors(response: Response): Response {
+  const next = new Response(response.body, response);
+  next.headers.set("Access-Control-Allow-Origin", ADMIN_ORIGIN);
+  next.headers.set("Access-Control-Allow-Methods", "GET, PATCH, OPTIONS");
+  next.headers.set("Access-Control-Allow-Headers", "Content-Type, X-MyWay-Admin-Key");
+  next.headers.set("Vary", "Origin");
+  return next;
 }
 
 function adminOnly(): Response {
@@ -42,8 +58,16 @@ const worker = {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
 
+    if (url.pathname === "/api/admin-visibility" && request.method === "GET") {
+      return Response.json({ authorized: isAdmin(request) }, { headers: { "Cache-Control": "private, no-store" } });
+    }
+
+    if (url.pathname.startsWith("/api/admin/feedback") && request.method === "OPTIONS") {
+      return adminCors(new Response(null, { status: 204 }));
+    }
+
     if (url.pathname === "/api/admin/feedback" && request.method === "GET") {
-      if (!isAdmin(request)) return adminOnly();
+      if (!isAdminRequest(request, env)) return adminCors(adminOnly());
       try {
         const category = url.searchParams.get("category") ?? "all";
         const status = url.searchParams.get("status") ?? "all";
@@ -72,52 +96,52 @@ const worker = {
           status, internal_notes AS internalNotes, updated_at AS updatedAt, created_at AS createdAt
           FROM feedback_submissions ${where} ORDER BY created_at DESC LIMIT 250`;
         const result = await env.DB.prepare(query).bind(...bindings).all();
-        return Response.json({ submissions: result.results });
+        return adminCors(Response.json({ submissions: result.results }));
       } catch (error) {
         console.error("Feedback inbox failed", error);
-        return Response.json({ error: "The feedback inbox could not be loaded." }, { status: 500 });
+        return adminCors(Response.json({ error: "The feedback inbox could not be loaded." }, { status: 500 }));
       }
     }
 
     const adminFeedbackMatch = url.pathname.match(/^\/api\/admin\/feedback\/([^/]+)$/);
     if (adminFeedbackMatch && request.method === "PATCH") {
-      if (!isAdmin(request)) return adminOnly();
+      if (!isAdminRequest(request, env)) return adminCors(adminOnly());
       try {
         const id = decodeURIComponent(adminFeedbackMatch[1]);
         const body = await request.json() as { status?: string; internalNotes?: string };
         const status = String(body.status ?? "");
         const internalNotes = String(body.internalNotes ?? "").trim().slice(0, 8000);
         if (!FEEDBACK_STATUSES.has(status)) {
-          return Response.json({ error: "Invalid feedback status." }, { status: 400 });
+          return adminCors(Response.json({ error: "Invalid feedback status." }, { status: 400 }));
         }
         const updatedAt = new Date().toISOString();
         const result = await env.DB.prepare("UPDATE feedback_submissions SET status = ?, internal_notes = ?, updated_at = ? WHERE id = ?")
           .bind(status, internalNotes || null, updatedAt, id).run();
-        if (!result.meta.changes) return Response.json({ error: "Feedback was not found." }, { status: 404 });
-        return Response.json({ ok: true, updatedAt });
+        if (!result.meta.changes) return adminCors(Response.json({ error: "Feedback was not found." }, { status: 404 }));
+        return adminCors(Response.json({ ok: true, updatedAt }));
       } catch (error) {
         console.error("Feedback update failed", error);
-        return Response.json({ error: "The feedback could not be updated." }, { status: 500 });
+        return adminCors(Response.json({ error: "The feedback could not be updated." }, { status: 500 }));
       }
     }
 
     const adminScreenshotMatch = url.pathname.match(/^\/api\/admin\/feedback\/([^/]+)\/screenshot$/);
     if (adminScreenshotMatch && request.method === "GET") {
-      if (!isAdmin(request)) return adminOnly();
+      if (!isAdminRequest(request, env)) return adminCors(adminOnly());
       try {
         const id = decodeURIComponent(adminScreenshotMatch[1]);
         const row = await env.DB.prepare("SELECT screenshot_key, screenshot_name FROM feedback_submissions WHERE id = ?").bind(id).first<{ screenshot_key: string | null; screenshot_name: string | null }>();
-        if (!row?.screenshot_key) return new Response("Screenshot not found", { status: 404 });
+        if (!row?.screenshot_key) return adminCors(new Response("Screenshot not found", { status: 404 }));
         const object = await env.BUCKET.get(row.screenshot_key);
-        if (!object) return new Response("Screenshot not found", { status: 404 });
+        if (!object) return adminCors(new Response("Screenshot not found", { status: 404 }));
         const headers = new Headers();
         object.writeHttpMetadata(headers);
         headers.set("Cache-Control", "private, no-store");
         headers.set("Content-Disposition", `inline; filename="${(row.screenshot_name ?? "feedback-screenshot").replaceAll('"', '')}"`);
-        return new Response(object.body, { headers });
+        return adminCors(new Response(object.body, { headers }));
       } catch (error) {
         console.error("Feedback screenshot failed", error);
-        return new Response("Screenshot could not be loaded", { status: 500 });
+        return adminCors(new Response("Screenshot could not be loaded", { status: 500 }));
       }
     }
 
