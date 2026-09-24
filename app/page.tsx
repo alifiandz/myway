@@ -781,10 +781,13 @@ function UserAvatar({ value, className = "avatar" }: { value: string; className?
   return <span className={className} aria-hidden="true">{value}</span>;
 }
 
-function Header({ view, go, notices, setNotices, notice, onNoticeAction, avatar }: { view: View; go: (v: View) => void; notices: boolean; setNotices: (v: boolean) => void; notice: { body: string; action: string }; onNoticeAction: () => void; avatar: string }) {
-  const title = { dashboard: "Dashboard", explore: "Explore universities", pathway: "My Pathway", tasks: "Tasks & Habits", progress: "Progress", profile: "Profile", settings: "Settings" }[view];
+function Header({ view, go, notices, setNotices, notice, onNoticeAction, avatar, language }: { view: View; go: (v: View) => void; notices: boolean; setNotices: (v: boolean) => void; notice: { body: string; action: string }; onNoticeAction: () => void; avatar: string; language: "en" | "id" }) {
+  const titles: Record<"en" | "id", Record<View, string>> = {
+    en: { dashboard: "Dashboard", explore: "Explore universities", pathway: "My Pathway", tasks: "Tasks & Habits", progress: "Progress", profile: "Profile", settings: "Settings" },
+    id: { dashboard: "Beranda", explore: "Jelajahi universitas", pathway: "Jalur Saya", tasks: "Tugas & Kebiasaan", progress: "Progres", profile: "Profil", settings: "Pengaturan" },
+  };
   return <header className="topbar">
-    <div><span className="eyebrow">Business study planner</span><h1>{title}</h1></div>
+    <div data-no-translate><span className="eyebrow">{language === "id" ? "Perencana studi bisnis" : "Business study planner"}</span><h1>{titles[language][view]}</h1></div>
     <div className="top-actions">
       <button className="icon-button" onClick={() => setNotices(!notices)} aria-label="Notifications"><Bell size={19} /><i /></button>
       <button className={`icon-button ${view === "settings" ? "active" : ""}`} onClick={() => go("settings")} aria-label="Open settings"><Settings2 size={19} /></button>
@@ -1969,7 +1972,7 @@ export default function App() {
   return <div className="app-shell">
     <SiteLanguage language={language} />
     <Navigation active={view} go={go} openGuide={() => setGuideOpen(true)} progress={progress} hasTarget={Boolean(dashboardProgram)} language={language} />
-    <main className="app-main"><Header view={view} go={go} notices={notices} setNotices={setNotices} notice={notice} onNoticeAction={runNoticeAction} avatar={avatar} /><div className="content-wrap">{content}</div></main>
+    <main className="app-main"><Header view={view} go={go} notices={notices} setNotices={setNotices} notice={notice} onNoticeAction={runNoticeAction} avatar={avatar} language={language} /><div className="content-wrap">{content}</div></main>
     <button className="feedback-fab" data-tour="feedback-button" onClick={() => openFeedback()}><MessageSquare size={15} /><span>Feedback</span></button>
     {compared.length > 0 && !compareOpen && <button className="compare-fab" onClick={() => setCompareOpen(true)}><Scale size={17} /><span>Compare {compared.length}</span><small>of 4</small></button>}
     {compareOpen && <ComparePanel ids={compared} close={() => setCompareOpen(false)} remove={toggleCompare} open={openSchool} />}
