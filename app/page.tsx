@@ -1726,6 +1726,23 @@ function PlanningGuide({ close, go }: { close: () => void; go: (view: View) => v
   return <div className="modal-backdrop guide-backdrop" onMouseDown={(event) => event.target === event.currentTarget && close()}><section className="guide-modal" role="dialog" aria-modal="true" aria-labelledby="planning-guide-title"><header><span><span className="eyebrow">MyWay guide</span><h2 id="planning-guide-title">From discovery to application</h2><p>MyWay organises preparation. Final applications are submitted through official university portals.</p></span><button className="icon-button" aria-label="Close planning guide" onClick={close}><X size={18} /></button></header><div>{steps.map((step, index) => <article key={step.title}><span>{String(index + 1).padStart(2, "0")}</span><div><strong>{step.title}</strong><p>{step.body}</p><button className="text-link" onClick={() => { go(step.view); close(); }}>{step.action} <ChevronRight size={13} /></button></div></article>)}</div><footer><CircleHelp size={14} /><span>Fit scores describe preference alignment. Readiness tracks preparation—not admission probability.</span></footer></section></div>;
 }
 
+function AccountGate({ language, ready, openAccount }: { language: "en" | "id"; ready: boolean; openAccount: () => void }) {
+  const id = language === "id";
+  return <main className="account-gate">
+    <section className="account-gate-card">
+      <div className="brand account-gate-brand"><span className="brand-mark"><img src="/myway-mark.png" alt="" /></span><span><strong><b>My</b><em>Way</em></strong><small>Explore · Plan · Go Further</small></span></div>
+      {!ready ? <div className="account-gate-loading"><i /><span>{id ? "Menyiapkan MyWay" : "Preparing MyWay"}</span></div> : <>
+        <span className="account-gate-icon"><ShieldCheck size={25} /></span>
+        <span className="eyebrow">{id ? "RUANG PRIBADIMU" : "YOUR PRIVATE WORKSPACE"}</span>
+        <h1>{id ? "Masuk sebelum mulai merencanakan." : "Sign in before you start planning."}</h1>
+        <p>{id ? "Progres, profil, universitas tersimpan, dan jalur aplikasi hanya ditampilkan setelah kamu masuk ke akun MyWay." : "Your progress, profile, saved universities, and application pathway only appear after you sign in to MyWay."}</p>
+        <button className="primary-button account-gate-action" onClick={openAccount}><CircleUserRound size={17} />{id ? "Masuk atau buat akun" : "Sign in or create account"}</button>
+        <div className="account-gate-note"><LockKeyhole size={14} /><span>{id ? "Tidak ada progres pribadi yang ditampilkan kepada pengunjung." : "No personal progress is shown to visitors."}</span></div>
+      </>}
+    </section>
+  </main>;
+}
+
 export default function App() {
   const [onboarded, setOnboarded] = useState(false);
   const [view, setView] = useState<View>("dashboard");
@@ -1754,6 +1771,7 @@ export default function App() {
   const [theme, setThemeState] = useState<"light" | "dark" | "system">("system");
   const [adminVisible, setAdminVisible] = useState(false);
   const [session, setSession] = useState<Session | null>(null);
+  const [authReady, setAuthReady] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
   const [passwordRecovery, setPasswordRecovery] = useState(false);
 
@@ -1803,7 +1821,7 @@ export default function App() {
     let unsubscribe = () => {};
     getSupabaseClient().then(async (supabase) => {
       const { data } = await supabase.auth.getSession();
-      if (active) setSession(data.session);
+      if (active) { setSession(data.session); setAuthReady(true); }
       const listener = supabase.auth.onAuthStateChange((event, nextSession) => {
         if (!active) return;
         setSession(nextSession);
@@ -1811,7 +1829,7 @@ export default function App() {
         if (event === "SIGNED_IN") setPasswordRecovery(false);
       });
       unsubscribe = () => listener.data.subscription.unsubscribe();
-    }).catch(() => {});
+    }).catch(() => { if (active) setAuthReady(true); });
     return () => { active = false; unsubscribe(); };
   }, []);
   useEffect(() => {
@@ -2002,6 +2020,7 @@ export default function App() {
   const selectedProgram = selectedProgramId ? programs.find((program) => program.id === selectedProgramId) ?? null : null;
   const selectedSchool = selectedSchoolId ? allBusinessSchools.find((school) => school.id === selectedSchoolId) ?? null : null;
 
+  if (!authReady || !session) return <><SiteLanguage language={language} /><AccountGate language={language} ready={authReady} openAccount={() => setAuthOpen(true)} />{authOpen && <AuthModal session={session} recovery={passwordRecovery} language={language} close={() => { setAuthOpen(false); setPasswordRecovery(false); }} openProfile={() => setView("profile")} />}</>;
   if (!onboarded) return <><SiteLanguage language={language} /><Onboarding finish={finish} saveLater={saveLater} /></>;
 
   let content;

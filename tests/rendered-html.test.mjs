@@ -30,5 +30,5 @@ test("renders the MyWay application shell", async () => {
   assert.match(html, /<title>MyWay<\/title>/i);
   assert.match(html, /Europe-first business university discovery and planning platform/i);
   assert.match(html, /MyWay/i);
-  assert.match(html, /onboarding-shell|app-shell/i);
+  assert.match(html, /account-gate|onboarding-shell|app-shell/i);
 });
