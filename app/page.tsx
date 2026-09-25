@@ -1671,7 +1671,8 @@ function ProductTutorial({ close, go, language }: { close: () => void; go: (view
           }
           targetRef.current = targets;
           if (!targets.length) { setFocus(null); return; }
-          targets[0].scrollIntoView({ behavior: "auto", block: "start", inline: "nearest" });
+          const fixedControl = targets[0].matches("[data-tour='settings-button'], [data-tour='feedback-button']");
+          if (!fixedControl) targets[0].scrollIntoView({ behavior: "auto", block: "center", inline: "nearest" });
           let trackingFrames = 0;
           const trackEntrance = () => {
             measure();
