@@ -811,10 +811,21 @@ function applyLanguage(language: Language) {
   let node = walker.nextNode() as Text | null;
   while (node) {
     if (node.parentElement?.closest("[data-no-translate]")) { node = walker.nextNode() as Text | null; continue; }
-    if (!originalText.has(node)) originalText.set(node, node.nodeValue ?? "");
-    const original = restoreEnglish(originalText.get(node) ?? "");
-    const next = language === "id" ? translate(original) : original;
-    if (node.nodeValue !== next) node.nodeValue = next;
+    const current = node.nodeValue ?? "";
+    if (language === "en") {
+      originalText.set(node, current);
+    } else {
+      let original = restoreEnglish(originalText.get(node) ?? current);
+      const previousTranslation = translate(original);
+      if (current !== original && current !== previousTranslation) {
+        original = restoreEnglish(current);
+        originalText.set(node, original);
+      } else if (!originalText.has(node)) {
+        originalText.set(node, original);
+      }
+      const next = translate(original);
+      if (current !== next) node.nodeValue = next;
+    }
     node = walker.nextNode() as Text | null;
   }
   document.querySelectorAll("[aria-label],[placeholder],[title]").forEach((element) => {
@@ -824,9 +835,17 @@ function applyLanguage(language: Language) {
     ["aria-label", "placeholder", "title"].forEach((name) => {
       const current = element.getAttribute(name);
       if (current === null) return;
-      if (!originals!.has(name)) originals!.set(name, current);
-      const original = restoreEnglish(originals!.get(name) ?? current);
-      element.setAttribute(name, language === "id" ? translate(original) : original);
+      if (language === "en") { originals!.set(name, current); return; }
+      let original = restoreEnglish(originals!.get(name) ?? current);
+      const previousTranslation = translate(original);
+      if (current !== original && current !== previousTranslation) {
+        original = restoreEnglish(current);
+        originals!.set(name, original);
+      } else if (!originals!.has(name)) {
+        originals!.set(name, original);
+      }
+      const next = translate(original);
+      if (current !== next) element.setAttribute(name, next);
     });
   });
   document.documentElement.lang = language;
