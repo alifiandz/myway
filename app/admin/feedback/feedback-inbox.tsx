@@ -82,7 +82,7 @@ export default function FeedbackInbox({ adminName, signOutPath }: { adminName: s
     <aside className="feedback-admin-sidebar">
       <a className="admin-brand" href="/"><span>M</span> MyWay</a>
       <div className="admin-private-label"><ShieldCheck size={14} /> Private admin</div>
-      <nav><a className="active" href="/admin/feedback"><Inbox size={17} /> Feedback Inbox <strong>{newCount}</strong></a></nav>
+      <nav><a href="/admin/data"><ShieldCheck size={17} /> University data</a><a className="active" href="/admin/feedback"><Inbox size={17} /> Feedback Inbox <strong>{newCount}</strong></a></nav>
       <div className="admin-account"><div><UserRound size={16} /><span><small>Signed in as</small>{adminName}</span></div><a href={signOutPath} target="_top" title="Sign out"><LogOut size={16} /></a></div>
     </aside>
 
