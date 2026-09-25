@@ -13,13 +13,14 @@ const EXPORTABLE_KEYS = [
   "myway-routines",
   "myway-habit-checks",
   "myway-notifications-enabled",
-  "myway-product-tour-v1",
+  "myway-product-tour-v2",
 ] as const;
 
 export const MYWAY_LOCAL_KEYS = [
   ...EXPORTABLE_KEYS,
   "myway-profile-documents",
   "myway-document-links",
+  "myway-profile-avatar",
 ] as const;
 
 export type MyWayPrototypeExport = {

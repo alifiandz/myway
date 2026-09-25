@@ -794,7 +794,7 @@ function Header({ view, go, notices, setNotices, notice, onNoticeAction, avatar,
     <div className="top-actions">
       <button className="icon-button" onClick={() => setNotices(!notices)} aria-label="Notifications"><Bell size={19} /><i /></button>
       <button data-tour="settings-button" className={`icon-button ${view === "settings" ? "active" : ""}`} onClick={() => go("settings")} aria-label="Open settings"><Settings2 size={19} /></button>
-      <button className={`avatar-button account-button ${session ? "signed-in" : ""}`} onClick={openAccount} aria-label={language === "id" ? "Buka akun" : "Open account"}><UserAvatar value={session?.user.user_metadata?.avatar_url || avatar} /><i /></button>
+      <button className={`avatar-button account-button ${session ? "signed-in" : ""}`} onClick={openAccount} aria-label={language === "id" ? "Buka akun" : "Open account"}><UserAvatar value={avatar} /><i /></button>
       {notices && <aside className="notice-popover"><strong>Next best action</strong><p>{notice.body}</p><button onClick={() => { onNoticeAction(); setNotices(false); }}>{notice.action} <ChevronRight size={15} /></button></aside>}
     </div>
   </header>;
@@ -1772,10 +1772,12 @@ export default function App() {
   const [adminVisible, setAdminVisible] = useState(false);
   const [session, setSession] = useState<Session | null>(null);
   const [authReady, setAuthReady] = useState(false);
+  const [accountDataReady, setAccountDataReady] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
   const [passwordRecovery, setPasswordRecovery] = useState(false);
 
   useEffect(() => {
+    if (!accountDataReady) return;
     const loadProfile = () => {
       try { setProfileSnapshot(JSON.parse(window.localStorage.getItem("myway-profile") || "{}")); } catch { setProfileSnapshot({}); }
       try { setProfileDocuments(JSON.parse(window.localStorage.getItem("myway-profile-documents") || "{}")); } catch { setProfileDocuments({}); }
@@ -1815,7 +1817,7 @@ export default function App() {
     }, 0);
     window.addEventListener("myway-profile-updated", loadProfile);
     return () => { window.clearTimeout(timer); window.removeEventListener("myway-profile-updated", loadProfile); };
-  }, []);
+  }, [accountDataReady]);
   useEffect(() => {
     let active = true;
     let unsubscribe = () => {};
@@ -1832,6 +1834,36 @@ export default function App() {
     }).catch(() => { if (active) setAuthReady(true); });
     return () => { active = false; unsubscribe(); };
   }, []);
+  useEffect(() => {
+    if (!authReady || !session) { setAccountDataReady(false); return; }
+    const accountKeys = [...MYWAY_LOCAL_KEYS, "myway-profile-avatar", "myway-product-tour-v2"] as const;
+    const activeUserKey = "myway-active-user-id";
+    const previousUserId = window.localStorage.getItem(activeUserKey);
+    const currentUserId = session.user.id;
+    if (previousUserId && previousUserId !== currentUserId) {
+      const previousData: Record<string, string> = {};
+      accountKeys.forEach((key) => { const value = window.localStorage.getItem(key); if (value !== null) previousData[key] = value; });
+      window.localStorage.setItem(`myway-account-data:${previousUserId}`, JSON.stringify(previousData));
+    }
+    const createdAt = Date.parse(session.user.created_at || "");
+    const lastSignInAt = Date.parse(session.user.last_sign_in_at || "");
+    const isFirstSignIn = Number.isFinite(createdAt) && Number.isFinite(lastSignInAt) && Math.abs(lastSignInAt - createdAt) < 15 * 60 * 1000;
+    if (previousUserId !== currentUserId && (previousUserId !== null || isFirstSignIn)) {
+      accountKeys.forEach((key) => window.localStorage.removeItem(key));
+      try {
+        const saved = JSON.parse(window.localStorage.getItem(`myway-account-data:${currentUserId}`) || "null") as Record<string, string> | null;
+        if (saved) Object.entries(saved).forEach(([key, value]) => { if (accountKeys.includes(key as typeof accountKeys[number]) && typeof value === "string") window.localStorage.setItem(key, value); });
+      } catch {}
+    }
+    if (!window.localStorage.getItem("myway-profile-avatar")) {
+      const metadata = session.user.user_metadata || {};
+      const providerPhoto = metadata.avatar_url || metadata.picture;
+      const fallback = (metadata.full_name || metadata.name || session.user.email || "MW").trim().split(/\s+/).map((part: string) => part[0]).join("").slice(0, 2).toUpperCase() || "MW";
+      window.localStorage.setItem("myway-profile-avatar", typeof providerPhoto === "string" && /^https:\/\//.test(providerPhoto) ? providerPhoto : fallback);
+    }
+    window.localStorage.setItem(activeUserKey, currentUserId);
+    setAccountDataReady(true);
+  }, [authReady, session]);
   useEffect(() => {
     let active = true;
     const refreshAdminAccess = async () => {
@@ -2020,7 +2052,7 @@ export default function App() {
   const selectedProgram = selectedProgramId ? programs.find((program) => program.id === selectedProgramId) ?? null : null;
   const selectedSchool = selectedSchoolId ? allBusinessSchools.find((school) => school.id === selectedSchoolId) ?? null : null;
 
-  if (!authReady || !session) return <><SiteLanguage language={language} /><AccountGate language={language} ready={authReady} openAccount={() => setAuthOpen(true)} />{authOpen && <AuthModal session={session} recovery={passwordRecovery} language={language} close={() => { setAuthOpen(false); setPasswordRecovery(false); }} openProfile={() => setView("profile")} />}</>;
+  if (!authReady || !session || !accountDataReady) return <><SiteLanguage language={language} /><AccountGate language={language} ready={authReady && (!session || accountDataReady)} openAccount={() => setAuthOpen(true)} />{authOpen && <AuthModal session={session} recovery={passwordRecovery} language={language} close={() => { setAuthOpen(false); setPasswordRecovery(false); }} openProfile={() => setView("profile")} />}</>;
   if (!onboarded) return <><SiteLanguage language={language} /><Onboarding finish={finish} saveLater={saveLater} /></>;
 
   let content;
