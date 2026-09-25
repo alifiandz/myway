@@ -58,7 +58,7 @@ function adminCors(response: Response): Response {
   const next = new Response(response.body, response);
   next.headers.set("Access-Control-Allow-Origin", ADMIN_ORIGIN);
   next.headers.set("Access-Control-Allow-Methods", "GET, PATCH, OPTIONS");
-  next.headers.set("Access-Control-Allow-Headers", "Content-Type, X-MyWay-Admin-Key");
+  next.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization, X-MyWay-Admin-Key");
   next.headers.set("Vary", "Origin");
   return next;
 }
