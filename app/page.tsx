@@ -756,11 +756,7 @@ function Brand() {
   return <div className="brand"><span className="brand-mark">
     {/* eslint-disable-next-line @next/next/no-img-element */}
     <img src="/myway-mark.png" alt="" />
-  </span><span><span className="brand-title"><strong><b>My</b><em>Way</em></strong><i>Beta</i></span><small>Explore · Plan · Go Further</small></span></div>;
-}
-
-function BetaNotice({ language }: { language: "en" | "id" }) {
-  return <aside className="beta-notice" role="note"><CircleAlert size={14} /><span><strong>{language === "id" ? "MyWay masih dalam tahap beta." : "MyWay is currently in beta."}</strong> {language === "id" ? "Konfirmasikan persyaratan, tenggat, dan biaya melalui sumber resmi yang ditautkan." : "Confirm requirements, deadlines, and fees using the linked official sources."}</span></aside>;
+  </span><span><strong><b>My</b><em>Way</em></strong><small>Explore · Plan · Go Further</small></span></div>;
 }
 
 function Navigation({ active, go, openGuide, progress, hasTarget, language }: { active: View; go: (v: View) => void; openGuide: () => void; progress: number; hasTarget: boolean; language: "en" | "id" }) {
@@ -2074,7 +2070,7 @@ export default function App() {
   return <div className="app-shell">
     <SiteLanguage language={language} />
     <Navigation active={view} go={go} openGuide={() => setGuideOpen(true)} progress={progress} hasTarget={Boolean(dashboardProgram)} language={language} />
-    <main className="app-main"><Header view={view} go={go} notices={notices} setNotices={setNotices} notice={notice} onNoticeAction={runNoticeAction} avatar={avatar} language={language} session={session} openAccount={() => setAuthOpen(true)} /><BetaNotice language={language} /><div className="content-wrap">{content}</div></main>
+    <main className="app-main"><Header view={view} go={go} notices={notices} setNotices={setNotices} notice={notice} onNoticeAction={runNoticeAction} avatar={avatar} language={language} session={session} openAccount={() => setAuthOpen(true)} /><div className="content-wrap">{content}</div></main>
     <button className="feedback-fab" data-tour="feedback-button" onClick={() => openFeedback()}><MessageSquare size={15} /><span>Feedback</span></button>
     {compared.length > 0 && !compareOpen && <button className="compare-fab" onClick={() => setCompareOpen(true)}><Scale size={17} /><span>Compare {compared.length}</span><small>of 4</small></button>}
     {compareOpen && <ComparePanel ids={compared} close={() => setCompareOpen(false)} remove={toggleCompare} open={openSchool} />}
