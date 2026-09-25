@@ -1650,11 +1650,13 @@ body:has(.modal-backdrop) { overflow: hidden; }
 }
 
 /* Guided product tour */
-.product-tour-layer { position: fixed; inset: 0; z-index: 300; pointer-events: none; }
+.product-tour-layer { position: fixed; inset: 0; z-index: 300; pointer-events: auto; }
 .tour-scrim { position: absolute; inset: 0; background: rgba(12, 20, 42, .62); backdrop-filter: blur(2px); pointer-events: auto; }
 .tour-spotlight { position: fixed; z-index: 301; border: 2px solid rgba(255, 255, 255, .98); border-radius: 15px; box-shadow: 0 0 0 9999px rgba(12, 20, 42, .64), 0 0 0 5px rgba(114, 135, 255, .32), 0 15px 42px rgba(9, 17, 38, .24); pointer-events: none; animation: tourFocusIn .18s ease both; }
 .tour-coachmark { z-index: 302; width: min(400px, calc(100vw - 32px)); padding: 20px; border: 1px solid rgba(255, 255, 255, .7); border-radius: 17px; background: var(--paper); color: var(--ink); font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; box-shadow: 0 24px 70px rgba(8, 18, 43, .3); pointer-events: auto; animation: tutorialIn .22s ease both; }
 .tour-coachmark.positioned { position: fixed; right: 24px; bottom: 24px; }
+.tour-coachmark.positioned.top { top: 24px; bottom: auto; }
+.tour-coachmark.positioned.bottom { top: auto; bottom: 24px; }
 .tour-coachmark.centered { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
 .tour-coachmark > header, .tour-coachmark > footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .tour-step { color: var(--muted); font-size: 10px; font-weight: 800; letter-spacing: .03em; }
@@ -1672,6 +1674,7 @@ body:has(.modal-backdrop) { overflow: hidden; }
 @media (max-width: 800px) {
   .tour-spotlight { border-radius: 12px; }
   .tour-coachmark.positioned, .tour-coachmark.centered { position: fixed; top: auto !important; right: 10px; bottom: 10px; left: 10px !important; width: auto; transform: none; }
+  .tour-coachmark.positioned.top { top: 10px !important; bottom: auto; }
   .tour-coachmark { padding: 16px; border-radius: 15px; }
   .tour-heading { margin: 14px 0; }
   .tour-heading h2 { font-size: 19px; }
