@@ -894,27 +894,6 @@ function Dashboard({ go, completed, toggleTask, openProgram, target, selected, p
     const timer = window.setInterval(updateHour, 60_000);
     return () => window.clearInterval(timer);
   }, []);
-  useEffect(() => {
-    let active = true;
-    const refreshAdminAccess = async () => {
-      const headerAccess = fetch("/api/admin-visibility", { cache: "no-store" })
-        .then((response) => response.ok ? response.json() : { authorized: false })
-        .then((data: { authorized?: boolean }) => data.authorized === true)
-        .catch(() => false);
-      let accountAccess = false;
-      if (session?.user.id) {
-        try {
-          const supabase = await getSupabaseClient();
-          const { data } = await supabase.from("profiles").select("role").eq("user_id", session.user.id).maybeSingle();
-          accountAccess = data?.role === "admin";
-        } catch {}
-      }
-      const trustedHeaderAccess = await headerAccess;
-      if (active) setAdminVisible(accountAccess || trustedHeaderAccess);
-    };
-    void refreshAdminAccess();
-    return () => { active = false; };
-  }, [session]);
   const greeting = currentHour >= 5 && currentHour < 12 ? "Good morning" : currentHour >= 12 && currentHour < 17 ? "Good afternoon" : currentHour >= 17 && currentHour < 22 ? "Good evening" : "Good night";
   const completeStages = readinessStages.filter((stage) => stage.value === 100).length;
   const inProgressStages = readinessStages.filter((stage) => stage.value > 0 && stage.value < 100).length;
@@ -1835,6 +1814,27 @@ export default function App() {
     }).catch(() => {});
     return () => { active = false; unsubscribe(); };
   }, []);
+  useEffect(() => {
+    let active = true;
+    const refreshAdminAccess = async () => {
+      const headerAccess = fetch("/api/admin-visibility", { cache: "no-store" })
+        .then((response) => response.ok ? response.json() : { authorized: false })
+        .then((data: { authorized?: boolean }) => data.authorized === true)
+        .catch(() => false);
+      let accountAccess = false;
+      if (session?.user.id) {
+        try {
+          const supabase = await getSupabaseClient();
+          const { data } = await supabase.from("profiles").select("role").eq("user_id", session.user.id).maybeSingle();
+          accountAccess = data?.role === "admin";
+        } catch {}
+      }
+      const trustedHeaderAccess = await headerAccess;
+      if (active) setAdminVisible(accountAccess || trustedHeaderAccess);
+    };
+    void refreshAdminAccess();
+    return () => { active = false; };
+  }, [session]);
   const setAvatar = (value: string) => { setAvatarState(value); window.localStorage.setItem("myway-profile-avatar", value); };
   const setLanguage = (value: "en" | "id") => {
     window.localStorage.setItem("myway-language", value);
