@@ -765,9 +765,14 @@ const patterns: Array<[RegExp, (match: RegExpMatchArray) => string]> = [
   [/^(\d+)% complete$/, (m) => `${m[1]}% selesai`],
   [/^(\d+) stored files$/, (m) => `${m[1]} file tersimpan`],
   [/^(\d+) saved universities$/, (m) => `${m[1]} universitas tersimpan`],
+  [/^(\d+) saved university$/, (m) => `${m[1]} universitas tersimpan`],
   [/^(\d+) Pathway choices$/, (m) => `${m[1]} pilihan Jalur`],
   [/^(\d+) universities$/, (m) => `${m[1]} universitas`],
+  [/^(\d+) university$/, (m) => `${m[1]} universitas`],
   [/^(\d+) institutions$/, (m) => `${m[1]} institusi`],
+  [/^(\d+) institution$/, (m) => `${m[1]} institusi`],
+  [/^Save (.+)$/, (m) => `Simpan ${m[1]}`],
+  [/^Remove (.+) from saved schools$/, (m) => `Hapus ${m[1]} dari universitas tersimpan`],
   [/^Context attached for (.+)$/, (m) => `Konteks terlampir untuk ${m[1]}`],
   [/^(\d+) routine check-ins$/, (m) => `${m[1]} aktivitas rutinitas`],
   [/^(\d+) active days$/, (m) => `${m[1]} hari aktif`],
@@ -864,7 +869,21 @@ export function SiteLanguage({ language }: { language: Language }) {
     run();
     const observer = new MutationObserver(run);
     observer.observe(document.body, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ["aria-label", "placeholder", "title"] });
-    return () => { active = false; observer.disconnect(); cancelAnimationFrame(frame); };
+    const rerunAfterInteraction = () => {
+      run();
+      window.setTimeout(run, 0);
+    };
+    document.addEventListener("click", rerunAfterInteraction, true);
+    document.addEventListener("input", rerunAfterInteraction, true);
+    document.addEventListener("change", rerunAfterInteraction, true);
+    return () => {
+      active = false;
+      observer.disconnect();
+      cancelAnimationFrame(frame);
+      document.removeEventListener("click", rerunAfterInteraction, true);
+      document.removeEventListener("input", rerunAfterInteraction, true);
+      document.removeEventListener("change", rerunAfterInteraction, true);
+    };
   }, [language]);
   return null;
 }
