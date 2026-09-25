@@ -38,6 +38,22 @@ function isAdminRequest(request: Request, env: Env): boolean {
   return isAdmin(request) || Boolean(env.MYWAY_ADMIN_SECRET && supplied === env.MYWAY_ADMIN_SECRET);
 }
 
+async function isSupabaseAdmin(request: Request, env: Env): Promise<boolean> {
+  const authorization = request.headers.get("Authorization");
+  if (!authorization?.startsWith("Bearer ") || !env.SUPABASE_URL || !env.SUPABASE_PUBLISHABLE_KEY) return false;
+  try {
+    const headers = { Authorization: authorization, apikey: env.SUPABASE_PUBLISHABLE_KEY };
+    const userResponse = await fetch(`${env.SUPABASE_URL}/auth/v1/user`, { headers });
+    if (!userResponse.ok) return false;
+    const user = await userResponse.json() as { id?: string };
+    if (!user.id) return false;
+    const profileResponse = await fetch(`${env.SUPABASE_URL}/rest/v1/profiles?user_id=eq.${encodeURIComponent(user.id)}&select=role`, { headers });
+    if (!profileResponse.ok) return false;
+    const profiles = await profileResponse.json() as Array<{ role?: string }>;
+    return profiles[0]?.role === "admin";
+  } catch { return false; }
+}
+
 function adminCors(response: Response): Response {
   const next = new Response(response.body, response);
   next.headers.set("Access-Control-Allow-Origin", ADMIN_ORIGIN);
@@ -75,7 +91,7 @@ const worker = {
     }
 
     if (url.pathname === "/api/admin/feedback" && request.method === "GET") {
-      if (!isAdminRequest(request, env)) return adminCors(adminOnly());
+      if (!isAdminRequest(request, env) && !await isSupabaseAdmin(request, env)) return adminCors(adminOnly());
       try {
         const category = url.searchParams.get("category") ?? "all";
         const status = url.searchParams.get("status") ?? "all";
@@ -113,7 +129,7 @@ const worker = {
 
     const adminFeedbackMatch = url.pathname.match(/^\/api\/admin\/feedback\/([^/]+)$/);
     if (adminFeedbackMatch && request.method === "PATCH") {
-      if (!isAdminRequest(request, env)) return adminCors(adminOnly());
+      if (!isAdminRequest(request, env) && !await isSupabaseAdmin(request, env)) return adminCors(adminOnly());
       try {
         const id = decodeURIComponent(adminFeedbackMatch[1]);
         const body = await request.json() as { status?: string; internalNotes?: string };
@@ -135,7 +151,7 @@ const worker = {
 
     const adminScreenshotMatch = url.pathname.match(/^\/api\/admin\/feedback\/([^/]+)\/screenshot$/);
     if (adminScreenshotMatch && request.method === "GET") {
-      if (!isAdminRequest(request, env)) return adminCors(adminOnly());
+      if (!isAdminRequest(request, env) && !await isSupabaseAdmin(request, env)) return adminCors(adminOnly());
       try {
         const id = decodeURIComponent(adminScreenshotMatch[1]);
         const row = await env.DB.prepare("SELECT screenshot_key, screenshot_name FROM feedback_submissions WHERE id = ?").bind(id).first<{ screenshot_key: string | null; screenshot_name: string | null }>();

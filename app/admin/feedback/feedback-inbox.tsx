@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ArrowLeft, Bug, Check, ChevronRight, CircleAlert, ExternalLink, Flag, Image as ImageIcon, Inbox, Lightbulb, LoaderCircle, LogOut, Mail, MessageSquareText, RefreshCw, Save, Search, ShieldCheck, UserRound, X } from "lucide-react";
 import { SiteLanguage } from "../../site-language";
+import { getSupabaseClient } from "../../supabase-client";
 
 type Status = "new" | "reviewing" | "resolved";
 type Category = "bug" | "incorrect" | "suggestion";
@@ -26,7 +27,7 @@ function formatDate(value: string) {
   return new Intl.DateTimeFormat(undefined, { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
 }
 
-export default function FeedbackInbox({ adminName, signOutPath }: { adminName: string; signOutPath: string }) {
+export default function FeedbackInbox() {
   const [language, setLanguage] = useState<"en" | "id">("en");
   const [items, setItems] = useState<Submission[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -38,13 +39,22 @@ export default function FeedbackInbox({ adminName, signOutPath }: { adminName: s
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [adminName, setAdminName] = useState("MyWay administrator");
+  const [accessToken, setAccessToken] = useState("");
 
   const load = useCallback(async () => {
     setLoading(true); setError("");
     try {
+      const supabase = await getSupabaseClient();
+      const { data: sessionData } = await supabase.auth.getSession();
+      if (!sessionData.session) throw new Error("Sign in to MyWay first, then reopen the admin workspace.");
+      const { data: profile } = await supabase.from("profiles").select("role,display_name").eq("user_id", sessionData.session.user.id).maybeSingle();
+      if (profile?.role !== "admin") throw new Error("This MyWay account does not have administrator access.");
+      const token = sessionData.session.access_token;
+      setAccessToken(token); setAdminName(profile.display_name || sessionData.session.user.email || "MyWay administrator");
       const params = new URLSearchParams({ category, status });
       if (query) params.set("search", query);
-      const response = await fetch(`/api/admin/feedback?${params}`, { cache: "no-store" });
+      const response = await fetch(`/api/admin/feedback?${params}`, { headers: { Authorization: `Bearer ${token}` }, cache: "no-store" });
       if (!response.ok) throw new Error("load");
       const data = await response.json() as { submissions: Submission[] };
       setItems(data.submissions);
@@ -67,7 +77,7 @@ export default function FeedbackInbox({ adminName, signOutPath }: { adminName: s
     setSaving(true); setSaved(false); setError("");
     try {
       const response = await fetch(`/api/admin/feedback/${encodeURIComponent(selected.id)}`, {
-        method: "PATCH", headers: { "Content-Type": "application/json" },
+        method: "PATCH", headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
         body: JSON.stringify({ status: form.get("status"), internalNotes: form.get("internalNotes") }),
       });
       if (!response.ok) throw new Error("save");
@@ -83,7 +93,7 @@ export default function FeedbackInbox({ adminName, signOutPath }: { adminName: s
       <a className="admin-brand" href="/"><span>M</span> MyWay</a>
       <div className="admin-private-label"><ShieldCheck size={14} /> Private admin</div>
       <nav><a href="/admin/data"><ShieldCheck size={17} /> University data</a><a className="active" href="/admin/feedback"><Inbox size={17} /> Feedback Inbox <strong>{newCount}</strong></a></nav>
-      <div className="admin-account"><div><UserRound size={16} /><span><small>Signed in as</small>{adminName}</span></div><a href={signOutPath} target="_top" title="Sign out"><LogOut size={16} /></a></div>
+      <div className="admin-account"><div><UserRound size={16} /><span><small>Signed in as</small>{adminName}</span></div><button type="button" className="admin-signout" title="Sign out" onClick={async () => { const supabase = await getSupabaseClient(); await supabase.auth.signOut(); window.location.href = "/"; }}><LogOut size={16} /></button></div>
     </aside>
 
     <section className="feedback-admin-main">
@@ -130,7 +140,7 @@ function SubmissionDetail({ item, saving, saved, onSubmit }: { item: Submission;
       <Detail label="Information category" value={item.informationCategory} />
       <Detail label="What should we review?" value={item.reviewRequest} />
       {item.sourceUrl && <div className="admin-detail-field"><span>Source or reference</span><a href={item.sourceUrl} target="_blank" rel="noreferrer">Open reference <ExternalLink size={13} /></a></div>}
-      {item.screenshotKey && <div className="admin-detail-field"><span>Screenshot</span><a href={`/api/admin/feedback/${encodeURIComponent(item.id)}/screenshot`} target="_blank" rel="noreferrer"><ImageIcon size={14} /> {item.screenshotName || "Open screenshot"}</a></div>}
+      {item.screenshotKey && <div className="admin-detail-field"><span>Screenshot</span><span>Screenshot access is available from the protected review API.</span></div>}
 
       <section className="admin-context-card"><h3>Attached context</h3><dl>
         <Context term="University" value={item.university} /><Context term="Programme" value={item.programme} /><Context term="Page" value={item.pageUrl} link /><Context term="Language" value={item.locale} /><Context term="Viewport" value={item.viewport} /><Context term="Browser and device" value={item.userAgent} />
