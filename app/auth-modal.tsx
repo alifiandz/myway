@@ -71,7 +71,7 @@ export function AuthModal({ session, recovery, language, close, openProfile }: {
   return <div className="modal-backdrop auth-backdrop" data-no-translate onMouseDown={(event) => event.target === event.currentTarget && close()}>
     <section className="auth-modal" role="dialog" aria-modal="true" aria-labelledby="auth-title">
       <button className="icon-button auth-close" onClick={close} aria-label={id ? "Tutup" : "Close"}><X size={18} /></button>
-      <div className="auth-brand"><span>MW</span><strong>MyWay</strong></div>
+      <div className="auth-brand"><span><img src="/myway-mark.png" alt="" /></span><strong>MyWay</strong></div>
       {session ? <div className="auth-account-state">
         <span className="auth-state-icon"><Check size={24} /></span><span className="eyebrow">{id ? "AKUN MYWAY" : "MYWAY ACCOUNT"}</span>
         <h2 id="auth-title">{id ? `Halo, ${displayName}` : `Welcome, ${displayName}`}</h2>

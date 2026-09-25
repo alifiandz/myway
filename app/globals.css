@@ -1657,7 +1657,8 @@ body:has(.modal-backdrop) { overflow: hidden; }
 .auth-modal { position: relative; width: min(430px, calc(100vw - 32px)); max-height: calc(100vh - 40px); overflow-y: auto; padding: 28px; border: 1px solid rgba(255,255,255,.72); border-radius: 21px; background: var(--paper); color: var(--ink); box-shadow: 0 28px 90px rgba(8,18,43,.3); animation: tutorialIn .22s ease both; }
 .auth-close { position: absolute; top: 16px; right: 16px; }
 .auth-brand { display: flex; align-items: center; gap: 9px; font-family: inherit; font-size: 17px; }
-.auth-brand > span { display: grid; width: 34px; height: 34px; place-items: center; border-radius: 10px; color: white; background: linear-gradient(145deg,var(--blue),var(--navy)); font-family: ui-sans-serif,system-ui,sans-serif; font-size: 11px; font-weight: 850; }
+.auth-brand > span { display: block; width: 34px; height: 34px; overflow: hidden; border-radius: 10px; }
+.auth-brand > span img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .auth-heading { margin: 27px 0 20px; }
 .auth-heading h2, .auth-account-state h2 { margin: 6px 0 7px; font-family: inherit; font-size: 27px; font-weight: 780; letter-spacing: -.035em; }
 .auth-heading p, .auth-account-state > p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
