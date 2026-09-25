@@ -25,7 +25,7 @@ function valueText(value: unknown) {
   return JSON.stringify(value);
 }
 
-export default function UniversityDataReview({ adminName, signOutPath }: { adminName: string; signOutPath: string }) {
+export default function UniversityDataReview() {
   const [items, setItems] = useState<University[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
@@ -78,7 +78,7 @@ export default function UniversityDataReview({ adminName, signOutPath }: { admin
   }
 
   return <><SiteLanguage language="en" /><main className="feedback-admin-shell university-admin-shell">
-    <aside className="feedback-admin-sidebar"><a className="admin-brand" href="/"><span>M</span> MyWay</a><div className="admin-private-label"><ShieldCheck size={14} /> Private admin</div><nav><a className="active" href="/admin/data"><Database size={17} /> University data <strong>{items.length}</strong></a><a href="/admin/feedback"><Inbox size={17} /> Feedback Inbox</a></nav><div className="admin-account"><div><UserRound size={16} /><span><small>Signed in as</small>{adminName}</span></div><a href={signOutPath} target="_top" title="Sign out"><LogOut size={16} /></a></div></aside>
+    <aside className="feedback-admin-sidebar"><a className="admin-brand" href="/"><span>M</span> MyWay</a><div className="admin-private-label"><ShieldCheck size={14} /> Private admin</div><nav><a className="active" href="/admin/data"><Database size={17} /> University data <strong>{items.length}</strong></a><a href="/admin/feedback"><Inbox size={17} /> Feedback Inbox</a></nav><div className="admin-account"><div><UserRound size={16} /><span><small>Access controlled by</small>MyWay admin account</span></div><a href="/" title="Return to MyWay"><LogOut size={16} /></a></div></aside>
     <section className="feedback-admin-main"><header className="feedback-admin-header"><div><a href="/"><ArrowLeft size={14} /> MyWay</a><h1>University data review</h1><p>Verify sourced facts and keep uncertain information clearly labelled.</p></div><button className="admin-icon-button" onClick={load} aria-label="Refresh university data"><RefreshCw size={17} /></button></header>
       <div className="university-admin-metrics"><article><span>Universities</span><strong>{items.length}</strong></article><article><span>Verified fields</span><strong>{verified}</strong></article><article><span>Under review</span><strong>{underReview}</strong></article><article><span>Not yet verified</span><strong>{missing}</strong></article></div>
       <div className="feedback-admin-filters university-admin-filters"><form onSubmit={(event) => event.preventDefault()}><Search size={16} /><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search university or programme" /></form><select value={filter} onChange={(event) => setFilter(event.target.value)}><option value="all">All statuses</option>{statusOptions.map(([value,label]) => <option key={value} value={value}>{label}</option>)}</select></div>
