@@ -7,6 +7,9 @@ interface Env {
   DB: D1Database;
   BUCKET: R2Bucket;
   MYWAY_ADMIN_SECRET?: string;
+  SUPABASE_URL?: string;
+  SUPABASE_PUBLISHABLE_KEY?: string;
+  SUPABASE_GOOGLE_ENABLED?: string;
   IMAGES: {
     input(stream: ReadableStream): {
       transform(options: Record<string, unknown>): {
@@ -57,6 +60,11 @@ function adminOnly(): Response {
 const worker = {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
+
+    if (url.pathname === "/api/auth-config" && request.method === "GET") {
+      if (!env.SUPABASE_URL || !env.SUPABASE_PUBLISHABLE_KEY) return Response.json({ error: "MyWay accounts are not configured." }, { status: 503 });
+      return Response.json({ url: env.SUPABASE_URL, publishableKey: env.SUPABASE_PUBLISHABLE_KEY, googleEnabled: env.SUPABASE_GOOGLE_ENABLED === "true" }, { headers: { "Cache-Control": "public, max-age=300" } });
+    }
 
     if (url.pathname === "/api/admin-visibility" && request.method === "GET") {
       return Response.json({ authorized: isAdmin(request) }, { headers: { "Cache-Control": "private, no-store" } });

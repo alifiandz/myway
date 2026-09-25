@@ -14,6 +14,9 @@ import { ftDirectoryIdentities } from "./ft-directory-data";
 import { clearVaultDocuments, deleteVaultDocument, getVaultDocument, listVaultDocuments, newVaultDocumentId, saveVaultDocument, type VaultDocument } from "./document-vault";
 import { createPrototypeExport, importPrototypeExport, MYWAY_LOCAL_KEYS } from "./prototype-data";
 import { SiteLanguage } from "./site-language";
+import { AuthModal } from "./auth-modal";
+import { getSupabaseClient } from "./supabase-client";
+import type { Session } from "@supabase/supabase-js";
 
 type View = "dashboard" | "explore" | "pathway" | "tasks" | "progress" | "profile" | "settings";
 type Role = "Dream" | "Target" | "Alternative";
@@ -774,14 +777,14 @@ function Navigation({ active, go, openGuide, progress, hasTarget, language }: { 
 }
 
 function UserAvatar({ value, className = "avatar" }: { value: string; className?: string }) {
-  if (value.startsWith("data:image/")) return <span className={className}>
+  if (value.startsWith("data:image/") || /^https:\/\//.test(value)) return <span className={className}>
     {/* eslint-disable-next-line @next/next/no-img-element */}
     <img src={value} alt="Your profile" />
   </span>;
   return <span className={className} aria-hidden="true">{value}</span>;
 }
 
-function Header({ view, go, notices, setNotices, notice, onNoticeAction, avatar, language }: { view: View; go: (v: View) => void; notices: boolean; setNotices: (v: boolean) => void; notice: { body: string; action: string }; onNoticeAction: () => void; avatar: string; language: "en" | "id" }) {
+function Header({ view, go, notices, setNotices, notice, onNoticeAction, avatar, language, session, openAccount }: { view: View; go: (v: View) => void; notices: boolean; setNotices: (v: boolean) => void; notice: { body: string; action: string }; onNoticeAction: () => void; avatar: string; language: "en" | "id"; session: Session | null; openAccount: () => void }) {
   const titles: Record<"en" | "id", Record<View, string>> = {
     en: { dashboard: "Dashboard", explore: "Explore universities", pathway: "My Pathway", tasks: "Tasks & Habits", progress: "Progress", profile: "Profile", settings: "Settings" },
     id: { dashboard: "Beranda", explore: "Jelajahi universitas", pathway: "Jalur Saya", tasks: "Tugas & Kebiasaan", progress: "Progres", profile: "Profil", settings: "Pengaturan" },
@@ -791,7 +794,7 @@ function Header({ view, go, notices, setNotices, notice, onNoticeAction, avatar,
     <div className="top-actions">
       <button className="icon-button" onClick={() => setNotices(!notices)} aria-label="Notifications"><Bell size={19} /><i /></button>
       <button data-tour="settings-button" className={`icon-button ${view === "settings" ? "active" : ""}`} onClick={() => go("settings")} aria-label="Open settings"><Settings2 size={19} /></button>
-      <button className={`avatar-button ${view === "profile" ? "active" : ""}`} onClick={() => go("profile")} aria-label="Open profile"><UserAvatar value={avatar} /></button>
+      <button className={`avatar-button account-button ${session ? "signed-in" : ""}`} onClick={openAccount} aria-label={language === "id" ? "Buka akun" : "Open account"}><UserAvatar value={session?.user.user_metadata?.avatar_url || avatar} /><i /></button>
       {notices && <aside className="notice-popover"><strong>Next best action</strong><p>{notice.body}</p><button onClick={() => { onNoticeAction(); setNotices(false); }}>{notice.action} <ChevronRight size={15} /></button></aside>}
     </div>
   </header>;
@@ -1750,6 +1753,9 @@ export default function App() {
   const [language, setLanguageState] = useState<"en" | "id">("en");
   const [theme, setThemeState] = useState<"light" | "dark" | "system">("system");
   const [adminVisible, setAdminVisible] = useState(false);
+  const [session, setSession] = useState<Session | null>(null);
+  const [authOpen, setAuthOpen] = useState(false);
+  const [passwordRecovery, setPasswordRecovery] = useState(false);
 
   useEffect(() => {
     const loadProfile = () => {
@@ -1791,6 +1797,22 @@ export default function App() {
     }, 0);
     window.addEventListener("myway-profile-updated", loadProfile);
     return () => { window.clearTimeout(timer); window.removeEventListener("myway-profile-updated", loadProfile); };
+  }, []);
+  useEffect(() => {
+    let active = true;
+    let unsubscribe = () => {};
+    getSupabaseClient().then(async (supabase) => {
+      const { data } = await supabase.auth.getSession();
+      if (active) setSession(data.session);
+      const listener = supabase.auth.onAuthStateChange((event, nextSession) => {
+        if (!active) return;
+        setSession(nextSession);
+        if (event === "PASSWORD_RECOVERY") { setPasswordRecovery(true); setAuthOpen(true); }
+        if (event === "SIGNED_IN") setPasswordRecovery(false);
+      });
+      unsubscribe = () => listener.data.subscription.unsubscribe();
+    }).catch(() => {});
+    return () => { active = false; unsubscribe(); };
   }, []);
   const setAvatar = (value: string) => { setAvatarState(value); window.localStorage.setItem("myway-profile-avatar", value); };
   const setLanguage = (value: "en" | "id") => {
@@ -1981,12 +2003,13 @@ export default function App() {
   return <div className="app-shell">
     <SiteLanguage language={language} />
     <Navigation active={view} go={go} openGuide={() => setGuideOpen(true)} progress={progress} hasTarget={Boolean(dashboardProgram)} language={language} />
-    <main className="app-main"><Header view={view} go={go} notices={notices} setNotices={setNotices} notice={notice} onNoticeAction={runNoticeAction} avatar={avatar} language={language} /><div className="content-wrap">{content}</div></main>
+    <main className="app-main"><Header view={view} go={go} notices={notices} setNotices={setNotices} notice={notice} onNoticeAction={runNoticeAction} avatar={avatar} language={language} session={session} openAccount={() => setAuthOpen(true)} /><div className="content-wrap">{content}</div></main>
     <button className="feedback-fab" data-tour="feedback-button" onClick={() => openFeedback()}><MessageSquare size={15} /><span>Feedback</span></button>
     {compared.length > 0 && !compareOpen && <button className="compare-fab" onClick={() => setCompareOpen(true)}><Scale size={17} /><span>Compare {compared.length}</span><small>of 4</small></button>}
     {compareOpen && <ComparePanel ids={compared} close={() => setCompareOpen(false)} remove={toggleCompare} open={openSchool} />}
     {guideOpen && <PlanningGuide close={() => setGuideOpen(false)} go={go} />}
     {tutorialOpen && <ProductTutorial close={() => setTutorialOpen(false)} go={go} language={language} />}
+    {authOpen && <AuthModal session={session} recovery={passwordRecovery} language={language} close={() => { setAuthOpen(false); setPasswordRecovery(false); }} openProfile={() => go("profile")} />}
     {feedbackOpen && <FeedbackModal initialCategory={feedbackCategory} context={feedbackContext} close={() => setFeedbackOpen(false)} />}
     {toast && <div className="toast"><CircleCheck size={17} />{toast}</div>}
   </div>;
