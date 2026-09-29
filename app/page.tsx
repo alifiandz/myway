@@ -22,6 +22,26 @@ type View = "dashboard" | "explore" | "pathway" | "tasks" | "progress" | "profil
 type Role = "Dream" | "Target" | "Alternative";
 type FeedbackCategory = "bug" | "incorrect" | "suggestion";
 type FeedbackContext = { university?: string; programme?: string };
+type PublicProgrammeFact = {
+  field_key: string;
+  value: unknown;
+  status: string;
+  source_url: string | null;
+  academic_year: string | null;
+  applicant_context: string | null;
+};
+
+const publicFactLabels: Record<string, string> = {
+  tuition: "Tuition",
+  application_deadline: "Application deadline",
+  entry_requirement: "Entry requirements",
+};
+function factValue(fact: PublicProgrammeFact | undefined): string {
+  if (!fact) return "Not yet verified";
+  if (fact.status === "not_published") return "Not published for this intake";
+  if (fact.status !== "verified" || fact.value == null) return "Not yet verified";
+  return typeof fact.value === "string" ? fact.value : String(fact.value);
+}
 
 type ProfileSnapshot = {
   name?: string;
@@ -1030,6 +1050,20 @@ function Explore({ openSchool, saved, setSaved, compared, toggleCompare, schoolP
 function SchoolDetail({ school, program, close, saved, toggleSaved, compared, toggleCompare, pathwayRole, addPath, removePath, fitResult, readinessScore, reportIncorrect }: { school: BusinessSchool; program?: Program; close: () => void; saved: boolean; toggleSaved: () => void; compared: boolean; toggleCompare: () => void; pathwayRole?: Role; addPath: (role: Role) => void; removePath: () => void; fitResult: FitResult; readinessScore?: number; reportIncorrect: () => void }) {
   const [roleOpen, setRoleOpen] = useState(false);
   const [tab, setTab] = useState<"overview" | "programmes" | "admissions" | "rankings">("overview");
+  const [facts, setFacts] = useState<PublicProgrammeFact[] | null>(null);
+  useEffect(() => {
+    let current = true;
+    setFacts(null);
+    getSupabaseClient().then(async (supabase) => {
+      const { data, error } = await supabase.from("programme_facts")
+        .select("field_key,value,status,source_url,academic_year,applicant_context")
+        .eq("programme_id", `${school.id}-primary`)
+        .in("field_key", ["tuition", "application_deadline", "entry_requirement"]);
+      if (current) setFacts(error ? [] : (data ?? []) as PublicProgrammeFact[]);
+    }).catch(() => { if (current) setFacts([]); });
+    return () => { current = false; };
+  }, [school.id]);
+  const factFor = (key: string) => facts?.find((fact) => fact.field_key === key);
   const rankings = schoolRankings(school);
   const verifiedRankings = rankings.filter((ranking) => ranking.status === "verified");
   const study = schoolStudy(school);
@@ -1060,7 +1094,7 @@ function SchoolDetail({ school, program, close, saved, toggleSaved, compared, to
           <article className="card detail-section"><span className="section-label">Programme evidence</span><h3>Information currently recorded</h3>{program ? <div className="evidence-table"><div><strong>Management</strong><span className="good-text">{program.management}</span></div><div><strong>Entrepreneurship</strong><span>{program.enterprise}</span></div><div><strong>Marketing</strong><span>{program.marketing}</span></div><div><strong>Quantitative course load</strong><span className={program.math.includes("high") ? "amber-text" : ""}>{program.math}</span></div><div><strong>Exchange, internships, career</strong><span>{program.experience}</span></div></div> : <div className="evidence-table"><div><strong>Study access</strong><span>{routeLabel}</span></div><div><strong>Business areas</strong><span>{study.areas.join(" · ")}</span></div><div><strong>Quantitative course load</strong><span>Not yet verified</span></div><div><strong>Exchange, internships, career</strong><span>Not yet verified</span></div></div>}</article>
         </>}
         {tab === "admissions" && <>
-          <article className="card detail-section"><span className="section-label">Admissions & costs</span><h3>What still needs confirmation</h3><div className="admissions-fact-list"><div><span>Entry structure</span><strong>{program?.entry ?? routeLabel}</strong></div><div><span>Tuition</span><strong>{program?.tuition ?? "Not yet verified"}</strong></div><div><span>Application deadline</span><strong>Not yet verified for your intake</strong></div><div><span>Applicant requirements</span><strong>Confirm for your curriculum and citizenship</strong></div></div></article>
+          <article className="card detail-section"><span className="section-label">Admissions & costs</span><h3>Check each fact at its source</h3><div className="admissions-fact-list">{(["tuition", "application_deadline", "entry_requirement"] as const).map((key) => { const fact = factFor(key); const href = fact?.source_url?.startsWith("https://") ? fact.source_url : program?.sources[0]?.href ?? study.source; return <div key={key}><span>{publicFactLabels[key]}</span><strong>{facts === null ? "Loading source record…" : factValue(fact)}</strong>{fact?.academic_year && <small>{fact.academic_year}{fact.applicant_context ? ` · ${fact.applicant_context}` : ""}</small>}<a href={href} target="_blank" rel="noopener noreferrer">Check official source <ExternalLink size={13}/></a></div>; })}</div><p className="school-route-note">Confirm the latest details and your eligibility on the university’s official page before applying.</p></article>
           <article className="card detail-section caution-list"><span className="section-label">Open questions</span>{openQuestions.map((item) => <div key={item}><CircleAlert size={16} /><span>{item}</span></div>)}<div><CircleAlert size={16} /><span>Deadlines must be verified for the intended intake and applicant category.</span></div></article>
           <article className="card detail-section university-next-step"><span><span className="section-label">Official confirmation</span><h3>Check before applying</h3><p>MyWay organises preparation, but the official institution portal remains the authority for requirements, fees and submission.</p></span><a className="outline-button" href={program?.sources[0]?.href ?? study.source} target="_blank" rel="noreferrer">Open official page <ExternalLink size={13} /></a></article>
         </>}
