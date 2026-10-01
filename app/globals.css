@@ -527,38 +527,38 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .admissions-fact-list > div:last-child { border-bottom: 0; }
 .admissions-fact-list span { color: var(--muted); font-size: 8px; }
 .admissions-fact-list strong { max-width: 65%; font-size: 9px; line-height: 1.4; text-align: right; }
-.university-profile-page .admissions-panel { padding: 24px; }
-.admissions-panel-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; }
-.admissions-panel-heading h3 { margin-top: 6px; font-size: 21px; letter-spacing: -.035em; }
+/* Compact admissions surface shared by every university profile. */
+.university-profile-page .admissions-panel { padding: 20px; }
+.admissions-panel-heading { display: flex; align-items: start; justify-content: space-between; gap: 20px; }
+.admissions-panel-heading h3 { margin-top: 5px; font-size: 17px; font-weight: 500; letter-spacing: -.02em; }
 .admissions-panel-heading p { max-width: 225px; margin: 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
-.university-profile-page .admissions-fact-list { margin-top: 21px; border: 0; border-radius: 0; overflow: visible; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-.university-profile-page .admissions-fact-list > .admissions-fact-card { min-width: 0; min-height: 216px; padding: 18px 18px 0; border: 1px solid #dfe6f4; border-radius: 16px; background: linear-gradient(160deg, #fbfcff 0%, #fff 70%); display: flex; flex-direction: column; gap: 0; box-shadow: 0 6px 20px rgba(30, 52, 96, .035); }
-.university-profile-page .admissions-fact-list > .admissions-entry_requirement { grid-column: 1 / -1; min-height: 190px; }
-.admissions-fact-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-.university-profile-page .admissions-fact-icon { width: 36px; height: 36px; flex: none; border-radius: 11px; display: grid; place-items: center; color: #4d68c7; background: #edf2ff; }
-.university-profile-page .admissions-application_deadline .admissions-fact-icon { color: #966b22; background: #fff4dd; }
-.university-profile-page .admissions-entry_requirement .admissions-fact-icon { color: #367f7a; background: #e8f6f3; }
-.university-profile-page .admissions-fact-status { display: inline-flex; align-items: center; gap: 4px; padding: 5px 9px; border-radius: 999px; color: #607089; background: #eef1f6; font-size: 11px; font-weight: 700; white-space: nowrap; }
-.university-profile-page .admissions-fact-status.verified { color: #28775c; background: #e7f5ee; }
-.university-profile-page .admissions-fact-status.unpublished { color: #8a622c; background: #fff2dd; }
-.university-profile-page .admissions-fact-copy { min-width: 0; padding: 16px 0 17px; }
-.university-profile-page .admissions-fact-copy h4 { margin: 0 0 8px; color: #65738d; font-size: 13px; font-weight: 700; }
-.university-profile-page .admissions-fact-copy p { margin: 0; color: var(--ink); font-size: 16px; font-weight: 700; line-height: 1.45; letter-spacing: -.015em; overflow-wrap: anywhere; }
-.university-profile-page .admissions-pending .admissions-fact-copy p, .university-profile-page .admissions-unpublished .admissions-fact-copy p { color: #52617b; font-weight: 600; }
-.university-profile-page .admissions-fact-copy small { display: block; margin-top: 8px; color: #71809a; font-size: 12px; line-height: 1.45; }
-.university-profile-page .admissions-fact-source { min-height: 45px; margin: auto -18px 0; padding: 10px 18px; border-top: 1px solid #e7ecf5; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #4164cc; font-size: 13px; font-weight: 700; text-decoration: none; }
-.university-profile-page .admissions-fact-source:hover { color: #263f95; background: #f5f8ff; }
-.university-profile-page .admissions-fact-source:focus-visible { outline: 2px solid var(--blue); outline-offset: -3px; }
-.admissions-panel-note { display: flex; align-items: center; gap: 7px; margin: 15px 0 0; color: #76839b; font-size: 12px; line-height: 1.45; }
-.admissions-panel-note svg { flex: none; }
-.university-profile-page .admissions-open-questions { padding: 22px 24px; }
-.admissions-open-questions h3 { margin: 5px 0 12px; font-size: 18px; }
-.university-profile-page .admissions-open-questions > div { min-height: 43px; grid-template-columns: 20px minmax(0, 1fr); gap: 10px; color: #53617b; font-size: 13px; line-height: 1.5; }
+.university-profile-page .admissions-fact-list { margin-top: 16px; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; display: grid; grid-template-columns: 1fr; gap: 0; }
+.university-profile-page .admissions-fact-list > .admissions-fact-card { min-width: 0; min-height: 0; padding: 16px 18px; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; background: var(--card, #fff); display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 0; box-shadow: none; }
+.university-profile-page .admissions-fact-list > .admissions-fact-card:last-child { border-bottom: 0; }
+.admissions-fact-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; }
+.admissions-fact-label { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.university-profile-page .admissions-fact-icon { flex: none; display: flex; color: #64779e; }
+.university-profile-page .admissions-fact-label h4 { margin: 0; color: var(--ink); font-size: 13px; font-weight: 500; }
+.university-profile-page .admissions-fact-status { display: inline-flex; align-items: center; gap: 4px; padding: 3px 7px; border-radius: 5px; color: #607089; background: #f1f3f7; font-size: 12px; font-weight: 400; white-space: nowrap; }
+.university-profile-page .admissions-fact-status.verified { color: #28775c; background: #edf7f1; }
+.university-profile-page .admissions-fact-status.unpublished { color: #8a622c; background: #fff6e8; }
+.university-profile-page .admissions-fact-copy { min-width: 0; padding: 9px 0 0; }
+.university-profile-page .admissions-fact-copy p { margin: 0; color: #45536b; font-size: 14px; font-weight: 400; line-height: 1.6; letter-spacing: normal; overflow-wrap: anywhere; }
+.university-profile-page .admissions-fact-copy small { display: block; margin-top: 5px; color: var(--muted); font-size: 12px; line-height: 1.5; }
+.university-profile-page .admissions-fact-source { align-self: flex-start; min-height: 28px; margin: 7px 0 0; padding: 3px 0; display: inline-flex; align-items: center; gap: 6px; color: var(--blue); font-size: 12px; font-weight: 400; text-decoration: none; }
+.university-profile-page .admissions-fact-source span { color: inherit; font-size: inherit; }
+.university-profile-page .admissions-fact-source:hover { text-decoration: underline; text-underline-offset: 3px; }
+.admissions-panel-note { display: flex; align-items: start; gap: 7px; margin: 12px 0 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+.admissions-panel-note svg { flex: none; margin-top: 2px; }
+.university-profile-page .admissions-open-questions { padding: 18px 20px; }
+.admissions-open-questions h3 { margin: 5px 0 10px; font-size: 16px; font-weight: 500; }
+.university-profile-page .admissions-open-questions > div { min-height: 40px; grid-template-columns: 20px minmax(0, 1fr); gap: 10px; color: #53617b; font-size: 13px; line-height: 1.5; }
 .university-profile-page .admissions-open-questions svg { color: #c58b35; }
-.university-profile-page .admissions-official-confirmation { border: 1px solid #dfe7f8; background: #f7f9ff; }
+.university-profile-page .admissions-official-confirmation { border: 1px solid var(--line); background: #f9fbff; }
+.university-profile-page .admissions-official-confirmation h3 { font-size: 16px; font-weight: 500; }
 .university-profile-page .admissions-official-confirmation p { max-width: 470px; font-size: 12px; }
-@media (max-width: 700px) { .admissions-panel-heading { align-items: start; flex-direction: column; gap: 7px; }.admissions-panel-heading p { max-width: none; }.university-profile-page .admissions-fact-list { grid-template-columns: 1fr; }.university-profile-page .admissions-fact-list > .admissions-entry_requirement { grid-column: auto; } }
-@media (max-width: 500px) { .university-profile-page .admissions-panel { padding: 18px; }.university-profile-page .admissions-fact-list { gap: 10px; margin-top: 17px; }.university-profile-page .admissions-fact-list > .admissions-fact-card { min-height: 0; padding: 16px 16px 0; }.university-profile-page .admissions-fact-source { margin-right: -16px; margin-left: -16px; padding-right: 16px; padding-left: 16px; } }
+@media (max-width: 700px) { .admissions-panel-heading { flex-direction: column; gap: 6px; }.admissions-panel-heading p { max-width: none; } }
+@media (max-width: 500px) { .university-profile-page .admissions-panel { padding: 16px; }.university-profile-page .admissions-fact-list > .admissions-fact-card { padding: 14px; }.admissions-fact-top { align-items: flex-start; }.university-profile-page .admissions-fact-label h4 { font-size: 13px; } }
 .ranking-profile-list { margin-top: 14px; border-top: 1px solid var(--line); }
 .ranking-profile-list a { min-height: 68px; padding: 10px 0; border-bottom: 1px solid var(--line); color: var(--ink); display: grid; grid-template-columns: 34px minmax(0, 1fr) auto auto; align-items: center; gap: 10px; text-decoration: none; }
 .ranking-profile-list a:hover strong { color: var(--blue); }
