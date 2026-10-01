@@ -1102,10 +1102,12 @@ function SchoolDetail({ school, program, close, saved, toggleSaved, compared, to
               const programmePage = href && [program?.sources[0]?.href, study.source].some((url) => url?.replace(/\/$/, "").toLowerCase() === href.replace(/\/$/, "").toLowerCase());
               const sourceLabel = programmePage ? "Programme page" : "Official source";
               const status = facts === null ? "loading" : fact?.status === "verified" ? "verified" : fact?.status === "not_published" ? "unpublished" : "pending";
+              const value = facts === null ? "Loading source record…" : factValue(fact);
+              const points = fact?.status === "verified" ? value.split(/(?:;\s*|\n+|[•]\s*)/).map((point) => point.trim()).filter(Boolean) : [];
               const Icon = key === "tuition" ? CreditCard : key === "application_deadline" ? CalendarDays : ClipboardCheck;
               return <div key={key} className={`admissions-fact-card admissions-${key} admissions-${status}`}>
                 <div className="admissions-fact-top"><div className="admissions-fact-label"><span className="admissions-fact-icon"><Icon size={15} strokeWidth={1.6} /></span><h4>{publicFactLabels[key]}</h4></div><span className={`admissions-fact-status ${status}`}>{status === "verified" ? <><CircleCheck size={13} /> Verified</> : status === "unpublished" ? "Not published" : status === "loading" ? "Loading" : "To verify"}</span></div>
-                <div className="admissions-fact-copy"><p>{facts === null ? "Loading source record…" : factValue(fact)}</p>{fact?.status === "verified" && fact.academic_year && <small>{fact.academic_year}{fact.applicant_context ? ` · ${fact.applicant_context}` : ""}</small>}{fact?.status === "not_published" && fact.applicant_context && <small>{fact.applicant_context}</small>}</div>
+                <div className="admissions-fact-copy">{points.length ? <ul className="admissions-fact-points">{points.map((point, index) => <li key={index}>{point}</li>)}</ul> : <p>{value}</p>}{fact?.status === "verified" && fact.academic_year && <small>{fact.academic_year}{fact.applicant_context ? ` · ${fact.applicant_context}` : ""}</small>}{fact?.status === "not_published" && fact.applicant_context && <small>{fact.applicant_context}</small>}</div>
                 {href && <a className="admissions-fact-source" href={href} target="_blank" rel="noopener noreferrer" aria-label={`Open official ${publicFactLabels[key].toLowerCase()} source for ${school.name}`}><span>{sourceLabel}</span><ExternalLink size={15}/></a>}
               </div>;
             })}</div>

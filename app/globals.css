@@ -544,6 +544,10 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid 
 .university-profile-page .admissions-fact-status.unpublished { color: #8a622c; background: #fff6e8; }
 .university-profile-page .admissions-fact-copy { min-width: 0; padding: 9px 0 0; }
 .university-profile-page .admissions-fact-copy p { margin: 0; color: #45536b; font-size: 14px; font-weight: 400; line-height: 1.6; letter-spacing: normal; overflow-wrap: anywhere; }
+.university-profile-page .admissions-fact-points { margin: 0; padding-left: 18px; color: #45536b; font-size: 14px; font-weight: 400; line-height: 1.6; list-style: disc; }
+.university-profile-page .admissions-fact-points li { padding-left: 2px; margin: 0; overflow-wrap: anywhere; }
+.university-profile-page .admissions-fact-points li + li { margin-top: 5px; }
+.university-profile-page .admissions-fact-points li::marker { color: #8798b6; font-size: .8em; }
 .university-profile-page .admissions-fact-copy small { display: block; margin-top: 5px; color: var(--muted); font-size: 12px; line-height: 1.5; }
 .university-profile-page .admissions-fact-source { align-self: flex-start; min-height: 28px; margin: 7px 0 0; padding: 3px 0; display: inline-flex; align-items: center; gap: 6px; color: var(--blue); font-size: 12px; font-weight: 400; text-decoration: none; }
 .university-profile-page .admissions-fact-source span { color: inherit; font-size: inherit; }
