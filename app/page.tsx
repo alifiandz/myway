@@ -7,11 +7,11 @@ import {
   CircleHelp, CircleUserRound, ClipboardCheck, Clock3, Database, Download, ExternalLink, Eye, FileText,
   Flag, Flame, FolderOpen, GraduationCap, Languages, LayoutDashboard, Map, MapPin, MoreHorizontal, Plus,
   Scale, Search, Settings2, ShieldCheck, SlidersHorizontal, Sparkles, Target,
-  Trash2, Trophy, Upload, UserRoundCog, X, Globe2, HardDrive, LifeBuoy, LockKeyhole, Moon, Sun, MessageSquare, Bug, Lightbulb,
+  Trash2, Trophy, Upload, X, HardDrive, LifeBuoy, LockKeyhole, Moon, Sun, MessageSquare, Bug, Lightbulb,
 } from "lucide-react";
 import { additionalSchoolStudyRows, schoolStudyRows, type SchoolStudySummary } from "./school-data";
 import { ftDirectoryIdentities } from "./ft-directory-data";
-import { clearVaultDocuments, deleteVaultDocument, getVaultDocument, listVaultDocuments, newVaultDocumentId, saveVaultDocument, type VaultDocument } from "./document-vault";
+import { clearVaultDocuments, importLegacyDocuments, legacyDocumentCount, deleteVaultDocument, getVaultDocument, listVaultDocuments, newVaultDocumentId, saveVaultDocument, type VaultDocument } from "./document-vault";
 import { createPrototypeExport, importPrototypeExport, MYWAY_LOCAL_KEYS } from "./prototype-data";
 import { startAccountSync, type SyncConflict } from "./account-sync";
 import { SiteLanguage } from "./site-language";
@@ -1406,8 +1406,18 @@ function DocumentRequirementRow({ label, help, filename, document, onUpload, onC
   </article>;
 }
 
-function DocumentVaultModal({ documents, links, selecting, onClose, onSelect, onView, onDownload, onDelete, onUpload }: { documents: VaultDocument[]; links: Record<string, string>; selecting: { key: string; label: string } | null; onClose: () => void; onSelect: (document: VaultDocument) => void; onView: (document: VaultDocument) => void; onDownload: (document: VaultDocument) => void; onDelete: (document: VaultDocument) => void; onUpload: (file: File) => void }) {
-  return <div className="modal-backdrop document-vault-backdrop" onMouseDown={(event) => event.target === event.currentTarget && onClose()}><section className="document-vault-modal" role="dialog" aria-modal="true" aria-labelledby="document-vault-title"><header><span><span className="section-label">Private document workspace</span><h2 id="document-vault-title">My Documents</h2><p>{selecting ? `Choose a saved file for ${selecting.label}.` : "View, download and reuse documents across university applications."}</p></span><button aria-label="Close My Documents" onClick={onClose}><X size={18} /></button></header><div className="vault-toolbar"><span><FolderOpen size={16} /><strong>{documents.length} saved file{documents.length === 1 ? "" : "s"}</strong><small>Available on this device</small></span><label className="primary-button compact"><Upload size={14} /> Add file<input type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xlsx,.xls" onChange={(event) => { const file = event.currentTarget.files?.[0]; if (file) onUpload(file); event.currentTarget.value = ""; }} /></label></div>{documents.length ? <div className="vault-document-list">{documents.map((document) => { const usageCount = Object.values(links).filter((id) => id === document.id).length; return <article key={document.id}><span className="document-file-icon"><FileText size={16} /></span><span><strong>{document.name}</strong><small>{document.category} · {formatFileSize(document.size)} · {formatStoredDate(document.uploadedAt)}</small><em>{usageCount ? `Used in ${usageCount} requirement${usageCount === 1 ? "" : "s"}` : document.previousVersionId ? `Previous version · v${document.version}` : "Not linked to a requirement"}</em></span><div>{selecting && <button className="vault-use-button" onClick={() => onSelect(document)}>Use file</button>}<button aria-label={`Preview ${document.name}`} onClick={() => onView(document)}><Eye size={14} /></button><button aria-label={`Download ${document.name}`} onClick={() => onDownload(document)}><Download size={14} /></button><button className="danger-action" aria-label={`Delete ${document.name}`} onClick={() => onDelete(document)}><Trash2 size={14} /></button></div></article>; })}</div> : <div className="vault-empty"><FolderOpen size={27} /><strong>No documents saved yet</strong><p>Upload a file here or from any Pathway requirement. It will then be available for reuse.</p></div>}<footer><CircleHelp size={14} /><span><strong>Prototype storage:</strong> actual files are stored privately in this browser on this device. Account-based cloud access will be added with the backend.</span></footer></section></div>;
+function DocumentVaultModal({ documents, links, selecting, onClose, onSelect, onView, onDownload, onDelete, onUpload, onImported }: { documents: VaultDocument[]; links: Record<string, string>; selecting: { key: string; label: string } | null; onClose: () => void; onSelect: (document: VaultDocument) => void; onView: (document: VaultDocument) => void; onDownload: (document: VaultDocument) => void; onDelete: (document: VaultDocument) => void; onUpload: (file: File) => void; onImported: () => Promise<void> }) {
+  const [olderCount, setOlderCount] = useState(0);
+  const [importing, setImporting] = useState(false);
+  useEffect(() => { let active = true; legacyDocumentCount().then(count => { if (active) setOlderCount(count); }).catch(() => {}); return () => { active = false; }; }, []);
+  const importOlder = async () => {
+    if (!window.confirm("Import older files from this device into this account? Continue only if these files belong to you. Original files remain as a device backup.")) return;
+    setImporting(true);
+    try { await importLegacyDocuments(); await onImported(); setOlderCount(0); }
+    catch (error) { window.alert(error instanceof Error ? error.message : "Files could not be imported. The originals are preserved."); }
+    finally { setImporting(false); }
+  };
+  return <div className="modal-backdrop document-vault-backdrop" onMouseDown={(event) => event.target === event.currentTarget && onClose()}><section className="document-vault-modal" role="dialog" aria-modal="true" aria-labelledby="document-vault-title"><header><span><span className="section-label">Private document workspace</span><h2 id="document-vault-title">My Documents</h2><p>{selecting ? `Choose a saved file for ${selecting.label}.` : "View, download and reuse documents across university applications."}</p></span><button aria-label="Close My Documents" onClick={onClose}><X size={18} /></button></header><div className="vault-toolbar">{olderCount > 0 && <button className="outline-button compact" disabled={importing} onClick={importOlder}>{importing ? "Importing…" : `Import ${olderCount} older device files`}</button>}<span><FolderOpen size={16} /><strong>{documents.length} saved file{documents.length === 1 ? "" : "s"}</strong><small>Available on this device</small></span><label className="primary-button compact"><Upload size={14} /> Add file<input type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xlsx,.xls" onChange={(event) => { const file = event.currentTarget.files?.[0]; if (file) onUpload(file); event.currentTarget.value = ""; }} /></label></div>{documents.length ? <div className="vault-document-list">{documents.map((document) => { const usageCount = Object.values(links).filter((id) => id === document.id).length; return <article key={document.id}><span className="document-file-icon"><FileText size={16} /></span><span><strong>{document.name}</strong><small>{document.category} · {formatFileSize(document.size)} · {formatStoredDate(document.uploadedAt)}</small><em>{usageCount ? `Used in ${usageCount} requirement${usageCount === 1 ? "" : "s"}` : document.previousVersionId ? `Previous version · v${document.version}` : "Not linked to a requirement"}</em></span><div>{selecting && <button className="vault-use-button" onClick={() => onSelect(document)}>Use file</button>}<button aria-label={`Preview ${document.name}`} onClick={() => onView(document)}><Eye size={14} /></button><button aria-label={`Download ${document.name}`} onClick={() => onDownload(document)}><Download size={14} /></button><button className="danger-action" aria-label={`Delete ${document.name}`} onClick={() => onDelete(document)}><Trash2 size={14} /></button></div></article>; })}</div> : <div className="vault-empty"><FolderOpen size={27} /><strong>No documents saved yet</strong><p>Upload a file here or from any Pathway requirement. It will then be available for reuse.</p></div>}<footer><CircleHelp size={14} /><span><strong>Prototype storage:</strong> actual files are stored privately in this browser on this device. Account-based cloud access will be added with the backend.</span></footer></section></div>;
 }
 
 function DocumentPreviewModal({ document, url, onClose, onDownload }: { document: VaultDocument; url: string; onClose: () => void; onDownload: () => void }) {
@@ -1552,7 +1562,7 @@ function Pathway({ selected, completed: allCompleted, toggleTask: toggleStoredTa
     </div>}</div></div></article>; })}</div></section>
     <section className="pathway-shortlists"><div className="section-head"><div><span className="section-label">Your shortlist</span><h3>Targets and alternatives</h3></div><button className="text-link" onClick={() => go("explore")}>Manage in Explore <ChevronRight size={14} /></button></div><div className="pathway-shortlist-grid"><article className="card pathway-role-card"><header><span className="role-symbol target"><Target size={16} /></span><span><h3>Target universities</h3><p>Your leading realistic options</p></span><em>{targets.length}</em></header>{targets.length ? targets.map((item) => <PathwayChoice key={item.p.id} item={item} openProgram={openProgram} changeRole={changeRole} removePath={removePath} />) : <div className="empty-compact"><Target size={17} /><span>No Target universities yet</span></div>}</article><article className="card pathway-role-card"><header><span className="role-symbol alternative"><ShieldCheck size={16} /></span><span><h3>Alternative universities</h3><p>Strong backup options</p></span><em>{alternatives.length}</em></header>{alternatives.length ? alternatives.map((item) => <PathwayChoice key={item.p.id} item={item} openProgram={openProgram} changeRole={changeRole} removePath={removePath} />) : <div className="empty-compact"><ShieldCheck size={17} /><span>No Alternative universities yet</span></div>}</article></div></section>
     <section className="gap-section"><div className="section-head"><div><span className="section-label">Questions to resolve</span><h3>Information still needed</h3></div></div><div className="gap-grid">{[["Intended intake", completed.includes("intake") ? "Added" : "Not provided", completed.includes("intake") ? "green" : "attention"], ["Entry requirements", ["entry-route", "qualification", "deadline", "translation", "selection-step"].every((id) => completed.includes(id)) ? "All checked" : "Needs review", ["entry-route", "qualification", "deadline", "translation", "selection-step"].every((id) => completed.includes(id)) ? "green" : "attention"], ["English evidence", completed.includes("english-certificate") ? "Certificate added" : completed.includes("english") ? "Score added" : "Not provided", completed.includes("english-certificate") ? "green" : "attention"], ["Funding plan", completed.includes("scholarship") && completed.includes("budget") ? "Budget and funding recorded" : "Incomplete", completed.includes("scholarship") && completed.includes("budget") ? "green" : "attention"]].map(([label, value, tone]) => <article className="card gap-card" key={label}><span className="row-icon">{tone === "green" ? <CircleCheck /> : <CircleAlert />}</span><span><small>{label}</small><strong>{value}</strong><em className={tone}>{tone === "green" ? "On track" : "Needs action"}</em></span></article>)}</div></section>
-    {vaultOpen && <DocumentVaultModal documents={vaultDocuments} links={documentLinks} selecting={selectingDocument} onClose={() => { setVaultOpen(false); setSelectingDocument(null); }} onSelect={chooseDocument} onView={viewDocument} onDownload={downloadDocument} onDelete={permanentlyDeleteDocument} onUpload={selectingDocument ? (file) => uploadDocument(selectingDocument.key, selectingDocument.label, file).then(() => { setVaultOpen(false); setSelectingDocument(null); }) : addGeneralDocument} />}
+    {vaultOpen && <DocumentVaultModal onImported={reloadVault} documents={vaultDocuments} links={documentLinks} selecting={selectingDocument} onClose={() => { setVaultOpen(false); setSelectingDocument(null); }} onSelect={chooseDocument} onView={viewDocument} onDownload={downloadDocument} onDelete={permanentlyDeleteDocument} onUpload={selectingDocument ? (file) => uploadDocument(selectingDocument.key, selectingDocument.label, file).then(() => { setVaultOpen(false); setSelectingDocument(null); }) : addGeneralDocument} />}
     {previewDocument && previewUrl && <DocumentPreviewModal document={previewDocument} url={previewUrl} onClose={() => { setPreviewDocument(null); setPreviewUrl(""); }} onDownload={() => downloadDocument(previewDocument)} />}
   </div>;
 }
@@ -1639,10 +1649,10 @@ function ProfilePage({ toast, avatar, setAvatar }: { toast: (s: string) => void;
         {tab === "tests" && <section className="profile-tab-panel"><div className="section-head"><div><span className="section-label">Language tests</span><h3>English qualification</h3><p>Record the result and validity separately from its certificate.</p></div><Languages size={19} /></div><div className="profile-form-grid">{field("test", "Test type", "IELTS, TOEFL, Duolingo...")}{field("score", "Overall score", "e.g. 6.5")}{field("components", "Component scores", "Reading, writing, listening, speaking")}{field("testDate", "Test date", "DD Month YYYY")}{field("expiry", "Valid until", "If applicable")}{field("retake", "Planned retake", "Date or not planned")}</div></section>}
         {tab === "preferences" && <section className="profile-tab-panel preferences-workspace"><div className="section-head"><div><span className="section-label">Study preferences</span><h3>What you are looking for</h3><p>Field: Business. Preferences shape matching—not readiness or admission probability.</p></div><Target size={19} /></div><div className="preference-section"><div><strong>Business interests</strong><small>Select every field you would genuinely consider.</small></div><div className="preference-chip-grid">{["Business Administration", "Management", "International Business", "Marketing", "Entrepreneurship", "Finance", "Accounting", "Economics", "Business Analytics", "Supply Chain & Operations", "Human Resources", "Hospitality & Tourism", "Real Estate", "Sports Business", "Luxury Management", "Sustainability & Social Enterprise"].map((item) => <button key={item} disabled={!editing || avoidedFields.includes(item)} className={selectedFields.includes(item) ? "selected" : ""} onClick={() => toggleField(item)}>{selectedFields.includes(item) && <Check size={12} />}{item}</button>)}</div></div><div className="preference-section"><div><strong>Prefer to avoid</strong><small>Optional. A field cannot be selected and avoided at the same time.</small></div><div className="preference-chip-grid avoid">{["Business Administration", "Management", "International Business", "Marketing", "Entrepreneurship", "Finance", "Accounting", "Economics", "Business Analytics", "Supply Chain & Operations", "Human Resources", "Hospitality & Tourism", "Real Estate", "Sports Business", "Luxury Management", "Sustainability & Social Enterprise"].map((item) => <button key={item} disabled={!editing || selectedFields.includes(item)} className={avoidedFields.includes(item) ? "selected" : ""} onClick={() => toggleAvoidedField(item)}>{avoidedFields.includes(item) && <X size={12} />}{item}</button>)}</div></div><div className="preference-section"><div><strong>Practical limits</strong><small>Leave a field blank when it should not restrict results.</small></div><div className="profile-form-grid">{field("degree", "Degree route", "Bachelor’s or foundation route")}{field("countries", "Countries / regions", "Countries you would consider")}{field("language", "Teaching language", "Preferred language")}{field("budget", "Maximum annual tuition", "Amount and currency")}{field("intake", "Preferred intake", "e.g. September 2027")}{field("math", "Math comfort", "Low, moderate or high")}</div></div><div className="preference-section"><div><strong>Opportunity priorities</strong><small>Click a priority while editing to cycle through its importance.</small></div><div className="profile-priority-grid">{Object.entries(preferencePriorities).map(([item, value]) => <button key={item} disabled={!editing} onClick={() => cyclePreference(item)}><span><strong>{item}</strong><small>{item === "Internships" ? "Work-integrated experience" : item === "Exchange" ? "International study" : item === "Career services" ? "Employer and career support" : item === "Entrepreneurship support" ? "Incubators and venture support" : item === "Scholarships" ? "Official funding opportunities" : "Real company projects"}</small></span><em className={value.toLowerCase().replace(" ", "-")}>{value}</em></button>)}</div></div><div className="preference-note"><CircleHelp size={14} /><span><strong>How MyWay uses this</strong><small>Must-have criteria are checked first. Preferred features improve ordering. No preference does not affect results.</small></span></div></section>}
         {tab === "experience" && <section className="profile-tab-panel"><div className="section-head"><div><span className="section-label">Experience</span><h3>Activities and evidence</h3><p>Record the experience first; attach supporting files in Documents.</p></div><BriefcaseBusiness size={19} /></div><div className="profile-form-grid">{field("activities", "Activities", "Clubs, projects and responsibilities")}{field("leadership", "Leadership", "Role, contribution and impact")}{field("volunteering", "Volunteering", "Organisation, work and result")}{field("competitions", "Competitions", "Event, level and achievement")}{field("work", "Work / internships", "Organisation, role and dates")}{field("portfolio", "Portfolio link", "Public portfolio URL")}</div></section>}
-        {tab === "documents" && <section className="profile-tab-panel"><div className="section-head"><div><span className="section-label">Shared documents</span><h3>Reusable files</h3><p>Upload once and reuse the same file across Pathway requirements.</p></div><button className="outline-button compact" onClick={() => { setSelectingDocument(null); setVaultOpen(true); }}><FolderOpen size={14} /> My Documents</button></div><div className="profile-document-list">{[["passport", "Passport / identity document", "PDF or image"], ["transcript", "Academic transcript", "Latest official or school-issued record"], ["certificate", "School certificate", "Completed or expected qualification"], ["cv", "CV / résumé", "Current general version"], ["english", "English certificate", "Official result document"], ["portfolio", "Portfolio evidence", "Certificates, outputs or supporting work"]].map(([key, label, note]) => { const linked = vaultDocuments.find((document) => document.id === documentLinks[profileLinkKey(key)]); return <DocumentRequirementRow key={key} label={label} help={note} filename={documents[key] || ""} document={linked} onUpload={(file) => uploadProfileDocument(key, label, file)} onChoose={() => { setSelectingDocument({ key, label }); setVaultOpen(true); }} onView={() => linked && viewProfileDocument(linked)} onDownload={() => linked && downloadProfileDocument(linked)} onUnlink={() => unlinkProfileDocument(key)} />; })}</div><p className="prototype-file-note"><CircleHelp size={13} /> Actual files are stored in this browser on this device and can be viewed, downloaded and reused. Cloud access will be added with the backend.</p></section>}
+        {tab === "documents" && <section className="profile-tab-panel"><div className="section-head"><div><span className="section-label">Shared documents</span><h3>Reusable files</h3><p>Upload once and reuse the same file across Pathway requirements.</p></div><button className="outline-button compact" onClick={() => { setSelectingDocument(null); setVaultOpen(true); }}><FolderOpen size={14} /> My Documents</button></div><div className="profile-document-list">{[["passport", "Passport / identity document", "PDF or image"], ["transcript", "Academic transcript", "Latest official or school-issued record"], ["certificate", "School certificate", "Completed or expected qualification"], ["cv", "CV / résumé", "Current general version"], ["english", "English certificate", "Official result document"], ["portfolio", "Portfolio evidence", "Certificates, outputs or supporting work"]].map(([key, label, note]) => { const linked = vaultDocuments.find((document) => document.id === documentLinks[profileLinkKey(key)]); return <DocumentRequirementRow key={key} label={label} help={note} filename={documents[key] || ""} document={linked} onUpload={(file) => uploadProfileDocument(key, label, file)} onChoose={() => { setSelectingDocument({ key, label }); setVaultOpen(true); }} onView={() => linked && viewProfileDocument(linked)} onDownload={() => linked && downloadProfileDocument(linked)} onUnlink={() => unlinkProfileDocument(key)} />; })}</div><p className="prototype-file-note"><CircleHelp size={13} /> File contents stay in this browser, separated by account. File names and links sync to your account; download important files for backup.</p></section>}
       </main>
     </div>
-    {vaultOpen && <DocumentVaultModal documents={vaultDocuments} links={documentLinks} selecting={selectingDocument} onClose={() => { setVaultOpen(false); setSelectingDocument(null); }} onSelect={chooseProfileDocument} onView={viewProfileDocument} onDownload={downloadProfileDocument} onDelete={deleteProfileDocument} onUpload={addGeneralProfileDocument} />}
+    {vaultOpen && <DocumentVaultModal onImported={reloadVault} documents={vaultDocuments} links={documentLinks} selecting={selectingDocument} onClose={() => { setVaultOpen(false); setSelectingDocument(null); }} onSelect={chooseProfileDocument} onView={viewProfileDocument} onDownload={downloadProfileDocument} onDelete={deleteProfileDocument} onUpload={addGeneralProfileDocument} />}
     {previewDocument && previewUrl && <DocumentPreviewModal document={previewDocument} url={previewUrl} onClose={() => { setPreviewDocument(null); setPreviewUrl(""); }} onDownload={() => downloadProfileDocument(previewDocument)} />}
   </div>;
 }
@@ -1828,11 +1838,20 @@ export default function App() {
   const [adminVisible, setAdminVisible] = useState(false);
   const [session, setSession] = useState<Session | null>(null);
   const [authReady, setAuthReady] = useState(false);
-  const [accountDataReady, setAccountDataReady] = useState(false);
+  const [completedAccountLoad, setCompletedAccountLoad] = useState<{ userId: string; attempt: number } | null>(null);
   const [syncStatus, setSyncStatus] = useState("Loading account data…");
-  const [syncConflict, setSyncConflict] = useState<SyncConflict | null>(null);
+  const [pendingConflict, setPendingConflict] = useState<{ userId: string; attempt: number; value: SyncConflict } | null>(null);
   const [syncAttempt, setSyncAttempt] = useState<{ count: number; choice?: "local" | "remote" }>({ count: 0 });
   const [syncGeneration, setSyncGeneration] = useState(0);
+  const accountUserId = session?.user.id;
+  const accountCreatedAt = session?.user.created_at || "";
+  const accountLastSignInAt = session?.user.last_sign_in_at || "";
+  const accountPhoto = session?.user.user_metadata?.avatar_url || session?.user.user_metadata?.picture;
+  const accountDisplayName = String(session?.user.user_metadata?.full_name || session?.user.user_metadata?.name || session?.user.email || "MW");
+  const accountDataReady = authReady && !!accountUserId && completedAccountLoad?.userId === accountUserId && completedAccountLoad.attempt === syncAttempt.count;
+  const syncConflict = pendingConflict?.userId === accountUserId && pendingConflict?.attempt === syncAttempt.count ? pendingConflict.value : null;
+  const [hydratedAccount, setHydratedAccount] = useState<{ userId: string; attempt: number } | null>(null);
+  const accountDisplayReady = accountDataReady && hydratedAccount?.userId === accountUserId && hydratedAccount.attempt === syncAttempt.count;
   const [authOpen, setAuthOpen] = useState(false);
   const [passwordRecovery, setPasswordRecovery] = useState(false);
 
@@ -1846,7 +1865,7 @@ export default function App() {
     const hydrate = () => {
       const complete = window.localStorage.getItem("myway-onboarding-v1") || window.localStorage.getItem("alif-pathway-business-v1");
       setOnboarded(complete === "complete");
-      if (complete === "complete" && !window.localStorage.getItem("myway-product-tour-v2")) setTutorialOpen(true);
+      setTutorialOpen(complete === "complete" && !window.localStorage.getItem("myway-product-tour-v2"));
       const hash = window.location.hash.replace("#", "");
       if (hash === "account") { setView("settings"); window.history.replaceState(null, "", "#settings"); }
       else if (hash === "settings") setView("settings");
@@ -1874,13 +1893,14 @@ export default function App() {
       if (storedTheme === "light") setThemeState("light");
       else { setThemeState("light"); window.localStorage.setItem("myway-theme", "light"); }
       loadProfile();
+      if (accountUserId) setHydratedAccount({ userId: accountUserId, attempt: syncAttempt.count });
     };
     const timer = window.setTimeout(hydrate, 0);
     const refresh = () => { hydrate(); setSyncGeneration(value => value + 1); };
     window.addEventListener("myway-account-updated", refresh);
     window.addEventListener("myway-profile-updated", loadProfile);
     return () => { window.clearTimeout(timer); window.removeEventListener("myway-account-updated", refresh); window.removeEventListener("myway-profile-updated", loadProfile); };
-  }, [accountDataReady]);
+  }, [accountDataReady, accountUserId, syncAttempt.count]);
   useEffect(() => {
     let active = true;
     let unsubscribe = () => {};
@@ -1890,6 +1910,7 @@ export default function App() {
       const listener = supabase.auth.onAuthStateChange((event, nextSession) => {
         if (!active) return;
         setSession(nextSession);
+        if (!nextSession) { setCompletedAccountLoad(null); setPendingConflict(null); setHydratedAccount(null); }
         if (event === "PASSWORD_RECOVERY") { setPasswordRecovery(true); setAuthOpen(true); }
         if (event === "SIGNED_IN") setPasswordRecovery(false);
       });
@@ -1898,18 +1919,18 @@ export default function App() {
     return () => { active = false; unsubscribe(); };
   }, []);
   useEffect(() => {
-    if (!authReady || !session) { setAccountDataReady(false); return; }
+    if (!authReady || !accountUserId) return;
     const accountKeys = [...MYWAY_LOCAL_KEYS, "myway-profile-avatar", "myway-product-tour-v2"] as const;
     const activeUserKey = "myway-active-user-id";
     const previousUserId = window.localStorage.getItem(activeUserKey);
-    const currentUserId = session.user.id;
+    const currentUserId = accountUserId;
     if (previousUserId && previousUserId !== currentUserId) {
       const previousData: Record<string, string> = {};
       accountKeys.forEach((key) => { const value = window.localStorage.getItem(key); if (value !== null) previousData[key] = value; });
       window.localStorage.setItem(`myway-account-data:${previousUserId}`, JSON.stringify(previousData));
     }
-    const createdAt = Date.parse(session.user.created_at || "");
-    const lastSignInAt = Date.parse(session.user.last_sign_in_at || "");
+    const createdAt = Date.parse(accountCreatedAt);
+    const lastSignInAt = Date.parse(accountLastSignInAt);
     const isFirstSignIn = Number.isFinite(createdAt) && Number.isFinite(lastSignInAt) && Math.abs(lastSignInAt - createdAt) < 15 * 60 * 1000;
     if (previousUserId !== currentUserId && (previousUserId !== null || isFirstSignIn)) {
       accountKeys.forEach((key) => window.localStorage.removeItem(key));
@@ -1919,25 +1940,26 @@ export default function App() {
       } catch {}
     }
     if (!window.localStorage.getItem("myway-profile-avatar")) {
-      const metadata = session.user.user_metadata || {};
-      const providerPhoto = metadata.avatar_url || metadata.picture;
-      const fallback = (metadata.full_name || metadata.name || session.user.email || "MW").trim().split(/\s+/).map((part: string) => part[0]).join("").slice(0, 2).toUpperCase() || "MW";
+      const providerPhoto = accountPhoto;
+      const fallback = accountDisplayName.trim().split(/\s+/).map((part: string) => part[0]).join("").slice(0, 2).toUpperCase() || "MW";
       window.localStorage.setItem("myway-profile-avatar", typeof providerPhoto === "string" && /^https:\/\//.test(providerPhoto) ? providerPhoto : fallback);
     }
     window.localStorage.setItem(activeUserKey, currentUserId);
     let active = true;
     let stop = () => {};
-    setAccountDataReady(false);
-    setSyncStatus("Loading account data…");
-    getSupabaseClient().then(client => startAccountSync(client, currentUserId, {
-      ready: () => { if (active) { setSyncConflict(null); setAccountDataReady(true); } },
+    getSupabaseClient().then(client => {
+      if (!active) return () => {};
+      setSyncStatus("Loading account data…");
+      return startAccountSync(client, currentUserId, {
+      ready: () => { if (active) { setPendingConflict(null); setCompletedAccountLoad({ userId: currentUserId, attempt: syncAttempt.count }); } },
       changed: () => { if (active) window.dispatchEvent(new Event("myway-account-updated")); },
-      conflict: value => { if (active) { setSyncConflict(value); setAccountDataReady(false); } },
+      conflict: value => { if (active) { setPendingConflict({ userId: currentUserId, attempt: syncAttempt.count, value }); setCompletedAccountLoad(null); } },
       status: value => { if (active) setSyncStatus(value); },
-    }, syncAttempt.choice, () => active)).then(cleanup => { if (active) stop = cleanup; else cleanup(); })
+    }, syncAttempt.choice, () => active);
+    }).then(cleanup => { if (active) stop = cleanup; else cleanup(); })
       .catch(() => { if (active) setSyncStatus("Account sync could not load. Your device data is preserved. Please retry."); });
     return () => { active = false; stop(); };
-  }, [authReady, session?.user.id, syncAttempt]);
+  }, [authReady, accountUserId, accountCreatedAt, accountLastSignInAt, accountPhoto, accountDisplayName, syncAttempt]);
   useEffect(() => {
     let active = true;
     const refreshAdminAccess = async () => {
@@ -2125,7 +2147,7 @@ export default function App() {
   const selectedProgram = selectedProgramId ? programs.find((program) => program.id === selectedProgramId) ?? null : null;
   const selectedSchool = selectedSchoolId ? allBusinessSchools.find((school) => school.id === selectedSchoolId) ?? null : null;
 
-  if (session && !accountDataReady && authReady) {
+  if (session && !accountDisplayReady && authReady) {
     const describe = (data: Record<string, string>) => {
       try {
         const items = JSON.parse(data["myway-pathway-selection"] || "[]") as { id: string; role: string }[];
@@ -2134,7 +2156,7 @@ export default function App() {
         return `${label} · ${items.length} pathway choices`;
       } catch { return "Saved planning data"; }
     };
-    const choose = (choice?: "local" | "remote") => { setSyncConflict(null); setSyncAttempt(value => ({ count: value.count + 1, choice })); };
+    const choose = (choice?: "local" | "remote") => { setPendingConflict(null); setSyncAttempt(value => ({ count: value.count + 1, choice })); };
     const downloadBackup = () => {
       const data = syncConflict?.local || {};
       const blob = new Blob([JSON.stringify({ product: "MyWay", formatVersion: 1, data }, null, 2)], { type: "application/json" });
@@ -2151,7 +2173,7 @@ export default function App() {
       </> : <><p>{syncStatus}</p><button className="outline-button" onClick={() => choose()}>{language === "id" ? "Coba lagi" : "Retry account sync"}</button></>}
     </section></main>;
   }
-  if (!authReady || !session || !accountDataReady) return <><SiteLanguage language={language} /><AccountGate language={language} ready={authReady && (!session || accountDataReady)} openAccount={() => setAuthOpen(true)} />{authOpen && <AuthModal key={passwordRecovery ? "recovery" : "account"} session={session} recovery={passwordRecovery} language={language} close={() => { setAuthOpen(false); setPasswordRecovery(false); }} openProfile={() => setView("profile")} />}</>;
+  if (!authReady || !session || !accountDisplayReady) return <><SiteLanguage language={language} /><AccountGate language={language} ready={authReady && (!session || accountDisplayReady)} openAccount={() => setAuthOpen(true)} />{authOpen && <AuthModal key={passwordRecovery ? "recovery" : "account"} session={session} recovery={passwordRecovery} language={language} close={() => { setAuthOpen(false); setPasswordRecovery(false); }} openProfile={() => setView("profile")} />}</>;
   if (!onboarded) return <><SiteLanguage language={language} /><Onboarding finish={finish} saveLater={saveLater} /></>;
 
   let content;

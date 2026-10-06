@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from "react";
-import { ArrowLeft, Bug, Check, ChevronRight, CircleAlert, ExternalLink, Flag, Image as ImageIcon, Inbox, Lightbulb, LoaderCircle, LogOut, Mail, MessageSquareText, RefreshCw, Save, Search, ShieldCheck, UserRound, X } from "lucide-react";
+import { ArrowLeft, Bug, Check, ChevronRight, CircleAlert, ExternalLink, Flag, Inbox, Lightbulb, LoaderCircle, LogOut, Mail, MessageSquareText, RefreshCw, Save, Search, ShieldCheck, UserRound, X } from "lucide-react";
 import { SiteLanguage } from "../../site-language";
 import { getSupabaseClient } from "../../supabase-client";
 

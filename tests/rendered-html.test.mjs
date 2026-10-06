@@ -51,3 +51,23 @@ test("missing auth configuration fails clearly and visitor admin access is false
   const visibility = await worker.fetch(new Request("http://localhost/api/admin-visibility"), {}, ctx);
   assert.deepEqual(await visibility.json(), { authorized: false });
 });
+
+test("public auth configuration exposes only browser-safe settings", async () => {
+  const { default: worker } = await import("../dist/server/index.js");
+  const response = await worker.fetch(new Request("http://localhost/api/auth-config"), {
+    SUPABASE_URL: "https://example.supabase.co", SUPABASE_PUBLISHABLE_KEY: "public-key",
+    SUPABASE_GOOGLE_ENABLED: "true", MYWAY_ADMIN_SECRET: "private-admin-secret",
+  }, { waitUntil() {}, passThroughOnException() {} });
+  assert.equal(response.status, 200);
+  assert.deepEqual(await response.json(), { url: "https://example.supabase.co", publishableKey: "public-key", googleEnabled: true });
+});
+
+test("invalid feedback is rejected before database or file storage access", async () => {
+  const { default: worker } = await import("../dist/server/index.js");
+  for (const [category, details, attachment] of [["invalid", "message"], ["bug", ""], ["bug", "message", new Blob(["bad"], { type: "application/pdf" })]]) {
+    const form = new FormData(); form.set("category", category); form.set("details", details);
+    if (attachment) form.set("screenshot", attachment, "file.pdf");
+    const response = await worker.fetch(new Request("http://localhost/api/feedback", { method: "POST", body: form }), {}, { waitUntil() {}, passThroughOnException() {} });
+    assert.equal(response.status, 400);
+  }
+});

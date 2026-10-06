@@ -27,7 +27,7 @@ const businessSchoolDomains = readLiteral("businessSchoolDomains");
 const identityCorrections = readLiteral("identityCorrections");
 const additionalBusinessSchoolRows = readLiteral("additionalBusinessSchoolRows");
 
-let universities = businessSchoolRows.map(([rank, name, location], index) => {
+let universities = businessSchoolRows.map(([, name], index) => {
   const id = `ft-school-${index + 1}`;
   const identity = ftDirectoryIdentities[id] ?? {};
   return {
@@ -88,7 +88,7 @@ universities = universities.map((university) => ({
   institutionType: university.institutionType === "business-school" ? "business_school" : university.institutionType,
 }));
 
-const studies = Object.fromEntries(universities.map((university, index) => [
+const studies = Object.fromEntries(universities.map((university) => [
   university.id,
   university.id.startsWith("ft-school-")
     ? schoolStudyRows[Number(university.id.slice("ft-school-".length)) - 1]

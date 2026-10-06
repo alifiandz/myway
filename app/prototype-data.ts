@@ -1,4 +1,4 @@
-import { listVaultDocuments, type VaultDocument } from "./document-vault";
+import { listVaultDocuments, type VaultDocument } from "./document-vault.ts";
 
 const EXPORTABLE_KEYS = [
   "myway-onboarding-v1",
