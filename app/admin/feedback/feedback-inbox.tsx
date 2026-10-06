@@ -1,9 +1,22 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import Link from "next/link";
+import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { ArrowLeft, Bug, Check, ChevronRight, CircleAlert, ExternalLink, Flag, Image as ImageIcon, Inbox, Lightbulb, LoaderCircle, LogOut, Mail, MessageSquareText, RefreshCw, Save, Search, ShieldCheck, UserRound, X } from "lucide-react";
 import { SiteLanguage } from "../../site-language";
 import { getSupabaseClient } from "../../supabase-client";
+
+function readLanguage(): "en" | "id" {
+  return window.localStorage.getItem("myway-language") === "id" ? "id" : "en";
+}
+function subscribeLanguage(notify: () => void) {
+  window.addEventListener("storage", notify);
+  window.addEventListener("myway-language-updated", notify);
+  return () => {
+    window.removeEventListener("storage", notify);
+    window.removeEventListener("myway-language-updated", notify);
+  };
+}
 
 type Status = "new" | "reviewing" | "resolved";
 type Category = "bug" | "incorrect" | "suggestion";
@@ -28,7 +41,7 @@ function formatDate(value: string) {
 }
 
 export default function FeedbackInbox() {
-  const [language, setLanguage] = useState<"en" | "id">("en");
+  const language = useSyncExternalStore(subscribeLanguage, readLanguage, () => "en" as const);
   const [items, setItems] = useState<Submission[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [category, setCategory] = useState("all");
@@ -43,9 +56,9 @@ export default function FeedbackInbox() {
   const [accessToken, setAccessToken] = useState("");
 
   const load = useCallback(async () => {
-    setLoading(true); setError("");
     try {
       const supabase = await getSupabaseClient();
+      setLoading(true); setError("");
       const { data: sessionData } = await supabase.auth.getSession();
       if (!sessionData.session) throw new Error("Sign in to MyWay first, then reopen the admin workspace.");
       const { data: profile } = await supabase.from("profiles").select("role,display_name").eq("user_id", sessionData.session.user.id).maybeSingle();
@@ -63,10 +76,9 @@ export default function FeedbackInbox() {
     finally { setLoading(false); }
   }, [category, status, query]);
 
-  useEffect(() => {
-    setLanguage(window.localStorage.getItem("myway-language") === "id" ? "id" : "en");
-  }, []);
-  useEffect(() => { load(); }, [load]);
+  // load awaits client initialization before updating React state.
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { void load(); }, [load]);
   const selected = useMemo(() => items.find((item) => item.id === selectedId) ?? null, [items, selectedId]);
   const newCount = items.filter((item) => item.status === "new").length;
 
@@ -90,15 +102,15 @@ export default function FeedbackInbox() {
 
   return <><SiteLanguage language={language} /><main className="feedback-admin-shell">
     <aside className="feedback-admin-sidebar">
-      <a className="admin-brand" href="/"><span>M</span> MyWay</a>
+      <Link className="admin-brand" href="/"><span>M</span> MyWay</Link>
       <div className="admin-private-label"><ShieldCheck size={14} /> Private admin</div>
-      <nav><a href="/admin/data"><ShieldCheck size={17} /> University data</a><a className="active" href="/admin/feedback"><Inbox size={17} /> Feedback Inbox <strong>{newCount}</strong></a></nav>
+      <nav><Link href="/admin/data"><ShieldCheck size={17} /> University data</Link><Link className="active" href="/admin/feedback"><Inbox size={17} /> Feedback Inbox <strong>{newCount}</strong></Link></nav>
       <div className="admin-account"><div><UserRound size={16} /><span><small>Signed in as</small>{adminName}</span></div><button type="button" className="admin-signout" title="Sign out" onClick={async () => { const supabase = await getSupabaseClient(); await supabase.auth.signOut(); window.location.href = "/"; }}><LogOut size={16} /></button></div>
     </aside>
 
     <section className="feedback-admin-main">
       <header className="feedback-admin-header">
-        <div><a href="/"><ArrowLeft size={14} /> MyWay</a><h1>Feedback Inbox</h1><p>Review reports, suggestions, and factual corrections.</p></div>
+        <div><Link href="/"><ArrowLeft size={14} /> MyWay</Link><h1>Feedback Inbox</h1><p>Review reports, suggestions, and factual corrections.</p></div>
         <button className="admin-icon-button" onClick={load} aria-label="Refresh feedback"><RefreshCw size={17} /></button>
       </header>
 

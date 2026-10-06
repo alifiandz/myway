@@ -1690,7 +1690,8 @@ const tutorialSteps: TutorialStep[] = [
 
 function ProductTutorial({ close, go, language }: { close: () => void; go: (view: View) => void; language: "en" | "id" }) {
   const [step, setStep] = useState(0);
-  const [focus, setFocus] = useState<{ top: number; left: number; width: number; height: number } | null>(null);
+  const [measuredFocus, setMeasuredFocus] = useState<{ step: number; box: { top: number; left: number; width: number; height: number } } | null>(null);
+  const focus = measuredFocus?.step === step ? measuredFocus.box : null;
   const targetRef = useRef<HTMLElement[]>([]);
   const current = tutorialSteps[step];
   const copy = current[language];
@@ -1699,23 +1700,22 @@ function ProductTutorial({ close, go, language }: { close: () => void; go: (view
 
   useLayoutEffect(() => {
     go(current.view);
-    setFocus(null);
     targetRef.current = [];
     let frame = 0;
     let observer: ResizeObserver | null = null;
     const measure = () => {
       const targets = targetRef.current;
-      if (!targets.length) { setFocus(null); return; }
+      if (!targets.length) { setMeasuredFocus(null); return; }
       const boxes = targets.map((target) => target.getBoundingClientRect()).filter((box) => box.width > 0 && box.height > 0);
-      if (!boxes.length) { setFocus(null); return; }
+      if (!boxes.length) { setMeasuredFocus(null); return; }
       const box = { top: Math.min(...boxes.map((item) => item.top)), left: Math.min(...boxes.map((item) => item.left)), right: Math.max(...boxes.map((item) => item.right)), bottom: Math.max(...boxes.map((item) => item.bottom)) };
       const padding = 7;
       const top = Math.max(7, box.top - padding);
       const left = Math.max(7, box.left - padding);
       const right = Math.min(window.innerWidth - 7, box.right + padding);
       const bottom = Math.min(window.innerHeight - 7, box.bottom + padding);
-      if (right <= left || bottom <= top) { setFocus(null); return; }
-      setFocus({ top, left, width: right - left, height: bottom - top });
+      if (right <= left || bottom <= top) { setMeasuredFocus(null); return; }
+      setMeasuredFocus({ step, box: { top, left, width: right - left, height: bottom - top } });
     };
     const settle = () => {
       frame = window.requestAnimationFrame(() => {
@@ -1729,7 +1729,7 @@ function ProductTutorial({ close, go, language }: { close: () => void; go: (view
             if (box.width > 0 && box.height > 0) { targets.push(candidate); break; }
           }
           targetRef.current = targets;
-          if (!targets.length) { setFocus(null); return; }
+          if (!targets.length) { setMeasuredFocus(null); return; }
           const fixedControl = targets[0].matches("[data-tour='settings-button'], [data-tour='feedback-button']");
           if (!fixedControl) targets[0].scrollIntoView({ behavior: "auto", block: "center", inline: "nearest" });
           let trackingFrames = 0;

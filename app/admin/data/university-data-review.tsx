@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ArrowLeft, Check, CircleAlert, Database, ExternalLink, Inbox, LoaderCircle, LogOut, RefreshCw, Save, Search, ShieldCheck, UserRound } from "lucide-react";
 import { getSupabaseClient } from "../../supabase-client";
@@ -35,9 +36,9 @@ export default function UniversityDataReview() {
   const [savingId, setSavingId] = useState<number | null>(null);
 
   const load = useCallback(async () => {
-    setLoading(true); setError("");
     try {
       const supabase = await getSupabaseClient();
+      setLoading(true); setError("");
       const { data: sessionData } = await supabase.auth.getSession();
       if (!sessionData.session) throw new Error("Sign in to MyWay first, then reopen the admin workspace.");
       const { data: profile } = await supabase.from("profiles").select("role").eq("user_id", sessionData.session.user.id).maybeSingle();
@@ -50,7 +51,9 @@ export default function UniversityDataReview() {
     finally { setLoading(false); }
   }, []);
 
-  useEffect(() => { load(); }, [load]);
+  // load awaits client initialization before updating React state.
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { void load(); }, [load]);
   const visible = useMemo(() => items.filter((item) => {
     const facts = item.programmes.flatMap((programme) => programme.programme_facts);
     const matchesStatus = filter === "all" || facts.some((fact) => fact.status === filter);
@@ -78,8 +81,8 @@ export default function UniversityDataReview() {
   }
 
   return <><SiteLanguage language="en" /><main className="feedback-admin-shell university-admin-shell">
-    <aside className="feedback-admin-sidebar"><a className="admin-brand" href="/"><span>M</span> MyWay</a><div className="admin-private-label"><ShieldCheck size={14} /> Private admin</div><nav><a className="active" href="/admin/data"><Database size={17} /> University data <strong>{items.length}</strong></a><a href="/admin/feedback"><Inbox size={17} /> Feedback Inbox</a></nav><div className="admin-account"><div><UserRound size={16} /><span><small>Access controlled by</small>MyWay admin account</span></div><a href="/" title="Return to MyWay"><LogOut size={16} /></a></div></aside>
-    <section className="feedback-admin-main"><header className="feedback-admin-header"><div><a href="/"><ArrowLeft size={14} /> Back to MyWay</a><h1>University data</h1><p>Choose a university, update its information, then save your changes.</p></div><button className="admin-icon-button" onClick={load} aria-label="Refresh university data"><RefreshCw size={17} /></button></header>
+    <aside className="feedback-admin-sidebar"><Link className="admin-brand" href="/"><span>M</span> MyWay</Link><div className="admin-private-label"><ShieldCheck size={14} /> Private admin</div><nav><Link className="active" href="/admin/data"><Database size={17} /> University data <strong>{items.length}</strong></Link><Link href="/admin/feedback"><Inbox size={17} /> Feedback Inbox</Link></nav><div className="admin-account"><div><UserRound size={16} /><span><small>Access controlled by</small>MyWay admin account</span></div><Link href="/" title="Return to MyWay"><LogOut size={16} /></Link></div></aside>
+    <section className="feedback-admin-main"><header className="feedback-admin-header"><div><Link href="/"><ArrowLeft size={14} /> Back to MyWay</Link><h1>University data</h1><p>Choose a university, update its information, then save your changes.</p></div><button className="admin-icon-button" onClick={load} aria-label="Refresh university data"><RefreshCw size={17} /></button></header>
       <div className="university-admin-summary"><strong>{items.length} universities</strong><span>{verified} verified</span><span>{underReview} under review</span><span>{missing} not yet verified</span></div>
       <div className="feedback-admin-filters university-admin-filters"><form onSubmit={(event) => event.preventDefault()}><Search size={16} /><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search university or programme" /></form><select value={filter} onChange={(event) => setFilter(event.target.value)}><option value="all">All statuses</option>{statusOptions.map(([value,label]) => <option key={value} value={value}>{label}</option>)}</select></div>
       {error && <div className="admin-error" role="alert"><CircleAlert size={16} /> {error}</div>}
