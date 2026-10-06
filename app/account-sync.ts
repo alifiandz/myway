@@ -1,6 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 
-export const SYNC_KEYS = ["myway-onboarding-v1", "alif-pathway-business-v1", "myway-profile", "myway-preference-priorities", "myway-saved", "myway-compared", "myway-pathway-selection", "myway-pathway-actions", "myway-pathway-records", "myway-routines", "myway-habit-checks", "myway-notifications-enabled", "myway-product-tour-v2", "myway-profile-avatar", "myway-language"];
+export const SYNC_KEYS = ["myway-onboarding-v1", "alif-pathway-business-v1", "myway-profile", "myway-profile-documents", "myway-document-links", "myway-preference-priorities", "myway-saved", "myway-compared", "myway-pathway-selection", "myway-pathway-actions", "myway-pathway-records", "myway-routines", "myway-habit-checks", "myway-notifications-enabled", "myway-product-tour-v2", "myway-profile-avatar", "myway-language"];
 export type PlanningData = Record<string, string>;
 type Row = { data: PlanningData; revision: number };
 export type SyncConflict = { local: PlanningData; remote: Row };

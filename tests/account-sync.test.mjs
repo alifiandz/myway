@@ -30,6 +30,8 @@ test("planning moves from first browser to second browser and refreshes remote c
   const original = globalThis.window; const db = new Map(); const a = browser("user-a"), b = browser("user-a");
   try {
     globalThis.window = a; a.localStorage.setItem("myway-pathway-selection", '[{"id":"school:skema","role":"Dream"}]');
+    a.localStorage.setItem("myway-profile-documents", JSON.stringify({transcript:"transcript.pdf",english:"ielts.pdf"}));
+    a.localStorage.setItem("myway-document-links", JSON.stringify({transcript:"https://example.com/transcript"}));
     await startAccountSync(client(db,"user-a"),"user-a",callbacks());
     globalThis.window = b; await startAccountSync(client(db,"user-a"),"user-a",callbacks());
     assert.equal(b.localStorage.getItem("myway-pathway-selection"), a.localStorage.getItem("myway-pathway-selection"));
@@ -38,6 +40,8 @@ test("planning moves from first browser to second browser and refreshes remote c
     globalThis.window = b; await b.timers[0]();
     assert.equal(b.localStorage.getItem("myway-saved"), '["skema"]');
     assert.equal(db.get("user-a").revision,2);
+    assert.equal(b.localStorage.getItem("myway-profile-documents"), a.localStorage.getItem("myway-profile-documents"));
+    assert.equal(b.localStorage.getItem("myway-document-links"), a.localStorage.getItem("myway-document-links"));
   } finally { globalThis.window = original; }
 });
 
