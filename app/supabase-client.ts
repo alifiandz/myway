@@ -11,7 +11,8 @@ export function getSupabaseClient() {
       })
       .then(({ url, publishableKey }) => createClient(url, publishableKey, {
         auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
-      }));
+      }))
+      .catch((error) => { clientPromise = null; throw error; });
   }
   return clientPromise;
 }

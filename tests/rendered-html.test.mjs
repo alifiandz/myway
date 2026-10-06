@@ -32,3 +32,22 @@ test("renders the MyWay application shell", async () => {
   assert.match(html, /MyWay/i);
   assert.match(html, /account-gate|onboarding-shell|app-shell/i);
 });
+
+
+test("anonymous callers cannot use admin feedback routes", async () => {
+  const { default: worker } = await import("../dist/server/index.js");
+  const ctx = { waitUntil() {}, passThroughOnException() {} };
+  for (const [path, method] of [["/api/admin/feedback", "GET"], ["/api/admin/feedback/example", "PATCH"], ["/api/admin/feedback/example/screenshot", "GET"]]) {
+    const response = await worker.fetch(new Request(`http://localhost${path}`, { method }), {}, ctx);
+    assert.equal(response.status, 403, `${method} ${path}`);
+  }
+});
+
+test("missing auth configuration fails clearly and visitor admin access is false", async () => {
+  const { default: worker } = await import("../dist/server/index.js");
+  const ctx = { waitUntil() {}, passThroughOnException() {} };
+  const config = await worker.fetch(new Request("http://localhost/api/auth-config"), {}, ctx);
+  assert.equal(config.status, 503);
+  const visibility = await worker.fetch(new Request("http://localhost/api/admin-visibility"), {}, ctx);
+  assert.deepEqual(await visibility.json(), { authorized: false });
+});
