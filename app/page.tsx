@@ -13,6 +13,7 @@ import { additionalSchoolStudyRows, schoolStudyRows, type SchoolStudySummary } f
 import { ftDirectoryIdentities } from "./ft-directory-data";
 import { clearVaultDocuments, deleteVaultDocument, getVaultDocument, listVaultDocuments, newVaultDocumentId, saveVaultDocument, type VaultDocument } from "./document-vault";
 import { createPrototypeExport, importPrototypeExport, MYWAY_LOCAL_KEYS } from "./prototype-data";
+import { startAccountSync, type SyncConflict } from "./account-sync";
 import { SiteLanguage } from "./site-language";
 import { AuthModal } from "./auth-modal";
 import { getSupabaseClient } from "./supabase-client";
@@ -963,7 +964,7 @@ function Dashboard({ go, completed, toggleTask, openProgram, target, selected, p
       </div>
       <aside className="right-column">
         <article className="card chosen-university-card"><span className="section-label">Chosen university</span><div className="chosen-university-main"><UniversityLogo program={target} size="large" /><span><strong>{target.university}</strong><small><MapPin size={12} /> {target.location}</small><em>{target.title}</em></span></div><button className="text-link" onClick={() => openProgram(target)}>View university <ChevronRight size={14} /></button></article>
-        <article className="card priority-card"><span className="section-label">Personal match</span><div className="priority-title"><span className="large-icon"><Target /></span><span><strong>{targetFit?.score === null ? "Complete your profile" : `${targetFit?.score ?? 0}/100 program fit`}</strong><small>{targetFit?.score === null ? "Add preferences to calculate a personal match" : `${targetFit?.label} · ${targetFit?.confidence ?? 0}% data confidence`}</small></span></div><div className="priority-measure"><div className="goal-bar blue"><i style={{ width: `${targetFit?.score ?? 0}%` }} /></div><span><small>Preferences</small><small>Programme evidence</small></span></div><button className="outline-button" onClick={() => targetFit?.score === null ? go("profile") : openProgram(target)}>View match details</button></article>
+        <article className="card priority-card"><span className="section-label">Personal match</span><div className="priority-title"><span className="large-icon"><Target /></span><span><strong>{targetFit?.score == null ? "Complete your profile" : `${targetFit?.score ?? 0}/100 program fit`}</strong><small>{targetFit?.score == null ? "Add preferences to calculate a personal match" : `${targetFit?.label} · ${targetFit?.confidence ?? 0}% data confidence`}</small></span></div><div className="priority-measure"><div className="goal-bar blue"><i style={{ width: `${targetFit?.score ?? 0}%` }} /></div><span><small>Preferences</small><small>Programme evidence</small></span></div><button className="outline-button" onClick={() => targetFit?.score == null ? go("profile") : openProgram(target)}>View match details</button></article>
         {nextStage && <article className="card dashboard-milestone"><div className="milestone-symbol"><Flag size={20} /></div><span className="section-label">Next pathway stage</span><h3>{nextStage.label}</h3><p>Finish the missing requirements, records, evidence and actions in this stage.</p><div className="milestone-progress"><span><strong>{nextStage.value}%</strong><small>stage readiness</small></span><div className="goal-bar blue"><i style={{ width: nextStage.value + "%" }} /></div></div><ul><li className={nextStage.requirements >= 100 ? "done" : ""}><CircleCheck size={15} /><span>Requirements verified</span><em>{nextStage.requirements}%</em></li><li className={nextStage.records >= 100 ? "done" : ""}><CircleCheck size={15} /><span>Student records added</span><em>{nextStage.records}%</em></li><li className={nextStage.evidence >= 100 ? "done" : ""}><CircleCheck size={15} /><span>Evidence prepared</span><em>{nextStage.evidence}%</em></li><li className={nextStage.actions >= 100 ? "done" : ""}><CircleCheck size={15} /><span>Actions completed</span><em>{nextStage.actions}%</em></li></ul><button className="text-link" onClick={() => go("pathway")}>Open this stage <ChevronRight size={14} /></button></article>}
       </aside>
     </div>
@@ -1652,7 +1653,7 @@ function SettingsPage({ toast, savedCount, applicationCount, replayTutorial, go,
   useEffect(() => { listVaultDocuments().then((items) => setDocumentCount(items.length)).catch(() => setDocumentCount(0)); }, []);
   const exportData = async () => { const payload = await createPrototypeExport(); const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" }); const url = URL.createObjectURL(blob); const anchor = window.document.createElement("a"); anchor.href = url; anchor.download = `myway-planning-data-${new Date().toISOString().slice(0, 10)}.json`; anchor.style.display = "none"; window.document.body.appendChild(anchor); anchor.click(); anchor.remove(); window.setTimeout(() => URL.revokeObjectURL(url), 1000); toast("MyWay planning data downloaded"); };
   const importData = async (file: File) => { try { importPrototypeExport(JSON.parse(await file.text())); toast("MyWay data restored · reloading"); window.setTimeout(() => window.location.reload(), 500); } catch { toast("This is not a supported MyWay data file"); } };
-  const resetData = async () => { if (!window.confirm("Clear your profile, saved universities, pathway progress, tasks, habits and stored documents from this browser? This cannot be undone.")) return; MYWAY_LOCAL_KEYS.forEach((key) => window.localStorage.removeItem(key)); await clearVaultDocuments(); window.location.reload(); };
+  const resetData = async () => { if (!window.confirm("Clear this device cache and permanently delete its local document files? Account-synced planning data will reload when you sign in.")) return; const userId = window.localStorage.getItem("myway-active-user-id"); window.localStorage.removeItem("myway-active-user-id"); if (userId) window.localStorage.removeItem(`myway-sync-base:${userId}`); MYWAY_LOCAL_KEYS.forEach((key) => window.localStorage.removeItem(key)); await clearVaultDocuments(); window.location.reload(); };
   const toggleNotifications = () => { const next = !notifications; setNotifications(next); window.localStorage.setItem("myway-notifications-enabled", String(next)); toast(next ? "In-app notifications enabled" : "In-app notifications paused"); };
   const id = language === "id";
   return <div className="page-enter settings-page" data-tour="settings-main">
@@ -1663,7 +1664,7 @@ function SettingsPage({ toast, savedCount, applicationCount, replayTutorial, go,
         <section id="general" className="card settings-panel"><div className="settings-panel-head"><span><Settings2 size={18}/></span><div><h3>{id ? "Umum" : "General"}</h3><p>{id ? "Pilih bagaimana MyWay terlihat dan berkomunikasi denganmu." : "Choose how MyWay looks and communicates with you."}</p></div></div><div className="setting-row setting-row-stack"><div><strong>{id ? "Tampilan" : "Appearance"}</strong><small>{id ? "Mode terang tersedia sekarang. Mode gelap akan hadir nanti." : "Light mode is available now. Dark mode is upcoming."}</small></div><div className="theme-picker theme-picker-compact"><button className={theme === "light" ? "selected" : ""} onClick={()=>setTheme('light')}><Sun size={16}/><span>{id?'Terang':'Light'}</span><Check size={14}/></button><button className="coming-soon" disabled aria-disabled="true"><Moon size={16}/><span>{id?'Gelap':'Dark'}</span><small>{id?'Segera hadir':'Upcoming'}</small></button></div></div><div className="setting-row"><div><strong>{id ? "Bahasa" : "Language"}</strong><small>{id ? "Terapkan bahasa pilihanmu ke seluruh halaman MyWay." : "Apply your preferred language across every MyWay page."}</small></div><div className="segmented-control" role="group" aria-label="Language"><button className={language==='en'?'active':''} onClick={()=>setLanguage('en')}>English</button><button className={language==='id'?'active':''} onClick={()=>setLanguage('id')}>Bahasa Indonesia</button></div></div></section>
         <section id="notifications" className="card settings-panel"><div className="settings-panel-head"><span><Bell size={18}/></span><div><h3>{id ? "Notifikasi" : "Notifications"}</h3><p>{id ? "Pilih apakah MyWay menampilkan pengingat perencanaan di aplikasi." : "Choose whether MyWay shows planning reminders inside the app."}</p></div></div><button className={`settings-toggle ${notifications ? "on" : ""}`} onClick={toggleNotifications} role="switch" aria-checked={notifications}><span><strong>{id ? "Pengingat dalam aplikasi" : "In-app reminders"}</strong><small>{notifications ? (id ? "Aktif" : "Enabled") : (id ? "Dijeda" : "Paused")}</small></span><i /></button><p className="settings-footnote">{id ? "Email, push, dan peringatan tenggat akan tersedia setelah akun dan backend terhubung." : "Email, push and deadline alerts will become available after accounts and the backend are connected."}</p></section>
         <section id="data" className="card settings-panel"><div className="settings-panel-head"><span><HardDrive size={18}/></span><div><h3>{id ? "Data & Penyimpanan" : "Data & Storage"}</h3><p>{id ? "Lihat data lokal, buat cadangan, atau pulihkan perencanaanmu." : "Review local data, create a backup, or restore your planning workspace."}</p></div></div><div className="settings-stats"><button onClick={() => go("profile")}><strong>{documentCount}</strong><small>{id ? "File tersimpan" : "Stored files"}</small></button><span><strong>{savedCount}</strong><small>{id ? "Universitas tersimpan" : "Saved universities"}</small></span><span><strong>{applicationCount}</strong><small>{id ? "Pilihan di Pathway" : "Pathway choices"}</small></span></div><div className="settings-actions"><button className="primary-button" onClick={exportData}><Download size={14}/>{id ? "Ekspor data" : "Export data"}</button><label className="outline-button"><Upload size={14}/>{id ? "Pulihkan data" : "Restore data"}<input type="file" accept="application/json,.json" onChange={(event)=>{const file=event.currentTarget.files?.[0];if(file)importData(file);event.currentTarget.value="";}}/></label><button className="outline-button" onClick={()=>go("profile")}><FolderOpen size={14}/>{id ? "Buka dokumen" : "Open documents"}</button></div><p className="settings-footnote">{id ? "Cadangan mencakup data perencanaan. File dokumen perlu diunduh terpisah dari Profil." : "Backups include planning data. Document files must be downloaded separately from Profile."}</p></section>
-        <section id="privacy" className="card settings-panel"><div className="settings-panel-head"><span><LockKeyhole size={18}/></span><div><h3>{id ? "Privasi & Keamanan" : "Privacy & Security"}</h3><p>{id ? "Versi prototipe ini menyimpan data hanya di browser perangkat ini." : "This prototype stores your information only in this browser on this device."}</p></div></div><div className="privacy-note"><ShieldCheck size={18}/><span><strong>{id ? "Penyimpanan lokal" : "Local storage"}</strong><small>{id ? "Akun tersedia. Data perencanaan dan dokumen tetap di perangkat ini; sinkronisasi cloud belum tersedia." : "Sign-in is available. Planning data and documents stay on this device; cloud sync is not available yet."}</small></span></div><div className="danger-row"><div><strong>{id ? "Hapus data perangkat" : "Clear device data"}</strong><small>{id ? "Menghapus profil, daftar, progres, tugas, kebiasaan, dan dokumen lokal secara permanen." : "Permanently removes the local profile, lists, progress, tasks, habits and documents."}</small></div><button className="outline-button danger-action" onClick={resetData}><Trash2 size={14}/>{id ? "Hapus data" : "Clear data"}</button></div></section>
+        <section id="privacy" className="card settings-panel"><div className="settings-panel-head"><span><LockKeyhole size={18}/></span><div><h3>{id ? "Privasi & Keamanan" : "Privacy & Security"}</h3><p>{id ? "Data perencanaan tersinkron ke akun. File dokumen disimpan secara lokal." : "Planning data syncs securely to your account. Document files are stored locally."}</p></div></div><div className="privacy-note"><ShieldCheck size={18}/><span><strong>{id ? "Penyimpanan lokal" : "Local storage"}</strong><small>{id ? "Profil, pilihan universitas, tugas, dan progres pathway tersinkron ke akun. File dokumen tetap di perangkat ini." : "Your profile, university choices, tasks and pathway progress sync to your account. Uploaded document files remain on this device."}</small></span></div><div className="danger-row"><div><strong>{id ? "Hapus data perangkat" : "Clear device data"}</strong><small>{id ? "Menghapus cache browser dan file dokumen lokal. Data perencanaan akun tetap tersimpan." : "Clears this browser’s cache and permanently deletes local document files. Account planning data is retained."}</small></div><button className="outline-button danger-action" onClick={resetData}><Trash2 size={14}/>{id ? "Hapus data" : "Clear data"}</button></div></section>
         {adminVisible && <section id="admin" className="card settings-panel admin-settings-panel"><div className="settings-panel-head"><span><ShieldCheck size={18}/></span><div><h3>{id ? "Ruang Admin" : "Admin Workspace"}</h3><p>{id ? "Kelola tinjauan data dan masukan pengguna di ruang pribadi MyWay." : "Manage data review and user feedback in your private MyWay workspace."}</p></div></div><div className="help-row"><div><strong>{id ? "Buka panel admin" : "Open admin panel"}</strong><small>{id ? "Hanya akun pemilik MyWay yang dapat membuka halaman ini." : "Only the MyWay owner account can open this page."}</small></div><a className="primary-button" href="https://admin.example.com" target="_blank" rel="noreferrer"><ShieldCheck size={14}/>{id ? "Buka Admin" : "Open Admin"}</a></div></section>}
         <section id="help" className="card settings-panel"><div className="settings-panel-head"><span><LifeBuoy size={18}/></span><div><h3>{id ? "Bantuan" : "Help"}</h3><p>{id ? "Pelajari kembali alur MyWay kapan pun kamu membutuhkannya." : "Revisit the MyWay workflow whenever you need a refresher."}</p></div></div><div className="help-row"><div><strong>{id ? "Tur terpandu MyWay" : "MyWay Guided Tour"}</strong><small>{id ? "Lihat cara Jelajahi, Bandingkan, Pathway, kesiapan, tugas, dan dokumen saling terhubung." : "See how Explore, Compare, Pathway, readiness, tasks and documents work together."}</small></div><button className="outline-button" onClick={replayTutorial}><BookOpen size={14}/>{id ? "Mulai ulang tur" : "Restart tour"}</button></div></section>
       </main>
@@ -1828,6 +1829,10 @@ export default function App() {
   const [session, setSession] = useState<Session | null>(null);
   const [authReady, setAuthReady] = useState(false);
   const [accountDataReady, setAccountDataReady] = useState(false);
+  const [syncStatus, setSyncStatus] = useState("Loading account data…");
+  const [syncConflict, setSyncConflict] = useState<SyncConflict | null>(null);
+  const [syncAttempt, setSyncAttempt] = useState<{ count: number; choice?: "local" | "remote" }>({ count: 0 });
+  const [syncGeneration, setSyncGeneration] = useState(0);
   const [authOpen, setAuthOpen] = useState(false);
   const [passwordRecovery, setPasswordRecovery] = useState(false);
 
@@ -1838,7 +1843,7 @@ export default function App() {
       try { setProfileDocuments(JSON.parse(window.localStorage.getItem("myway-profile-documents") || "{}")); } catch { setProfileDocuments({}); }
       try { setPreferencePriorities(JSON.parse(window.localStorage.getItem("myway-preference-priorities") || "{}")); } catch { setPreferencePriorities({}); }
     };
-    const timer = window.setTimeout(() => {
+    const hydrate = () => {
       const complete = window.localStorage.getItem("myway-onboarding-v1") || window.localStorage.getItem("alif-pathway-business-v1");
       setOnboarded(complete === "complete");
       if (complete === "complete" && !window.localStorage.getItem("myway-product-tour-v2")) setTutorialOpen(true);
@@ -1869,9 +1874,12 @@ export default function App() {
       if (storedTheme === "light") setThemeState("light");
       else { setThemeState("light"); window.localStorage.setItem("myway-theme", "light"); }
       loadProfile();
-    }, 0);
+    };
+    const timer = window.setTimeout(hydrate, 0);
+    const refresh = () => { hydrate(); setSyncGeneration(value => value + 1); };
+    window.addEventListener("myway-account-updated", refresh);
     window.addEventListener("myway-profile-updated", loadProfile);
-    return () => { window.clearTimeout(timer); window.removeEventListener("myway-profile-updated", loadProfile); };
+    return () => { window.clearTimeout(timer); window.removeEventListener("myway-account-updated", refresh); window.removeEventListener("myway-profile-updated", loadProfile); };
   }, [accountDataReady]);
   useEffect(() => {
     let active = true;
@@ -1917,8 +1925,19 @@ export default function App() {
       window.localStorage.setItem("myway-profile-avatar", typeof providerPhoto === "string" && /^https:\/\//.test(providerPhoto) ? providerPhoto : fallback);
     }
     window.localStorage.setItem(activeUserKey, currentUserId);
-    setAccountDataReady(true);
-  }, [authReady, session]);
+    let active = true;
+    let stop = () => {};
+    setAccountDataReady(false);
+    setSyncStatus("Loading account data…");
+    getSupabaseClient().then(client => startAccountSync(client, currentUserId, {
+      ready: () => { if (active) { setSyncConflict(null); setAccountDataReady(true); } },
+      changed: () => { if (active) window.dispatchEvent(new Event("myway-account-updated")); },
+      conflict: value => { if (active) { setSyncConflict(value); setAccountDataReady(false); } },
+      status: value => { if (active) setSyncStatus(value); },
+    }, syncAttempt.choice, () => active)).then(cleanup => { if (active) stop = cleanup; else cleanup(); })
+      .catch(() => { if (active) setSyncStatus("Account sync could not load. Your device data is preserved. Please retry."); });
+    return () => { active = false; stop(); };
+  }, [authReady, session?.user.id, syncAttempt]);
   useEffect(() => {
     let active = true;
     const refreshAdminAccess = async () => {
@@ -2083,8 +2102,8 @@ export default function App() {
   return { score: stages.length ? Math.round(stages.reduce((sum, stage) => sum + stage.value, 0) / stages.length) : 0, stages };
   };
   const applicationReadiness = Object.fromEntries(pathway.map((item) => [item.p.id, readinessFor(item.p)])) as Record<string, { score: number; stages: ReadinessStage[] }>;
-  const programFits = Object.fromEntries(programs.map((program) => {
-    const school = allBusinessSchools.find((item) => item.programId === program.id);
+  const programFits = Object.fromEntries([...programs, ...pathway.map(item => item.p)].map((program) => {
+    const school = allBusinessSchools.find((item) => item.programId === program.id || `school:${item.id}` === program.id);
     return [program.id, calculateProgramFit(program, school ? schoolStudy(school) : undefined, profileSnapshot, preferencePriorities)];
   })) as Record<string, FitResult>;
   const fitFor = (program: Program, school?: BusinessSchool) => {
@@ -2106,6 +2125,32 @@ export default function App() {
   const selectedProgram = selectedProgramId ? programs.find((program) => program.id === selectedProgramId) ?? null : null;
   const selectedSchool = selectedSchoolId ? allBusinessSchools.find((school) => school.id === selectedSchoolId) ?? null : null;
 
+  if (session && !accountDataReady && authReady) {
+    const describe = (data: Record<string, string>) => {
+      try {
+        const items = JSON.parse(data["myway-pathway-selection"] || "[]") as { id: string; role: string }[];
+        const dream = items.find(item => item.role === "Dream");
+        const label = dream ? programs.find(p => p.id === dream.id)?.university || allBusinessSchools.find(school => `school:${school.id}` === dream.id)?.name || "Selected university" : "No Dream university";
+        return `${label} · ${items.length} pathway choices`;
+      } catch { return "Saved planning data"; }
+    };
+    const choose = (choice?: "local" | "remote") => { setSyncConflict(null); setSyncAttempt(value => ({ count: value.count + 1, choice })); };
+    const downloadBackup = () => {
+      const data = syncConflict?.local || {};
+      const blob = new Blob([JSON.stringify({ product: "MyWay", formatVersion: 1, data }, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob); const a = document.createElement("a"); a.href = url; a.download = "myway-device-backup.json"; a.click(); URL.revokeObjectURL(url);
+    };
+    return <main className="account-gate"><section className="account-gate-card">
+      <h1>{syncConflict ? (language === "id" ? "Pilih data akun yang ingin dipakai" : "Choose which account data to use") : (language === "id" ? "Memuat data akun" : "Loading account data")}</h1>
+      {syncConflict ? <>
+        <p>{language === "id" ? "Data browser ini berbeda dari akun. Kedua versi disimpan sebagai cadangan sebelum pilihanmu diterapkan." : "This browser differs from your account. Both versions are preserved as device backups before applying your choice."}</p>
+        <p><strong>Account:</strong> {describe(syncConflict.remote.data)}</p><p><strong>This browser:</strong> {describe(syncConflict.local)}</p>
+        <button className="primary-button" onClick={() => choose("remote")}>{language === "id" ? "Gunakan data akun" : "Use account version"}</button>
+        <button className="outline-button" onClick={() => choose("local")}>{language === "id" ? "Gunakan data browser ini" : "Use this browser’s version"}</button>
+        <button className="text-link" onClick={downloadBackup}>{language === "id" ? "Unduh cadangan browser" : "Download browser backup"}</button>
+      </> : <><p>{syncStatus}</p><button className="outline-button" onClick={() => choose()}>{language === "id" ? "Coba lagi" : "Retry account sync"}</button></>}
+    </section></main>;
+  }
   if (!authReady || !session || !accountDataReady) return <><SiteLanguage language={language} /><AccountGate language={language} ready={authReady && (!session || accountDataReady)} openAccount={() => setAuthOpen(true)} />{authOpen && <AuthModal key={passwordRecovery ? "recovery" : "account"} session={session} recovery={passwordRecovery} language={language} close={() => { setAuthOpen(false); setPasswordRecovery(false); }} openProfile={() => setView("profile")} />}</>;
   if (!onboarded) return <><SiteLanguage language={language} /><Onboarding finish={finish} saveLater={saveLater} /></>;
 
@@ -2123,7 +2168,7 @@ export default function App() {
   return <div className="app-shell">
     <SiteLanguage language={language} />
     <Navigation active={view} go={go} openGuide={() => setGuideOpen(true)} progress={progress} hasTarget={Boolean(dashboardProgram)} language={language} />
-    <main className="app-main"><Header view={view} go={go} notices={notices} setNotices={setNotices} notice={notice} onNoticeAction={runNoticeAction} avatar={avatar} language={language} session={session} openAccount={() => setAuthOpen(true)} /><div className="content-wrap">{content}</div></main>
+    <main className="app-main"><Header view={view} go={go} notices={notices} setNotices={setNotices} notice={notice} onNoticeAction={runNoticeAction} avatar={avatar} language={language} session={session} openAccount={() => setAuthOpen(true)} /><div className="content-wrap" key={syncGeneration}><div role="status" className="sync-status">{syncStatus}</div>{content}</div></main>
     <button className="feedback-fab" data-tour="feedback-button" onClick={() => openFeedback()}><MessageSquare size={15} /><span>Feedback</span></button>
     {compared.length > 0 && !compareOpen && <button className="compare-fab" onClick={() => setCompareOpen(true)}><Scale size={17} /><span>Compare {compared.length}</span><small>of 4</small></button>}
     {compareOpen && <ComparePanel ids={compared} close={() => setCompareOpen(false)} remove={toggleCompare} open={openSchool} />}

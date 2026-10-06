@@ -1937,3 +1937,5 @@ body:has(.modal-backdrop) { overflow: hidden; }
 @media (max-width: 620px) { .account-gate { padding: 14px; }.account-gate-card { padding: 26px 20px; border-radius: 20px; }.account-gate-brand { margin-bottom: 32px; }.account-gate-card h1 { font-size: 30px; } }
 @media (max-width: 1050px) { .university-admin-metrics { grid-template-columns: repeat(2, 1fr); }.university-admin-workspace { grid-template-columns: minmax(270px, 340px) minmax(440px, 1fr); } }
 @media (max-width: 720px) { .university-admin-metrics { grid-template-columns: repeat(2, 1fr); }.university-admin-filters { grid-template-columns: 1fr; }.university-admin-workspace { display: block; min-height: 0; overflow: visible; border: 0; background: transparent; box-shadow: none; }.university-admin-list { max-height: 380px; border: 1px solid var(--line); border-radius: 12px; }.university-admin-detail { max-height: none; margin-top: 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--paper); }.university-editor-head { flex-direction: column; }.university-fact-grid { grid-template-columns: 1fr; } }
+
+.sync-status { font-size: .875rem; color: var(--muted); margin-bottom: 12px; }
