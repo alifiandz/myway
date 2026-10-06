@@ -18,6 +18,8 @@ import { AuthModal } from "./auth-modal";
 import { getSupabaseClient } from "./supabase-client";
 import type { Session } from "@supabase/supabase-js";
 
+type Language = "en" | "id";
+
 type View = "dashboard" | "explore" | "pathway" | "tasks" | "progress" | "profile" | "settings";
 type Role = "Dream" | "Target" | "Alternative";
 type FeedbackCategory = "bug" | "incorrect" | "suggestion";
@@ -1659,7 +1661,7 @@ function SettingsPage({ toast, savedCount, applicationCount, replayTutorial, go,
     <div className="settings-layout">
       <nav className="settings-section-nav" aria-label="Settings sections"><a href="#general"><Settings2 size={15}/>{id ? "Umum" : "General"}</a><a href="#notifications"><Bell size={15}/>{id ? "Notifikasi" : "Notifications"}</a><a href="#data"><HardDrive size={15}/>{id ? "Data & Penyimpanan" : "Data & Storage"}</a><a href="#privacy"><LockKeyhole size={15}/>{id ? "Privasi & Keamanan" : "Privacy & Security"}</a>{adminVisible && <a href="#admin"><ShieldCheck size={15}/>{id ? "Admin" : "Admin"}</a>}<a href="#help"><LifeBuoy size={15}/>{id ? "Bantuan" : "Help"}</a></nav>
       <main className="settings-content">
-        <section id="general" className="card settings-panel"><div className="settings-panel-head"><span><Settings2 size={18}/></span><div><h3>{id ? "Umum" : "General"}</h3><p>{id ? "Pilih bagaimana MyWay terlihat dan berkomunikasi denganmu." : "Choose how MyWay looks and communicates with you."}</p></div></div><div className="setting-row setting-row-stack"><div><strong>{id ? "Tampilan" : "Appearance"}</strong><small>{id ? "Mode terang tersedia sekarang. Mode gelap sedang disiapkan." : "Light mode is available now. Dark mode is being prepared."}</small></div><div className="theme-picker theme-picker-compact"><button className="selected" onClick={()=>setTheme('light')}><Sun size={16}/><span>{id?'Terang':'Light'}</span><Check size={14}/></button><button className="coming-soon" disabled aria-disabled="true"><Moon size={16}/><span>{id?'Gelap':'Dark'}</span><small>{id?'Segera hadir':'Upcoming'}</small></button></div></div><div className="setting-row"><div><strong>{id ? "Bahasa" : "Language"}</strong><small>{id ? "Terapkan bahasa pilihanmu ke seluruh halaman MyWay." : "Apply your preferred language across every MyWay page."}</small></div><div className="segmented-control" role="group" aria-label="Language"><button className={language==='en'?'active':''} onClick={()=>setLanguage('en')}>English</button><button className={language==='id'?'active':''} onClick={()=>setLanguage('id')}>Bahasa Indonesia</button></div></div></section>
+        <section id="general" className="card settings-panel"><div className="settings-panel-head"><span><Settings2 size={18}/></span><div><h3>{id ? "Umum" : "General"}</h3><p>{id ? "Pilih bagaimana MyWay terlihat dan berkomunikasi denganmu." : "Choose how MyWay looks and communicates with you."}</p></div></div><div className="setting-row setting-row-stack"><div><strong>{id ? "Tampilan" : "Appearance"}</strong><small>{id ? "Pilih mode terang, gelap, atau ikuti pengaturan perangkat." : "Choose light, dark, or follow your device settings."}</small></div><div className="theme-picker theme-picker-compact"><button className={theme === "light" ? "selected" : ""} onClick={()=>setTheme('light')}><Sun size={16}/><span>{id?'Terang':'Light'}</span><Check size={14}/></button><button className={theme === "dark" ? "selected" : ""} onClick={()=>setTheme('dark')}><Moon size={16}/><span>{id?'Gelap':'Dark'}</span></button><button className={theme === "system" ? "selected" : ""} onClick={()=>setTheme('system')}><span>{id?'Sistem':'System'}</span></button></div></div><div className="setting-row"><div><strong>{id ? "Bahasa" : "Language"}</strong><small>{id ? "Terapkan bahasa pilihanmu ke seluruh halaman MyWay." : "Apply your preferred language across every MyWay page."}</small></div><div className="segmented-control" role="group" aria-label="Language"><button className={language==='en'?'active':''} onClick={()=>setLanguage('en')}>English</button><button className={language==='id'?'active':''} onClick={()=>setLanguage('id')}>Bahasa Indonesia</button></div></div></section>
         <section id="notifications" className="card settings-panel"><div className="settings-panel-head"><span><Bell size={18}/></span><div><h3>{id ? "Notifikasi" : "Notifications"}</h3><p>{id ? "Pilih apakah MyWay menampilkan pengingat perencanaan di aplikasi." : "Choose whether MyWay shows planning reminders inside the app."}</p></div></div><button className={`settings-toggle ${notifications ? "on" : ""}`} onClick={toggleNotifications} role="switch" aria-checked={notifications}><span><strong>{id ? "Pengingat dalam aplikasi" : "In-app reminders"}</strong><small>{notifications ? (id ? "Aktif" : "Enabled") : (id ? "Dijeda" : "Paused")}</small></span><i /></button><p className="settings-footnote">{id ? "Email, push, dan peringatan tenggat akan tersedia setelah akun dan backend terhubung." : "Email, push and deadline alerts will become available after accounts and the backend are connected."}</p></section>
         <section id="data" className="card settings-panel"><div className="settings-panel-head"><span><HardDrive size={18}/></span><div><h3>{id ? "Data & Penyimpanan" : "Data & Storage"}</h3><p>{id ? "Lihat data lokal, buat cadangan, atau pulihkan perencanaanmu." : "Review local data, create a backup, or restore your planning workspace."}</p></div></div><div className="settings-stats"><button onClick={() => go("profile")}><strong>{documentCount}</strong><small>{id ? "File tersimpan" : "Stored files"}</small></button><span><strong>{savedCount}</strong><small>{id ? "Universitas tersimpan" : "Saved universities"}</small></span><span><strong>{applicationCount}</strong><small>{id ? "Pilihan di Pathway" : "Pathway choices"}</small></span></div><div className="settings-actions"><button className="primary-button" onClick={exportData}><Download size={14}/>{id ? "Ekspor data" : "Export data"}</button><label className="outline-button"><Upload size={14}/>{id ? "Pulihkan data" : "Restore data"}<input type="file" accept="application/json,.json" onChange={(event)=>{const file=event.currentTarget.files?.[0];if(file)importData(file);event.currentTarget.value="";}}/></label><button className="outline-button" onClick={()=>go("profile")}><FolderOpen size={14}/>{id ? "Buka dokumen" : "Open documents"}</button></div><p className="settings-footnote">{id ? "Cadangan mencakup data perencanaan. File dokumen perlu diunduh terpisah dari Profil." : "Backups include planning data. Document files must be downloaded separately from Profile."}</p></section>
         <section id="privacy" className="card settings-panel"><div className="settings-panel-head"><span><LockKeyhole size={18}/></span><div><h3>{id ? "Privasi & Keamanan" : "Privacy & Security"}</h3><p>{id ? "Versi prototipe ini menyimpan data hanya di browser perangkat ini." : "This prototype stores your information only in this browser on this device."}</p></div></div><div className="privacy-note"><ShieldCheck size={18}/><span><strong>{id ? "Penyimpanan lokal" : "Local storage"}</strong><small>{id ? "Belum ada akun atau sinkronisasi cloud. Jangan gunakan perangkat bersama untuk dokumen sensitif." : "Accounts and cloud sync are not connected yet. Avoid sensitive documents on a shared device."}</small></span></div><div className="danger-row"><div><strong>{id ? "Hapus data perangkat" : "Clear device data"}</strong><small>{id ? "Menghapus profil, daftar, progres, tugas, kebiasaan, dan dokumen lokal secara permanen." : "Permanently removes the local profile, lists, progress, tasks, habits and documents."}</small></div><button className="outline-button danger-action" onClick={resetData}><Trash2 size={14}/>{id ? "Hapus data" : "Clear data"}</button></div></section>
@@ -1865,7 +1867,7 @@ export default function App() {
       const storedLanguage = window.localStorage.getItem("myway-language");
       if (storedLanguage === "en" || storedLanguage === "id") setLanguageState(storedLanguage);
       const storedTheme = window.localStorage.getItem("myway-theme");
-      if (storedTheme === "light") setThemeState("light");
+      if (storedTheme === "light" || storedTheme === "dark" || storedTheme === "system") setThemeState(storedTheme);
       else { setThemeState("light"); window.localStorage.setItem("myway-theme", "light"); }
       loadProfile();
     }, 0);
@@ -1922,7 +1924,7 @@ export default function App() {
     let active = true;
     const refreshAdminAccess = async () => {
       const headerAccess = fetch("/api/admin-visibility", { cache: "no-store" })
-        .then((response) => response.ok ? response.json() : { authorized: false })
+        .then((response) => response.ok ? response.json() as Promise<{ authorized?: boolean }> : { authorized: false })
         .then((data: { authorized?: boolean }) => data.authorized === true)
         .catch(() => false);
       let accountAccess = false;
@@ -1947,7 +1949,13 @@ export default function App() {
   };
   const setTheme = (value: "light" | "dark" | "system") => { setThemeState(value); window.localStorage.setItem("myway-theme", value); };
   const openFeedback = (category?: FeedbackCategory, context: FeedbackContext = {}) => { setFeedbackCategory(category); setFeedbackContext(context); setFeedbackOpen(true); };
-  useEffect(() => { document.documentElement.dataset.theme = "light"; }, [theme]);
+  useEffect(() => {
+    const preference = window.matchMedia("(prefers-color-scheme: dark)");
+    const applyTheme = () => { document.documentElement.dataset.theme = theme === "system" ? (preference.matches ? "dark" : "light") : theme; };
+    applyTheme();
+    preference.addEventListener("change", applyTheme);
+    return () => preference.removeEventListener("change", applyTheme);
+  }, [theme]);
   useEffect(() => {
     if (!toast) return;
     const timer = window.setTimeout(() => setToast(""), 2600);
