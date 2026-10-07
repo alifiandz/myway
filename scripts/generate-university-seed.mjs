@@ -123,10 +123,10 @@ for (const university of universities) {
   const programmeId = `${university.id}-primary`;
   for (const [key, value] of [["duration", study.duration], ["credits", study.credits], ["teaching_language", study.language]]) {
     const status = value == null ? "not_yet_verified" : study.lastVerified ? "verified" : "under_review";
-    factRows.push(`(${quote(programmeId)}, ${quote(key)}, ${value == null ? "null" : json(value)}, ${quote(status)}, ${quote(study.source)}, ${quote(value == null ? null : study.lastVerified ?? null)}, ${quote(value == null ? "Not yet verified" : null)})`);
+    factRows.push(`(${quote(programmeId)}, ${quote(key)}, ${value == null ? "null" : json(value)}, ${quote(status)}, ${quote(study.source)}, ${quote(value == null ? null : study.lastVerified ?? null)}, null)`);
   }
   for (const key of detailedKeys) {
-    factRows.push(`(${quote(programmeId)}, ${quote(key)}, null, 'not_yet_verified', ${quote(study.source)}, null, 'Not yet verified')`);
+    factRows.push(`(${quote(programmeId)}, ${quote(key)}, null, 'not_yet_verified', ${quote(study.source)}, null, null)`);
   }
 }
 

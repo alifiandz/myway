@@ -43,9 +43,9 @@ export default function UniversityDataReview() {
       if (!sessionData.session) throw new Error("Sign in to MyWay first, then reopen the admin workspace.");
       const { data: profile } = await supabase.from("profiles").select("role").eq("user_id", sessionData.session.user.id).maybeSingle();
       if (profile?.role !== "admin") throw new Error("This MyWay account does not have database administrator access.");
-      const { data, error: queryError } = await supabase.from("universities").select("id,name,city,country,website_domain,logo_url,publication_status,programmes(id,title,duration,credits,teaching_language,official_source_url,verification_status,programme_facts(id,field_key,value,status,source_url,verified_on,note))").order("directory_order");
+      const { data, error: queryError } = await supabase.from("universities").select("id,name,city,country,website_domain,logo_url,publication_status,programmes(id,title,duration,credits,teaching_language,official_source_url,verification_status,programme_facts(id,field_key,value,status,source_url,verified_on,programme_fact_review_notes(note)))").order("directory_order");
       if (queryError) throw queryError;
-      const rows = (data ?? []) as University[];
+      const rows = (data ?? []).map((university) => ({ ...university, programmes: university.programmes.map((programme) => ({ ...programme, programme_facts: programme.programme_facts.map((fact) => ({ ...fact, note: (fact.programme_fact_review_notes as unknown as { note: string | null } | null)?.note ?? null })) })) })) as University[];
       setItems(rows); setSelectedId((current) => current && rows.some((item) => item.id === current) ? current : rows[0]?.id ?? null);
     } catch (cause) { setError(cause instanceof Error ? cause.message : "University data could not be loaded."); }
     finally { setLoading(false); }
@@ -73,7 +73,7 @@ export default function UniversityDataReview() {
       const sourceUrl = String(values.get("sourceUrl") ?? "").trim(); const verifiedOn = String(values.get("verifiedOn") ?? "").trim(); const note = String(values.get("note") ?? "").trim();
       if (status === "verified" && (!rawValue || !sourceUrl || !verifiedOn)) throw new Error("A verified field requires a value, official source, and verification date.");
       const supabase = await getSupabaseClient();
-      const { error: updateError } = await supabase.from("programme_facts").update({ value: rawValue ? rawValue : null, status, source_url: sourceUrl || null, verified_on: verifiedOn || null, note: note || null, updated_at: new Date().toISOString() }).eq("id", fact.id).eq("programme_id", programmeId);
+      const { error: updateError } = await supabase.rpc("save_programme_fact_review", { p_fact_id: fact.id, p_programme_id: programmeId, p_value: rawValue || null, p_status: status, p_source_url: sourceUrl || null, p_verified_on: verifiedOn || null, p_note: note || null });
       if (updateError) throw updateError;
       setItems((current) => current.map((university) => ({ ...university, programmes: university.programmes.map((programme) => programme.id !== programmeId ? programme : { ...programme, programme_facts: programme.programme_facts.map((currentFact) => currentFact.id !== fact.id ? currentFact : { ...currentFact, value: rawValue || null, status, source_url: sourceUrl || null, verified_on: verifiedOn || null, note: note || null }) }) })));
     } catch (cause) { setError(cause instanceof Error ? cause.message : "The field could not be saved."); }

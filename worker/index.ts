@@ -74,6 +74,14 @@ function adminOnly(): Response {
 // dangerouslyAllowSVG: true in next.config.js and uncomment below:
 // const imageConfig: ImageConfig = { dangerouslyAllowSVG: true };
 
+const SCREENSHOT_TYPES = new Set(["image/png", "image/jpeg", "image/webp"]);
+async function validScreenshotBytes(bytes: Uint8Array, type: string): Promise<boolean> {
+  if (type === "image/png") return [137,80,78,71,13,10,26,10].every((byte,index) => bytes[index] === byte);
+  if (type === "image/jpeg") return bytes[0] === 255 && bytes[1] === 216 && bytes[2] === 255;
+  if (type === "image/webp") return bytes.length >= 12 && String.fromCharCode(...bytes.slice(0,4)) === "RIFF" && String.fromCharCode(...bytes.slice(8,12)) === "WEBP";
+  return false;
+}
+
 const worker = {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
@@ -159,11 +167,14 @@ const worker = {
         if (!row?.screenshot_key) return adminCors(new Response("Screenshot not found", { status: 404 }));
         const object = await env.BUCKET.get(row.screenshot_key);
         if (!object) return adminCors(new Response("Screenshot not found", { status: 404 }));
-        const headers = new Headers();
-        object.writeHttpMetadata(headers);
-        headers.set("Cache-Control", "private, no-store");
-        headers.set("Content-Disposition", `inline; filename="${(row.screenshot_name ?? "feedback-screenshot").replaceAll('"', '')}"`);
-        return adminCors(new Response(object.body, { headers }));
+        const type = object.httpMetadata?.contentType ?? "";
+        if (!SCREENSHOT_TYPES.has(type) || object.size > 8 * 1024 * 1024) return adminCors(new Response("Unsupported screenshot", { status: 415 }));
+        const bytes = new Uint8Array(await object.arrayBuffer());
+        if (!await validScreenshotBytes(bytes, type)) return adminCors(new Response("Unsupported screenshot", { status: 415 }));
+        const headers = new Headers({ "Content-Type": type, "Cache-Control": "private, no-store", "X-Content-Type-Options": "nosniff", "Content-Security-Policy": "default-src 'none'; sandbox" });
+        const extension = type === "image/png" ? "png" : type === "image/jpeg" ? "jpg" : "webp";
+        headers.set("Content-Disposition", `attachment; filename="feedback-screenshot.${extension}"`);
+        return adminCors(new Response(bytes, { headers }));
       } catch (error) {
         console.error("Feedback screenshot failed", error);
         return adminCors(new Response("Screenshot could not be loaded", { status: 500 }));
@@ -187,12 +198,14 @@ const worker = {
         let screenshotKey: string | null = null;
         let screenshotName: string | null = null;
         if (screenshot instanceof File && screenshot.size > 0) {
-          if (!screenshot.type.startsWith("image/") || screenshot.size > 8 * 1024 * 1024) {
-            return Response.json({ error: "The screenshot must be an image smaller than 8 MB." }, { status: 400 });
+          if (!SCREENSHOT_TYPES.has(screenshot.type) || screenshot.size > 8 * 1024 * 1024) {
+            return Response.json({ error: "The screenshot must be PNG, JPG or WebP smaller than 8 MB." }, { status: 400 });
           }
+          const bytes = new Uint8Array(await screenshot.arrayBuffer());
+          if (!await validScreenshotBytes(bytes, screenshot.type)) return Response.json({ error: "Screenshot contents do not match PNG, JPG or WebP." }, { status: 400 });
           screenshotKey = `feedback/${createdAt.slice(0, 10)}/${id}`;
           screenshotName = screenshot.name.slice(0, 240);
-          await env.BUCKET.put(screenshotKey, screenshot.stream(), { httpMetadata: { contentType: screenshot.type }, customMetadata: { originalName: screenshotName } });
+          await env.BUCKET.put(screenshotKey, bytes, { httpMetadata: { contentType: screenshot.type }, customMetadata: { originalName: screenshotName } });
         }
         await env.DB.prepare(`INSERT INTO feedback_submissions
           (id, category, details, expected, page_feature, information_category, review_request, source_url, name, email, may_contact, page_url, university, programme, locale, user_agent, viewport, screenshot_key, screenshot_name, status, created_at)

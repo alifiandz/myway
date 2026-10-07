@@ -5,6 +5,11 @@ import { useEffect } from "react";
 type Language = "en" | "id";
 
 const idText: Record<string, string> = {
+  "Must-have unverified": "Syarat wajib belum terverifikasi",
+  "Current programme matches": "Kecocokan program saat ini",
+  "No confirmed matches yet": "Belum ada kecocokan terkonfirmasi",
+  "Add your preferences or confirm missing must-have evidence. All 100 programmes remain available in Explore.": "Tambahkan preferensi atau konfirmasi bukti untuk syarat wajib. Seluruh 100 program tetap tersedia di Jelajahi.",
+  "Explore all programmes": "Jelajahi semua program",
   "Explore · Plan · Go Further": "Jelajahi · Rencanakan · Melangkah Lebih Jauh",
   "YOUR BUSINESS PATHWAY": "JALUR STUDI BISNISMU",
   "Step": "Langkah",
@@ -820,6 +825,8 @@ const idText: Record<string, string> = {
 };
 
 const patterns: Array<[RegExp, (match: RegExpMatchArray) => string]> = [
+  [/^Confirm your must-haves: (.+)$/, (m) => `Konfirmasi syarat wajibmu: ${m[1]}`],
+  [/^Must-have evidence missing: (.+)$/, (m) => `Bukti syarat wajib belum tersedia: ${m[1]}`],
   [/^(\d+) sourced results$/, (m) => `${m[1]} hasil bersumber`],
   [/^Sort: (.+)$/, (m) => `Urutkan: ${m[1]}`],
   [/^(\d+) credits$/, (m) => `${m[1]} kredit`],

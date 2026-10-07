@@ -105,3 +105,27 @@ test("built Worker handles 25 concurrent shell and access-check requests", async
   }));
   assert.equal(results.length, 25);
 });
+
+const auditPng = Uint8Array.from(Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aAZsAAAAASUVORK5CYII=','base64'));
+
+test('feedback rejects SVG, renamed SVG, invalid raster bytes and oversized screenshots before storage', async () => {
+ const { default: worker } = await import('../dist/server/index.js');
+ for (const [type, bytes] of [['image/svg+xml','<svg><script>audit</script></svg>'],['image/png','<svg>renamed</svg>'],['image/jpeg','not a jpeg'],['image/webp','not a webp'],['image/png',new Uint8Array(8*1024*1024+1)]]) {
+  let stored=false;
+  const form=new FormData();form.set('category','bug');form.set('details','local test');form.set('screenshot',new Blob([bytes],{type}),'audit.png');
+  const response=await worker.fetch(new Request('http://localhost/api/feedback',{method:'POST',body:form}),{BUCKET:{put:async()=>{stored=true}},DB:{prepare:()=>{stored=true;throw new Error('Storage must not be reached')}}},{waitUntil(){},passThroughOnException(){}});
+  assert.equal(response.status,400,type);assert.equal(stored,false);
+ }
+});
+test('valid raster screenshots upload, while downloads reject legacy SVG and use safe attachment headers', async () => {
+ const { default: worker } = await import('../dist/server/index.js');
+ let uploaded=false;
+ const form=new FormData();form.set('category','bug');form.set('details','local test');form.set('screenshot',new Blob([auditPng],{type:'image/png'}),'audit.png');
+ const uploadedResponse=await worker.fetch(new Request('http://localhost/api/feedback',{method:'POST',body:form}),{BUCKET:{put:async()=>{uploaded=true}},DB:{prepare:()=>({bind:()=>({run:async()=>({success:true})})})}},{waitUntil(){},passThroughOnException(){}});
+ assert.equal(uploadedResponse.status,200);assert.equal(uploaded,true);
+ for (const type of ['image/png','image/svg+xml']) {
+  const response=await worker.fetch(new Request('http://localhost/api/admin/feedback/example/screenshot',{headers:{'oai-authenticated-user-id':'11111111-1111-4111-8111-111111111111'}}),{DB:{prepare:()=>({bind:()=>({first:async()=>({screenshot_key:'mock',screenshot_name:'untrusted.svg'})})})},BUCKET:{get:async()=>({size:auditPng.length,httpMetadata:{contentType:type},arrayBuffer:async()=>auditPng.buffer})}},{waitUntil(){},passThroughOnException(){}});
+  assert.equal(response.status,type==='image/png'?200:415);
+  if(type==='image/png') {assert.equal(response.headers.get('x-content-type-options'),'nosniff');assert.match(response.headers.get('content-disposition'),/^attachment;/);assert.match(response.headers.get('content-security-policy'),/sandbox/);}
+ }
+});
