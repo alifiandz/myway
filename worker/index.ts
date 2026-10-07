@@ -178,6 +178,8 @@ const worker = {
         if (!["bug", "incorrect", "suggestion"].includes(category) || !details) {
           return Response.json({ error: "Please complete the required feedback fields." }, { status: 400 });
         }
+        let safePageUrl: string | null = null;
+        try { const page = new URL(read("pageUrl", 1200)); if (["http:", "https:"].includes(page.protocol)) safePageUrl = page.origin + page.pathname; } catch { /* Optional page URL. */ }
         const id = crypto.randomUUID();
         const createdAt = new Date().toISOString();
         const screenshot = form.get("screenshot");
@@ -194,7 +196,7 @@ const worker = {
         await env.DB.prepare(`INSERT INTO feedback_submissions
           (id, category, details, expected, page_feature, information_category, review_request, source_url, name, email, may_contact, page_url, university, programme, locale, user_agent, viewport, screenshot_key, screenshot_name, status, created_at)
           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'new', ?)`)
-          .bind(id, category, details, read("expected") || null, read("pageFeature", 500) || null, read("informationCategory", 100) || null, read("reviewRequest") || null, read("sourceUrl", 1000) || null, read("name", 200) || null, read("email", 320) || null, read("mayContact", 10) === "true" ? 1 : 0, read("pageUrl", 1200), read("university", 300) || null, read("programme", 500) || null, read("locale", 20) || null, read("userAgent", 1000) || null, read("viewport", 100) || null, screenshotKey, screenshotName, createdAt).run();
+          .bind(id, category, details, read("expected") || null, read("pageFeature", 500) || null, read("informationCategory", 100) || null, read("reviewRequest") || null, read("sourceUrl", 1000) || null, read("name", 200) || null, read("email", 320) || null, read("mayContact", 10) === "true" ? 1 : 0, safePageUrl, read("university", 300) || null, read("programme", 500) || null, read("locale", 20) || null, read("userAgent", 1000) || null, read("viewport", 100) || null, screenshotKey, screenshotName, createdAt).run();
         return Response.json({ ok: true, id });
       } catch (error) {
         console.error("Feedback submission failed", error);

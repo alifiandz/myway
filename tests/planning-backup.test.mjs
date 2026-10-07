@@ -33,3 +33,28 @@ test("backup import rejects unsupported formats and ignores account identifiers"
     assert.equal(values.get("myway-saved"), '["escp"]');
   } finally { globalThis.window = original; }
 });
+
+test("malformed backup is rejected before any planning values change", () => {
+  const original = globalThis.window, values = new Map([["myway-saved", '["original"]']]);
+  try {
+    globalThis.window = { localStorage: { getItem: key => values.get(key) ?? null, setItem: (key, value) => values.set(key, value) } };
+    for (const data of [[], { "myway-saved": '["replacement"]', "myway-profile": '{broken' }, { "myway-saved": '{}' }, { "myway-pathway-selection": '[{"id":"a","role":"Admin"}]' }, {}]) {
+      assert.throws(() => importPrototypeExport({ product: "MyWay", formatVersion: 1, data }));
+      assert.equal(values.get("myway-saved"), '["original"]');
+    }
+  } finally { globalThis.window = original; }
+});
+
+test("storage failure rolls back earlier successful backup writes", () => {
+  const original = globalThis.window, values = new Map([["myway-saved", '["original"]']]);
+  try {
+    globalThis.window = { localStorage: {
+      getItem: key => values.get(key) ?? null,
+      removeItem: key => values.delete(key),
+      setItem: (key, value) => { if (key === "myway-profile") throw new Error("Quota exceeded"); values.set(key, value); },
+    } };
+    assert.throws(() => importPrototypeExport({ product: "MyWay", formatVersion: 1, data: { "myway-saved": '["replacement"]', "myway-profile": '{}' } }), /device storage/);
+    assert.equal(values.get("myway-saved"), '["original"]');
+    assert.equal(values.has("myway-profile"), false);
+  } finally { globalThis.window = original; }
+});

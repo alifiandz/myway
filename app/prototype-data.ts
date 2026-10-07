@@ -58,9 +58,35 @@ export async function createPrototypeExport(): Promise<MyWayPrototypeExport> {
 export function importPrototypeExport(value: unknown) {
   if (!value || typeof value !== "object") throw new Error("Invalid MyWay export");
   const candidate = value as Partial<MyWayPrototypeExport>;
-  if (candidate.product !== "MyWay" || candidate.formatVersion !== 1 || !candidate.data || typeof candidate.data !== "object") throw new Error("Unsupported MyWay export");
+  if (candidate.product !== "MyWay" || candidate.formatVersion !== 1 || !candidate.data || typeof candidate.data !== "object" || Array.isArray(candidate.data)) throw new Error("Unsupported MyWay export");
   const allowed = new Set<string>(EXPORTABLE_KEYS);
-  Object.entries(candidate.data).forEach(([key, storedValue]) => {
-    if (allowed.has(key) && typeof storedValue === "string") window.localStorage.setItem(key, storedValue);
-  });
+  const entries = Object.entries(candidate.data).filter(([key]) => allowed.has(key));
+  if (!entries.length) throw new Error("Empty MyWay export");
+  const arrays = new Set(["myway-saved", "myway-compared", "myway-pathway-selection", "myway-pathway-actions", "myway-routines"]);
+  const flags = new Set(["myway-onboarding-v1", "alif-pathway-business-v1", "myway-notifications-enabled", "myway-product-tour-v2"]);
+  let total = 0;
+  for (const [key, storedValue] of entries) {
+    if (typeof storedValue !== "string") throw new Error("Invalid backup value");
+    total += storedValue.length;
+    if (total > 5 * 1024 * 1024) throw new Error("Backup too large");
+    if (flags.has(key)) {
+      if (!["complete", "true", "false"].includes(storedValue)) throw new Error("Invalid backup flag");
+      continue;
+    }
+    const parsed: unknown = JSON.parse(storedValue);
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed) !== arrays.has(key)) throw new Error("Invalid backup structure");
+    if (["myway-saved", "myway-compared", "myway-pathway-actions"].includes(key) && !(parsed as unknown[]).every(item => typeof item === "string")) throw new Error("Invalid backup list");
+    if (key === "myway-pathway-selection" && !(parsed as { id?: unknown; role?: unknown }[]).every(item => item && typeof item.id === "string" && ["Dream", "Target", "Alternative"].includes(String(item.role)))) throw new Error("Invalid pathway choice");
+  }
+  const storage = window.localStorage;
+  const previous = new Map(entries.map(([key]) => [key, storage.getItem?.(key) ?? null]));
+  const written: string[] = [];
+  try {
+    for (const [key, storedValue] of entries) { storage.setItem(key, storedValue); written.push(key); }
+  } catch {
+    for (const key of written.reverse()) {
+      try { const value = previous.get(key); if (value == null) storage.removeItem(key); else storage.setItem(key, value); } catch { /* Storage may remain unavailable; preserve all recoverable values. */ }
+    }
+    throw new Error("Backup could not be restored to device storage");
+  }
 }

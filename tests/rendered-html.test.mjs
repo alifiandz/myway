@@ -71,3 +71,29 @@ test("invalid feedback is rejected before database or file storage access", asyn
     assert.equal(response.status, 400);
   }
 });
+
+test("feedback page context excludes query strings and authentication fragments", async () => {
+  const { default: worker } = await import("../dist/server/index.js");
+  let stored;
+  const form = new FormData();
+  form.set("category", "suggestion"); form.set("details", "Test feedback");
+  form.set("pageUrl", "https://example.com/path?code=private-code#access_token=private-token");
+  const response = await worker.fetch(new Request("http://localhost/api/feedback", { method: "POST", body: form }), {
+    DB: { prepare: () => ({ bind: (...values) => { stored = values; return { run: async () => ({ success: true }) }; } }) },
+  }, { waitUntil() {}, passThroughOnException() {} });
+  assert.equal(response.status, 200);
+  assert.equal(stored[11], "https://example.com/path");
+  assert.doesNotMatch(JSON.stringify(stored), /private-code|private-token/);
+});
+
+test("built Worker handles 25 concurrent shell and access-check requests", async () => {
+  const { default: worker } = await import("../dist/server/index.js");
+  const results = await Promise.all(Array.from({ length: 25 }, async (_, index) => {
+    const path = index % 2 ? "/api/admin-visibility" : "/";
+    const response = await worker.fetch(new Request(`http://localhost${path}`), { ASSETS: { fetch: async () => new Response("Not found", { status: 404 }) } }, { waitUntil() {}, passThroughOnException() {} });
+    assert.equal(response.status, 200);
+    if (index % 2) assert.deepEqual(await response.json(), { authorized: false });
+    else assert.match(await response.text(), /MyWay/);
+  }));
+  assert.equal(results.length, 25);
+});

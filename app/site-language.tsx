@@ -5,6 +5,79 @@ import { useEffect } from "react";
 type Language = "en" | "id";
 
 const idText: Record<string, string> = {
+  "Explore · Plan · Go Further": "Jelajahi · Rencanakan · Melangkah Lebih Jauh",
+  "YOUR BUSINESS PATHWAY": "JALUR STUDI BISNISMU",
+  "Step": "Langkah",
+  "Bachelor’s": "Sarjana",
+  "Foundation + Bachelor’s": "Foundation + Sarjana",
+  "Integrated Bachelor’s + Master’s": "Sarjana + Magister terintegrasi",
+  "MyWay currently focuses on business-related programmes.": "MyWay saat ini berfokus pada program studi terkait bisnis.",
+  "of 9 stages ready": "dari 9 tahap siap",
+  "open": "terbuka",
+  "stage readiness": "kesiapan tahap",
+  "Show": "Tampilkan",
+  "school": "institusi",
+  "Official source linked · Verification required": "Sumber resmi ditautkan · Perlu verifikasi",
+  "Source record": "Data sumber",
+  "Help keep MyWay accurate": "Bantu menjaga keakuratan MyWay",
+  "Found outdated or incorrect information?": "Menemukan informasi lama atau keliru?",
+  "Listed study areas": "Bidang studi yang tercatat",
+  "These areas are recorded from the linked programme source. Confirm the current curriculum on the official page before making a decision.": "Bidang ini dicatat dari sumber program yang ditautkan. Konfirmasi kurikulum terbaru di halaman resmi sebelum menentukan pilihan.",
+  "Must verify before applying": "Verifikasi sebelum mendaftar",
+  "Information currently recorded": "Informasi yang tercatat saat ini",
+  "Fees and application details": "Biaya dan detail pendaftaran",
+  "Figures and dates depend on the intake and your applicant category.": "Biaya dan tanggal bergantung pada tahun masuk dan kategori pendaftar.",
+  "Verified": "Terverifikasi",
+  "Confirm the latest details on the linked official page before applying.": "Konfirmasi detail terbaru di halaman resmi yang ditautkan sebelum mendaftar.",
+  "Planning notes": "Catatan perencanaan",
+  "Before you apply": "Sebelum mendaftar",
+  "Confirm the deadline for your intake and applicant category.": "Konfirmasi tenggat untuk tahun masuk dan kategori pendaftarmu.",
+  "Ready to check the full programme?": "Siap memeriksa detail lengkap program?",
+  "The institution’s page has the final requirements and application instructions.": "Halaman institusi memuat persyaratan akhir dan petunjuk pendaftaran.",
+  "Programme page": "Halaman program",
+  "verified": "terverifikasi",
+  "Context attached for": "Konteks dilampirkan untuk",
+  "of 4 selected": "dari 4 dipilih",
+  "minute session": "menit per sesi",
+  "Connected to": "Terhubung ke",
+  "This link explains why the task appears in your week.": "Tautan ini menjelaskan alasan tugas muncul dalam jadwal mingguanmu.",
+  "Cancel": "Batal",
+  "to goal": "menuju target",
+  "Pathway role for": "Kategori pilihan untuk",
+  "Saved in My Documents · Version": "Tersimpan di Dokumen Saya · Versi",
+  "saved file": "file tersimpan",
+  "Upload a file here or from any Pathway requirement. It will then be available for reuse.": "Unggah file di sini atau dari persyaratan Pathway untuk digunakan kembali.",
+  "· Version": "· Versi",
+  "· Added": "· Ditambahkan",
+  "application": "pendaftaran",
+  "of 9 stages ready · specific to this application · not an admission score": "dari 9 tahap siap · khusus pendaftaran ini · bukan skor peluang diterima",
+  "actions": "tindakan",
+  "details": "detail",
+  "files linked": "file tertaut",
+  "actions complete": "tindakan selesai",
+  "% of total score": "% dari skor total",
+  "% ready": "% siap",
+  "Strengthen": "Perkuat",
+  "Manage choices": "Kelola pilihan",
+  "math": "matematika",
+  "File contents stay in this browser, separated by account. File names and links sync to your account; download important files for backup.": "Isi file tetap di browser ini dan dipisahkan menurut akun. Nama file dan tautan tersinkron ke akun; unduh file penting sebagai cadangan.",
+  "Account:": "Akun:",
+  "This browser:": "Browser ini:",
+  "Close comparison": "Tutup perbandingan",
+
+  "Document storage:": "Penyimpanan dokumen:",
+  "file contents remain in this browser, separated by account. Download important files for backup; cloud file storage is not available.": "Isi file tetap di browser ini dan dipisahkan menurut akun. Unduh file penting sebagai cadangan; penyimpanan file cloud belum tersedia.",
+  "Not published for this intake": "Belum diterbitkan untuk tahun masuk ini",
+  "Loading source record…": "Memuat data sumber…",
+  "Connection error": "Kesalahan koneksi",
+  "Source record unavailable": "Data sumber tidak tersedia",
+  "Retry loading": "Coba muat ulang",
+  "Admissions data could not be loaded. This is a connection issue, not a verification result.": "Data penerimaan gagal dimuat karena masalah koneksi. Ini bukan hasil verifikasi.",
+  "These rankings describe institutions or subject areas. They do not verify this bachelor programme’s ranking.": "Peringkat ini menilai institusi atau bidang studi. Peringkat ini tidak memverifikasi peringkat program sarjana ini.",
+  "Institution rankings": "Peringkat institusi",
+  "No source details recorded yet": "Detail sumber belum tercatat",
+  "Partial source findings. Confirm the unresolved conditions below before relying on this record.": "Temuan sumber masih sebagian. Pastikan kondisi yang belum jelas di bawah sebelum mengandalkan data ini.",
+  "Incomplete verification": "Verifikasi belum lengkap",
   "Private admin": "Admin pribadi",
   "Feedback Inbox": "Kotak Masuk Masukan",
   "Signed in as": "Masuk sebagai",
@@ -799,7 +872,7 @@ function applyLanguage(language: Language) {
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   let node = walker.nextNode() as Text | null;
   while (node) {
-    if (node.parentElement?.closest("[data-no-translate]")) { node = walker.nextNode() as Text | null; continue; }
+    if (node.parentElement?.closest("[data-no-translate],script,style,noscript")) { node = walker.nextNode() as Text | null; continue; }
     const current = node.nodeValue ?? "";
     if (language === "en") {
       originalText.set(node, current);
@@ -818,7 +891,7 @@ function applyLanguage(language: Language) {
     node = walker.nextNode() as Text | null;
   }
   document.querySelectorAll("[aria-label],[placeholder],[title]").forEach((element) => {
-    if (element.closest("[data-no-translate]")) return;
+    if (element.closest("[data-no-translate],script,style,noscript")) return;
     let originals = originalAttributes.get(element);
     if (!originals) { originals = new Map(); originalAttributes.set(element, originals); }
     ["aria-label", "placeholder", "title"].forEach((name) => {
