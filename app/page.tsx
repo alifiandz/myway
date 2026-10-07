@@ -33,6 +33,7 @@ type PublicProgrammeFact = {
   source_url: string | null;
   academic_year: string | null;
   applicant_context: string | null;
+  verified_on: string | null;
 };
 
 const publicFactLabels: Record<string, string> = {
@@ -1066,14 +1067,16 @@ function SchoolDetail({ school, program, close, saved, toggleSaved, compared, to
     let current = true;
     getSupabaseClient().then(async (supabase) => {
       const { data, error } = await supabase.from("programme_facts")
-        .select("field_key,value,status,source_url,academic_year,applicant_context")
+        .select("field_key,value,status,source_url,academic_year,applicant_context,verified_on")
         .eq("programme_id", `${school.id}-primary`)
-        .in("field_key", ["tuition", "application_deadline", "entry_requirement"]);
+        .in("field_key", ["tuition", "application_deadline", "entry_requirement", "ranking"]);
       if (current) { setFactsError(Boolean(error)); setFacts(error ? [] : (data ?? []) as PublicProgrammeFact[]); }
     }).catch(() => { if (current) { setFactsError(true); setFacts([]); } });
     return () => { current = false; };
   }, [school.id, factsAttempt]);
   const factFor = (key: string) => facts?.find((fact) => fact.field_key === key);
+  const programmeRanking = factFor("ranking");
+  const programmeRankingSource = programmeRanking?.source_url?.startsWith("https://") ? programmeRanking.source_url : null;
   const rankings = schoolRankings(school);
   const verifiedRankings = rankings.filter((ranking) => ranking.status === "verified");
   const study = schoolStudy(school);
@@ -1127,6 +1130,10 @@ function SchoolDetail({ school, program, close, saved, toggleSaved, compared, to
           <article className="card detail-section university-next-step admissions-official-confirmation"><span><span className="section-label">Official confirmation</span><h3>Ready to check the full programme?</h3><p>The institution’s page has the final requirements and application instructions.</p></span><a className="outline-button" href={program?.sources[0]?.href ?? study.source} target="_blank" rel="noreferrer">Programme page <ExternalLink size={13} /></a></article>
         </>}
         {tab === "rankings" && <>
+          <article className="card detail-section"><div className="section-head"><div><span className="section-label">Programme ranking evidence</span><h3>Published position and scope</h3></div><span className="university-route-count">{factsError ? "Connection error" : facts === null ? "Loading" : programmeRanking?.status === "verified" ? "Evidence checked" : "Not yet verified"}</span></div>
+            {factsError ? <div className="admissions-load-error" role="alert"><p>Ranking data could not be loaded. Please retry.</p><button className="outline-button" onClick={() => { setFacts(null); setFactsError(false); setFactsAttempt(value => value + 1); }}>Retry loading</button></div> : facts === null ? <p role="status">Loading source record…</p> : <><p className="university-section-intro">{factValue(programmeRanking)}</p>{programmeRanking?.status !== "verified" && <p>No applicable programme position has been verified yet.</p>}{programmeRanking && <p className="university-section-intro">{[programmeRanking.academic_year, programmeRanking.applicant_context, programmeRanking.verified_on ? `Checked ${programmeRanking.verified_on}` : null].filter(Boolean).join(" · ")}</p>}{programmeRankingSource && <a className="text-link" href={programmeRankingSource} target="_blank" rel="noopener noreferrer">Ranking publisher source <ExternalLink size={13} /></a>}</>}
+            <div className="source-warning"><CircleHelp size={16} /><p>A checked ranking record can describe a position or an explicit exclusion. Read its scope before comparing programmes.</p></div>
+          </article>
           <article className="card detail-section"><div className="section-head"><div><span className="section-label">Institution rankings</span><h3>Separate sources and methodologies</h3><p>These rankings describe institutions or subject areas. They do not verify this bachelor programme’s ranking.</p></div><span className="university-route-count">{verifiedRankings.length} verified</span></div>{verifiedRankings.length ? <div className="ranking-profile-list">{verifiedRankings.map((ranking) => <a key={`${ranking.publisher}-${ranking.title}-${ranking.year}`} href={ranking.href} target="_blank" rel="noreferrer"><span className="ranking-publisher">{ranking.publisher}</span><span><strong>{ranking.title}</strong><small>{ranking.year} · {ranking.scope}</small><small>Ranked entity: {ranking.rankedEntity}{ranking.verifiedOn ? ` · Checked ${ranking.verifiedOn}` : ""}</small></span><em>{ranking.rank}</em><ExternalLink size={13} /></a>)}</div> : <div className="university-empty-state"><Trophy size={20} /><span><strong>No ranking position verified</strong><small>MyWay will not estimate or invent a position.</small></span></div>}<div className="source-warning"><CircleHelp size={16} /><p>Ranking systems measure different entities and outcomes. MyWay displays them separately and never averages them.</p></div></article>
           <article className="card detail-section"><span className="section-label">Official sources</span><h3>Institution and programme evidence</h3><div className="source-list">{(program?.sources ?? [{ label: study.sourceLabel, href: study.source }]).map((source) => <a key={source.href} href={source.href} target="_blank" rel="noreferrer"><ExternalLink size={15} /><span>{source.label}</span><ChevronRight size={15} /></a>)}{school.identitySource && <a href={school.identitySource} target="_blank" rel="noreferrer"><ExternalLink size={15} /><span>Official institution identity</span><ChevronRight size={15} /></a>}</div></article>
         </>}
