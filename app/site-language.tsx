@@ -74,6 +74,10 @@ const idText: Record<string, string> = {
   "Retry loading": "Coba muat ulang",
   "Admissions data could not be loaded. This is a connection issue, not a verification result.": "Data penerimaan gagal dimuat karena masalah koneksi. Ini bukan hasil verifikasi.",
   "These rankings describe institutions or subject areas. They do not verify this bachelor programme’s ranking.": "Peringkat ini menilai institusi atau bidang studi. Peringkat ini tidak memverifikasi peringkat program sarjana ini.",
+  "Positions, assessments and scope": "Posisi, penilaian, dan cakupan",
+  "Reviewed \u00b7 position unverified": "Ditinjau · posisi belum terverifikasi",
+  "Ranking evidence source": "Sumber bukti peringkat",
+  "Evidence can describe a position, an indicator assessment or an exclusion. An unverified position does not mean a programme is unranked.": "Bukti dapat menjelaskan posisi, penilaian indikator, atau pengecualian. Posisi yang belum terverifikasi tidak berarti program tidak memiliki peringkat.",
   "Programme ranking evidence": "Bukti peringkat program",
   "Published position and scope": "Posisi yang dipublikasikan dan cakupan",
   "Evidence checked": "Bukti diperiksa",
@@ -816,6 +820,7 @@ const idText: Record<string, string> = {
 };
 
 const patterns: Array<[RegExp, (match: RegExpMatchArray) => string]> = [
+  [/^(\d+) sourced results$/, (m) => `${m[1]} hasil bersumber`],
   [/^Sort: (.+)$/, (m) => `Urutkan: ${m[1]}`],
   [/^(\d+) credits$/, (m) => `${m[1]} kredit`],
   [/^(\d+) of (\d+) done$/, (m) => `${m[1]} dari ${m[2]} selesai`],
