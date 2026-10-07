@@ -21,7 +21,7 @@ export function AuthModal({ session, recovery, language, close, openProfile }: {
   const [message, setMessage] = useState("");
   const [googleEnabled, setGoogleEnabled] = useState(false);
 
-  useEffect(() => { fetch("/api/auth-config", { cache: "no-store" }).then((response) => response.json() as Promise<{ googleEnabled?: boolean }>).then((config: { googleEnabled?: boolean }) => setGoogleEnabled(config.googleEnabled === true)).catch(() => setGoogleEnabled(false)); }, []);
+  useEffect(() => { let current = true; fetch("/api/auth-config", { cache: "no-store", signal: AbortSignal.timeout(10_000) }).then((response) => response.json() as Promise<{ googleEnabled?: boolean }>).then((config: { googleEnabled?: boolean }) => { if (current) setGoogleEnabled(config.googleEnabled === true); }).catch(() => { if (current) setGoogleEnabled(false); }); return () => { current = false; }; }, []);
 
   const run = async (event: FormEvent) => {
     event.preventDefault();

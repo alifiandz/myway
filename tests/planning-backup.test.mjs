@@ -58,3 +58,31 @@ test("storage failure rolls back earlier successful backup writes", () => {
     assert.equal(values.has("myway-profile"), false);
   } finally { globalThis.window = original; }
 });
+
+test("backup rejects values that would break profile, routines and habit rendering", () => {
+  const original = globalThis.window, values = new Map([["myway-saved", '["original"]']]);
+  try {
+    globalThis.window = { localStorage: { getItem: key => values.get(key) ?? null, setItem: (key, value) => values.set(key, value) } };
+    for (const [key, malformed] of [
+      ["myway-profile", { name: { unexpected: true } }],
+      ["myway-preference-priorities", { Internships: "unknown" }],
+      ["myway-pathway-records", { deadline: [] }],
+      ["myway-habit-checks", { habit: "not-an-array" }],
+      ["myway-habit-checks", { habit: [0, 32] }],
+      ["myway-routines", [null]],
+      ["myway-routines", [{ id: "task", title: "Task", focus: "Study", weeklyGoal: 0, minutes: -1 }]],
+    ]) {
+      assert.throws(() => importPrototypeExport({ product: "MyWay", formatVersion: 1, data: { "myway-saved": '["replacement"]', [key]: JSON.stringify(malformed) } }));
+      assert.equal(values.get("myway-saved"), '["original"]');
+    }
+    const data = {
+      "myway-profile": JSON.stringify({ name: "Alif", countries: "Netherlands" }),
+      "myway-preference-priorities": JSON.stringify({ Internships: "Must have" }),
+      "myway-pathway-records": JSON.stringify({ "escp:deadline": "2027-01-01" }),
+      "myway-habit-checks": JSON.stringify({ habit: [1, 31] }),
+      "myway-routines": JSON.stringify([{ id: "task", title: "Task", focus: "Study", weeklyGoal: 2, minutes: 25 }]),
+    };
+    importPrototypeExport({ product: "MyWay", formatVersion: 1, data });
+    for (const [key, value] of Object.entries(data)) assert.equal(values.get(key), value);
+  } finally { globalThis.window = original; }
+});

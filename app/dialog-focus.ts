@@ -10,7 +10,7 @@ export function useDialogFocus(close: () => void) {
     const dialog = ref.current;
     if (!dialog) return;
     const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-    const focusable = () => Array.from(dialog.querySelectorAll<HTMLElement>('button:not(:disabled),a[href],input:not(:disabled),select:not(:disabled),textarea:not(:disabled),[tabindex="0"]')).filter(element => element.getClientRects().length > 0);
+    const focusable = () => Array.from(dialog.querySelectorAll<HTMLElement>('button:not(:disabled),a[href],input:not(:disabled),select:not(:disabled),textarea:not(:disabled),iframe,[contenteditable="true"],[tabindex]')).filter(element => element.tabIndex >= 0 && !element.closest('[hidden],[inert],[aria-hidden="true"]') && element.getClientRects().length > 0);
     (focusable()[0] ?? dialog).focus();
     const keys = (event: KeyboardEvent) => {
       const dialogs = document.querySelectorAll('[role="dialog"][aria-modal="true"]');

@@ -43,11 +43,12 @@ async function isSupabaseAdmin(request: Request, env: Env): Promise<boolean> {
   if (!authorization?.startsWith("Bearer ") || !env.SUPABASE_URL || !env.SUPABASE_PUBLISHABLE_KEY) return false;
   try {
     const headers = { Authorization: authorization, apikey: env.SUPABASE_PUBLISHABLE_KEY };
-    const userResponse = await fetch(`${env.SUPABASE_URL}/auth/v1/user`, { headers });
+    const signal = AbortSignal.timeout(10_000);
+    const userResponse = await fetch(`${env.SUPABASE_URL}/auth/v1/user`, { headers, signal });
     if (!userResponse.ok) return false;
     const user = await userResponse.json() as { id?: string };
     if (!user.id) return false;
-    const profileResponse = await fetch(`${env.SUPABASE_URL}/rest/v1/profiles?user_id=eq.${encodeURIComponent(user.id)}&select=role`, { headers });
+    const profileResponse = await fetch(`${env.SUPABASE_URL}/rest/v1/profiles?user_id=eq.${encodeURIComponent(user.id)}&select=role`, { headers, signal });
     if (!profileResponse.ok) return false;
     const profiles = await profileResponse.json() as Array<{ role?: string }>;
     return profiles[0]?.role === "admin";

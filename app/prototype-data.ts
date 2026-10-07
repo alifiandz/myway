@@ -77,6 +77,12 @@ export function importPrototypeExport(value: unknown) {
     if (!parsed || typeof parsed !== "object" || Array.isArray(parsed) !== arrays.has(key)) throw new Error("Invalid backup structure");
     if (["myway-saved", "myway-compared", "myway-pathway-actions"].includes(key) && !(parsed as unknown[]).every(item => typeof item === "string")) throw new Error("Invalid backup list");
     if (key === "myway-pathway-selection" && !(parsed as { id?: unknown; role?: unknown }[]).every(item => item && typeof item.id === "string" && ["Dream", "Target", "Alternative"].includes(String(item.role)))) throw new Error("Invalid pathway choice");
+    const values = Object.values(parsed);
+    if (key === "myway-profile" && !values.every(item => typeof item === "string")) throw new Error("Invalid profile field");
+    if (key === "myway-preference-priorities" && !values.every(item => ["Must have", "Prefer", "No preference"].includes(String(item)))) throw new Error("Invalid preference");
+    if (key === "myway-pathway-records" && !values.every(item => typeof item === "string")) throw new Error("Invalid pathway record");
+    if (key === "myway-habit-checks" && !values.every(item => Array.isArray(item) && item.every(day => Number.isInteger(day) && day >= 1 && day <= 31))) throw new Error("Invalid habit check");
+    if (key === "myway-routines" && !values.every(item => item && typeof item === "object" && typeof item.id === "string" && typeof item.title === "string" && typeof item.focus === "string" && Number.isFinite(item.weeklyGoal) && item.weeklyGoal > 0 && Number.isFinite(item.minutes) && item.minutes > 0)) throw new Error("Invalid routine");
   }
   const storage = window.localStorage;
   const previous = new Map(entries.map(([key]) => [key, storage.getItem?.(key) ?? null]));

@@ -1674,8 +1674,8 @@ function SettingsPage({ toast, savedCount, applicationCount, replayTutorial, go,
   const [notifications, setNotifications] = useState(() => typeof window !== "undefined" ? window.localStorage.getItem("myway-notifications-enabled") !== "false" : true);
   useEffect(() => { listVaultDocuments().then((items) => setDocumentCount(items.length)).catch(() => setDocumentCount(0)); }, []);
   const exportData = async () => { const payload = await createPrototypeExport(); const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" }); const url = URL.createObjectURL(blob); const anchor = window.document.createElement("a"); anchor.href = url; anchor.download = `myway-planning-data-${new Date().toISOString().slice(0, 10)}.json`; anchor.style.display = "none"; window.document.body.appendChild(anchor); anchor.click(); anchor.remove(); window.setTimeout(() => URL.revokeObjectURL(url), 1000); toast("MyWay planning data downloaded"); };
-  const importData = async (file: File) => { try { if (file.size > 5 * 1024 * 1024) throw new Error("Backup too large"); importPrototypeExport(JSON.parse(await file.text())); toast("MyWay data restored · reloading"); window.setTimeout(() => window.location.reload(), 500); } catch { toast("This is not a supported MyWay data file"); } };
-  const resetData = async () => { if (!window.confirm("Clear this device cache and permanently delete its local document files? Account-synced planning data will reload when you sign in.")) return; const userId = window.localStorage.getItem("myway-active-user-id"); window.localStorage.removeItem("myway-active-user-id"); if (userId) window.localStorage.removeItem(`myway-sync-base:${userId}`); MYWAY_LOCAL_KEYS.forEach((key) => window.localStorage.removeItem(key)); await clearVaultDocuments(); window.location.reload(); };
+  const importData = async (file: File) => { try { if (file.size > 5 * 1024 * 1024) throw new Error("Backup too large"); importPrototypeExport(JSON.parse(await file.text())); toast(language === "id" ? "Data MyWay dipulihkan · memuat ulang" : "MyWay data restored · reloading"); window.setTimeout(() => window.location.reload(), 500); } catch (error) { const storageFailed = error instanceof Error && error.message === "Backup could not be restored to device storage"; toast(storageFailed ? (language === "id" ? "Penyimpanan perangkat tidak tersedia. Kosongkan ruang lalu coba lagi." : "Device storage is unavailable. Free some space and try again.") : (language === "id" ? "File ini bukan cadangan MyWay yang didukung." : "This is not a supported MyWay data file")); } };
+  const resetData = async () => { if (!window.confirm(language === "id" ? "Hapus cache perangkat dan file dokumen lokal secara permanen? Data perencanaan akun akan dimuat kembali saat masuk." : "Clear this device cache and permanently delete its local document files? Account-synced planning data will reload when you sign in.")) return; try { const userId = window.localStorage.getItem("myway-active-user-id"); await clearVaultDocuments(); if (userId) window.localStorage.removeItem(`myway-sync-base:${userId}`); MYWAY_LOCAL_KEYS.forEach((key) => window.localStorage.removeItem(key)); window.localStorage.removeItem("myway-active-user-id"); window.location.reload(); } catch { toast(language === "id" ? "Data perangkat tidak dapat dihapus sepenuhnya. Coba lagi sebelum menutup browser." : "Device data could not be fully cleared. Try again before closing the browser."); } };
   const toggleNotifications = () => { const next = !notifications; setNotifications(next); window.localStorage.setItem("myway-notifications-enabled", String(next)); toast(next ? "In-app notifications enabled" : "In-app notifications paused"); };
   const id = language === "id";
   return <div className="page-enter settings-page" data-tour="settings-main">
@@ -1719,6 +1719,7 @@ function ProductTutorial({ close, go, language }: { close: () => void; go: (view
   const copy = current[language];
   const id = language === "id";
   const finish = () => { window.localStorage.setItem("myway-product-tour-v2", "complete"); go("dashboard"); close(); };
+  const dialogRef = useDialogFocus(finish);
 
   useLayoutEffect(() => {
     go(current.view);
@@ -1774,7 +1775,7 @@ function ProductTutorial({ close, go, language }: { close: () => void; go: (view
 
   useEffect(() => {
     const keys = (event: KeyboardEvent) => {
-      if (event.key === "Escape") finish();
+      if (event.target instanceof HTMLElement && event.target.closest("input, textarea, select, [contenteditable='true']")) return;
       if (event.key === "ArrowRight" && step < tutorialSteps.length - 1) setStep((value) => value + 1);
       if (event.key === "ArrowLeft" && step > 0) setStep((value) => value - 1);
     };
@@ -1782,10 +1783,10 @@ function ProductTutorial({ close, go, language }: { close: () => void; go: (view
     return () => window.removeEventListener("keydown", keys);
   });
 
-  return <div className="product-tour-layer" data-no-translate role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
+  return <div ref={dialogRef as React.RefObject<HTMLDivElement>} tabIndex={-1} className="product-tour-layer" data-no-translate role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
     {!focus && <div className="tour-scrim" />}
     {focus && <div key={`spotlight-${step}`} className="tour-spotlight" style={{ top: focus.top, left: focus.left, width: focus.width, height: focus.height }} />}
-    <section key={`coach-${step}`} className={`tour-coachmark ${focus ? `positioned ${focus.top + focus.height / 2 > window.innerHeight / 2 ? "top" : "bottom"}` : "centered"}`} aria-live="polite">
+    <section className={`tour-coachmark ${focus ? `positioned ${focus.top + focus.height / 2 > window.innerHeight / 2 ? "top" : "bottom"}` : "centered"}`} aria-live="polite">
       <header><span className="tour-step">{id ? "Langkah" : "Step"} {step + 1} {id ? "dari" : "of"} {tutorialSteps.length}</span><button className="text-link" onClick={finish}>{id ? "Lewati tur" : "Skip tour"}</button></header>
       <div className="tour-heading"><span><Sparkles size={18} /></span><div><h2 id="tutorial-title">{copy.title}</h2><p>{copy.body}</p></div></div>
       <div className="tour-progress" style={{ gridTemplateColumns: `repeat(${tutorialSteps.length}, 1fr)` }} aria-hidden="true">{tutorialSteps.map((item, index) => <i key={`${item.view}-${index}`} className={index <= step ? "active" : ""} />)}</div>
