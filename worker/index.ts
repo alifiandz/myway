@@ -178,7 +178,7 @@ const worker = {
         if (!["bug", "incorrect", "suggestion"].includes(category) || !details) {
           return Response.json({ error: "Please complete the required feedback fields." }, { status: 400 });
         }
-        let safePageUrl: string | null = null;
+        let safePageUrl = "";
         try { const page = new URL(read("pageUrl", 1200)); if (["http:", "https:"].includes(page.protocol)) safePageUrl = page.origin + page.pathname; } catch { /* Optional page URL. */ }
         const id = crypto.randomUUID();
         const createdAt = new Date().toISOString();

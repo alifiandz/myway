@@ -84,6 +84,14 @@ test("feedback page context excludes query strings and authentication fragments"
   assert.equal(response.status, 200);
   assert.equal(stored[11], "https://example.com/path");
   assert.doesNotMatch(JSON.stringify(stored), /private-code|private-token/);
+  for (const pageUrl of ["", "javascript:private-token"]) {
+    form.set("pageUrl", pageUrl);
+    const invalid = await worker.fetch(new Request("http://localhost/api/feedback", { method: "POST", body: form }), {
+      DB: { prepare: () => ({ bind: (...values) => { stored = values; return { run: async () => ({ success: true }) }; } }) },
+    }, { waitUntil() {}, passThroughOnException() {} });
+    assert.equal(invalid.status, 200);
+    assert.equal(stored[11], "");
+  }
 });
 
 test("built Worker handles 25 concurrent shell and access-check requests", async () => {
