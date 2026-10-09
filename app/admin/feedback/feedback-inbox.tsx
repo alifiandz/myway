@@ -1,5 +1,7 @@
 "use client";
 
+import FeedbackScreenshot from "./feedback-screenshot";
+
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { ArrowLeft, Bug, Check, ChevronRight, CircleAlert, ExternalLink, Flag, Inbox, Lightbulb, LoaderCircle, LogOut, Mail, MessageSquareText, RefreshCw, Save, Search, ShieldCheck, UserRound, X } from "lucide-react";
@@ -152,7 +154,7 @@ function SubmissionDetail({ item, saving, saved, onSubmit }: { item: Submission;
       <Detail label="Information category" value={item.informationCategory} />
       <Detail label="What should we review?" value={item.reviewRequest} />
       {item.sourceUrl && <div className="admin-detail-field"><span>Source or reference</span><a href={item.sourceUrl} target="_blank" rel="noreferrer">Open reference <ExternalLink size={13} /></a></div>}
-      {item.screenshotKey && <div className="admin-detail-field"><span>Screenshot</span><span>Screenshot access is available from the protected review API.</span></div>}
+      {item.screenshotKey && <FeedbackScreenshot key={item.id} id={item.id} />}
 
       <section className="admin-context-card"><h3>Attached context</h3><dl>
         <Context term="University" value={item.university} /><Context term="Programme" value={item.programme} /><Context term="Page" value={item.pageUrl} link /><Context term="Language" value={item.locale} /><Context term="Viewport" value={item.viewport} /><Context term="Browser and device" value={item.userAgent} />

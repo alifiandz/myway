@@ -5,6 +5,20 @@ import { useEffect } from "react";
 type Language = "en" | "id";
 
 const idText: Record<string, string> = {
+  "Intake / academic year": "Tahun masuk / tahun akademik",
+  "Review due on": "Jadwal tinjauan berikutnya",
+  "Applicant context": "Konteks pendaftar",
+  "Qualification, nationality, route and scope": "Kualifikasi, kewarganegaraan, jalur, dan cakupan",
+  "Review due date cannot be before the checked date.": "Tanggal tinjauan tidak boleh sebelum tanggal pemeriksaan.",
+  "View screenshot": "Lihat tangkapan layar",
+  "Close screenshot": "Tutup tangkapan layar",
+  "Download screenshot": "Unduh tangkapan layar",
+  "Retry screenshot": "Coba lagi",
+  "Loading screenshot…": "Memuat tangkapan layar…",
+  "This attachment is not a supported screenshot.": "Lampiran ini bukan tangkapan layar yang didukung.",
+  "The screenshot could not be loaded. Please try again.": "Tangkapan layar gagal dimuat. Silakan coba lagi.",
+  "Sign in again before opening the screenshot.": "Masuk kembali sebelum membuka tangkapan layar.",
+  "Administrator access is required.": "Akses administrator diperlukan.",
   "Must-have unverified": "Syarat wajib belum terverifikasi",
   "Current programme matches": "Kecocokan program saat ini",
   "No confirmed matches yet": "Belum ada kecocokan terkonfirmasi",

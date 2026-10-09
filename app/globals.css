@@ -1957,3 +1957,12 @@ select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible { outline
 .ranking-profile-list small { font-size: 0.8rem; line-height: 1.5; }
 .ranking-profile-list em { font-size: 1rem; font-weight: 600; }
 @media (max-width: 600px) { .ranking-profile-list a { grid-template-columns: 68px minmax(0, 1fr) auto; gap: 8px; } }
+
+.planning-reminders { width:min(390px,calc(100vw - 32px)); max-height:min(70vh,620px); overflow-y:auto; }
+.planning-reminders .planning-reminder { display:grid;gap:5px;text-align:left;width:100%;background:#f5f7fc;color:#24334b;padding:12px;border-radius:10px;margin-top:10px; }
+.planning-reminder span,.planning-reminder small,.planning-reminders>small { font-size:.875rem;line-height:1.5; }
+.planning-next-action { border-top:1px solid #e3e8f0;margin-top:14px;padding-top:14px; }
+.admin-screenshot-viewer { display:grid;gap:12px;padding:16px 0; }
+.admin-screenshot-viewer>span { font-size:.875rem;color:#526078; }
+.admin-screenshot-viewer img { max-width:100%;max-height:500px;object-fit:contain;background:#f4f6fa;border-radius:10px; }
+.admin-screenshot-viewer button,.admin-screenshot-viewer a { justify-self:start;font-size:.875rem; }
