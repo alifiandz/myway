@@ -9,7 +9,8 @@ export async function healthResponse(env: HealthEnv, fetcher: typeof fetch = fet
     const url = new URL('/rest/v1/programme_facts', env.SUPABASE_URL);
     if (url.protocol !== 'https:') return result('not_configured');
     url.search = new URLSearchParams({ select: 'field_key,status', programme_id: 'eq.ft-school-80-primary', field_key: 'in.(tuition,application_deadline,entry_requirement,ranking)', limit: '4' }).toString();
-    const response = await fetcher(url, { headers: { apikey: env.SUPABASE_PUBLISHABLE_KEY }, redirect: 'error', signal: AbortSignal.timeout(5000) });
+    // Workerd supports manual/follow; manual prevents forwarding the key on redirects.
+    const response = await fetcher(url, { headers: { apikey: env.SUPABASE_PUBLISHABLE_KEY }, redirect: 'manual', signal: AbortSignal.timeout(5000) });
     if (!response.ok) return result([401,403].includes(response.status) ? 'catalogue_access_denied' : 'catalogue_unavailable');
     const rows: unknown = await response.json();
     const expected = ['tuition','application_deadline','entry_requirement','ranking'];

@@ -6,7 +6,7 @@ test('health validates public catalogue, uses bounded read and excludes keys/row
   const response = await healthResponse(env, async (url, options) => {
     assert.equal(url.searchParams.get('limit'),'4');
     assert.equal(options.headers.apikey,'test-key');
-    assert.equal(options.redirect,'error');
+    assert.equal(options.redirect,'manual');
     assert.ok(options.signal);
     return Response.json(['tuition','application_deadline','entry_requirement','ranking'].map(field_key => ({field_key,status:'not_yet_verified'})));
   });
