@@ -52,6 +52,15 @@ test("missing auth configuration fails clearly and visitor admin access is false
   assert.deepEqual(await visibility.json(), { authorized: false });
 });
 
+test("built health route fails closed without configuration and rejects writes", async () => {
+  const { default: worker } = await import("../dist/server/index.js");
+  const ctx = { waitUntil() {}, passThroughOnException() {} };
+  assert.equal((await worker.fetch(new Request("http://localhost/api/health"), {}, ctx)).status,503);
+  const response = await worker.fetch(new Request("http://localhost/api/health",{method:"POST"}), {}, ctx);
+  assert.equal(response.status,405);
+  assert.equal(response.headers.get("allow"),"GET");
+});
+
 test("public auth configuration exposes only browser-safe settings", async () => {
   const { default: worker } = await import("../dist/server/index.js");
   const response = await worker.fetch(new Request("http://localhost/api/auth-config"), {

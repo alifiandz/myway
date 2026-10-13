@@ -1,6 +1,7 @@
 /** Cloudflare Worker entry point for the vinext-starter template. */
 import { handleImageOptimization, DEFAULT_DEVICE_SIZES, DEFAULT_IMAGE_SIZES } from "vinext/server/image-optimization";
 import handler from "vinext/server/app-router-entry";
+import { healthResponse } from "./health";
 
 interface Env {
   ASSETS: Fetcher;
@@ -85,6 +86,11 @@ async function validScreenshotBytes(bytes: Uint8Array, type: string): Promise<bo
 const worker = {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
+
+    if (url.pathname === "/api/health") {
+      if (request.method !== "GET") return new Response(null, { status: 405, headers: { Allow: "GET", "Cache-Control": "no-store" } });
+      return healthResponse(env);
+    }
 
     if (url.pathname === "/api/auth-config" && request.method === "GET") {
       if (!env.SUPABASE_URL || !env.SUPABASE_PUBLISHABLE_KEY) return Response.json({ error: "MyWay accounts are not configured." }, { status: 503 });
