@@ -5,6 +5,13 @@ import { useEffect } from "react";
 type Language = "en" | "id";
 
 const idText: Record<string, string> = {
+  "of": "dari",
+  "Added": "Ditambahkan",
+  "of 4": "dari 4",
+  "Saved to account": "Tersimpan di akun",
+  "Saving to account…": "Menyimpan ke akun…",
+  "Loading account data…": "Memuat data akun…",
+  "Sync paused · your changes are kept on this device": "Sinkronisasi dijeda · perubahanmu tetap disimpan di perangkat ini",
   "Intake / academic year": "Tahun masuk / tahun akademik",
   "Review due on": "Jadwal tinjauan berikutnya",
   "Applicant context": "Konteks pendaftar",

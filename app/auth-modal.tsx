@@ -90,6 +90,7 @@ export function AuthModal({ session, recovery, language, close, openProfile }: {
           {error && <p className="auth-error" role="alert">{error}</p>}{message && <p className="auth-message" role="status">{message}</p>}
           <button className="primary-button auth-wide" disabled={busy}>{busy ? (id ? "Mohon tunggu" : "Please wait") : mode === "signup" ? (id ? "Buat akun" : "Create account") : mode === "forgot" ? (id ? "Kirim tautan pemulihan" : "Send recovery link") : mode === "recovery" ? (id ? "Perbarui kata sandi" : "Update password") : (id ? "Masuk" : "Sign in")}</button>
         </form>
+        <p className="settings-footnote"><a href="/privacy">{id ? "Privasi & bantuan" : "Privacy & support"}</a></p>
         <footer className="auth-footer">{mode === "signin" ? <><button onClick={() => setMode("forgot")}>{id ? "Lupa kata sandi?" : "Forgot password?"}</button><span>{id ? "Belum punya akun?" : "New to MyWay?"} <button onClick={() => setMode("signup")}>{id ? "Daftar" : "Sign up"}</button></span></> : <button onClick={() => setMode("signin")}>{id ? "Kembali untuk masuk" : "Back to sign in"}</button>}</footer>
       </>}
     </section>
