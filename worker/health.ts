@@ -1,5 +1,16 @@
 type HealthEnv = { SUPABASE_URL?: string; SUPABASE_PUBLISHABLE_KEY?: string };
 
+/** GET and HEAD share the dependency check; write methods never reach it. */
+export async function healthRequest(request: Request, env: HealthEnv, fetcher: typeof fetch = fetch): Promise<Response> {
+  if (request.method !== 'GET' && request.method !== 'HEAD') {
+    return new Response(null, { status: 405, headers: { Allow: 'GET, HEAD', 'Cache-Control': 'no-store' } });
+  }
+  const response = await healthResponse(env, fetcher);
+  if (request.method !== 'HEAD') return response;
+  await response.body?.cancel();
+  return new Response(null, { status: response.status, statusText: response.statusText, headers: response.headers });
+}
+
 /** Read-only public dependency check. Never include configuration or row data. */
 export async function healthResponse(env: HealthEnv, fetcher: typeof fetch = fetch): Promise<Response> {
   const headers = { 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' };

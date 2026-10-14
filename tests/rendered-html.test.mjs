@@ -56,9 +56,13 @@ test("built health route fails closed without configuration and rejects writes",
   const { default: worker } = await import("../dist/server/index.js");
   const ctx = { waitUntil() {}, passThroughOnException() {} };
   assert.equal((await worker.fetch(new Request("http://localhost/api/health"), {}, ctx)).status,503);
+  const head = await worker.fetch(new Request("http://localhost/api/health",{method:"HEAD"}), {}, ctx);
+  assert.equal(head.status,503);
+  assert.equal(await head.text(), "");
+  assert.equal(head.headers.get("cache-control"), "no-store");
   const response = await worker.fetch(new Request("http://localhost/api/health",{method:"POST"}), {}, ctx);
   assert.equal(response.status,405);
-  assert.equal(response.headers.get("allow"),"GET");
+  assert.equal(response.headers.get("allow"),"GET, HEAD");
 });
 
 test("public auth configuration exposes only browser-safe settings", async () => {
