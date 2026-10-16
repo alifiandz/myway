@@ -344,6 +344,8 @@ const idText: Record<string, string> = {
   "Reusable information about your current qualification.": "Informasi yang dapat digunakan kembali tentang kualifikasimu saat ini.",
   "Citizenship": "Kewarganegaraan",
   "Expected graduation": "Perkiraan kelulusan",
+  "High school graduation year": "Tahun kelulusan SMA / sederajat",
+  "e.g. 2027": "mis. 2027",
   "English result": "Hasil Bahasa Inggris",
   "School": "Sekolah",
   "Graduation year": "Tahun kelulusan",
