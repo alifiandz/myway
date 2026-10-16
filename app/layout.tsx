@@ -3,18 +3,20 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "MyWay",
-  description: "A Europe-first business university discovery and planning platform.",
-  metadataBase: new URL("https://alif-pathway.smalhi2025.chatgpt.site"),
+  description: "Explore. Plan. Go Further.",
+  metadataBase: new URL("https://mywaypath.com"),
+  alternates: { canonical: "/" },
   openGraph: {
+    url: "/",
     title: "MyWay",
-    description: "Plan university choices with evidence.",
-    images: [{ url: "/og.png", width: 1730, height: 909, alt: "MyWay" }],
+    description: "Explore. Plan. Go Further.",
+    images: [{ url: "/og.png?v=7659380fd28a", width: 1733, height: 907, alt: "MyWay" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "MyWay",
-    description: "Plan university choices with evidence.",
-    images: ["/og.png"],
+    description: "Explore. Plan. Go Further.",
+    images: ["/og.png?v=7659380fd28a"],
   },
   icons: {
     icon: "/myway-mark.png",

@@ -28,7 +28,7 @@ test("renders the MyWay application shell", async () => {
   );
   const html = await response.text();
   assert.match(html, /<title>MyWay<\/title>/i);
-  assert.match(html, /Europe-first business university discovery and planning platform/i);
+  assert.match(html, /Explore\. Plan\. Go Further\./);
   assert.match(html, /MyWay/i);
   assert.match(html, /account-gate|onboarding-shell|app-shell/i);
 });
