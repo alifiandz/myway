@@ -1,6 +1,8 @@
 "use client";
 
 import FeedbackScreenshot from "./feedback-screenshot";
+import AdminNavigation from "../admin-navigation";
+import { publicMyWayUrl } from "../../myway-url";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -103,11 +105,11 @@ export default function FeedbackInbox() {
     finally { setSaving(false); }
   }
 
-  return <><SiteLanguage language={language} /><main className="feedback-admin-shell">
+  return <><SiteLanguage language={language} /><main className="feedback-admin-shell university-admin-shell">
     <aside className="feedback-admin-sidebar">
       <Link className="admin-brand" href="/"><Image src="/myway-mark.png" alt="" width={38} height={38} unoptimized /> MyWay</Link>
       <div className="admin-private-label"><ShieldCheck size={14} /> Private admin</div>
-      <nav><Link href="/admin/data"><ShieldCheck size={17} /> University data</Link><Link className="active" href="/admin/feedback"><Inbox size={17} /> Feedback Inbox <strong>{newCount}</strong></Link></nav>
+      <AdminNavigation active="feedback" language={language} feedbackCount={newCount}/>
       <div className="admin-account"><div><UserRound size={16} /><span><small>Signed in as</small>{adminName}</span></div><button type="button" className="admin-signout" title="Sign out" onClick={async () => { const supabase = await getSupabaseClient(); await supabase.auth.signOut(); window.location.href = "/"; }}><LogOut size={16} /></button></div>
     </aside>
 
@@ -158,7 +160,7 @@ function SubmissionDetail({ item, saving, saved, onSubmit }: { item: Submission;
       {item.screenshotKey && <FeedbackScreenshot key={item.id} id={item.id} />}
 
       <section className="admin-context-card"><h3>Attached context</h3><dl>
-        <Context term="University" value={item.university} /><Context term="Programme" value={item.programme} /><Context term="Page" value={item.pageUrl} link /><Context term="Language" value={item.locale} /><Context term="Viewport" value={item.viewport} /><Context term="Browser and device" value={item.userAgent} />
+        <Context term="University" value={item.university} /><Context term="Programme" value={item.programme} /><Context term="Page" value={publicMyWayUrl(item.pageUrl)} link /><Context term="Language" value={item.locale} /><Context term="Viewport" value={item.viewport} /><Context term="Browser and device" value={item.userAgent} />
       </dl></section>
 
       <section className="admin-contact-card"><h3>Contact details</h3>{item.name || item.email ? <><p>{item.name || "Name not provided"}</p>{item.email && <a href={`mailto:${item.email}`}><Mail size={14} /> {item.email}</a>}<div className={item.mayContact ? "allowed" : "not-allowed"}>{item.mayContact ? <Check size={13} /> : <X size={13} />}{item.mayContact ? "Contact permitted" : "Contact not permitted"}</div></> : <p>No contact details provided.</p>}</section>

@@ -5,6 +5,8 @@ import { buildPlanningReminders, localCalendarDate, type PlanningReminder } from
 import { calculateProgramFit, selectRecommendations, type FitResult } from "./programme-fit";
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import PublicUniversityLogo from "./university-logo";
+import { publicMyWayUrl } from "./myway-url";
 import {
   BarChart3, Bell, BookOpen, Bookmark, BriefcaseBusiness, CalendarDays, Camera, CreditCard,
   Check, ChevronDown, ChevronLeft, ChevronRight, CircleAlert, CircleCheck,
@@ -687,15 +689,10 @@ function fitResultClass(result: FitResult) {
 }
 
 function UniversityLogo({ program, size = "" }: { program: Program; size?: "" | "large" | "small" }) {
+  const school = undergraduateBusinessSchools.find((item) => item.programId === program.id || `school:${item.id}` === program.id || item.id === program.id);
   return <span className={`crest university-logo ${size} ${program.id === "escp" ? "dark" : ""}`.trim()}>
     <span>{program.initials}</span>
-    {/* Official university-hosted assets; initials remain as a resilient fallback. */}
-    {/* eslint-disable-next-line @next/next/no-img-element */}
-    <img
-      src={program.logo}
-      alt={`${program.university} logo`} loading="lazy" decoding="async"
-      onError={(event) => { event.currentTarget.style.display = "none"; }}
-    />
+    <PublicUniversityLogo universityId={school?.id} fallback={program.logo} name={program.university}/>
   </span>;
 }
 
@@ -706,9 +703,7 @@ function SchoolLogo({ school, program, size = "small" }: { school: BusinessSchoo
 
 function OfficialSchoolLogo({ school, size }: { school: BusinessSchool; size: "large" | "small" }) {
   return <span className={`crest university-logo ${size} school-logo`}>
-    {/* Each path is a locally hosted, visually checked institution mark with its source recorded in the audit. */}
-    {/* eslint-disable-next-line @next/next/no-img-element */}
-    {school.logoUrl && <img src={school.logoUrl} alt={`${school.name} logo`} loading="lazy" decoding="async" />}
+    <PublicUniversityLogo universityId={school.id} fallback={school.logoUrl ?? ""} name={school.name}/>
   </span>;
 }
 
@@ -1131,7 +1126,7 @@ function FeedbackModal({ initialCategory, context, close }: { initialCategory?: 
     setSending(true); setError("");
     const form = new FormData(event.currentTarget);
     form.set("category", category);
-    form.set("pageUrl", window.location.origin + window.location.pathname);
+    form.set("pageUrl", publicMyWayUrl(window.location.origin + window.location.pathname));
     form.set("university", context.university ?? "");
     form.set("programme", context.programme ?? "");
     form.set("locale", document.documentElement.lang || navigator.language);

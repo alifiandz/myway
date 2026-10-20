@@ -142,3 +142,16 @@ test('valid raster screenshots upload, while downloads reject legacy SVG and use
   if(type==='image/png') {assert.equal(response.headers.get('x-content-type-options'),'nosniff');assert.match(response.headers.get('content-disposition'),/^attachment;/);assert.match(response.headers.get('content-security-policy'),/sandbox/);}
  }
 });
+
+test("admin university and logo routes preserve shared navigation and a back route", async () => {
+  const { default: worker } = await import("../dist/server/index.js");
+  const ctx = { waitUntil() {}, passThroughOnException() {} };
+  for (const path of ["/admin/universities", "/admin/universities/ft-school-2", "/admin/logos", "/admin/logos/ft-school-2", "/admin/feedback"]) {
+    const response = await worker.fetch(new Request(`http://localhost${path}`, { headers: { accept: "text/html" } }), { ASSETS: { fetch: async () => new Response("Not found", { status: 404 }) } }, ctx);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    for (const href of ["/admin/data", "/admin/universities", "/admin/logos", "/admin/feedback"]) assert.ok(html.includes(`href="${href}"`), `${path} retains ${href}`);
+    if (path.endsWith("ft-school-2")) assert.match(html, /Back to all universities/);
+    assert.doesNotMatch(html, /name="note"/, "Private notes are not rendered before authentication and loading");
+  }
+});
