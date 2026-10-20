@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
+import AdminOverview from "./admin-overview";
 import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from "react";
-import { ArrowLeft, Check, CircleAlert, Database, ExternalLink, Inbox, LoaderCircle, LogOut, RefreshCw, Save, Search, ShieldCheck, UserRound } from "lucide-react";
+import { ArrowLeft, LayoutDashboard, Check, CircleAlert, Database, ExternalLink, Inbox, LoaderCircle, LogOut, RefreshCw, Save, Search, ShieldCheck, UserRound } from "lucide-react";
 import { getSupabaseClient } from "../../supabase-client";
 import { SiteLanguage } from "../../site-language";
 
@@ -33,6 +35,7 @@ function subscribeAdminLanguage(notify: () => void) {
 }
 export default function UniversityDataReview() {
   const language = useSyncExternalStore(subscribeAdminLanguage,readAdminLanguage,()=>"en" as const);
+  const [view, setView] = useState<"overview" | "data">("overview");
   const [items, setItems] = useState<University[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
@@ -91,12 +94,15 @@ export default function UniversityDataReview() {
   }
 
   return <><SiteLanguage language={language} /><main className="feedback-admin-shell university-admin-shell">
-    <aside className="feedback-admin-sidebar"><Link className="admin-brand" href="/"><span>M</span> MyWay</Link><div className="admin-private-label"><ShieldCheck size={14} /> Private admin</div><nav><Link className="active" href="/admin/data"><Database size={17} /> University data <strong>{items.length}</strong></Link><Link href="/admin/feedback"><Inbox size={17} /> Feedback Inbox</Link></nav><div className="admin-account"><div><UserRound size={16} /><span><small>Access controlled by</small>MyWay admin account</span></div><Link href="/" title="Return to MyWay"><LogOut size={16} /></Link></div></aside>
-    <section className="feedback-admin-main"><header className="feedback-admin-header"><div><Link href="/"><ArrowLeft size={14} /> Back to MyWay</Link><h1>University data</h1><p>Choose a university, update its information, then save your changes.</p></div><button className="admin-icon-button" onClick={load} aria-label="Refresh university data"><RefreshCw size={17} /></button></header>
+    <aside className="feedback-admin-sidebar"><Link className="admin-brand" href="/"><Image src="/myway-mark.png" alt="" width={38} height={38} unoptimized /> MyWay</Link><div className="admin-private-label"><ShieldCheck size={14} /> Private admin</div><nav><button className={view === "overview" ? "active" : ""} onClick={() => setView("overview")} aria-current={view === "overview" ? "page" : undefined}><LayoutDashboard size={17} />{language === "id" ? "Ringkasan" : "Overview"}</button><button className={view === "data" ? "active" : ""} onClick={() => setView("data")} aria-current={view === "data" ? "page" : undefined}><Database size={17} /> University data <strong>{items.length}</strong></button><Link href="/admin/feedback"><Inbox size={17} /> Feedback Inbox</Link></nav><div className="admin-account"><div><UserRound size={16} /><span><small>Access controlled by</small>MyWay admin account</span></div><Link href="/" title="Return to MyWay"><LogOut size={16} /></Link></div></aside>
+    <section className="feedback-admin-main"><header className="feedback-admin-header"><div><Link href="/"><ArrowLeft size={14} /> Back to MyWay</Link><h1>{view === "overview" ? (language === "id" ? "Ringkasan data" : "Data overview") : "University data"}</h1><p>{view === "overview" ? (language === "id" ? "Katalogmu, dirangkum dari catatan langsung." : "Your catalogue, summarized from live records.") : "Choose a university, update its information, then save your changes."}</p></div><button className="admin-icon-button" onClick={load} aria-label="Refresh university data"><RefreshCw size={17} /></button></header>
+      {error && <div className="admin-error" role="alert"><CircleAlert size={16} /> {error}</div>}
+      {view === "overview" ? (loading ? <div className="admin-empty"><LoaderCircle className="admin-spin" size={24}/><p>Loading university data</p></div> : !error && <AdminOverview items={items} language={language} openEditor={(id) => { if (id) setSelectedId(id); setSearch(""); setFilter("all"); setView("data"); }} />) : <>
       <div className="university-admin-summary"><strong>{items.length} universities</strong><span>{verified} verified</span><span>{underReview} under review</span><span>{missing} not yet verified</span></div>
       <div className="feedback-admin-filters university-admin-filters"><form onSubmit={(event) => event.preventDefault()}><Search size={16} /><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search university or programme" /></form><select value={filter} onChange={(event) => setFilter(event.target.value)}><option value="all">All statuses</option>{statusOptions.map(([value,label]) => <option key={value} value={value}>{label}</option>)}</select></div>
-      {error && <div className="admin-error" role="alert"><CircleAlert size={16} /> {error}</div>}
+
       <div className="university-admin-workspace"><div className="university-admin-list">{loading ? <div className="admin-empty"><LoaderCircle className="admin-spin" size={24} /><p>Loading university data</p></div> : visible.map((item) => { const facts=item.programmes.flatMap((programme)=>programme.programme_facts); const open=facts.filter((fact)=>fact.status!=="verified").length; return <button key={item.id} className={selectedId===item.id?"selected":""} onClick={()=>setSelectedId(item.id)}><span className="university-admin-logo">{item.logo_url?<img src={item.logo_url} alt="" />:<Database size={17}/>}</span><span><strong>{item.name}</strong><small>{item.city}{item.city&&item.country?", ":""}{item.country}</small><em>{item.programmes[0]?.title ?? "No programme"}</em></span><b>{open} open</b></button> })}</div><div className="university-admin-detail">{selected ? <UniversityEditor university={selected} savingId={savingId} saveFact={saveFact} /> : <div className="admin-empty"><Database size={28}/><h2>Select a university</h2></div>}</div></div>
+      </>}
     </section>
   </main></>;
 }

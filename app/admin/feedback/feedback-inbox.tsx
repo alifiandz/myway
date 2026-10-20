@@ -3,6 +3,7 @@
 import FeedbackScreenshot from "./feedback-screenshot";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { ArrowLeft, Bug, Check, ChevronRight, CircleAlert, ExternalLink, Flag, Inbox, Lightbulb, LoaderCircle, LogOut, Mail, MessageSquareText, RefreshCw, Save, Search, ShieldCheck, UserRound, X } from "lucide-react";
 import { SiteLanguage } from "../../site-language";
@@ -104,7 +105,7 @@ export default function FeedbackInbox() {
 
   return <><SiteLanguage language={language} /><main className="feedback-admin-shell">
     <aside className="feedback-admin-sidebar">
-      <Link className="admin-brand" href="/"><span>M</span> MyWay</Link>
+      <Link className="admin-brand" href="/"><Image src="/myway-mark.png" alt="" width={38} height={38} unoptimized /> MyWay</Link>
       <div className="admin-private-label"><ShieldCheck size={14} /> Private admin</div>
       <nav><Link href="/admin/data"><ShieldCheck size={17} /> University data</Link><Link className="active" href="/admin/feedback"><Inbox size={17} /> Feedback Inbox <strong>{newCount}</strong></Link></nav>
       <div className="admin-account"><div><UserRound size={16} /><span><small>Signed in as</small>{adminName}</span></div><button type="button" className="admin-signout" title="Sign out" onClick={async () => { const supabase = await getSupabaseClient(); await supabase.auth.signOut(); window.location.href = "/"; }}><LogOut size={16} /></button></div>
