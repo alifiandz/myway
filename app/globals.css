@@ -2064,3 +2064,22 @@ select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible { outline
 .indonesia-faculty ul{list-style:none;margin:0;padding:0 22px}.indonesia-faculty li{border-top:1px solid var(--line);padding:14px 0;display:flex;justify-content:space-between;gap:16px;font-size:14px}.indonesia-faculty li small{margin-left:12px;color:var(--green);font-size:11px}.indonesia-faculty a{font-size:12px;color:var(--blue-dark)}.indonesia-faculty-source{display:inline-block;margin:12px 22px 20px}.indonesia-catalogue-note{font-size:12px;line-height:1.7;color:var(--muted);margin-top:24px}
 .indonesia-region-options button:focus-visible,.indonesia-search-filters :is(input,select):focus-visible,.indonesia-faculty :is(summary,a):focus-visible{outline:3px solid var(--blue);outline-offset:3px}
 @media(max-width:1000px){.indonesia-search-filters{grid-template-columns:1fr 1fr}}@media(max-width:600px){.indonesia-search-filters{grid-template-columns:1fr}.indonesia-faculty li{align-items:flex-start}.indonesia-faculty li>a{flex-shrink:0}}
+
+/* Indonesia follows the shared university cards and profile system. */
+.indonesia-mark{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--blue-soft);color:var(--navy);font-size:13px;font-weight:800;min-width:52px;min-height:52px;border:1px solid var(--line);border-radius:12px;padding:8px}
+.indonesia-breadcrumb{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:4px 0 14px;font-size:11px;color:var(--muted)}
+.indonesia-breadcrumb button{border:0;background:transparent;color:var(--blue-dark);padding:3px 0;cursor:pointer;text-align:left}
+.indonesia-faculty-grid,.indonesia-programme-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.indonesia-faculty-card,.indonesia-programme-card{display:flex;align-items:center;gap:14px;padding:20px;text-align:left;cursor:pointer;color:var(--ink);background:var(--paper);border:1px solid var(--line);min-width:0}
+.indonesia-faculty-card>span:nth-child(2),.indonesia-programme-card>span{flex:1;min-width:0}
+.indonesia-faculty-card strong,.indonesia-programme-card strong{display:block;font-size:14px;line-height:1.5}
+.indonesia-faculty-card small,.indonesia-programme-card small{display:block;font-size:11px;color:var(--muted);margin-top:6px;line-height:1.6}
+.indonesia-faculty-card:hover,.indonesia-programme-card:hover{border-color:var(--blue);box-shadow:var(--shadow)}
+.indonesia-comparison{padding:22px;margin:20px 0}.indonesia-compare-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:18px;margin:18px 0}.indonesia-compare-grid article{padding-right:16px;border-right:1px solid var(--line)}.indonesia-compare-grid strong{font-size:13px}.indonesia-compare-grid p,.indonesia-comparison>small{font-size:12px;color:var(--muted)}.indonesia-compare-grid button{margin-right:12px}
+.indonesia-role-label{display:flex;flex-direction:column;gap:8px;font-size:12px;margin:18px 0}.indonesia-role-label select,.indonesia-plan-actions select{padding:10px;border:1px solid var(--line);border-radius:8px;color:var(--ink);background:var(--paper)}
+.indonesia-plan-actions{display:flex;align-items:center;flex-wrap:wrap;gap:15px;margin-top:20px}.indonesia-pathway-plans{margin-bottom:32px}.indonesia-pathway-plans .section-head p{font-size:12px;color:var(--muted)}
+.indonesia-search-filters{grid-template-columns:1fr 1fr auto auto;box-shadow:none;border:0}
+.indonesia-programme-card:focus-visible,.indonesia-faculty-card:focus-visible,.indonesia-breadcrumb button:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+@media(max-width:1000px){.indonesia-search-filters{grid-template-columns:1fr 1fr}}@media(max-width:600px){.indonesia-programme-grid,.indonesia-faculty-grid,.indonesia-search-filters{grid-template-columns:1fr}.indonesia-mark{min-width:45px;min-height:45px;font-size:11px}.indonesia-breadcrumb{line-height:1.5}}
+
+.indonesia-mark img{display:block;width:100%;height:100%;max-width:64px;max-height:64px;object-fit:contain}.indonesia-mark-dark{background:#203462}.university-profile-hero>.indonesia-mark{width:78px;height:78px}.indonesia-mark{width:58px;height:58px}
