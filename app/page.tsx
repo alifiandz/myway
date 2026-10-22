@@ -5,6 +5,7 @@ import { buildPlanningReminders, localCalendarDate, type PlanningReminder } from
 import { calculateProgramFit, selectRecommendations, type FitResult } from "./programme-fit";
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import IndonesiaExplore from "./indonesia-explore";
 import PublicUniversityLogo from "./university-logo";
 import { publicMyWayUrl } from "./myway-url";
 import {
@@ -930,6 +931,7 @@ function BusinessSchoolCard({ school, program, openSchool, saved, toggleSaved, c
 
 function Explore({ openSchool, saved, setSaved, compared, toggleCompare, schoolPathwayIds, toggleSchoolPathway, language }: { openSchool: (school: BusinessSchool) => void; saved: string[]; setSaved: (id: string) => void; compared: string[]; toggleCompare: (id: string) => void; schoolPathwayIds: string[]; toggleSchoolPathway: (school: BusinessSchool) => void; language: Language }) {
   const id = language === "id";
+  const [searchRegion, setSearchRegion] = useState<"international" | "indonesia">("international");
   const [query, setQuery] = useState("");
   const [refineOpen, setRefineOpen] = useState(false);
   const [savedOnly, setSavedOnly] = useState(false);
@@ -977,7 +979,9 @@ function Explore({ openSchool, saved, setSaved, compared, toggleCompare, schoolP
     });
     return matchesQuery && matchesSelected && (!savedOnly || saved.includes(school.id));
   }).sort((a, b) => sort === "A–Z" ? a.name.localeCompare(b.name) : (a.order ?? 999) - (b.order ?? 999));
-  return <div className="page-enter" data-tour="explore-main">
+  const regionOptions = <div className="indonesia-region-options" role="group" aria-label={id ? "Wilayah pencarian" : "Search region"}><button type="button" aria-pressed={searchRegion === "international"} onClick={() => setSearchRegion("international")}>{id ? "Internasional" : "International"}</button><button type="button" aria-pressed={searchRegion === "indonesia"} onClick={() => setSearchRegion("indonesia")}>Indonesia · S1</button></div>;
+  if (searchRegion === "indonesia") return <div className="page-enter" data-tour="explore-main">{regionOptions}<IndonesiaExplore language={language} /></div>;
+  return <div className="page-enter" data-tour="explore-main">{regionOptions}
     <section className="page-intro"><div><span className="eyebrow">Business study discovery</span><h2>Explore {undergraduateBusinessSchools.length} institutions</h2><p>Explore universities and business schools offering undergraduate routes. Preferences apply only when you choose filters.</p></div><a className="source-stamp" href={rankingSource} target="_blank" rel="noreferrer"><CircleCheck size={15} /> FT directory source <ExternalLink size={12} /></a></section>
     <section className="card search-card" data-tour="explore-search">
       <label className="search-box"><Search size={18} /><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search programs, universities, specializations, or countries…" />{query && <button onClick={() => setQuery("")} aria-label="Clear search"><X size={15} /></button>}</label>
