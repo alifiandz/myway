@@ -8,6 +8,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 import IndonesiaExplore from "./indonesia-explore";
 import IndonesiaPathway from "./indonesia-pathway";
 import PublicUniversityLogo from "./university-logo";
+import reviewedLogoAssets from "./institution-logo-assets.json";
 import { publicMyWayUrl } from "./myway-url";
 import {
   BarChart3, Bell, BookOpen, Bookmark, BriefcaseBusiness, CalendarDays, Camera, CreditCard,
@@ -692,7 +693,8 @@ function fitResultClass(result: FitResult) {
 
 function UniversityLogo({ program, size = "" }: { program: Program; size?: "" | "large" | "small" }) {
   const school = undergraduateBusinessSchools.find((item) => item.programId === program.id || `school:${item.id}` === program.id || item.id === program.id);
-  return <span className={`crest university-logo ${size} ${program.id === "escp" ? "dark" : ""}`.trim()}>
+  const logoAsset = school ? (reviewedLogoAssets as Record<string, {src: string; background: string}>)[school.id] : undefined;
+  return <span className={`crest university-logo ${size}`.trim()} style={{ backgroundColor: logoAsset?.background ?? "#fff" }}>
     <span>{program.initials}</span>
     <PublicUniversityLogo universityId={school?.id} fallback={program.logo} name={program.university}/>
   </span>;
@@ -704,7 +706,7 @@ function SchoolLogo({ school, program, size = "small" }: { school: BusinessSchoo
 }
 
 function OfficialSchoolLogo({ school, size }: { school: BusinessSchool; size: "large" | "small" }) {
-  return <span className={`crest university-logo ${size} school-logo`}>
+  return <span className={`crest university-logo ${size} school-logo`} style={{ backgroundColor: (reviewedLogoAssets as Record<string, {src: string; background: string}>)[school.id]?.background ?? "#fff" }}>
     <PublicUniversityLogo universityId={school.id} fallback={school.logoUrl ?? ""} name={school.name}/>
   </span>;
 }

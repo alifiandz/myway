@@ -2118,3 +2118,15 @@ select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible { outline
 .indonesia-profile .indonesia-programme-card,.indonesia-profile .indonesia-faculty-card{padding:19px;min-height:95px;border-radius:12px;gap:12px}
 @media(max-width:1100px){.indonesia-discovery .program-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.indonesia-discovery .program-list{grid-template-columns:minmax(0,1fr)}.indonesia-profile .detail-hero,.indonesia-profile .detail-section{padding:20px}.indonesia-profile .university-profile-tabs{display:flex;overflow-x:auto}.indonesia-profile .university-profile-tabs button{flex:0 0 auto;padding:14px}.indonesia-profile .detail-hero{gap:14px}.indonesia-profile .university-profile-hero>.indonesia-mark{width:60px;height:60px}.indonesia-profile .detail-hero h2{font-size:23px}}
+
+/* One clean frame for every institution; preserve the artwork's native ratio. */
+.university-logo,.university-logo.small,.university-logo.large,.school-logo,.school-logo.large,.indonesia-mark,.indonesia-discovery .indonesia-mark{box-sizing:border-box;isolation:isolate;overflow:hidden;border:1px solid #e1e6ef;box-shadow:none;background:#fff;padding:7px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.university-logo img,.university-logo.dark img,.school-logo img,.school-logo.large img,.indonesia-mark img,.indonesia-mark-dark img{display:block;position:relative;z-index:1;width:100%;height:100%;max-width:100%;max-height:100%;padding:0;margin:0;border:0;border-radius:0;background:transparent;object-fit:contain;object-position:center;image-rendering:auto;filter:none;mix-blend-mode:normal}
+.university-logo.small{width:44px;height:44px;padding:5px;border-radius:10px}.university-logo.large{width:84px;height:84px;padding:9px;border-radius:15px}
+.school-identity{grid-template-columns:44px minmax(0,1fr);gap:11px}
+.indonesia-discovery .school-identity{grid-template-columns:60px minmax(0,1fr);gap:13px}.indonesia-discovery .indonesia-mark{width:60px;height:60px;min-width:60px;min-height:60px;padding:7px}
+.university-profile-hero>.indonesia-mark{width:88px;height:88px;min-width:88px;min-height:88px;padding:10px;border-radius:16px}
+.indonesia-mark{width:60px;height:60px;min-width:60px;min-height:60px}
+.dashboard-shortlist-list .university-logo.small{width:34px;height:34px;padding:4px;border-radius:8px}
+@media(max-width:600px){.university-profile-hero>.indonesia-mark{width:68px;height:68px;min-width:68px;min-height:68px;padding:8px;border-radius:13px}.indonesia-discovery .school-identity{grid-template-columns:56px minmax(0,1fr)}.indonesia-discovery .indonesia-mark{width:56px;height:56px;min-width:56px;min-height:56px}}
+.university-logo:has(img)>span{visibility:hidden}

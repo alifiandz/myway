@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { getSupabaseClient } from "./supabase-client";
+import reviewedAssets from "./institution-logo-assets.json";
 import { validateUniversityLogo } from "./admin/data/logo-policy";
 let request: Promise<Map<string, string>> | null = null;
 function publishedLogos() {
@@ -20,9 +21,12 @@ export default function PublicUniversityLogo({ universityId, fallback, name }: {
     if (universityId) void publishedLogos().then((logos) => { if (active) setPublished(logos.get(universityId) ?? null); }).catch(() => { /* Existing logos remain available offline. */ });
     return () => { active = false; };
   }, [universityId]);
-  const preferred = published ?? fallback, src = failed === preferred ? fallback : preferred;
+  const reviewed = universityId ? (reviewedAssets as Record<string, {src: string; background: string; srcSet?: string}>)[universityId] : undefined;
+  const localFallback = reviewed?.src ?? fallback;
+  const preferred = published && !published.startsWith("/institution-logos/") ? published : localFallback;
+  const src = failed === preferred ? localFallback : preferred;
   if (!src || failed === src) return null;
   // Existing logo assets and administrator-selected public image URLs have fixed layout in their parent.
   // eslint-disable-next-line @next/next/no-img-element
-  return <img key={src} src={src} alt={`${name} logo`} loading="lazy" decoding="async" onError={() => setFailed(src)}/>;
+  return <img key={src} src={src} srcSet={src === reviewed?.src ? reviewed.srcSet : undefined} sizes="84px" alt={`${name} logo`} loading="lazy" decoding="async" onError={() => setFailed(src)}/>;
 }

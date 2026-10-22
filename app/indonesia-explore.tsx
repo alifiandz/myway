@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Bookmark, ChevronLeft, ChevronRight, ExternalLink, GraduationCap, MapPin, Search, Scale, Check, BookOpen, Building2 } from "lucide-react";
 import { facultyAlias, filterIndonesia, indonesiaProgrammes as catalogue, indonesiaUniversities as institutions, INDONESIA_PLANS_KEY, readIndonesiaPlans, type IndonesiaProgramme, type IndonesiaPlan } from "./indonesia-data";
+import reviewedLogoAssets from "./institution-logo-assets.json";
 import { displayProgrammeTitle, subjectGuide } from "./indonesia-copy";
 export { filterIndonesia } from "./indonesia-data";
 
@@ -17,7 +18,8 @@ function routeFromUrl(): Route {
 }
 function Mark({ uid, name }: { uid: string; name: string }) {
   const [failed, setFailed] = useState(false);
-  return <span className={`university-logo indonesia-mark ${uid === "amikom" ? "indonesia-mark-dark" : ""}`}>{failed ? uid.toUpperCase() : <img src={`/institution-logos/indonesia-${uid}.png`} alt={`${name} logo`} onError={() => setFailed(true)} />}</span>;
+  const asset = (reviewedLogoAssets as Record<string, {src: string; background: string; srcSet?: string}>)[`indonesia-${uid}`];
+  return <span className="university-logo indonesia-mark" style={{ backgroundColor: asset?.background ?? "#fff" }}>{failed ? uid.toUpperCase() : <img src={asset?.src ?? `/institution-logos/indonesia-${uid}.png`} srcSet={asset?.srcSet} sizes="88px" width={64} height={64} alt={`${name} logo`} decoding="async" onError={() => setFailed(true)} />}</span>;
 }
 
 type Props = { language: "en" | "id"; saved: string[]; toggleSaved: (id: string) => void; records: Record<string, string>; updateRecord: (key: string, value: string) => void; goPathway: () => void };
