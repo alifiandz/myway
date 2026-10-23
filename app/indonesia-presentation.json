@@ -1,0 +1,416 @@
+{
+  "ui": {
+    "intake": "2026/2027",
+    "status": "past",
+    "summary": {
+      "en": "2026 SIMAK registration has ended.",
+      "id": "Pendaftaran SIMAK 2026 telah berakhir."
+    },
+    "eligibility": [
+      {
+        "en": "SMA / SMK / MA or equivalent",
+        "id": "SMA / SMK / MA atau sederajat"
+      },
+      {
+        "en": "Latest three graduation years; route rules apply",
+        "id": "Tiga tahun kelulusan terakhir; mengikuti syarat jalur"
+      }
+    ],
+    "events": [
+      {
+        "label": {
+          "en": "SIMAK registration",
+          "id": "Pendaftaran SIMAK"
+        },
+        "date": "8 May–5 Jun 2026"
+      },
+      {
+        "label": {
+          "en": "SIMAK exam",
+          "id": "Ujian SIMAK"
+        },
+        "date": "13–14 Jun 2026"
+      }
+    ],
+    "costs": [
+      {
+        "label": {
+          "en": "SNBP / SNBT",
+          "id": "SNBP / SNBT"
+        },
+        "recurring": {
+          "en": "UKT each semester",
+          "id": "UKT per semester"
+        },
+        "oneOff": {
+          "en": "No IPI",
+          "id": "Tanpa IPI"
+        }
+      },
+      {
+        "label": {
+          "en": "Independent routes",
+          "id": "Jalur mandiri"
+        },
+        "recurring": {
+          "en": "UKT each semester",
+          "id": "UKT per semester"
+        },
+        "oneOff": {
+          "en": "IPI, paid once",
+          "id": "IPI, satu kali"
+        }
+      }
+    ],
+    "note": {
+      "en": "Amounts follow UI’s tariff group and assessment.",
+      "id": "Nominal mengikuti kelompok tarif dan penetapan UI."
+    },
+    "reviewedOn": "2026-10-23"
+  },
+  "ugm": {
+    "intake": "2026/2027",
+    "status": "past",
+    "summary": {
+      "en": "Regular undergraduate selection is closed.",
+      "id": "Seleksi sarjana reguler telah ditutup."
+    },
+    "eligibility": [
+      {
+        "en": "National or UGM independent selection",
+        "id": "Seleksi nasional atau mandiri UGM"
+      },
+      {
+        "en": "PBU and Afirmasi have specific applicant criteria",
+        "id": "PBU dan Afirmasi memiliki kriteria peserta khusus"
+      }
+    ],
+    "events": [
+      {
+        "label": {
+          "en": "Selection completed",
+          "id": "Seleksi selesai"
+        },
+        "date": "Jun 2026"
+      },
+      {
+        "label": {
+          "en": "UGM confirms closure",
+          "id": "UGM mengonfirmasi penutupan"
+        },
+        "date": "7 Jul 2026"
+      }
+    ],
+    "costs": [
+      {
+        "label": {
+          "en": "Regular S1",
+          "id": "S1 reguler"
+        },
+        "recurring": {
+          "en": "Programme-specific UKT groups",
+          "id": "Kelompok UKT menurut program"
+        },
+        "oneOff": {
+          "en": "Check applicable IPI rules",
+          "id": "Ikuti ketentuan IPI jalur"
+        }
+      }
+    ],
+    "note": {
+      "en": "UKT depends on programme and subsidy group. BKT is not the student’s UKT bill.",
+      "id": "UKT mengikuti program dan kelompok subsidi. BKT bukan tagihan UKT mahasiswa."
+    },
+    "reviewedOn": "2026-10-23"
+  },
+  "uny": {
+    "intake": "2026",
+    "status": "past",
+    "summary": {
+      "en": "Listed 2026 registration windows have passed.",
+      "id": "Periode pendaftaran 2026 yang tercantum telah lewat."
+    },
+    "eligibility": [
+      {
+        "en": "National or Seleksi Mandiri routes",
+        "id": "Jalur nasional atau Seleksi Mandiri"
+      },
+      {
+        "en": "Some routes require a portfolio, skills test or interview",
+        "id": "Jalur tertentu memerlukan portofolio, tes keterampilan, atau wawancara"
+      }
+    ],
+    "events": [
+      {
+        "label": {
+          "en": "UTBK-score registration deadline",
+          "id": "Batas pendaftaran skor UTBK"
+        },
+        "date": "17 Jul 2026"
+      },
+      {
+        "label": {
+          "en": "CBT Domisili registration deadline",
+          "id": "Batas pendaftaran CBT Domisili"
+        },
+        "date": "23 Jul 2026"
+      }
+    ],
+    "costs": [
+      {
+        "label": {
+          "en": "National routes",
+          "id": "Jalur nasional"
+        },
+        "recurring": {
+          "en": "Economic-group UKT",
+          "id": "UKT kelompok ekonomi"
+        },
+        "oneOff": {
+          "en": "Follow the route rules",
+          "id": "Mengikuti ketentuan jalur"
+        }
+      },
+      {
+        "label": {
+          "en": "Mandiri · 2026/2027",
+          "id": "Mandiri · 2026/2027"
+        },
+        "recurring": {
+          "en": "Minimum UKT group IV",
+          "id": "Minimal UKT kelompok IV"
+        },
+        "oneOff": {
+          "en": "IPI, paid once",
+          "id": "IPI, satu kali"
+        }
+      }
+    ],
+    "note": {
+      "en": "The 2026/2027 leaflet sets minimum UKT IV for Mandiri. Older online rate tables remain labelled 2025/2026.",
+      "id": "Leaflet 2026/2027 menetapkan minimal UKT IV untuk Mandiri. Tabel nominal daring lama masih berlabel 2025/2026."
+    },
+    "reviewedOn": "2026-10-23",
+    "feeYear": "2026/2027 policy"
+  },
+  "uin": {
+    "intake": "2026/2027",
+    "status": "past",
+    "summary": {
+      "en": "The main 2026 Mandiri window has ended.",
+      "id": "Periode Mandiri utama 2026 telah berakhir."
+    },
+    "eligibility": [
+      {
+        "en": "National, PTKIN and independent selections",
+        "id": "Seleksi nasional, PTKIN, dan mandiri"
+      },
+      {
+        "en": "General and religious programmes have different route choices",
+        "id": "Program umum dan keagamaan memiliki pilihan jalur berbeda"
+      }
+    ],
+    "events": [
+      {
+        "label": {
+          "en": "Main Mandiri payment deadline",
+          "id": "Batas pembayaran Mandiri utama"
+        },
+        "date": "13 Jul 2026"
+      },
+      {
+        "label": {
+          "en": "Finalisation deadline · 12:00 WIB",
+          "id": "Batas finalisasi · 12.00 WIB"
+        },
+        "date": "14 Jul 2026"
+      }
+    ],
+    "costs": [
+      {
+        "label": {
+          "en": "S1 tuition",
+          "id": "Uang kuliah S1"
+        },
+        "recurring": {
+          "en": "Economic-group UKT each semester",
+          "id": "UKT kelompok ekonomi per semester"
+        },
+        "oneOff": {
+          "en": "Application fee varies by route",
+          "id": "Biaya pendaftaran menurut jalur"
+        }
+      }
+    ],
+    "note": {
+      "en": "Medicine has a separate schedule. Confirm programme availability for your route.",
+      "id": "Kedokteran memiliki jadwal tersendiri. Pastikan program tersedia pada jalur pilihanmu."
+    },
+    "reviewedOn": "2026-10-23"
+  },
+  "unair": {
+    "intake": "2026/2027",
+    "status": "past",
+    "summary": {
+      "en": "Published 2026 Mandiri deadlines have passed.",
+      "id": "Batas Mandiri 2026 yang dipublikasikan telah lewat."
+    },
+    "eligibility": [
+      {
+        "en": "2026 Mandiri: Indonesian graduates of 2024–2026",
+        "id": "Mandiri 2026: WNI lulusan 2024–2026"
+      },
+      {
+        "en": "Prestasi / Kemitraan have additional conditions",
+        "id": "Prestasi / Kemitraan memiliki syarat tambahan"
+      }
+    ],
+    "events": [
+      {
+        "label": {
+          "en": "Prestasi deadline",
+          "id": "Batas Prestasi"
+        },
+        "date": "28 May 2026"
+      },
+      {
+        "label": {
+          "en": "UTBK Plus deadline",
+          "id": "Batas UTBK Plus"
+        },
+        "date": "8 Jun 2026"
+      },
+      {
+        "label": {
+          "en": "Ujian Tulis / Kemitraan deadline",
+          "id": "Batas Ujian Tulis / Kemitraan"
+        },
+        "date": "21 Jun 2026"
+      }
+    ],
+    "costs": [
+      {
+        "label": {
+          "en": "Mandiri",
+          "id": "Mandiri"
+        },
+        "recurring": {
+          "en": "UKT each semester",
+          "id": "UKT per semester"
+        },
+        "oneOff": {
+          "en": "IPI according to route",
+          "id": "IPI sesuai jalur"
+        }
+      }
+    ],
+    "note": {
+      "en": "Amounts vary by programme and route. The Management example does not apply to all programmes.",
+      "id": "Nominal berbeda menurut program dan jalur. Contoh Manajemen bukan tarif semua program."
+    },
+    "reviewedOn": "2026-10-23"
+  },
+  "itb": {
+    "intake": "2026/2027",
+    "status": "past",
+    "summary": {
+      "en": "Published 2026 selection dates have passed.",
+      "id": "Jadwal seleksi 2026 yang dipublikasikan telah lewat."
+    },
+    "eligibility": [
+      {
+        "en": "SSU requirements vary by faculty / programme",
+        "id": "Persyaratan SSU berbeda menurut fakultas / program"
+      },
+      {
+        "en": "Some national routes allocate programmes after year one",
+        "id": "Jalur nasional tertentu menempatkan program setelah tahun pertama"
+      }
+    ],
+    "events": [
+      {
+        "label": {
+          "en": "SSU test re-registration",
+          "id": "Daftar ulang SSU Tes"
+        },
+        "date": "27 Jun–3 Jul 2026"
+      }
+    ],
+    "costs": [
+      {
+        "label": {
+          "en": "SSU test route · 2026",
+          "id": "Jalur SSU Tes · 2026"
+        },
+        "recurring": {
+          "en": "Faculty-specific UKT",
+          "id": "UKT menurut fakultas"
+        },
+        "oneOff": {
+          "en": "IPI category applies",
+          "id": "Mengikuti kategori IPI"
+        }
+      }
+    ],
+    "note": {
+      "en": "SSU fees are not universal SNBP/SNBT fees. Programme allocation depends on the route.",
+      "id": "Biaya SSU bukan tarif umum SNBP/SNBT. Penempatan program mengikuti jalur masuk."
+    },
+    "reviewedOn": "2026-10-23"
+  },
+  "amikom": {
+    "intake": "2027/2028",
+    "status": "announced",
+    "summary": {
+      "en": "2027 special wave advertised open.",
+      "id": "Gelombang khusus 2027 diumumkan dibuka."
+    },
+    "eligibility": [
+      {
+        "en": "Rapor: final-report / school-exam average ≥75",
+        "id": "Rapor: rata-rata rapor terakhir / ujian sekolah ≥75"
+      },
+      {
+        "en": "Below 75: online CBT",
+        "id": "Di bawah 75: CBT daring"
+      }
+    ],
+    "events": [
+      {
+        "label": {
+          "en": "Current wave",
+          "id": "Gelombang terkini"
+        },
+        "date": "2027"
+      },
+      {
+        "label": {
+          "en": "Closing date",
+          "id": "Tanggal penutupan"
+        },
+        "date": "Not verified / Belum terverifikasi"
+      }
+    ],
+    "costs": [
+      {
+        "label": {
+          "en": "Regular S1 · 2027/2028",
+          "id": "S1 reguler · 2027/2028"
+        },
+        "recurring": {
+          "en": "Programme-specific semester fee",
+          "id": "UKT per semester menurut program"
+        },
+        "oneOff": {
+          "en": "Rp200,000 application",
+          "id": "Pendaftaran Rp200.000"
+        }
+      }
+    ],
+    "note": {
+      "en": "Confirm the active wave in the portal. Reduced tuition requires semester VIII onward and fewer than 12 SKS.",
+      "id": "Pastikan gelombang aktif di portal. Tarif lebih rendah berlaku mulai semester VIII dan beban di bawah 12 SKS."
+    },
+    "reviewedOn": "2026-10-23"
+  }
+}

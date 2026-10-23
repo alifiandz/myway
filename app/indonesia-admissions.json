@@ -54,7 +54,7 @@
         "url": "https://ugm.ac.id/id/berita/ugm-buka-pendaftaraan-seleksi-ujian-mandiri-cbt/"
       }
     ],
-    "checkedOn": "2026-10-22"
+    "checkedOn": "2026-10-23"
   },
   "uny": {
     "year": "Schedule: 2026; published fee tables: 2025/2026",
@@ -70,8 +70,8 @@
       "SM Skor UTBK-SNBT"
     ],
     "fees": {
-      "en": "UNY assigns semester UKT using family socioeconomic circumstances. Its published S1 policy states a minimum of UKT group III plus a one-time first-semester IPI for independent admission. The linked rate tables are labelled 2025/2026, so their amounts should not be presented as confirmed 2026/2027 or 2027 fees.",
-      "id": "UKT per semester UNY ditetapkan dengan mempertimbangkan kondisi sosial ekonomi keluarga. Kebijakan S1 yang dipublikasikan menyebut minimal UKT kelompok III serta IPI satu kali pada semester pertama untuk jalur mandiri. Tabel tarif tertaut berlabel 2025/2026, sehingga nominalnya belum boleh disajikan sebagai tarif pasti 2026/2027 atau 2027."
+      "en": "The 2026/2027 S1 leaflet sets minimum UKT IV plus IPI for Mandiri. Older nominal tables are labelled 2025/2026.",
+      "id": "Leaflet S1 2026/2027 menetapkan minimal UKT IV dan IPI untuk Mandiri. Tabel nominal lama berlabel 2025/2026."
     },
     "timing": {
       "en": "The published regular-S1 schedule is for 2026 and its listed registration windows have passed: UTBK-score selection ended 17 July and CBT Domisili ended 23 July. RPL, IUP and cooperation have separate schedules. No 2027 regular-S1 schedule is verified here.",
@@ -88,6 +88,13 @@
           "id": "Jalur penerimaan S1"
         },
         "url": "https://pmb.uny.ac.id/program-sarjana/jalur"
+      },
+      {
+        "label": {
+          "en": "2026/2027 S1 admission & fee policy",
+          "id": "Ketentuan penerimaan & biaya S1 2026/2027"
+        },
+        "url": "https://pmb.uny.ac.id/sites/pmb.uny.ac.id/files/2026-02/Leaflet%20SM%20S1%20UNY%20-%2012.02.26.pdf#page=3"
       },
       {
         "label": {
@@ -111,7 +118,7 @@
         "url": "https://pmb.uny.ac.id/sarjana-ipi"
       }
     ],
-    "checkedOn": "2026-10-22"
+    "checkedOn": "2026-10-23"
   },
   "uin": {
     "year": "2026/2027",
@@ -161,7 +168,7 @@
         "url": "https://admisi.uin-suka.ac.id/berita/141"
       }
     ],
-    "checkedOn": "2026-10-22"
+    "checkedOn": "2026-10-23"
   },
   "ui": {
     "year": "2026/2027",
@@ -236,8 +243,8 @@
       "id": "Ketentuan Mandiri 2026 mencakup WNI lulusan SMA/sederajat tahun 2024–2026. Prestasi dan Kemitraan memiliki syarat tambahan berupa prestasi atau rekomendasi mitra."
     },
     "fees": {
-      "en": "Mandiri tuition comprises semester UKT and IPI, varying by programme and route. For Management, the published Mandiri Reguler 2026/2027 table lists UKT Rp8m or Rp10m per semester and IPI Rp55m; this does not describe national or Kemitraan fees.",
-      "id": "Biaya mandiri terdiri dari UKT per semester dan IPI sesuai program serta jalur. Tabel Mandiri Reguler 2026/2027 untuk Manajemen mencantumkan UKT Rp8 juta atau Rp10 juta per semester dan IPI Rp55 juta; ini bukan tarif jalur nasional atau Kemitraan."
+      "en": "Mandiri charges semester UKT and IPI. Amounts vary by programme and route.",
+      "id": "Mandiri dikenai UKT per semester dan IPI. Nominal berbeda menurut program serta jalur."
     },
     "timing": {
       "en": "The published 2026 deadlines—28 May for Prestasi, 8 June for UTBK Plus, and 21 June for Ujian Tulis/Kemitraan—have passed. No 2027 timetable is confirmed in this summary.",
@@ -266,7 +273,7 @@
         "url": "https://ppmb.unair.ac.id/id/jadwal-sarjana"
       }
     ],
-    "checkedOn": "2026-10-22"
+    "checkedOn": "2026-10-23"
   },
   "itb": {
     "year": "2026/2027",
@@ -315,7 +322,7 @@
         "url": "https://akademik.itb.ac.id/id/berita-dan-acara/pengumuman-hasil-seleksi-dan-panduan-daftar-ulang-jalur-penerimaan-seleksi-siswa-unggul-ssu-itb-jalur-tes"
       }
     ],
-    "checkedOn": "2026-10-22"
+    "checkedOn": "2026-10-23"
   },
   "amikom": {
     "year": "2027/2028",
@@ -332,8 +339,8 @@
       "id": "Seleksi rapor mensyaratkan rata-rata rapor terakhir atau ujian sekolah minimal 75. Peserta di bawah 75 diarahkan ke CBT daring. Pastikan gelombang aktif di portal pendaftaran."
     },
     "fees": {
-      "en": "Published 2027/2028 regular-S1 first-semester tuition is Rp8.5m, Rp9.5m or Rp10.75m depending on programme. Semesters II–VII split the same semester total 70% before KRS and 30% before UTS. A reduced final-semester rate applies only below 12 SKS.",
-      "id": "UKT semester pertama S1 reguler 2027/2028 tercantum Rp8,5 juta, Rp9,5 juta, atau Rp10,75 juta menurut program. Semester II–VII membagi total yang sama: 70% sebelum KRS dan 30% sebelum UTS. Tarif semester akhir yang lebih rendah berlaku hanya di bawah 12 SKS."
+      "en": "Published 2027/2028 regular-S1 first-semester tuition is Rp8.5m, Rp9.5m or Rp10.75m depending on programme. Semesters II–VII split the same semester total 70% before KRS and 30% before UTS. A reduced rate applies from semester VIII onward only below 12 SKS.",
+      "id": "UKT semester pertama S1 reguler 2027/2028 tercantum Rp8,5 juta, Rp9,5 juta, atau Rp10,75 juta menurut program. Semester II–VII membagi total yang sama: 70% sebelum KRS dan 30% sebelum UTS. Tarif lebih rendah berlaku mulai semester VIII dan hanya di bawah 12 SKS."
     },
     "timing": {
       "en": "The PMB site advertises the 2027 special wave as open. A fixed closing date has not been verified; check the active wave in cmhs.amikom.ac.id.",

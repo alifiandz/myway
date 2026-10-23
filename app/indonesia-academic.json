@@ -55,7 +55,7 @@
       "en": "Possible fields include finance, marketing, HR, operations and management consulting.",
       "id": "Bidang karier dapat meliputi keuangan, pemasaran, SDM, operasi, dan konsultasi manajemen."
     },
-    "sourceUrl": "https://feb.ui.ac.id/uploads/2024/01/Buku-Pedoman-Akademik-Sarjana-2023.pdf#page=90",
+    "sourceUrl": "https://feb.ui.ac.id/uploads/2024/01/Buku-Pedoman-Akademik-Sarjana-2023.pdf#page=94",
     "degreeSourceUrl": "https://feb.ui.ac.id/departemen-manajemen/",
     "cohortNote": {
       "en": "145 SKS and the eight-semester plan follow the 2023 handbook. An older summary states 144 SKS; a new intake follows its own curriculum.",
@@ -86,6 +86,28 @@
         "6",
         "Final project",
         "Tugas akhir"
+      ]
+    ],
+    "careerTopics": [
+      [
+        "Finance",
+        "Keuangan"
+      ],
+      [
+        "Marketing",
+        "Pemasaran"
+      ],
+      [
+        "Human resources",
+        "Sumber daya manusia"
+      ],
+      [
+        "Operations",
+        "Operasi"
+      ],
+      [
+        "Management consulting",
+        "Konsultasi manajemen"
       ]
     ]
   },
@@ -150,7 +172,25 @@
     "cohortNote": {
       "en": "The September 2026 curriculum lists 144 credits over semesters 1–7; earlier cohorts follow their applicable curriculum.",
       "id": "Kurikulum September 2026 memuat 144 SKS pada semester 1–7; angkatan terdahulu mengikuti kurikulum yang berlaku baginya."
-    }
+    },
+    "careerTopics": [
+      [
+        "Banking",
+        "Perbankan"
+      ],
+      [
+        "Consulting",
+        "Konsultasi"
+      ],
+      [
+        "Marketing",
+        "Pemasaran"
+      ],
+      [
+        "Business development",
+        "Pengembangan bisnis"
+      ]
+    ]
   },
   "id-uny-s1-manajemen": {
     "title": "Manajemen",
@@ -211,7 +251,21 @@
     "cohortNote": {
       "en": "The published document gives conflicting 145/146-credit totals; confirm the applicable requirement with the programme.",
       "id": "Dokumen terbitan mencantumkan total 145/146 SKS yang tidak konsisten; pastikan ketentuan angkatan melalui program studi."
-    }
+    },
+    "careerTopics": [
+      [
+        "Management",
+        "Manajemen"
+      ],
+      [
+        "Entrepreneurship",
+        "Kewirausahaan"
+      ],
+      [
+        "Management research",
+        "Penelitian manajemen"
+      ]
+    ]
   },
   "id-uin-s1-manajemen-keuangan-syari-ah": {
     "title": "Manajemen Keuangan Syari'ah",
@@ -338,7 +392,21 @@
       }
     ],
     "degreeSourceUrl": "https://feb.unair.ac.id/id/study-program/bachelor-of-management/",
-    "careersSourceUrl": "https://feb.unair.ac.id/id/study-program/bachelor-of-management/"
+    "careersSourceUrl": "https://feb.unair.ac.id/id/study-program/bachelor-of-management/",
+    "careerTopics": [
+      [
+        "Management analyst",
+        "Analis manajemen"
+      ],
+      [
+        "First-line manager",
+        "Manajer tingkat pertama"
+      ],
+      [
+        "Entrepreneur",
+        "Wirausahawan"
+      ]
+    ]
   },
   "id-itb-s1-manajemen": {
     "title": "Manajemen",
@@ -414,7 +482,25 @@
       }
     ],
     "degreeSourceUrl": "https://akademik.itb.ac.id/id/program/S1/program-studi/190",
-    "careersSourceUrl": "https://www.sbm.itb.ac.id/academic-programs/bachelor-of-management/general-management/"
+    "careersSourceUrl": "https://www.sbm.itb.ac.id/academic-programs/bachelor-of-management/general-management/",
+    "careerTopics": [
+      [
+        "Entrepreneurship",
+        "Kewirausahaan"
+      ],
+      [
+        "Companies",
+        "Perusahaan"
+      ],
+      [
+        "Government",
+        "Pemerintah"
+      ],
+      [
+        "Nonprofit organisations",
+        "Organisasi nirlaba"
+      ]
+    ]
   },
   "id-amikom-s1-informatika": {
     "title": "Informatika",
@@ -486,7 +572,25 @@
         "covers": "Officially linked BUKU KURIKULUM 2025, 64 pages, downloaded and read locally: SarjanaKomputer(S.Kom.) and courses confirmed."
       }
     ],
-    "degreeSourceUrl": "https://informatika.amikom.ac.id/",
-    "careersSourceUrl": "https://informatika.amikom.ac.id/"
+    "degreeSourceUrl": "https://drive.google.com/file/d/1xfYyadUseFQmQrQKJEZMb1_yHbgXvj6J/view?usp=sharing",
+    "careersSourceUrl": "https://informatika.amikom.ac.id/",
+    "careerTopics": [
+      [
+        "AI engineering",
+        "Rekayasa AI"
+      ],
+      [
+        "Software engineering",
+        "Rekayasa perangkat lunak"
+      ],
+      [
+        "Content creation",
+        "Pembuatan konten"
+      ],
+      [
+        "Digital freelance work",
+        "Pekerja lepas digital"
+      ]
+    ]
   }
 }
