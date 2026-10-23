@@ -58,8 +58,8 @@
     "sourceUrl": "https://feb.ui.ac.id/uploads/2024/01/Buku-Pedoman-Akademik-Sarjana-2023.pdf#page=94",
     "degreeSourceUrl": "https://feb.ui.ac.id/departemen-manajemen/",
     "cohortNote": {
-      "en": "145 SKS and the eight-semester plan follow the 2023 handbook. An older summary states 144 SKS; a new intake follows its own curriculum.",
-      "id": "145 SKS dan rencana delapan semester mengikuti pedoman 2023. Ringkasan lama masih menyebut 144 SKS; angkatan baru mengikuti kurikulumnya sendiri."
+      "en": "The 2022/2023 FEB handbook (2020 curriculum) states 145 SKS. Another official page states 144 SKS. Confirm the curriculum for your intake.",
+      "id": "Pedoman FEB 2022/2023 (kurikulum 2020) mencantumkan 145 SKS. Halaman resmi lain menyebut 144 SKS. Konfirmasikan kurikulum untuk angkatanmu."
     },
     "creditBreakdown": [
       [
@@ -109,7 +109,12 @@
         "Management consulting",
         "Konsultasi manajemen"
       ]
-    ]
+    ],
+    "sourceYear": {
+      "en": "2022/2023 handbook · 2020 curriculum",
+      "id": "Buku pedoman 2022/2023 · kurikulum 2020"
+    },
+    "checkedOn": "2026-10-23"
   },
   "id-ugm-s1-manajemen": {
     "title": "Manajemen",
@@ -166,7 +171,7 @@
     },
     "sourceUrl": "https://feb.ugm.ac.id/id/pendidikan/program-sarjana/kurikulum/27913-kurikulum-manajemen-2026",
     "degreeSourceUrl": "https://admissions.ugm.ac.id/v26/program-studi/sarjana-manajemen/",
-    "careersSourceUrl": "https://ugm.ac.id/id/prodi/manajemen/",
+    "careersSourceUrl": "https://admissions.ugm.ac.id/v26/program-studi/sarjana-manajemen/",
     "sourceYear": "2026",
     "checkedOn": "2026-10-23",
     "cohortNote": {
@@ -297,7 +302,7 @@
     ],
     "courses": [
       [
-        "Financial Planning",
+        "Islamic Financial Planning",
         "Perencanaan Keuangan Syariah"
       ],
       [
@@ -463,8 +468,8 @@
     },
     "sourceUrl": "https://six.itb.ac.id/pub/kur2024/190",
     "cohortNote": {
-      "en": "Central ITB lists 8 semesters; SBM’s separate page retains an older 3-year/9-short-semester structure. Use the central profile and 2024 curriculum.",
-      "id": "ITB pusat mencantumkan 8 semester; halaman SBM lain masih memuat struktur lama 3 tahun/9  semester pendek. Gunakan profil pusat dan Kurikulum 2024."
+      "en": "The central ITB profile lists 8 semesters and 144 SKS. The SBM page describes three years and lists nine semesters under its 2024 curriculum. Confirm the applicable structure for your intake.",
+      "id": "Profil pusat ITB mencantumkan 8 semester dan 144 SKS. Halaman SBM menjelaskan tiga tahun dan memuat sembilan semester pada kurikulum 2024. Konfirmasikan struktur yang berlaku untuk angkatanmu."
     },
     "checkedOn": "2026-10-23",
     "sources": [
@@ -500,6 +505,10 @@
         "Nonprofit organisations",
         "Organisasi nirlaba"
       ]
-    ]
+    ],
+    "sourceYear": {
+      "en": "2024 curriculum",
+      "id": "Kurikulum 2024"
+    }
   }
 }
