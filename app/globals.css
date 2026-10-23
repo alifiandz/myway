@@ -2130,3 +2130,19 @@ select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible { outline
 .dashboard-shortlist-list .university-logo.small{width:34px;height:34px;padding:4px;border-radius:8px}
 @media(max-width:600px){.university-profile-hero>.indonesia-mark{width:68px;height:68px;min-width:68px;min-height:68px;padding:8px;border-radius:13px}.indonesia-discovery .school-identity{grid-template-columns:56px minmax(0,1fr)}.indonesia-discovery .indonesia-mark{width:56px;height:56px;min-width:56px;min-height:56px}}
 .university-logo:has(img)>span{visibility:hidden}
+
+/* Factual Indonesia profiles and contextual official references. */
+.indonesia-profile .university-profile-tabs{grid-template-columns:repeat(3,minmax(0,1fr))}
+.id-programme-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin:22px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.id-programme-facts>div{min-width:0;padding:18px;border-bottom:1px solid var(--line)}.id-programme-facts>div:nth-child(odd){border-right:1px solid var(--line)}.id-programme-facts>div:nth-last-child(-n+2){border-bottom:0}
+.id-programme-facts dt{font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:5px}.id-programme-facts dd{margin:0;font-size:14px;font-weight:650;line-height:1.6;overflow-wrap:anywhere}
+.id-information-stack{display:grid;gap:18px}.id-information-stack h4{font-size:14px;line-height:1.6;margin:22px 0 10px}
+.id-route-tags{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}.id-route-tags span{font-size:12px;line-height:1.5;padding:9px 12px;border-radius:8px;background:var(--blue-soft);color:var(--blue-dark)}
+.id-information-link{display:inline-flex;align-items:center;gap:6px;font-size:11px;line-height:1.7;color:var(--blue-dark);text-decoration:underline;text-underline-offset:3px;margin:4px 16px 4px 0}
+.id-factual-list{display:grid;grid-template-columns:1fr 1fr;gap:12px 24px;padding-left:20px;font-size:13px;line-height:1.7}
+.id-credit-breakdown{margin:18px 0}.id-credit-breakdown>div{display:flex;justify-content:space-between;gap:20px;padding:13px 0;border-bottom:1px solid var(--line);font-size:13px}.id-credit-breakdown dd{margin:0;font-weight:700;white-space:nowrap}
+.id-fee-highlight,.id-intake-note{padding:16px;border-left:3px solid #98a8d3;border-radius:4px 10px 10px 4px;background:#f5f7fc;font-size:13px;line-height:1.75}
+.id-official-information{margin-top:24px;padding:24px 4px;border-top:1px solid var(--line)}.id-official-information h3{font-size:15px;margin:0 0 7px}.id-official-information>p,.id-official-information>small{font-size:11px;line-height:1.7;color:var(--muted)}
+.id-official-links{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:17px 0}.id-official-links>a{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 15px;border:1px solid var(--line);border-radius:10px;background:white;color:var(--blue-dark);font-size:12px;line-height:1.6;text-decoration:none}.id-official-links small{display:block;font-size:10px;color:var(--muted);overflow-wrap:anywhere}.id-official-links svg{flex-shrink:0}
+.id-official-links>a:hover{border-color:var(--blue)}.id-information-link:focus-visible,.id-official-links>a:focus-visible{outline:3px solid var(--blue);outline-offset:3px}.id-university-information{margin-top:22px}
+@media(max-width:600px){.id-programme-facts,.id-factual-list,.id-official-links{grid-template-columns:1fr}.id-programme-facts>div:nth-child(odd){border-right:0}.id-programme-facts>div:nth-last-child(2){border-bottom:1px solid var(--line)}.indonesia-profile .university-profile-tabs{display:flex}.indonesia-profile .university-profile-tabs button{flex:1;white-space:normal;font-size:10px;padding:10px}}

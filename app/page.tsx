@@ -749,7 +749,7 @@ function Header({ reminders, remindersEnabled, onReminderAction, view, go, notic
     id: { dashboard: "Beranda", explore: "Jelajahi universitas", pathway: "Jalur Saya", tasks: "Tugas & Kebiasaan", progress: "Progres", profile: "Profil", settings: "Pengaturan" },
   };
   return <header className="topbar" onKeyDown={(event) => { if (event.key === "Escape") setNotices(false); }}>
-    <div data-no-translate><span className="eyebrow">{language === "id" ? "Perencana studi bisnis" : "Business study planner"}</span><h1>{titles[language][view]}</h1></div>
+    <div data-no-translate><span className="eyebrow">{language === "id" ? "Perencana studi" : "Your study planner"}</span><h1>{titles[language][view]}</h1></div>
     <div className="top-actions">
       <button className="icon-button" onClick={() => setNotices(!notices)} aria-label={language === "id" ? "Pengingat" : "Reminders"} aria-expanded={notices} aria-controls="planning-reminders"><Bell size={19} />{remindersEnabled && <i />}</button>
       <button data-tour="settings-button" className={`icon-button ${view === "settings" ? "active" : ""}`} onClick={() => go("settings")} aria-label="Open settings"><Settings2 size={19} /></button>
