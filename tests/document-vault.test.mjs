@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { saveVaultDocument, getVaultDocument, listVaultDocuments, clearVaultDocuments, legacyDocumentCount, importLegacyDocuments } from "../app/document-vault.ts";
+import { saveVaultDocument, getVaultDocument, listVaultDocuments, clearVaultDocuments, legacyDocumentCount, importLegacyDocuments } from "../app/document-vault-local.ts";
 
 // Model asynchronous requests and transaction completion separately.
 function device() {
