@@ -324,94 +324,255 @@
     ],
     "checkedOn": "2026-10-23"
   },
-  "amikom": {
-    "year": "2027/2028",
+  "undip": {
+    "year": "2026/2027",
     "intro": {
-      "en": "AMIKOM advertises a 2027 special admission wave. Applicants can use report-card selection or online CBT through its admissions portal.",
-      "id": "AMIKOM mengumumkan gelombang khusus penerimaan 2027. Peserta dapat menggunakan seleksi rapor atau CBT daring melalui portal penerimaan."
+      "en": "No regular S1 application window verified open on 23 October 2026. Current PMB open notices concern postgraduate and professional study.",
+      "id": "Belum ada pendaftaran S1 reguler yang terverifikasi masih dibuka pada 23 Oktober 2026. Pengumuman aktif PMB menyangkut pascasarjana dan profesi."
     },
     "routes": [
-      "Rapor",
-      "CBT Online"
+      "SNBP",
+      "SNBT",
+      "SBUB",
+      "UM CBT online",
+      "UM nilai UTBK dan rapor"
     ],
     "eligibility": {
-      "en": "Report-card selection requires a final-report or school-exam average of at least 75. Applicants below 75 are directed to online CBT. Confirm the active wave in the application portal.",
-      "id": "Seleksi rapor mensyaratkan rata-rata rapor terakhir atau ujian sekolah minimal 75. Peserta di bawah 75 diarahkan ke CBT daring. Pastikan gelombang aktif di portal pendaftaran."
+      "en": "Requirements vary by route. UM CBT 2026 lists school graduates from 2024–2026 and maximum age 25 on 1 July 2026; its Paket C wording lists only 2024–2025. UTBK-based UM requires the 2026 UTBK certificate and semester 1–5 reports. SBUB is for 2026 graduates with qualifying achievements and semester averages of at least 70/100.",
+      "id": "Syarat berbeda tiap jalur. UM CBT 2026 mencantumkan lulusan sekolah 2024–2026 dan usia maksimal 25 tahun per 1 Juli 2026; ketentuan Paket C hanya menyebut 2024–2025. UM nilai UTBK memerlukan sertifikat UTBK 2026 dan rapor semester 1–5. SBUB untuk lulusan 2026 dengan prestasi sesuai ketentuan serta rata-rata rapor minimal 70/100."
     },
     "fees": {
-      "en": "Published 2027/2028 regular-S1 first-semester tuition is Rp8.5m, Rp9.5m or Rp10.75m depending on programme. Semesters II–VII split the same semester total 70% before KRS and 30% before UTS. A reduced rate applies from semester VIII onward only below 12 SKS.",
-      "id": "UKT semester pertama S1 reguler 2027/2028 tercantum Rp8,5 juta, Rp9,5 juta, atau Rp10,75 juta menurut program. Semester II–VII membagi total yang sama: 70% sebelum KRS dan 30% sebelum UTS. Tarif lebih rendah berlaku mulai semester VIII dan hanya di bawah 12 SKS."
+      "en": "The regular UM table lists programme-specific semester UKT groups I–VIII plus one-time IPI with two IPI groups. The 2026 UM application fee was Rp350,000. Check the exact programme and route before budgeting; IUP fees are separate.",
+      "id": "Tabel UM reguler memuat UKT per semester kelompok I–VIII menurut program serta IPI sekali selama masa studi dengan dua kelompok IPI. Biaya pendaftaran UM 2026 sebesar Rp350.000. Periksa program dan jalur yang tepat; biaya IUP terpisah."
     },
     "timing": {
-      "en": "The PMB site advertises the 2027 special wave as open. A fixed closing date has not been verified; check the active wave in cmhs.amikom.ac.id.",
-      "id": "Situs PMB mengumumkan gelombang khusus 2027 dibuka. Tanggal penutupan tetap belum terverifikasi; periksa gelombang aktif di cmhs.amikom.ac.id."
-    },
-    "applicationFee": {
-      "en": "Published application fee: Rp200,000.",
-      "id": "Biaya pendaftaran terbitan: Rp200.000."
+      "en": "Historical 2026 dates: SNBP 3–18 February; SNBT 25 March–7 April; UM CBT registration 5 May–11 June and tests 22–30 June; UM UTBK 3–17 June; second UTBK round 10–20 July. These are past deadlines.",
+      "id": "Jadwal 2026 yang sudah berlalu: SNBP 3–18 Februari; SNBT 25 Maret–7 April; pendaftaran UM CBT 5 Mei–11 Juni dan tes 22–30 Juni; UM nilai UTBK 3–17 Juni; gelombang 2 nilai UTBK 10–20 Juli."
     },
     "links": [
       {
         "label": {
-          "en": "Current admissions & application",
-          "id": "Penerimaan & pendaftaran terkini"
+          "en": "Official admissions",
+          "id": "Penerimaan resmi"
         },
-        "url": "https://pmb.amikom.ac.id/"
+        "url": "https://pmb.undip.ac.id/"
       },
       {
         "label": {
-          "en": "Report-card eligibility",
-          "id": "Persyaratan jalur rapor"
+          "en": "2026/2027 programme list",
+          "id": "Daftar program 2026/2027"
         },
-        "url": "https://pmb.amikom.ac.id/rapor/"
+        "url": "https://pmb.undip.ac.id/wp-content/uploads/2026/04/SK-NO-41-TENTANG-PENETAPAN-DAYA-TAMPUNG-VOKASI-DAN-SARJANA-TAHUN-2026-2027.pdf"
       },
       {
         "label": {
-          "en": "2027/2028 regular-S1 fee poster",
-          "id": "Poster biaya S1 reguler 2027/2028"
+          "en": "UM CBT 2026",
+          "id": "UM CBT 2026"
         },
-        "url": "https://pmb.amikom.ac.id/wp-content/uploads/2026/10/biaya-kuliah-amikom-2027.jpg"
+        "url": "https://pmb.undip.ac.id/sarjana/jalur-um-sarjana/"
+      },
+      {
+        "label": {
+          "en": "UM UTBK 2026",
+          "id": "UM UTBK 2026"
+        },
+        "url": "https://pmb.undip.ac.id/sarjana/jalur-um-sarjana-utbk/"
+      },
+      {
+        "label": {
+          "en": "UM UTBK · round 2",
+          "id": "UM UTBK · gelombang 2"
+        },
+        "url": "https://pmb.undip.ac.id/jalur-um-program-sarjana-gelombang-2/"
+      },
+      {
+        "label": {
+          "en": "SBUB 2026",
+          "id": "SBUB 2026"
+        },
+        "url": "https://pmb.undip.ac.id/sarjana/jalur-sbub/"
+      },
+      {
+        "label": {
+          "en": "UM regular tuition & IPI",
+          "id": "UKT & IPI UM reguler"
+        },
+        "url": "https://pmb.undip.ac.id/wp-content/uploads/2026/04/UKT-DAN-IPI-PROGRAM-SARJANA-JALUR-UM-REGULER.pdf"
+      },
+      {
+        "label": {
+          "en": "2026 admission calendar",
+          "id": "Kalender penerimaan 2026"
+        },
+        "url": "https://pmb.undip.ac.id/kalender-pendaftaran/"
       }
     ],
     "checkedOn": "2026-10-23",
-    "feeGroups": [
+    "applicationFee": {
+      "en": "UM 2026 application: Rp350,000.",
+      "id": "Pendaftaran UM 2026: Rp350.000."
+    }
+  },
+  "its": {
+    "year": "2026/2027",
+    "intro": {
+      "en": "Published2026 S1 application periods have passed. No2027 S1 schedule verified.",
+      "id": "Periode pendaftaran S1 tahun2026 yang dipublikasikan sudah berlalu. Jadwal S1 tahun2027 belum terverifikasi.",
+      "code": "past-published-dates"
+    },
+    "routes": [
+      "SNBP",
+      "SNBT",
+      "SMITS FLAT: Mandiri Beasiswa / Mandiri Prestasi",
+      "SMITS ACE: Mandiri Kemitraan / Mandiri Umum",
+      "SMITS CDT: Mandiri Talenta Desain"
+    ],
+    "eligibility": {
+      "en": "Rules depend on route. SMITS2026 accepts WNI school/PaketC graduates2024–2026, maximum age26 on1July2026, excluding SNBP2024–2026 admits. FLAT requires certified achievement; ACE requires TesSMITS; CDT requires a design portfolio.",
+      "id": "Syarat berbeda menurut jalur. SMITS2026 menerima WNI lulusan sekolah/PaketC2024–2026, maksimal26tahun pada1Juli2026, yang tidak diterima SNBP2024–2026. FLAT mensyaratkan prestasi bersertifikat; ACE menggunakan TesSMITS; CDT menggunakan portofolio desain."
+    },
+    "fees": {
+      "en": "UKT and IPI vary by route and programme. Use the official tables below.",
+      "id": "UKT dan IPI berbeda menurut jalur dan program. Lihat tabel resmi di bawah."
+    },
+    "timing": {
+      "en": "Published 2026 dates have passed.",
+      "id": "Jadwal 2026 yang dipublikasikan sudah berlalu."
+    },
+    "links": [
       {
-        "programmes": [
-          "Akuntansi",
-          "Ekonomi",
-          "Hubungan Internasional",
-          "Ilmu Pemerintahan",
-          "Kewirausahaan",
-          "Geografi"
-        ],
-        "semesterOne": 8500000,
-        "semester2to7BeforeKRS": 5950000,
-        "semester2to7BeforeUTS": 2550000,
-        "finalSemesterUnder12SKS": 4250000
+        "label": {
+          "en": "S1 admissions",
+          "id": "Penerimaan S1"
+        },
+        "url": "https://www.its.ac.id/admission/sarjana/"
       },
       {
-        "programmes": [
-          "Arsitektur",
-          "Teknik Komputer",
-          "Perencanaan Wilayah dan Kota"
-        ],
-        "semesterOne": 9500000,
-        "semester2to7BeforeKRS": 6650000,
-        "semester2to7BeforeUTS": 2850000,
-        "finalSemesterUnder12SKS": 4750000
+        "label": {
+          "en": "SNBP requirements",
+          "id": "Syarat SNBP"
+        },
+        "url": "https://www.its.ac.id/admission/snbp/"
       },
       {
-        "programmes": [
-          "Informatika",
-          "Sistem Informasi",
-          "Teknologi Informasi",
-          "Ilmu Komunikasi"
-        ],
-        "semesterOne": 10750000,
-        "semester2to7BeforeKRS": 7525000,
-        "semester2to7BeforeUTS": 3225000,
-        "finalSemesterUnder12SKS": 5375000
+        "label": {
+          "en": "SNBT tuition & requirements",
+          "id": "UKT & syarat SNBT"
+        },
+        "url": "https://www.its.ac.id/admission/snbt/"
+      },
+      {
+        "label": {
+          "en": "SMITS FLAT fees & requirements",
+          "id": "Biaya & syarat SMITS FLAT"
+        },
+        "url": "https://www.its.ac.id/admission/smits-flat/"
+      },
+      {
+        "label": {
+          "en": "SMITS ACE tuition & IPI",
+          "id": "UKT & IPI SMITS ACE"
+        },
+        "url": "https://www.its.ac.id/admission/smits-ace/"
+      },
+      {
+        "label": {
+          "en": "SMITS CDT tuition & dates",
+          "id": "UKT & jadwal SMITS CDT"
+        },
+        "url": "https://www.its.ac.id/admission/smits-cdt/"
+      },
+      {
+        "label": {
+          "en": "Current admission portal",
+          "id": "Portal penerimaan terkini"
+        },
+        "url": "https://admission.its.ac.id/"
       }
-    ]
+    ],
+    "checkedOn": "2026-10-23"
+  },
+  "ub": {
+    "year": "2026/2027",
+    "intro": {
+      "en": "2026 reference dates have passed. Preliminary 2027 plans are available.",
+      "id": "Jadwal acuan 2026 sudah lewat. Rencana awal 2027 tersedia."
+    },
+    "routes": [
+      "SNBP",
+      "SNBT",
+      "SMUB Nilai Rapor",
+      "SMUB Prestasi",
+      "SMUB Nilai UTBK",
+      "SMPD"
+    ],
+    "eligibility": {
+      "en": "Requirements vary by route and programme. UTBK routes require the relevant score; health and colour-vision rules differ by programme.",
+      "id": "Syarat berbeda menurut jalur dan program. Jalur UTBK memerlukan nilai yang sesuai; ketentuan kesehatan dan buta warna mengikuti program."
+    },
+    "fees": {
+      "en": "Programme-specific semester UKT; independent routes also apply IPI.",
+      "id": "UKT per semester sesuai program; jalur mandiri juga mengenakan IPI."
+    },
+    "timing": {
+      "en": "2026 regular S1 reference dates have passed. SMUB UTBK Murni payment registration ran 17–20 July 2026 and results were published 24 July 2026.",
+      "id": "Jadwal acuan 2026 telah berlalu. Pendaftaran UTBK Murni: 17–20 Juli; hasil: 24 Juli 2026."
+    },
+    "applicationFee": {
+      "en": "SMUB Nilai UTBK (Murni), 2026: Rp500,000. Other routes may differ.",
+      "id": "SMUB Nilai UTBK (Murni), 2026: Rp500.000. Jalur lain dapat berbeda."
+    },
+    "links": [
+      {
+        "label": {
+          "en": "Official SMUB 2026 routes",
+          "id": "Jalur resmi SMUB 2026"
+        },
+        "url": "https://selma.ub.ac.id/smub"
+      },
+      {
+        "label": {
+          "en": "2026 UTBK Murni requirements and dates",
+          "id": "Syarat dan jadwal UTBK Murni 2026"
+        },
+        "url": "https://selma.ub.ac.id/smub-murni-utbk-2026/"
+      },
+      {
+        "label": {
+          "en": "2026 UTBK Murni results",
+          "id": "Hasil UTBK Murni 2026"
+        },
+        "url": "https://selma.ub.ac.id/pengumuman-hasil-smub-utbk-murni-2026/"
+      },
+      {
+        "label": {
+          "en": "Official UKT fee tables",
+          "id": "Tabel biaya UKT resmi"
+        },
+        "url": "https://selma.ub.ac.id/ukt/"
+      },
+      {
+        "label": {
+          "en": "Official IPI fee tables",
+          "id": "Tabel biaya IPI resmi"
+        },
+        "url": "https://selma.ub.ac.id/ipi/"
+      },
+      {
+        "label": {
+          "en": "Preliminary 2027 SNBT overview",
+          "id": "Gambaran awal SNBT 2027"
+        },
+        "url": "https://selma.ub.ac.id/seleksi-masuk-nasional-tes/"
+      },
+      {
+        "label": {
+          "en": "SMPD overview",
+          "id": "Gambaran SMPD"
+        },
+        "url": "https://selma.ub.ac.id/smpd/"
+      }
+    ],
+    "checkedOn": "2026-10-23"
   }
 }

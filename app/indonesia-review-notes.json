@@ -1,0 +1,54 @@
+{
+  "undip": {
+    "notes": [
+      {
+        "en": "2027 S1 schedule and fees: not yet verified in the official sources reviewed.",
+        "id": "Jadwal dan biaya S1 2027: belum terverifikasi pada sumber resmi yang ditinjau."
+      },
+      {
+        "en": "Catalogue: 60 programme/campus entries from the 2026/2027 decree. Older official pages show 53 or 55; campuses are listed separately here.",
+        "id": "Katalog: 60 entri program/kampus dari SK 2026/2027. Halaman resmi lain menyebut 53 atau 55; kampus dicatat terpisah di sini."
+      },
+      {
+        "en": "UM CBT Paket C eligibility lists 2024–2025 only. Check your qualification directly with admissions.",
+        "id": "Syarat Paket C UM CBT hanya menyebut 2024–2025. Konfirmasikan kualifikasimu kepada admisi."
+      }
+    ],
+    "programmeNotes": {
+      "id-undip-s1-perencanaan-wilayah-dan-kota-kampus-pekalongan": {
+        "en": "Intake availability needs confirmation: the decree lists UM quota 60 but total 0 for this campus.",
+        "id": "Ketersediaan penerimaan perlu dikonfirmasi: SK mencantumkan kuota UM 60 tetapi total 0 untuk kampus ini."
+      }
+    }
+  },
+  "its": {
+    "notes": [
+      {
+        "en": "2027 S1 schedule and fees: not yet verified in the official sources reviewed.",
+        "id": "Jadwal dan biaya S1 2027: belum terverifikasi pada sumber resmi yang ditinjau."
+      },
+      {
+        "en": "Catalogue uses the 2026 admissions tables, including the new Mining Engineering programme.",
+        "id": "Katalog memakai tabel penerimaan 2026, termasuk program baru Teknik Pertambangan."
+      }
+    ],
+    "programmeNotes": {}
+  },
+  "ub": {
+    "notes": [
+      {
+        "en": "2027 S1 schedule: preliminary months appear on official pages. Exact dates, open registration and 2027 fees are not yet verified.",
+        "id": "Jadwal S1 2027: bulan perkiraan tercantum pada halaman resmi. Tanggal pasti, pendaftaran dibuka dan biaya 2027 belum terverifikasi."
+      },
+      {
+        "en": "Preliminary plans: SNBT in March 2027; SMPD registration in April–May 2027. Confirm before planning.",
+        "id": "Rencana awal: SNBT Maret 2027; pendaftaran SMPD April–Mei 2027. Konfirmasi sebelum merencanakan."
+      },
+      {
+        "en": "Catalogue includes 80 S1 programme/campus offerings, including five at Kediri. Faculty names follow the 2026 updates.",
+        "id": "Katalog mencakup 80 penawaran program/kampus S1, termasuk lima di Kediri. Nama fakultas mengikuti pembaruan 2026."
+      }
+    ],
+    "programmeNotes": {}
+  }
+}

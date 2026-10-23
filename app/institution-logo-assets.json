@@ -573,5 +573,18 @@
     "src": "/institution-logos/reviewed/verified-school-nus.png",
     "background": "#ffffff",
     "srcSet": "/institution-logos/reviewed/verified-school-nus.png 104w"
+  },
+  "indonesia-its": {
+    "src": "/institution-logos/reviewed/indonesia-its.svg",
+    "background": "#fff"
+  },
+  "indonesia-undip": {
+    "src": "/institution-logos/reviewed/indonesia-undip.png",
+    "background": "#fff"
+  },
+  "indonesia-ub": {
+    "src": "/institution-logos/reviewed/indonesia-ub-512.webp",
+    "background": "#fff",
+    "srcSet": "/institution-logos/reviewed/indonesia-ub-128.webp 128w, /institution-logos/reviewed/indonesia-ub-256.webp 256w, /institution-logos/reviewed/indonesia-ub-512.webp 512w, /institution-logos/reviewed/indonesia-ub-1024.webp 1024w"
   }
 }

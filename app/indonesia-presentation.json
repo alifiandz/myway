@@ -358,58 +358,232 @@
     },
     "reviewedOn": "2026-10-23"
   },
-  "amikom": {
-    "intake": "2027/2028",
-    "status": "announced",
+  "undip": {
+    "intake": "2026/2027",
+    "status": "past",
     "summary": {
-      "en": "2027 special wave advertised open.",
-      "id": "Gelombang khusus 2027 diumumkan dibuka."
+      "en": "2026 application dates have passed",
+      "id": "Jadwal pendaftaran 2026 sudah berlalu"
     },
     "eligibility": [
       {
-        "en": "Rapor: final-report / school-exam average ≥75",
-        "id": "Rapor: rata-rata rapor terakhir / ujian sekolah ≥75"
+        "en": "UM CBT: school graduates 2024–2026; age ≤25 on 1 July 2026.",
+        "id": "UM CBT: lulusan sekolah 2024–2026; usia ≤25 pada 1 Juli 2026."
       },
       {
-        "en": "Below 75: online CBT",
-        "id": "Di bawah 75: CBT daring"
+        "en": "UTBK route: UTBK 2026 certificate and semester 1–5 reports.",
+        "id": "Jalur UTBK: sertifikat UTBK 2026 dan rapor semester 1–5."
+      },
+      {
+        "en": "SBUB: 2026 graduates, qualifying achievements and report averages ≥70.",
+        "id": "SBUB: lulusan 2026, prestasi sesuai syarat dan rata-rata rapor ≥70."
       }
     ],
     "events": [
       {
         "label": {
-          "en": "Current wave",
-          "id": "Gelombang terkini"
+          "en": "UM CBT registration",
+          "id": "Pendaftaran UM CBT"
         },
-        "date": "2027"
+        "date": "5 May–11 Jun 2026"
       },
       {
         "label": {
-          "en": "Closing date",
-          "id": "Tanggal penutupan"
+          "en": "UM CBT tests",
+          "id": "Tes UM CBT"
         },
-        "date": "Not verified / Belum terverifikasi"
+        "date": "22–30 Jun 2026"
+      },
+      {
+        "label": {
+          "en": "UM UTBK · round 2",
+          "id": "UM UTBK · gelombang 2"
+        },
+        "date": "10–20 Jul 2026"
       }
     ],
     "costs": [
       {
         "label": {
-          "en": "Regular S1 · 2027/2028",
-          "id": "S1 reguler · 2027/2028"
+          "en": "UM regular",
+          "id": "UM reguler"
         },
         "recurring": {
-          "en": "Programme-specific semester fee",
-          "id": "UKT per semester menurut program"
+          "en": "UKT I–VIII · programme-specific",
+          "id": "UKT I–VIII · sesuai program"
         },
         "oneOff": {
-          "en": "Rp200,000 application",
-          "id": "Pendaftaran Rp200.000"
+          "en": "IPI · two groups by programme",
+          "id": "IPI · dua kelompok sesuai program"
         }
       }
     ],
     "note": {
-      "en": "Confirm the active wave in the portal. Reduced tuition requires semester VIII onward and fewer than 12 SKS.",
-      "id": "Pastikan gelombang aktif di portal. Tarif lebih rendah berlaku mulai semester VIII dan beban di bawah 12 SKS."
+      "en": "Rates depend on programme and assigned group. This table covers regular UM, not IUP.",
+      "id": "Tarif mengikuti program dan kelompok yang ditetapkan. Tabel ini untuk UM reguler, bukan IUP."
+    },
+    "reviewedOn": "2026-10-23"
+  },
+  "its": {
+    "intake": "2026/2027",
+    "status": "past",
+    "summary": {
+      "en": "2026 application dates have passed",
+      "id": "Jadwal pendaftaran 2026 sudah berlalu"
+    },
+    "eligibility": [
+      {
+        "en": "SMITS: WNI graduates 2024–2026; age ≤26 on 1 July 2026.",
+        "id": "SMITS: WNI lulusan 2024–2026; usia ≤26 pada 1 Juli 2026."
+      },
+      {
+        "en": "FLAT: achievement evidence. ACE: TesSMITS. CDT: design portfolio.",
+        "id": "FLAT: bukti prestasi. ACE: TesSMITS. CDT: portofolio desain."
+      },
+      {
+        "en": "SMITS excludes applicants admitted through SNBP 2024–2026.",
+        "id": "SMITS tidak menerima peserta yang diterima SNBP 2024–2026."
+      }
+    ],
+    "events": [
+      {
+        "label": {
+          "en": "SMITS FLAT deadline",
+          "id": "Batas SMITS FLAT"
+        },
+        "date": "8 May 2026"
+      },
+      {
+        "label": {
+          "en": "SMITS ACE · wave 2 deadline",
+          "id": "Batas SMITS ACE · gelombang 2"
+        },
+        "date": "24 Jun 2026"
+      },
+      {
+        "label": {
+          "en": "SMITS CDT · extended deadline",
+          "id": "Batas SMITS CDT · diperpanjang"
+        },
+        "date": "22 Jul 2026"
+      }
+    ],
+    "costs": [
+      {
+        "label": {
+          "en": "SNBT",
+          "id": "SNBT"
+        },
+        "recurring": {
+          "en": "Programme & economic-group UKT",
+          "id": "UKT sesuai program & kelompok ekonomi"
+        },
+        "oneOff": {
+          "en": "UKT is the tuition component",
+          "id": "Komponen pendidikan berupa UKT"
+        }
+      },
+      {
+        "label": {
+          "en": "SMITS ACE",
+          "id": "SMITS ACE"
+        },
+        "recurring": {
+          "en": "From Rp7.5m; medicine Rp20–30m",
+          "id": "Mulai Rp7,5 juta; kedokteran Rp20–30 juta"
+        },
+        "oneOff": {
+          "en": "IPI varies by programme & route",
+          "id": "IPI sesuai program & jalur"
+        }
+      },
+      {
+        "label": {
+          "en": "SMITS CDT · 3 design programmes",
+          "id": "SMITS CDT · 3 program desain"
+        },
+        "recurring": {
+          "en": "From Rp7.5m",
+          "id": "Mulai Rp7,5 juta"
+        },
+        "oneOff": {
+          "en": "IPI Rp75m / Rp100m",
+          "id": "IPI Rp75 juta / Rp100 juta"
+        }
+      }
+    ],
+    "note": {
+      "en": "Starting amounts are not universal prices. CDT covers Product, Interior and Visual Communication Design only. Check the official programme table.",
+      "id": "Nominal awal bukan tarif semua program. CDT hanya untuk Desain Produk, Interior dan Komunikasi Visual. Periksa tabel program resmi."
+    },
+    "reviewedOn": "2026-10-23"
+  },
+  "ub": {
+    "intake": "2026/2027",
+    "status": "past",
+    "summary": {
+      "en": "2026 dates passed · 2027 plans preliminary",
+      "id": "Jadwal 2026 lewat · rencana 2027 masih awal"
+    },
+    "eligibility": [
+      {
+        "en": "Requirements depend on route and programme.",
+        "id": "Syarat mengikuti jalur dan program."
+      },
+      {
+        "en": "UTBK routes require the relevant score. Check programme health requirements.",
+        "id": "Jalur UTBK memerlukan nilai yang sesuai. Periksa syarat kesehatan program."
+      }
+    ],
+    "events": [
+      {
+        "label": {
+          "en": "UTBK Murni registration/payment",
+          "id": "Pendaftaran/pembayaran UTBK Murni"
+        },
+        "date": "17–20 Jul 2026"
+      },
+      {
+        "label": {
+          "en": "UTBK Murni results",
+          "id": "Hasil UTBK Murni"
+        },
+        "date": "24 Jul 2026"
+      }
+    ],
+    "costs": [
+      {
+        "label": {
+          "en": "National routes",
+          "id": "Jalur nasional"
+        },
+        "recurring": {
+          "en": "Programme & assigned-group UKT",
+          "id": "UKT sesuai program & kelompok"
+        },
+        "oneOff": {
+          "en": "Follow national-route rules",
+          "id": "Mengikuti ketentuan jalur nasional"
+        }
+      },
+      {
+        "label": {
+          "en": "SMUB independent routes",
+          "id": "Jalur mandiri SMUB"
+        },
+        "recurring": {
+          "en": "Programme & assigned-group UKT",
+          "id": "UKT sesuai program & kelompok"
+        },
+        "oneOff": {
+          "en": "Programme-specific IPI",
+          "id": "IPI sesuai program"
+        }
+      }
+    ],
+    "note": {
+      "en": "Official UKT and IPI tables are linked below. Undated rates are not confirmed 2027 prices.",
+      "id": "Tabel UKT dan IPI resmi ditautkan di bawah. Tarif tanpa tahun bukan konfirmasi biaya 2027."
     },
     "reviewedOn": "2026-10-23"
   }
