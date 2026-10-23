@@ -575,8 +575,9 @@
     "srcSet": "/institution-logos/reviewed/verified-school-nus.png 104w"
   },
   "indonesia-its": {
-    "src": "/institution-logos/reviewed/indonesia-its.svg",
-    "background": "#fff"
+    "src": "/institution-logos/reviewed/indonesia-its-emblem.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/indonesia-its-emblem-128.webp 128w, /institution-logos/reviewed/indonesia-its-emblem-256.webp 256w, /institution-logos/reviewed/indonesia-its-emblem-512.webp 512w, /institution-logos/reviewed/indonesia-its-emblem-1024.webp 1024w, /institution-logos/reviewed/indonesia-its-emblem.png 1559w"
   },
   "indonesia-undip": {
     "src": "/institution-logos/reviewed/indonesia-undip.png",
