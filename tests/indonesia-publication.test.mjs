@@ -13,7 +13,7 @@ const {summarizePublishedIndonesia}=load(path.join(root,'indonesia-publication.t
 const {default:Catalogue}=load(path.join(root,'admin/data/indonesia-live-catalogue.tsx'));
 const rows=JSON.parse(fs.readFileSync(path.join(root,'indonesia-catalogue.json')));
 test('admin publication counts use public data and keep publication separate from curriculum review',()=>{
- const x=summarizePublishedIndonesia();assert.equal(x.universities.length,9);assert.equal(x.programmeCount,530);assert.equal(x.facultyCount,111);assert.equal(x.reviewedSummaries,6);assert.equal(x.summariesToReview,524);assert.equal(x.sourceAudits,530);assert(x.curriculumSources>6);assert(x.programmeGaps<=530);assert(!x.universities.some(u=>u.id==='amikom'));
+ const x=summarizePublishedIndonesia();assert.equal(x.universities.length,9);assert.equal(x.programmeCount,530);assert.equal(x.facultyCount,112);assert.equal(x.reviewedSummaries,6);assert.equal(x.summariesToReview,524);assert.equal(x.sourceAudits,530);assert(x.curriculumSources>6);assert(x.programmeGaps<=530);assert(!x.universities.some(u=>u.id==='amikom'));
  const subset=rows.filter(p=>p.university_id==='its'),y=summarizePublishedIndonesia(subset);assert.equal(y.universities.length,1);assert.equal(y.programmeCount,subset.length);assert.equal(y.reviewedSummaries,0);assert.equal(y.summariesToReview,subset.length);
 });
 test('published admin catalogue shows real logos, view-only controls and review scope in both languages',()=>{

@@ -31,3 +31,9 @@ test('numeric study plans include semester units and credit facts include SKS',(
  const p=Object.entries(research.programmeResearch).find(([,r])=>typeof r.fields.duration.value==='number'&&r.fields.duration.status==='verified');assert(p);
  const html=renderToStaticMarkup(React.createElement(components.ProgrammeResearchInformation,{programmeId:p[0],id:false}));assert.match(html,/\d+ semesters/);
 });
+
+test('main-campus UNAIR programmes keep their own faculties and campus offerings remain separate',()=>{
+ const expected={'kedokteran':'Fakultas Kedokteran','kedokteran-hewan':'Fakultas Kedokteran Hewan','kesehatan-masyarakat':'Fakultas Kesehatan Masyarakat','akuakultur':'Fakultas Perikanan dan Kelautan'};
+ for(const [slug,faculty] of Object.entries(expected))assert.equal(rows.find(r=>r.id==='id-unair-s1-'+slug).faculty,faculty);
+ assert.equal(new Set(rows.map(r=>r.id)).size,530);
+});
