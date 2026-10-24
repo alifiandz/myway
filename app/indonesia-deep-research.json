@@ -1323,11 +1323,11 @@
             "note": "Not explicitly established for this S1 programme in the official profile/curriculum reviewed; this does not mean the information is unpublished."
           },
           "curriculum": {
-            "value": null,
-            "status": "source_inaccessible",
+            "value": "https://drive.google.com/file/d/1PNRRAL8587HPjlH3bImAcglGIVLS70fo/view",
+            "status": "verified",
             "sourceUrl": "https://drive.google.com/file/d/1PNRRAL8587HPjlH3bImAcglGIVLS70fo/view",
-            "sourceYear": null,
-            "note": "Current faculty regular-S1 curriculum page https://law.ugm.ac.id/kurikulum/ links2025S1handbook. Document download could not complete in this runtime; not unpublished."
+            "sourceYear": "2025",
+            "note": "ActualofficialS1handbook successfullydownloadedandread; previousretrievalblock resolved. Cohortexplicit;2027applicabilitynotconfirmed."
           },
           "entry_requirement": {
             "value": null,
@@ -4151,11 +4151,11 @@
             "note": "Official degree title; international-award alternatives, if shown, are not generalised to the regular programme."
           },
           "credits": {
-            "value": null,
-            "status": "source_inaccessible",
-            "sourceUrl": "https://thp.faperta.ugm.ac.id/kurikulum-2019/",
-            "sourceYear": null,
-            "note": "Not explicitly established for this S1 programme in the official profile/curriculum reviewed; this does not mean the information is unpublished."
+            "value": "144–155",
+            "status": "verified",
+            "sourceUrl": "https://drive.google.com/file/d/1OG7pQZRmkzybqI3QKgewTwGLby2Ijnwo/view#page=46",
+            "sourceYear": "2026",
+            "note": "Page46minimum144maximum155includinggraduationrequirements. Coursecompositionp30states144–146; do notpresentalltabletotalsasonecohortuniformload."
           },
           "duration": {
             "value": null,
@@ -4172,11 +4172,11 @@
             "note": "Not explicitly established for this S1 programme in the official profile/curriculum reviewed; this does not mean the information is unpublished."
           },
           "curriculum": {
-            "value": null,
-            "status": "source_inaccessible",
-            "sourceUrl": "https://thp.faperta.ugm.ac.id/kurikulum-2019/",
-            "sourceYear": null,
-            "note": "Official admissions link could not be read successfully."
+            "value": "https://drive.google.com/file/d/1OG7pQZRmkzybqI3QKgewTwGLby2Ijnwo/view",
+            "status": "verified",
+            "sourceUrl": "https://drive.google.com/file/d/1OG7pQZRmkzybqI3QKgewTwGLby2Ijnwo/view",
+            "sourceYear": "2026",
+            "note": "ActualofficialS1handbook successfullydownloadedandread; previousretrievalblock resolved. Cohortexplicit;2027applicabilitynotconfirmed."
           },
           "entry_requirement": {
             "value": null,
@@ -5716,11 +5716,11 @@
             "note": "The reviewed official programme sources do not explicitly establish this field. No value inferred from national minimums, course names, or staff qualifications."
           },
           "curriculum": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://sastraindonesia.fbs.uny.ac.id/id/kurikulum",
-            "sourceYear": null,
-            "note": "The reviewed official programme sources do not explicitly establish this field. No value inferred from national minimums, course names, or staff qualifications."
+            "value": "https://sasindo.fbs.uny.ac.id/sites/sasindo.fbs.uny.ac.id/files/Kurikulum%202020%20Sasindo%20%2830%20Juli%29.pdf",
+            "status": "verified",
+            "sourceUrl": "https://sasindo.fbs.uny.ac.id/sites/sasindo.fbs.uny.ac.id/files/Kurikulum%202020%20Sasindo%20%2830%20Juli%29.pdf",
+            "sourceYear": "2020",
+            "note": "Actualprogramme-specificcurriculum/course table read; historicalcohortexplicit,2027applicability notconfirmed."
           },
           "entry_requirement": {
             "value": null,
@@ -6581,11 +6581,11 @@
             "note": "The reviewed official programme sources do not explicitly establish this field. No value inferred from national minimums, course names, or staff qualifications."
           },
           "curriculum": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://pknh.fisip.uny.ac.id/id/kurikulum",
-            "sourceYear": null,
-            "note": "The reviewed official programme sources do not explicitly establish this field. No value inferred from national minimums, course names, or staff qualifications."
+            "value": "https://pendidikan-kewarganegaraan-hukum.fisip.uny.ac.id/id/node/1364",
+            "status": "verified",
+            "sourceUrl": "https://pendidikan-kewarganegaraan-hukum.fisip.uny.ac.id/id/node/1364",
+            "sourceYear": "MBKM2020",
+            "note": "Actualprogramme-specificcurriculum/course table read; historicalcohortexplicit,2027applicability notconfirmed."
           },
           "entry_requirement": {
             "value": null,
@@ -6716,11 +6716,11 @@
             "note": "Programme source/document was located, but readable details sufficient to verify this field could not be obtained. No claim of non-publication."
           },
           "curriculum": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://pendidikan-sejarah.fisip.uny.ac.id/id/kurikulum",
-            "sourceYear": null,
-            "note": "The reviewed official programme sources do not explicitly establish this field. No value inferred from national minimums, course names, or staff qualifications."
+            "value": "https://drive.google.com/file/d/1UsWDMZ6KD5Y_BBbrvXByYo5llc17llO-/view",
+            "status": "verified",
+            "sourceUrl": "https://drive.google.com/file/d/1UsWDMZ6KD5Y_BBbrvXByYo5llc17llO-/view",
+            "sourceYear": "2025",
+            "note": "ActualS1curriculumPDF fromfaculty2026curriculumdirectory downloadedandread.2027applicabilitynotconfirmed."
           },
           "entry_requirement": {
             "value": null,
@@ -7101,18 +7101,18 @@
             "note": "The reviewed official programme sources do not explicitly establish this field. No value inferred from national minimums, course names, or staff qualifications."
           },
           "credits": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://pariwisata.fisip.uny.ac.id/id/kurikulum",
-            "sourceYear": null,
-            "note": "The reviewed official programme sources do not explicitly establish this field. No value inferred from national minimums, course names, or staff qualifications."
+            "value": 154,
+            "status": "verified",
+            "sourceUrl": "https://drive.google.com/file/d/1NeF10jKc9B8dY6VxEQE8Kv2Tep3dq26y/view",
+            "sourceYear": "2025",
+            "note": "Explicitprogramme loadfrom2025curriculum. IlmuPolitik144–160rangeisnormativeprogrammecreditrange;notasinglefixedtotal."
           },
           "duration": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://pariwisata.fisip.uny.ac.id/id/kurikulum",
-            "sourceYear": null,
-            "note": "The reviewed official programme sources do not explicitly establish this field. No value inferred from national minimums, course names, or staff qualifications."
+            "value": 8,
+            "status": "verified",
+            "sourceUrl": "https://drive.google.com/file/d/1NeF10jKc9B8dY6VxEQE8Kv2Tep3dq26y/view",
+            "sourceYear": "2025",
+            "note": "Explicit8semestercurriculumplan."
           },
           "language": {
             "value": null,
@@ -7122,11 +7122,11 @@
             "note": "The reviewed official programme sources do not explicitly establish this field. No value inferred from national minimums, course names, or staff qualifications."
           },
           "curriculum": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://pariwisata.fisip.uny.ac.id/id/profil-singkat",
-            "sourceYear": "Undated",
-            "note": "Programme content and official course/CPL listings checked. A complete current curriculum document could not be established from the accessible content; not described as unpublished."
+            "value": "https://drive.google.com/file/d/1NeF10jKc9B8dY6VxEQE8Kv2Tep3dq26y/view",
+            "status": "verified",
+            "sourceUrl": "https://drive.google.com/file/d/1NeF10jKc9B8dY6VxEQE8Kv2Tep3dq26y/view",
+            "sourceYear": "2025",
+            "note": "ActualS1curriculumPDF fromfaculty2026curriculumdirectory downloadedandread.2027applicabilitynotconfirmed."
           },
           "entry_requirement": {
             "value": null,
@@ -7169,18 +7169,18 @@
             "note": "The reviewed official programme sources do not explicitly establish this field. No value inferred from national minimums, course names, or staff qualifications."
           },
           "credits": {
-            "value": 144,
+            "value": "144–160",
             "status": "verified",
-            "sourceUrl": "https://pmb.uny.ac.id/program-sarjana/prodi-fishipol/ilmu-politik",
-            "sourceYear": "Undated",
-            "note": "Explicit programme total/range in the cited source; applies to that curriculum version, not automatically to 2027 entrants."
+            "sourceUrl": "https://drive.google.com/file/d/15Rqf_xDfDNCkg6_Q9BOQF4rzjbMqt6-L/view",
+            "sourceYear": "2025",
+            "note": "Explicitprogramme loadfrom2025curriculum. IlmuPolitik144–160rangeisnormativeprogrammecreditrange;notasinglefixedtotal."
           },
           "duration": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://ilmupolitik.fisip.uny.ac.id/id/kurikulum",
-            "sourceYear": null,
-            "note": "The reviewed official programme sources do not explicitly establish this field. No value inferred from national minimums, course names, or staff qualifications."
+            "value": 8,
+            "status": "verified",
+            "sourceUrl": "https://drive.google.com/file/d/15Rqf_xDfDNCkg6_Q9BOQF4rzjbMqt6-L/view",
+            "sourceYear": "2025",
+            "note": "Explicit8semestercurriculumplan."
           },
           "language": {
             "value": null,
@@ -7190,11 +7190,11 @@
             "note": "The reviewed official programme sources do not explicitly establish this field. No value inferred from national minimums, course names, or staff qualifications."
           },
           "curriculum": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://ilmupolitik.fisip.uny.ac.id/id/kurikulum",
-            "sourceYear": null,
-            "note": "The reviewed official programme sources do not explicitly establish this field. No value inferred from national minimums, course names, or staff qualifications."
+            "value": "https://drive.google.com/file/d/15Rqf_xDfDNCkg6_Q9BOQF4rzjbMqt6-L/view",
+            "status": "verified",
+            "sourceUrl": "https://drive.google.com/file/d/15Rqf_xDfDNCkg6_Q9BOQF4rzjbMqt6-L/view",
+            "sourceYear": "2025",
+            "note": "ActualS1curriculumPDF fromfaculty2026curriculumdirectory downloadedandread.2027applicabilitynotconfirmed."
           },
           "entry_requirement": {
             "value": null,
@@ -7681,10 +7681,10 @@
           },
           "curriculum": {
             "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://ptboga.ft.uny.ac.id/id/kurikulum-1",
+            "status": "source_inaccessible",
+            "sourceUrl": "https://drive.google.com/uc?export=download&id=0B5WicmcDI2dkV29HX2tLbG5US2s",
             "sourceYear": "Undated",
-            "note": "Programme content and official course/CPL listings checked. A complete current curriculum document could not be established from the accessible content; not described as unpublished."
+            "note": "Faculty2019S1curriculumlinklocated,butdownloadreturnedHTML ratherthan PDF. No curriculumcontentverified;notproof ofnonpublication."
           },
           "entry_requirement": {
             "value": null,
@@ -7736,10 +7736,10 @@
           },
           "curriculum": {
             "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://ptbusana.ft.uny.ac.id/id/kurikulum-program-studi-s1-pendidikan-tata-busana",
+            "status": "source_inaccessible",
+            "sourceUrl": "https://drive.google.com/uc?export=download&id=0B5WicmcDI2dkNlJmSHRrUS1ISHM",
             "sourceYear": "2024",
-            "note": "The official curriculum page currently contains only xxxxx; no course or credit details can be established from it."
+            "note": "Faculty2019S1curriculumlinklocated,butdownloadreturnedHTML ratherthan PDF. No curriculumcontentverified;notproof ofnonpublication."
           },
           "entry_requirement": {
             "value": null,
@@ -8190,11 +8190,11 @@
             "note": "Programme source/document was located, but readable details sufficient to verify this field could not be obtained. No claim of non-publication."
           },
           "curriculum": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://teknik-sipil.ft.uny.ac.id/id/kurikulum",
-            "sourceYear": null,
-            "note": "The reviewed official programme sources do not explicitly establish this field. No value inferred from national minimums, course names, or staff qualifications."
+            "value": "https://tsipil.ft.uny.ac.id/sites/tsipil.ft.uny.ac.id/files/DAFTAR%20MK_KURIKULUM%20S1%20TEKNIK%20SIPIL%20UNY_MBKM_FINAL_03082020_B%20INDO_Formal_CETAK_sanctioned.pdf",
+            "status": "verified",
+            "sourceUrl": "https://tsipil.ft.uny.ac.id/sites/tsipil.ft.uny.ac.id/files/DAFTAR%20MK_KURIKULUM%20S1%20TEKNIK%20SIPIL%20UNY_MBKM_FINAL_03082020_B%20INDO_Formal_CETAK_sanctioned.pdf",
+            "sourceYear": "2020",
+            "note": "ActualsixpageS1TeknikSipil2020MBKMsemester table read. Sourceembeddedby https://tsipil.ft.uny.ac.id/id/mata-kuliah. TeachingdegreePTSPandD4curriculanotused."
           },
           "entry_requirement": {
             "value": null,
@@ -8384,11 +8384,11 @@
             "note": "Award explicitly stated by the official programme source; no suffix taken from staff names."
           },
           "credits": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://pjkr.fikk.uny.ac.id/id/kurikulum",
-            "sourceYear": null,
-            "note": "The reviewed official programme sources do not explicitly establish this field. No value inferred from national minimums, course names, or staff qualifications."
+            "value": 144,
+            "status": "verified",
+            "sourceUrl": "https://s1pjsd.fikk.uny.ac.id/sites/s1pjsd.fikk.uny.ac.id/files/Buku%20Kurikulum%202014%20PJKR_opt.pdf#page=9",
+            "sourceYear": "2014",
+            "note": "Historical2014curriculum expressly144SKS. This does not establish2027load."
           },
           "duration": {
             "value": "8 semesters / 4 years",
@@ -8405,11 +8405,11 @@
             "note": "The reviewed official programme sources do not explicitly establish this field. No value inferred from national minimums, course names, or staff qualifications."
           },
           "curriculum": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://pjkr.fikk.uny.ac.id/id/kurikulum",
-            "sourceYear": null,
-            "note": "The reviewed official programme sources do not explicitly establish this field. No value inferred from national minimums, course names, or staff qualifications."
+            "value": "https://s1pjsd.fikk.uny.ac.id/sites/s1pjsd.fikk.uny.ac.id/files/Buku%20Kurikulum%202014%20PJKR_opt.pdf",
+            "status": "verified",
+            "sourceUrl": "https://s1pjsd.fikk.uny.ac.id/sites/s1pjsd.fikk.uny.ac.id/files/Buku%20Kurikulum%202014%20PJKR_opt.pdf",
+            "sourceYear": "2014",
+            "note": "Actualprogramme-specificcurriculum/course table read; historicalcohortexplicit,2027applicability notconfirmed."
           },
           "entry_requirement": {
             "value": "2026 Mandiri guidance: sports applicants have skills and health tests; portfolio rules depend on admission route.",
@@ -8772,11 +8772,11 @@
             "note": "Programme source/document was located, but readable details sufficient to verify this field could not be obtained. No claim of non-publication."
           },
           "curriculum": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://pendidikan-akuntansi.feb.uny.ac.id/id/kurikulum",
-            "sourceYear": null,
-            "note": "The reviewed official programme sources do not explicitly establish this field. No value inferred from national minimums, course names, or staff qualifications."
+            "value": "https://pendidikan-akuntansi.feb.uny.ac.id/sites/pendidikan-akuntansi.feb.uny.ac.id/files/KURIKULUM%202020%20PEND%20AKUNTANSI_MERDEKA%20BELAJAR_FINAL_1.pdf",
+            "status": "verified",
+            "sourceUrl": "https://pendidikan-akuntansi.feb.uny.ac.id/sites/pendidikan-akuntansi.feb.uny.ac.id/files/KURIKULUM%202020%20PEND%20AKUNTANSI_MERDEKA%20BELAJAR_FINAL_1.pdf",
+            "sourceYear": "2020",
+            "note": "Actualprogramme-specificcurriculum/course table read; historicalcohortexplicit,2027applicability notconfirmed."
           },
           "entry_requirement": {
             "value": null,
@@ -13966,25 +13966,25 @@
         "status": "partial",
         "fields": {
           "degree": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Read this programme’s description in faculty regular-S1 directory and faculty graduation rule. Faculty minimum144SKS does not establish exact programme curriculum total. Programme handbook link reviewed separately; current applicability unconfirmed."
+            "value": "Sarjana Teknik (S.T.)",
+            "status": "verified",
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Elektro-2023-2024.pdf#page=89",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Regularundergraduateaward fromprogrammespecification; partnerdegree notincluded."
           },
           "credits": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Faculty policy states minimum144SKS, but no exact programme-specific total verified; value withheld."
+            "value": 145,
+            "status": "verified",
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Elektro-2023-2024.pdf#page=89",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Explicit programme total145SKS in thishandbook. Later2024curricula may differ; historicaltable notgeneralised to2027."
           },
           "duration": {
             "value": 8,
             "status": "verified",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Read this programme’s description in faculty regular-S1 directory and faculty graduation rule. Faculty minimum144SKS does not establish exact programme curriculum total. Programme handbook link reviewed separately; current applicability unconfirmed."
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Elektro-2023-2024.pdf#page=89",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Four-year undergraduate plan shown; maximumduration distinct."
           },
           "language": {
             "value": null,
@@ -13994,11 +13994,11 @@
             "note": "Read this programme’s description in faculty regular-S1 directory and faculty graduation rule. Faculty minimum144SKS does not establish exact programme curriculum total. Programme handbook link reviewed separately; current applicability unconfirmed."
           },
           "curriculum": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Programme profile reviewed but a programme-specific curriculum document was not established from this accessible source. This does not mean it is unpublished."
+            "value": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Elektro-2023-2024.pdf#page=89",
+            "status": "verified",
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Elektro-2023-2024.pdf#page=89",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Actual programme-specific undergraduate chapter read in official department handbook. Historicalcohort source;2027curriculum notconfirmed."
           },
           "entry_requirement": {
             "value": null,
@@ -14394,25 +14394,25 @@
         "status": "partial",
         "fields": {
           "degree": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Read this programme’s description in faculty regular-S1 directory and faculty graduation rule. Faculty minimum144SKS does not establish exact programme curriculum total. Programme handbook link reviewed separately; current applicability unconfirmed."
+            "value": "Bachelor of Engineering",
+            "status": "verified",
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Industri-2023-2024.pdf#page=34",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Regularundergraduateaward fromprogrammespecification; partnerdegree notincluded."
           },
           "credits": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Faculty policy states minimum144SKS, but no exact programme-specific total verified; value withheld."
+            "value": 145,
+            "status": "verified",
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Industri-2023-2024.pdf#page=34",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Explicit programme total145SKS in thishandbook. Later2024curricula may differ; historicaltable notgeneralised to2027."
           },
           "duration": {
             "value": 8,
             "status": "verified",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Read this programme’s description in faculty regular-S1 directory and faculty graduation rule. Faculty minimum144SKS does not establish exact programme curriculum total. Programme handbook link reviewed separately; current applicability unconfirmed."
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Industri-2023-2024.pdf#page=34",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Four-year undergraduate plan shown; maximumduration distinct."
           },
           "language": {
             "value": null,
@@ -14422,11 +14422,11 @@
             "note": "Read this programme’s description in faculty regular-S1 directory and faculty graduation rule. Faculty minimum144SKS does not establish exact programme curriculum total. Programme handbook link reviewed separately; current applicability unconfirmed."
           },
           "curriculum": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Programme profile reviewed but a programme-specific curriculum document was not established from this accessible source. This does not mean it is unpublished."
+            "value": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Industri-2023-2024.pdf#page=34",
+            "status": "verified",
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Industri-2023-2024.pdf#page=34",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Actual programme-specific undergraduate chapter read in official department handbook. Historicalcohort source;2027curriculum notconfirmed."
           },
           "entry_requirement": {
             "value": null,
@@ -15232,25 +15232,25 @@
         "status": "partial",
         "fields": {
           "degree": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Read this programme’s description in faculty regular-S1 directory and faculty graduation rule. Faculty minimum144SKS does not establish exact programme curriculum total. Programme handbook link reviewed separately; current applicability unconfirmed."
+            "value": "Sarjana Teknik (S.T.)",
+            "status": "verified",
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Sipil-2023-2024.pdf#page=35",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Regularundergraduateaward fromprogrammespecification; partnerdegree notincluded."
           },
           "credits": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Faculty policy states minimum144SKS, but no exact programme-specific total verified; value withheld."
+            "value": 145,
+            "status": "verified",
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Sipil-2023-2024.pdf#page=35",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Explicit programme total145SKS in thishandbook. Later2024curricula may differ; historicaltable notgeneralised to2027."
           },
           "duration": {
             "value": 8,
             "status": "verified",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Read this programme’s description in faculty regular-S1 directory and faculty graduation rule. Faculty minimum144SKS does not establish exact programme curriculum total. Programme handbook link reviewed separately; current applicability unconfirmed."
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Sipil-2023-2024.pdf#page=35",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Four-year undergraduate plan shown; maximumduration distinct."
           },
           "language": {
             "value": null,
@@ -15260,11 +15260,11 @@
             "note": "Read this programme’s description in faculty regular-S1 directory and faculty graduation rule. Faculty minimum144SKS does not establish exact programme curriculum total. Programme handbook link reviewed separately; current applicability unconfirmed."
           },
           "curriculum": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Programme profile reviewed but a programme-specific curriculum document was not established from this accessible source. This does not mean it is unpublished."
+            "value": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Sipil-2023-2024.pdf#page=35",
+            "status": "verified",
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Sipil-2023-2024.pdf#page=35",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Actual programme-specific undergraduate chapter read in official department handbook. Historicalcohort source;2027curriculum notconfirmed."
           },
           "entry_requirement": {
             "value": null,
@@ -15469,25 +15469,25 @@
         "status": "partial",
         "fields": {
           "degree": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Read this programme’s description in faculty regular-S1 directory and faculty graduation rule. Faculty minimum144SKS does not establish exact programme curriculum total. Programme handbook link reviewed separately; current applicability unconfirmed."
+            "value": "Sarjana Teknik (S.T.)",
+            "status": "verified",
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Kimia-2023-2024.pdf#page=78",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Regularundergraduateaward fromprogrammespecification; partnerdegree notincluded."
           },
           "credits": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Faculty policy states minimum144SKS, but no exact programme-specific total verified; value withheld."
+            "value": 145,
+            "status": "verified",
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Kimia-2023-2024.pdf#page=78",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Explicit programme total145SKS in thishandbook. Later2024curricula may differ; historicaltable notgeneralised to2027."
           },
           "duration": {
             "value": 8,
             "status": "verified",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Read this programme’s description in faculty regular-S1 directory and faculty graduation rule. Faculty minimum144SKS does not establish exact programme curriculum total. Programme handbook link reviewed separately; current applicability unconfirmed."
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Kimia-2023-2024.pdf#page=78",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Four-year undergraduate plan shown; maximumduration distinct."
           },
           "language": {
             "value": null,
@@ -15497,11 +15497,11 @@
             "note": "Read this programme’s description in faculty regular-S1 directory and faculty graduation rule. Faculty minimum144SKS does not establish exact programme curriculum total. Programme handbook link reviewed separately; current applicability unconfirmed."
           },
           "curriculum": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Programme profile reviewed but a programme-specific curriculum document was not established from this accessible source. This does not mean it is unpublished."
+            "value": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Kimia-2023-2024.pdf#page=78",
+            "status": "verified",
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Kimia-2023-2024.pdf#page=78",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Actual programme-specific undergraduate chapter read in official department handbook. Historicalcohort source;2027curriculum notconfirmed."
           },
           "entry_requirement": {
             "value": null,
@@ -15651,25 +15651,25 @@
         "status": "partial",
         "fields": {
           "degree": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Read this programme’s description in faculty regular-S1 directory and faculty graduation rule. Faculty minimum144SKS does not establish exact programme curriculum total. Programme handbook link reviewed separately; current applicability unconfirmed."
+            "value": "Sarjana Teknik (S.T.)",
+            "status": "verified",
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Sipil-2023-2024.pdf#page=69",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Regularundergraduateaward fromprogrammespecification; partnerdegree notincluded."
           },
           "credits": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Faculty policy states minimum144SKS, but no exact programme-specific total verified; value withheld."
+            "value": 145,
+            "status": "verified",
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Sipil-2023-2024.pdf#page=69",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Explicit programme total145SKS in thishandbook. Later2024curricula may differ; historicaltable notgeneralised to2027."
           },
           "duration": {
             "value": 8,
             "status": "verified",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Read this programme’s description in faculty regular-S1 directory and faculty graduation rule. Faculty minimum144SKS does not establish exact programme curriculum total. Programme handbook link reviewed separately; current applicability unconfirmed."
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Sipil-2023-2024.pdf#page=69",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Four-year undergraduate plan shown; maximumduration distinct."
           },
           "language": {
             "value": null,
@@ -15679,11 +15679,11 @@
             "note": "Read this programme’s description in faculty regular-S1 directory and faculty graduation rule. Faculty minimum144SKS does not establish exact programme curriculum total. Programme handbook link reviewed separately; current applicability unconfirmed."
           },
           "curriculum": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Programme profile reviewed but a programme-specific curriculum document was not established from this accessible source. This does not mean it is unpublished."
+            "value": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Sipil-2023-2024.pdf#page=69",
+            "status": "verified",
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Sipil-2023-2024.pdf#page=69",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Actual programme-specific undergraduate chapter read in official department handbook. Historicalcohort source;2027curriculum notconfirmed."
           },
           "entry_requirement": {
             "value": null,
@@ -15706,25 +15706,25 @@
         "status": "partial",
         "fields": {
           "degree": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Read this programme’s description in faculty regular-S1 directory and faculty graduation rule. Faculty minimum144SKS does not establish exact programme curriculum total. Programme handbook link reviewed separately; current applicability unconfirmed."
+            "value": "Sarjana Teknik (S.T.)",
+            "status": "verified",
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Mesin-2023-2024.pdf#page=89",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Regularundergraduateaward fromprogrammespecification; partnerdegree notincluded."
           },
           "credits": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Faculty policy states minimum144SKS, but no exact programme-specific total verified; value withheld."
+            "value": 145,
+            "status": "verified",
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Mesin-2023-2024.pdf#page=89",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Explicit programme total145SKS in thishandbook. Later2024curricula may differ; historicaltable notgeneralised to2027."
           },
           "duration": {
             "value": 8,
             "status": "verified",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Read this programme’s description in faculty regular-S1 directory and faculty graduation rule. Faculty minimum144SKS does not establish exact programme curriculum total. Programme handbook link reviewed separately; current applicability unconfirmed."
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Mesin-2023-2024.pdf#page=89",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Four-year undergraduate plan shown; maximumduration distinct."
           },
           "language": {
             "value": null,
@@ -15734,11 +15734,11 @@
             "note": "Read this programme’s description in faculty regular-S1 directory and faculty graduation rule. Faculty minimum144SKS does not establish exact programme curriculum total. Programme handbook link reviewed separately; current applicability unconfirmed."
           },
           "curriculum": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Programme profile reviewed but a programme-specific curriculum document was not established from this accessible source. This does not mean it is unpublished."
+            "value": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Mesin-2023-2024.pdf#page=89",
+            "status": "verified",
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Mesin-2023-2024.pdf#page=89",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Actual programme-specific undergraduate chapter read in official department handbook. Historicalcohort source;2027curriculum notconfirmed."
           },
           "entry_requirement": {
             "value": null,
@@ -15761,25 +15761,25 @@
         "status": "partial",
         "fields": {
           "degree": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Read this programme’s description in faculty regular-S1 directory and faculty graduation rule. Faculty minimum144SKS does not establish exact programme curriculum total. Programme handbook link reviewed separately; current applicability unconfirmed."
+            "value": "Sarjana Teknik (S.T.)",
+            "status": "verified",
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Metalurgi-dan-Material-2023-2024.pdf#page=33",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Regularundergraduateaward fromprogrammespecification; partnerdegree notincluded."
           },
           "credits": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Faculty policy states minimum144SKS, but no exact programme-specific total verified; value withheld."
+            "value": 145,
+            "status": "verified",
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Metalurgi-dan-Material-2023-2024.pdf#page=33",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Explicit programme total145SKS in thishandbook. Later2024curricula may differ; historicaltable notgeneralised to2027."
           },
           "duration": {
             "value": 8,
             "status": "verified",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Read this programme’s description in faculty regular-S1 directory and faculty graduation rule. Faculty minimum144SKS does not establish exact programme curriculum total. Programme handbook link reviewed separately; current applicability unconfirmed."
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Metalurgi-dan-Material-2023-2024.pdf#page=33",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Four-year undergraduate plan shown; maximumduration distinct."
           },
           "language": {
             "value": null,
@@ -15789,11 +15789,11 @@
             "note": "Read this programme’s description in faculty regular-S1 directory and faculty graduation rule. Faculty minimum144SKS does not establish exact programme curriculum total. Programme handbook link reviewed separately; current applicability unconfirmed."
           },
           "curriculum": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Programme profile reviewed but a programme-specific curriculum document was not established from this accessible source. This does not mean it is unpublished."
+            "value": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Metalurgi-dan-Material-2023-2024.pdf#page=33",
+            "status": "verified",
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Metalurgi-dan-Material-2023-2024.pdf#page=33",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Actual programme-specific undergraduate chapter read in official department handbook. Historicalcohort source;2027curriculum notconfirmed."
           },
           "entry_requirement": {
             "value": null,
@@ -15816,25 +15816,25 @@
         "status": "partial",
         "fields": {
           "degree": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Read this programme’s description in faculty regular-S1 directory and faculty graduation rule. Faculty minimum144SKS does not establish exact programme curriculum total. Programme handbook link reviewed separately; current applicability unconfirmed."
+            "value": "Sarjana Teknik (S.T.)",
+            "status": "verified",
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Mesin-2023-2024.pdf#page=34",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Regularundergraduateaward fromprogrammespecification; partnerdegree notincluded."
           },
           "credits": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Faculty policy states minimum144SKS, but no exact programme-specific total verified; value withheld."
+            "value": 145,
+            "status": "verified",
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Mesin-2023-2024.pdf#page=34",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Explicit programme total145SKS in thishandbook. Later2024curricula may differ; historicaltable notgeneralised to2027."
           },
           "duration": {
             "value": 8,
             "status": "verified",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Read this programme’s description in faculty regular-S1 directory and faculty graduation rule. Faculty minimum144SKS does not establish exact programme curriculum total. Programme handbook link reviewed separately; current applicability unconfirmed."
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Mesin-2023-2024.pdf#page=34",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Four-year undergraduate plan shown; maximumduration distinct."
           },
           "language": {
             "value": null,
@@ -15844,11 +15844,11 @@
             "note": "Read this programme’s description in faculty regular-S1 directory and faculty graduation rule. Faculty minimum144SKS does not establish exact programme curriculum total. Programme handbook link reviewed separately; current applicability unconfirmed."
           },
           "curriculum": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Programme profile reviewed but a programme-specific curriculum document was not established from this accessible source. This does not mean it is unpublished."
+            "value": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Mesin-2023-2024.pdf#page=34",
+            "status": "verified",
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Mesin-2023-2024.pdf#page=34",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Actual programme-specific undergraduate chapter read in official department handbook. Historicalcohort source;2027curriculum notconfirmed."
           },
           "entry_requirement": {
             "value": null,
@@ -16053,25 +16053,25 @@
         "status": "partial",
         "fields": {
           "degree": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Read this programme’s description in faculty regular-S1 directory and faculty graduation rule. Faculty minimum144SKS does not establish exact programme curriculum total. Programme handbook link reviewed separately; current applicability unconfirmed."
+            "value": "Sarjana Teknik (S.T.)",
+            "status": "verified",
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Elektro-2023-2024.pdf#page=40",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Regularundergraduateaward fromprogrammespecification; partnerdegree notincluded."
           },
           "credits": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Faculty policy states minimum144SKS, but no exact programme-specific total verified; value withheld."
+            "value": 145,
+            "status": "verified",
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Elektro-2023-2024.pdf#page=40",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Explicit programme total145SKS in thishandbook. Later2024curricula may differ; historicaltable notgeneralised to2027."
           },
           "duration": {
             "value": 8,
             "status": "verified",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Read this programme’s description in faculty regular-S1 directory and faculty graduation rule. Faculty minimum144SKS does not establish exact programme curriculum total. Programme handbook link reviewed separately; current applicability unconfirmed."
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Elektro-2023-2024.pdf#page=40",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Four-year undergraduate plan shown; maximumduration distinct."
           },
           "language": {
             "value": null,
@@ -16081,11 +16081,11 @@
             "note": "Read this programme’s description in faculty regular-S1 directory and faculty graduation rule. Faculty minimum144SKS does not establish exact programme curriculum total. Programme handbook link reviewed separately; current applicability unconfirmed."
           },
           "curriculum": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Programme profile reviewed but a programme-specific curriculum document was not established from this accessible source. This does not mean it is unpublished."
+            "value": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Elektro-2023-2024.pdf#page=40",
+            "status": "verified",
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Elektro-2023-2024.pdf#page=40",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Actual programme-specific undergraduate chapter read in official department handbook. Historicalcohort source;2027curriculum notconfirmed."
           },
           "entry_requirement": {
             "value": null,
@@ -16362,25 +16362,25 @@
         "status": "partial",
         "fields": {
           "degree": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Read this programme’s description in faculty regular-S1 directory and faculty graduation rule. Faculty minimum144SKS does not establish exact programme curriculum total. Programme handbook link reviewed separately; current applicability unconfirmed."
+            "value": "Sarjana Teknik (S.T.)",
+            "status": "verified",
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Kimia-2023-2024.pdf#page=36",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Regularundergraduateaward fromprogrammespecification; partnerdegree notincluded."
           },
           "credits": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Faculty policy states minimum144SKS, but no exact programme-specific total verified; value withheld."
+            "value": 145,
+            "status": "verified",
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Kimia-2023-2024.pdf#page=36",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Explicit programme total145SKS in thishandbook. Later2024curricula may differ; historicaltable notgeneralised to2027."
           },
           "duration": {
             "value": 8,
             "status": "verified",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Read this programme’s description in faculty regular-S1 directory and faculty graduation rule. Faculty minimum144SKS does not establish exact programme curriculum total. Programme handbook link reviewed separately; current applicability unconfirmed."
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Kimia-2023-2024.pdf#page=36",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Four-year undergraduate plan shown; maximumduration distinct."
           },
           "language": {
             "value": null,
@@ -16390,11 +16390,11 @@
             "note": "Read this programme’s description in faculty regular-S1 directory and faculty graduation rule. Faculty minimum144SKS does not establish exact programme curriculum total. Programme handbook link reviewed separately; current applicability unconfirmed."
           },
           "curriculum": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://eng.ui.ac.id/reguler/",
-            "sourceYear": "Undated faculty regular-S1 policy",
-            "note": "Programme profile reviewed but a programme-specific curriculum document was not established from this accessible source. This does not mean it is unpublished."
+            "value": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Kimia-2023-2024.pdf#page=36",
+            "status": "verified",
+            "sourceUrl": "https://eng.ui.ac.id/wp-content/uploads/Departemen-Teknik-Kimia-2023-2024.pdf#page=36",
+            "sourceYear": "2023/2024 handbook; curriculum2020",
+            "note": "Actual programme-specific undergraduate chapter read in official department handbook. Historicalcohort source;2027curriculum notconfirmed."
           },
           "entry_requirement": {
             "value": null,
@@ -16936,11 +16936,11 @@
             "note": "NewAIprogramme 2026page read; no curriculum credit total inferred."
           },
           "curriculum": {
-            "value": null,
-            "status": "not_found",
+            "value": "https://cs.ui.ac.id/sarjana-kecerdasan-artifisial/",
+            "status": "verified",
             "sourceUrl": "https://cs.ui.ac.id/sarjana-kecerdasan-artifisial/",
-            "sourceYear": "2026/2027 intake",
-            "note": "Programme profile reviewed but a programme-specific curriculum document was not established from this accessible source. This does not mean it is unpublished."
+            "sourceYear": "2026/2027",
+            "note": "Fullpagecurriculumsection read: named mandatory/elective courses and individualSKS. Degree total not inferred from adding mandatorycourses."
           },
           "entry_requirement": {
             "value": "Lulusan SMA/sederajat; latar akademik kuat terutama Matematika dan IPA.",
@@ -16950,7 +16950,28 @@
             "note": "Faculty guidance; confirm 2027 programme and route-specific eligibility."
           }
         },
-        "courses": [],
+        "courses": [
+          {
+            "name": "AI Ethics",
+            "sourceUrl": "https://cs.ui.ac.id/sarjana-kecerdasan-artifisial/"
+          },
+          {
+            "name": "Data Science and Machine Learning",
+            "sourceUrl": "https://cs.ui.ac.id/sarjana-kecerdasan-artifisial/"
+          },
+          {
+            "name": "Knowledge Representation and Reasoning",
+            "sourceUrl": "https://cs.ui.ac.id/sarjana-kecerdasan-artifisial/"
+          },
+          {
+            "name": "Deep Learning",
+            "sourceUrl": "https://cs.ui.ac.id/sarjana-kecerdasan-artifisial/"
+          },
+          {
+            "name": "Generative AI",
+            "sourceUrl": "https://cs.ui.ac.id/sarjana-kecerdasan-artifisial/"
+          }
+        ],
         "checkedOn": "2026-10-24",
         "searchLog": [
           {
@@ -28088,7 +28109,7 @@
         ]
       },
       "id-undip-s1-biologi": {
-        "status": "partial",
+        "status": "reviewed",
         "checkedOn": "2026-10-24",
         "fields": {
           "degree": {
@@ -28120,11 +28141,11 @@
             "note": "University S1 academic regulation reproduced in the official handbook states Bahasa Indonesia is the main language for regular classes. Does not mean every course/material is exclusively Indonesian; confirm any programme-specific international track separately."
           },
           "curriculum": {
-            "value": null,
-            "status": "not_found",
-            "sourceUrl": "https://bio.fsm.undip.ac.id/v1/informasi-kurikulum-prodi-s1-biologi/",
-            "sourceYear": null,
-            "note": "Programme-specific official sources and curriculum search reviewed. Full current programme/campus course table not verified. This is not evidence the curriculum is unpublished."
+            "value": "https://bio.undip.ac.id/distribusi-mata-kuliah/",
+            "status": "verified",
+            "sourceUrl": "https://bio.undip.ac.id/distribusi-mata-kuliah/",
+            "sourceYear": "2024 course codes;official semester distribution undated",
+            "note": "Recovered and read programme-specific full curriculum/course distribution in official document. Published historical version; not confirmation of the2027 curriculum."
           },
           "entry_requirement": {
             "value": [
@@ -28137,7 +28158,28 @@
             "note": "Historical cohort-specific health matrix explicitly lists this programme/campus. 2027/2028 eligibility is not announced in sources reviewed. Route-specific academic/age/document rules also apply. Generic undated PMB colour-vision list differs for Geodesi; use the cohort-specific matrix for historical comparison, obtain 2027 rules before applying."
           }
         },
-        "courses": [],
+        "courses": [
+          {
+            "name": "Biologi Dasar I",
+            "sourceUrl": "https://bio.undip.ac.id/distribusi-mata-kuliah/"
+          },
+          {
+            "name": "Anatomi Hewan",
+            "sourceUrl": "https://bio.undip.ac.id/distribusi-mata-kuliah/"
+          },
+          {
+            "name": "Morfologi Tumbuhan",
+            "sourceUrl": "https://bio.undip.ac.id/distribusi-mata-kuliah/"
+          },
+          {
+            "name": "Pengantar Biodiversitas",
+            "sourceUrl": "https://bio.undip.ac.id/distribusi-mata-kuliah/"
+          },
+          {
+            "name": "Biologi Molekuler",
+            "sourceUrl": "https://bio.undip.ac.id/distribusi-mata-kuliah/"
+          }
+        ],
         "searchLog": [
           {
             "url": "https://undip.ac.id/program-sarjana-2",
@@ -28979,18 +29021,18 @@
             "note": "Degree stated for this programme in the central directory; intake applicability not specified."
           },
           "credits": {
-            "value": 144,
+            "value": 146,
             "status": "verified",
-            "sourceUrl": "https://undip.ac.id/program-sarjana-2",
-            "sourceYear": "Undated official programme profile",
-            "note": "Exact programme-specific central profile wording. Undated or older curriculum; not a confirmed 2027 curriculum. Bachelor phase only where professional phase is separate."
+            "sourceUrl": "https://elektro.ft.undip.ac.id/v3/wp-content/uploads/2025/10/Buku-Pedoman-Prodi-Sarjana-Teknik-Elektro-2024-ver2_compressed.pdf",
+            "sourceYear": "2024–2029 curriculum /2024 handbook",
+            "note": "Exact programme-specific regular bachelor minimum146SKS stated on page6;supersedes older undated144SKS profile for this curriculum."
           },
           "duration": {
-            "value": "8 s.d. 14 semesters",
+            "value": "8 semesters normally;maximum14 semesters",
             "status": "verified",
-            "sourceUrl": "https://undip.ac.id/program-sarjana-2",
-            "sourceYear": "Undated official programme profile",
-            "note": "Programme-specific published study range. Undated central profile; confirm applicable cohort with programme."
+            "sourceUrl": "https://elektro.ft.undip.ac.id/v3/wp-content/uploads/2025/10/Buku-Pedoman-Prodi-Sarjana-Teknik-Elektro-2024-ver2_compressed.pdf",
+            "sourceYear": "2024–2029 curriculum /2024 handbook",
+            "note": "Exact programme-specific normal andmaximum duration stated on page6."
           },
           "language": {
             "value": "Indonesian (regular classes); IUP is a separate English-medium route",
@@ -29000,11 +29042,11 @@
             "note": "University S1 academic regulation reproduced in the official handbook states Bahasa Indonesia is the main language for regular classes. Does not mean every course/material is exclusively Indonesian; confirm any programme-specific international track separately."
           },
           "curriculum": {
-            "value": null,
-            "status": "source_inaccessible",
-            "sourceUrl": "https://elektro.undip.ac.id/kurikulum-v2/",
-            "sourceYear": "2020 / 2024",
-            "note": "Official curriculum page was read; full linked/embedded curriculum table could not be reliably extracted. Publication exists, but complete contents/current cohort applicability not verified."
+            "value": "https://elektro.ft.undip.ac.id/v3/wp-content/uploads/2025/10/Buku-Pedoman-Prodi-Sarjana-Teknik-Elektro-2024-ver2_compressed.pdf",
+            "status": "verified",
+            "sourceUrl": "https://elektro.ft.undip.ac.id/v3/wp-content/uploads/2025/10/Buku-Pedoman-Prodi-Sarjana-Teknik-Elektro-2024-ver2_compressed.pdf",
+            "sourceYear": "2024–2029 curriculum /2024 handbook",
+            "note": "Official98-page programme handbook recovered on the older official faculty hostname after new-host read timeouts. Full semester distribution andcourse syllabi read. Published2024–2029 curriculum cycle;future amendments remain possible."
           },
           "entry_requirement": {
             "value": [
@@ -29018,7 +29060,28 @@
             "note": "Historical cohort-specific health matrix explicitly lists this programme/campus. 2027/2028 eligibility is not announced in sources reviewed. Route-specific academic/age/document rules also apply. Generic undated PMB colour-vision list differs for Geodesi; use the cohort-specific matrix for historical comparison, obtain 2027 rules before applying."
           }
         },
-        "courses": [],
+        "courses": [
+          {
+            "name": "Rangkaian Listrik",
+            "sourceUrl": "https://elektro.ft.undip.ac.id/v3/wp-content/uploads/2025/10/Buku-Pedoman-Prodi-Sarjana-Teknik-Elektro-2024-ver2_compressed.pdf"
+          },
+          {
+            "name": "Sistem Digital",
+            "sourceUrl": "https://elektro.ft.undip.ac.id/v3/wp-content/uploads/2025/10/Buku-Pedoman-Prodi-Sarjana-Teknik-Elektro-2024-ver2_compressed.pdf"
+          },
+          {
+            "name": "Medan Elektromagnetik",
+            "sourceUrl": "https://elektro.ft.undip.ac.id/v3/wp-content/uploads/2025/10/Buku-Pedoman-Prodi-Sarjana-Teknik-Elektro-2024-ver2_compressed.pdf"
+          },
+          {
+            "name": "Desain Sistem Mikroprosesor",
+            "sourceUrl": "https://elektro.ft.undip.ac.id/v3/wp-content/uploads/2025/10/Buku-Pedoman-Prodi-Sarjana-Teknik-Elektro-2024-ver2_compressed.pdf"
+          },
+          {
+            "name": "Dasar Sistem Kontrol",
+            "sourceUrl": "https://elektro.ft.undip.ac.id/v3/wp-content/uploads/2025/10/Buku-Pedoman-Prodi-Sarjana-Teknik-Elektro-2024-ver2_compressed.pdf"
+          }
+        ],
         "searchLog": [
           {
             "url": "https://undip.ac.id/program-sarjana-2",
@@ -29280,9 +29343,9 @@
           "curriculum": {
             "value": null,
             "status": "source_inaccessible",
-            "sourceUrl": "https://tekim.undip.ac.id/program-studi-sarjana/kurikulum/",
-            "sourceYear": "Undated",
-            "note": "Official curriculum page was read; full linked/embedded curriculum table could not be reliably extracted. Publication exists, but complete contents/current cohort applicability not verified."
+            "sourceUrl": "https://tekim.undip.ac.id/wp-content/uploads/2022/09/Buku-Panduan-Prgram-Studi-Sarjana-Teknik-Kimia-Undip-2021-1.pdf",
+            "sourceYear": "2021",
+            "note": "Exact official programme page links this full bachelor handbook. Two directreads timedout;older officialfaculty hostname returned404. Fullcontents remain inaccessible,not unpublished."
           },
           "entry_requirement": {
             "value": [
@@ -36918,11 +36981,11 @@
             "note": "Programme-specific source reviewed in official index and direct access attempted. Full programme-specific value could not be established; do not substitute a national minimum or another campus."
           },
           "curriculum": {
-            "value": null,
-            "status": "source_inaccessible",
+            "value": "https://sosiologi.ub.ac.id/wp-content/uploads/2025/02/Buku-Pedoman-Pendidikan-FISIP-UB-2020-2021.pdf",
+            "status": "verified",
             "sourceUrl": "https://sosiologi.ub.ac.id/wp-content/uploads/2025/02/Buku-Pedoman-Pendidikan-FISIP-UB-2020-2021.pdf",
-            "sourceYear": null,
-            "note": "Official programme curriculum/syllabus source located in search index. Full document/content not yet established; link retained for applicants. This is an access limitation, not an unpublished claim."
+            "sourceYear": "2020/2021 official FISIP handbook;uploaded2025",
+            "note": "Recovered and read programme-specific full curriculum/course distribution in official document. Published historical version; not confirmation of the2027 curriculum."
           },
           "entry_requirement": {
             "value": null,
@@ -36932,7 +36995,28 @@
             "note": "Official programme-specific disability/colour-vision matrix exists; full matrix returned HTTP 403. Individual 2027 eligibility restrictions are not established. Consult HaloSELMA before applying."
           }
         },
-        "courses": [],
+        "courses": [
+          {
+            "name": "Pengantar Sosiologi",
+            "sourceUrl": "https://sosiologi.ub.ac.id/wp-content/uploads/2025/02/Buku-Pedoman-Pendidikan-FISIP-UB-2020-2021.pdf"
+          },
+          {
+            "name": "Teori Sosiologi Klasik",
+            "sourceUrl": "https://sosiologi.ub.ac.id/wp-content/uploads/2025/02/Buku-Pedoman-Pendidikan-FISIP-UB-2020-2021.pdf"
+          },
+          {
+            "name": "Paradigma Penelitian Sosial",
+            "sourceUrl": "https://sosiologi.ub.ac.id/wp-content/uploads/2025/02/Buku-Pedoman-Pendidikan-FISIP-UB-2020-2021.pdf"
+          },
+          {
+            "name": "Perubahan Sosial",
+            "sourceUrl": "https://sosiologi.ub.ac.id/wp-content/uploads/2025/02/Buku-Pedoman-Pendidikan-FISIP-UB-2020-2021.pdf"
+          },
+          {
+            "name": "Statistik Sosial",
+            "sourceUrl": "https://sosiologi.ub.ac.id/wp-content/uploads/2025/02/Buku-Pedoman-Pendidikan-FISIP-UB-2020-2021.pdf"
+          }
+        ],
         "searchLog": [
           {
             "url": "https://sosiologi.ub.ac.id/wp-content/uploads/2025/02/Buku-Pedoman-Pendidikan-FISIP-UB-2020-2021.pdf",
@@ -37097,11 +37181,11 @@
             "note": "Programme-specific source reviewed in official index and direct access attempted. Full programme-specific value could not be established; do not substitute a national minimum or another campus."
           },
           "curriculum": {
-            "value": null,
-            "status": "source_inaccessible",
-            "sourceUrl": "https://hi.ub.ac.id/programs/reguler/",
-            "sourceYear": null,
-            "note": "Official programme curriculum/syllabus source located in search index. Full document/content not yet established; link retained for applicants. This is an access limitation, not an unpublished claim."
+            "value": "https://sosiologi.ub.ac.id/wp-content/uploads/2025/02/Buku-Pedoman-Pendidikan-FISIP-UB-2020-2021.pdf",
+            "status": "verified",
+            "sourceUrl": "https://sosiologi.ub.ac.id/wp-content/uploads/2025/02/Buku-Pedoman-Pendidikan-FISIP-UB-2020-2021.pdf",
+            "sourceYear": "2020/2021 official FISIP handbook;uploaded2025",
+            "note": "Recovered and read programme-specific full curriculum/course distribution in official document. Published historical version; not confirmation of the2027 curriculum."
           },
           "entry_requirement": {
             "value": null,
@@ -37111,7 +37195,24 @@
             "note": "Official programme-specific disability/colour-vision matrix exists; full matrix returned HTTP 403. Individual 2027 eligibility restrictions are not established. Consult HaloSELMA before applying."
           }
         },
-        "courses": [],
+        "courses": [
+          {
+            "name": "Pengantar Hubungan Internasional",
+            "sourceUrl": "https://sosiologi.ub.ac.id/wp-content/uploads/2025/02/Buku-Pedoman-Pendidikan-FISIP-UB-2020-2021.pdf"
+          },
+          {
+            "name": "Pengantar Hukum Internasional",
+            "sourceUrl": "https://sosiologi.ub.ac.id/wp-content/uploads/2025/02/Buku-Pedoman-Pendidikan-FISIP-UB-2020-2021.pdf"
+          },
+          {
+            "name": "Metodologi Hubungan Internasional",
+            "sourceUrl": "https://sosiologi.ub.ac.id/wp-content/uploads/2025/02/Buku-Pedoman-Pendidikan-FISIP-UB-2020-2021.pdf"
+          },
+          {
+            "name": "Riset Hubungan Internasional",
+            "sourceUrl": "https://sosiologi.ub.ac.id/wp-content/uploads/2025/02/Buku-Pedoman-Pendidikan-FISIP-UB-2020-2021.pdf"
+          }
+        ],
         "searchLog": [
           {
             "url": "https://hi.ub.ac.id/programs/reguler/",
@@ -37152,11 +37253,11 @@
             "note": "Programme-specific source reviewed in official index and direct access attempted. Full programme-specific value could not be established; do not substitute a national minimum or another campus."
           },
           "curriculum": {
-            "value": null,
-            "status": "source_inaccessible",
-            "sourceUrl": "https://politik.ub.ac.id/berita/dokumen-rencana-pembelajaran-semester-rps-kurikulum-2019-2023-program-studi-s1-ilmu-politik",
-            "sourceYear": null,
-            "note": "Official programme curriculum/syllabus source located in search index. Full document/content not yet established; link retained for applicants. This is an access limitation, not an unpublished claim."
+            "value": "https://sosiologi.ub.ac.id/wp-content/uploads/2025/02/Buku-Pedoman-Pendidikan-FISIP-UB-2020-2021.pdf",
+            "status": "verified",
+            "sourceUrl": "https://sosiologi.ub.ac.id/wp-content/uploads/2025/02/Buku-Pedoman-Pendidikan-FISIP-UB-2020-2021.pdf",
+            "sourceYear": "2020/2021 official FISIP handbook;uploaded2025",
+            "note": "Recovered and read programme-specific full curriculum/course distribution in official document. Published historical version; not confirmation of the2027 curriculum."
           },
           "entry_requirement": {
             "value": null,
@@ -37166,7 +37267,28 @@
             "note": "Official programme-specific disability/colour-vision matrix exists; full matrix returned HTTP 403. Individual 2027 eligibility restrictions are not established. Consult HaloSELMA before applying."
           }
         },
-        "courses": [],
+        "courses": [
+          {
+            "name": "Filsafat Politik",
+            "sourceUrl": "https://sosiologi.ub.ac.id/wp-content/uploads/2025/02/Buku-Pedoman-Pendidikan-FISIP-UB-2020-2021.pdf"
+          },
+          {
+            "name": "Sistem Politik Indonesia",
+            "sourceUrl": "https://sosiologi.ub.ac.id/wp-content/uploads/2025/02/Buku-Pedoman-Pendidikan-FISIP-UB-2020-2021.pdf"
+          },
+          {
+            "name": "Teori Politik",
+            "sourceUrl": "https://sosiologi.ub.ac.id/wp-content/uploads/2025/02/Buku-Pedoman-Pendidikan-FISIP-UB-2020-2021.pdf"
+          },
+          {
+            "name": "Ideologi Politik",
+            "sourceUrl": "https://sosiologi.ub.ac.id/wp-content/uploads/2025/02/Buku-Pedoman-Pendidikan-FISIP-UB-2020-2021.pdf"
+          },
+          {
+            "name": "Komunikasi Politik",
+            "sourceUrl": "https://sosiologi.ub.ac.id/wp-content/uploads/2025/02/Buku-Pedoman-Pendidikan-FISIP-UB-2020-2021.pdf"
+          }
+        ],
         "searchLog": [
           {
             "url": "https://politik.ub.ac.id/berita/dokumen-rencana-pembelajaran-semester-rps-kurikulum-2019-2023-program-studi-s1-ilmu-politik",
@@ -37207,11 +37329,11 @@
             "note": "Programme-specific source reviewed in official index and direct access attempted. Full programme-specific value could not be established; do not substitute a national minimum or another campus."
           },
           "curriculum": {
-            "value": null,
-            "status": "source_inaccessible",
-            "sourceUrl": "https://pemerintahan.ub.ac.id/kurikulum",
-            "sourceYear": null,
-            "note": "Official programme curriculum/syllabus source located in search index. Full document/content not yet established; link retained for applicants. This is an access limitation, not an unpublished claim."
+            "value": "https://sosiologi.ub.ac.id/wp-content/uploads/2025/02/Buku-Pedoman-Pendidikan-FISIP-UB-2020-2021.pdf",
+            "status": "verified",
+            "sourceUrl": "https://sosiologi.ub.ac.id/wp-content/uploads/2025/02/Buku-Pedoman-Pendidikan-FISIP-UB-2020-2021.pdf",
+            "sourceYear": "2020/2021 official FISIP handbook;uploaded2025",
+            "note": "Recovered and read programme-specific full curriculum/course distribution in official document. Published historical version; not confirmation of the2027 curriculum."
           },
           "entry_requirement": {
             "value": null,
@@ -37223,8 +37345,24 @@
         },
         "courses": [
           {
-            "name": "Politik Identitas dan Multikulturalisme",
-            "sourceUrl": "https://pemerintahan.ub.ac.id/kurikulum"
+            "name": "Pengantar Keuangan Pemerintahan",
+            "sourceUrl": "https://sosiologi.ub.ac.id/wp-content/uploads/2025/02/Buku-Pedoman-Pendidikan-FISIP-UB-2020-2021.pdf"
+          },
+          {
+            "name": "Dasar-Dasar Ilmu Pemerintahan",
+            "sourceUrl": "https://sosiologi.ub.ac.id/wp-content/uploads/2025/02/Buku-Pedoman-Pendidikan-FISIP-UB-2020-2021.pdf"
+          },
+          {
+            "name": "Teori Birokrasi",
+            "sourceUrl": "https://sosiologi.ub.ac.id/wp-content/uploads/2025/02/Buku-Pedoman-Pendidikan-FISIP-UB-2020-2021.pdf"
+          },
+          {
+            "name": "Demografi Politik",
+            "sourceUrl": "https://sosiologi.ub.ac.id/wp-content/uploads/2025/02/Buku-Pedoman-Pendidikan-FISIP-UB-2020-2021.pdf"
+          },
+          {
+            "name": "Sistem Pemerintahan Indonesia",
+            "sourceUrl": "https://sosiologi.ub.ac.id/wp-content/uploads/2025/02/Buku-Pedoman-Pendidikan-FISIP-UB-2020-2021.pdf"
           }
         ],
         "searchLog": [
@@ -37597,11 +37735,11 @@
             "note": "Programme-specific source reviewed in official index and direct access attempted. Full programme-specific value could not be established; do not substitute a national minimum or another campus."
           },
           "curriculum": {
-            "value": null,
-            "status": "source_inaccessible",
+            "value": "https://pendidikanindonesia-fib.ub.ac.id/wp-content/uploads/2021/10/Draft-Buku-Kurikulum-PS-Pendidikan-Bahasa-dan-Sastra-Indonesia.pdf",
+            "status": "verified",
             "sourceUrl": "https://pendidikanindonesia-fib.ub.ac.id/wp-content/uploads/2021/10/Draft-Buku-Kurikulum-PS-Pendidikan-Bahasa-dan-Sastra-Indonesia.pdf",
-            "sourceYear": null,
-            "note": "Official programme curriculum/syllabus source located in search index. Full document/content not yet established; link retained for applicants. This is an access limitation, not an unpublished claim."
+            "sourceYear": "2021 published draft",
+            "note": "Full programme curriculum table read in a document explicitly named Draft. Contents verified as published draft; formal approval and2027 applicability unconfirmed."
           },
           "entry_requirement": {
             "value": null,
@@ -37611,7 +37749,28 @@
             "note": "Official programme-specific disability/colour-vision matrix exists; full matrix returned HTTP 403. Individual 2027 eligibility restrictions are not established. Consult HaloSELMA before applying."
           }
         },
-        "courses": [],
+        "courses": [
+          {
+            "name": "Pengantar Ilmu Linguistik",
+            "sourceUrl": "https://pendidikanindonesia-fib.ub.ac.id/wp-content/uploads/2021/10/Draft-Buku-Kurikulum-PS-Pendidikan-Bahasa-dan-Sastra-Indonesia.pdf"
+          },
+          {
+            "name": "Pengantar Sastra Indonesia",
+            "sourceUrl": "https://pendidikanindonesia-fib.ub.ac.id/wp-content/uploads/2021/10/Draft-Buku-Kurikulum-PS-Pendidikan-Bahasa-dan-Sastra-Indonesia.pdf"
+          },
+          {
+            "name": "Psikologi pendidikan",
+            "sourceUrl": "https://pendidikanindonesia-fib.ub.ac.id/wp-content/uploads/2021/10/Draft-Buku-Kurikulum-PS-Pendidikan-Bahasa-dan-Sastra-Indonesia.pdf"
+          },
+          {
+            "name": "Morfologi Bahasa Indonesia",
+            "sourceUrl": "https://pendidikanindonesia-fib.ub.ac.id/wp-content/uploads/2021/10/Draft-Buku-Kurikulum-PS-Pendidikan-Bahasa-dan-Sastra-Indonesia.pdf"
+          },
+          {
+            "name": "Semantik Bahasa Indonesia",
+            "sourceUrl": "https://pendidikanindonesia-fib.ub.ac.id/wp-content/uploads/2021/10/Draft-Buku-Kurikulum-PS-Pendidikan-Bahasa-dan-Sastra-Indonesia.pdf"
+          }
+        ],
         "searchLog": [
           {
             "url": "https://pendidikanindonesia-fib.ub.ac.id/wp-content/uploads/2021/10/Draft-Buku-Kurikulum-PS-Pendidikan-Bahasa-dan-Sastra-Indonesia.pdf",
@@ -37794,25 +37953,25 @@
         "checkedOn": "2026-10-24",
         "fields": {
           "degree": {
-            "value": null,
-            "status": "source_inaccessible",
+            "value": "Sarjana Kedokteran Gigi (S.KG)",
+            "status": "verified",
             "sourceUrl": "https://fkg.ub.ac.id/wp-content/uploads/2020/10/BUKU-PEDOMAN-PENDIDIKAN-FKG-UB-2019-2020-FINAL-EDIT-2120.pdf",
-            "sourceYear": null,
-            "note": "Programme-specific source reviewed in official index and direct access attempted. Full programme-specific value could not be established; do not substitute a national minimum or another campus."
+            "sourceYear": "2019/2020",
+            "note": "Bachelor phase explicitly stated;separate professional phase32SKS/4semesters excluded. Historical only."
           },
           "credits": {
-            "value": null,
-            "status": "conflicting",
-            "sourceUrl": "https://fkg.ub.ac.id/pendidikan/",
-            "sourceYear": null,
-            "note": "Official education overview states 146 SKS / 7 semesters; official 2021/22 curriculum PDF states total Sarjana 145 SKS. Current applicable cohort curriculum must be confirmed. Sources: https://fkg.ub.ac.id/wp-content/uploads/2021/11/KURIKULUM-FKG-UB-2021-2022.pdf"
+            "value": 146,
+            "status": "verified",
+            "sourceUrl": "https://fkg.ub.ac.id/wp-content/uploads/2020/10/BUKU-PEDOMAN-PENDIDIKAN-FKG-UB-2019-2020-FINAL-EDIT-2120.pdf",
+            "sourceYear": "2019/2020",
+            "note": "Bachelor phase explicitly stated;separate professional phase32SKS/4semesters excluded. Historical only."
           },
           "duration": {
-            "value": null,
-            "status": "source_inaccessible",
+            "value": "7 semesters",
+            "status": "verified",
             "sourceUrl": "https://fkg.ub.ac.id/wp-content/uploads/2020/10/BUKU-PEDOMAN-PENDIDIKAN-FKG-UB-2019-2020-FINAL-EDIT-2120.pdf",
-            "sourceYear": null,
-            "note": "Programme-specific source reviewed in official index and direct access attempted. Full programme-specific value could not be established; do not substitute a national minimum or another campus."
+            "sourceYear": "2019/2020",
+            "note": "Bachelor phase explicitly stated;separate professional phase32SKS/4semesters excluded. Historical only."
           },
           "language": {
             "value": null,
@@ -37822,11 +37981,11 @@
             "note": "Programme-specific source reviewed in official index and direct access attempted. Full programme-specific value could not be established; do not substitute a national minimum or another campus."
           },
           "curriculum": {
-            "value": null,
-            "status": "source_inaccessible",
+            "value": "https://fkg.ub.ac.id/wp-content/uploads/2020/10/BUKU-PEDOMAN-PENDIDIKAN-FKG-UB-2019-2020-FINAL-EDIT-2120.pdf",
+            "status": "verified",
             "sourceUrl": "https://fkg.ub.ac.id/wp-content/uploads/2020/10/BUKU-PEDOMAN-PENDIDIKAN-FKG-UB-2019-2020-FINAL-EDIT-2120.pdf",
-            "sourceYear": null,
-            "note": "Official programme curriculum/syllabus source located in search index. Full document/content not yet established; link retained for applicants. This is an access limitation, not an unpublished claim."
+            "sourceYear": "2019/2020 official handbook",
+            "note": "Recovered and read programme-specific full curriculum/course distribution in official document. Published historical version; not confirmation of the2027 curriculum."
           },
           "entry_requirement": {
             "value": null,
@@ -37836,7 +37995,28 @@
             "note": "Official programme-specific disability/colour-vision matrix exists; full matrix returned HTTP 403. Individual 2027 eligibility restrictions are not established. Consult HaloSELMA before applying."
           }
         },
-        "courses": [],
+        "courses": [
+          {
+            "name": "Ilmu Kedokteran Dasar",
+            "sourceUrl": "https://fkg.ub.ac.id/wp-content/uploads/2020/10/BUKU-PEDOMAN-PENDIDIKAN-FKG-UB-2019-2020-FINAL-EDIT-2120.pdf"
+          },
+          {
+            "name": "Ilmu Kedokteran Gigi Dasar I",
+            "sourceUrl": "https://fkg.ub.ac.id/wp-content/uploads/2020/10/BUKU-PEDOMAN-PENDIDIKAN-FKG-UB-2019-2020-FINAL-EDIT-2120.pdf"
+          },
+          {
+            "name": "Ilmu Kedokteran Gigi Dasar II",
+            "sourceUrl": "https://fkg.ub.ac.id/wp-content/uploads/2020/10/BUKU-PEDOMAN-PENDIDIKAN-FKG-UB-2019-2020-FINAL-EDIT-2120.pdf"
+          },
+          {
+            "name": "Kedaruratan Medik Dental",
+            "sourceUrl": "https://fkg.ub.ac.id/wp-content/uploads/2020/10/BUKU-PEDOMAN-PENDIDIKAN-FKG-UB-2019-2020-FINAL-EDIT-2120.pdf"
+          },
+          {
+            "name": "Odontologi Forensik",
+            "sourceUrl": "https://fkg.ub.ac.id/wp-content/uploads/2020/10/BUKU-PEDOMAN-PENDIDIKAN-FKG-UB-2019-2020-FINAL-EDIT-2120.pdf"
+          }
+        ],
         "searchLog": [
           {
             "url": "https://fkg.ub.ac.id/wp-content/uploads/2020/10/BUKU-PEDOMAN-PENDIDIKAN-FKG-UB-2019-2020-FINAL-EDIT-2120.pdf",
