@@ -13,12 +13,12 @@ const {summarizePublishedIndonesia}=load(path.join(root,'indonesia-publication.t
 const {default:Catalogue}=load(path.join(root,'admin/data/indonesia-live-catalogue.tsx'));
 const rows=JSON.parse(fs.readFileSync(path.join(root,'indonesia-catalogue.json')));
 test('admin publication counts use public data and keep publication separate from curriculum review',()=>{
- const x=summarizePublishedIndonesia();assert.equal(x.universities.length,9);assert.equal(x.programmeCount,530);assert.equal(x.facultyCount,111);assert.equal(x.reviewedSummaries,6);assert.equal(x.summariesToReview,524);assert(!x.universities.some(u=>u.id==='amikom'));
+ const x=summarizePublishedIndonesia();assert.equal(x.universities.length,9);assert.equal(x.programmeCount,530);assert.equal(x.facultyCount,111);assert.equal(x.reviewedSummaries,6);assert.equal(x.summariesToReview,524);assert.equal(x.sourceAudits,530);assert(x.curriculumSources>6);assert(x.programmeGaps<=530);assert(!x.universities.some(u=>u.id==='amikom'));
  const subset=rows.filter(p=>p.university_id==='its'),y=summarizePublishedIndonesia(subset);assert.equal(y.universities.length,1);assert.equal(y.programmeCount,subset.length);assert.equal(y.reviewedSummaries,0);assert.equal(y.summariesToReview,subset.length);
 });
 test('published admin catalogue shows real logos, view-only controls and review scope in both languages',()=>{
- for(const language of ['en','id']){const html=renderToStaticMarkup(React.createElement(Catalogue,{language}));assert.match(html,/530/);assert.match(html,/524/);assert.match(html,/indonesia-its-emblem/);assert.doesNotMatch(html,/AMIKOM|Save this section/);assert.match(html,language==='en'?/View only/:/Hanya tampilan/);}
+ for(const language of ['en','id']){const html=renderToStaticMarkup(React.createElement(Catalogue,{language}));assert.match(html,/530/);assert.match(html,/Programme source reviews|Tinjauan sumber program/);assert.match(html,/indonesia-its-emblem/);assert.doesNotMatch(html,/AMIKOM|Save this section/);assert.match(html,language==='en'?/View only/:/Hanya tampilan/);}
 });
 test('each published university has a usable admin detail with programme evidence and explicit unreviewed status',()=>{
- for(const u of summarizePublishedIndonesia().universities){const html=renderToStaticMarkup(React.createElement(Catalogue,{language:'en',universityId:'indonesia-'+u.id}));assert(html.includes(u.name));assert.match(html,/Official source/);assert.match(html,/cannot yet be edited/);assert.match(html,/Detailed curriculum not yet reviewed/);assert.doesNotMatch(html,/Save this section/);}
+ for(const u of summarizePublishedIndonesia().universities){const html=renderToStaticMarkup(React.createElement(Catalogue,{language:'en',universityId:'indonesia-'+u.id}));assert(html.includes(u.name));assert.match(html,/Official source/);assert.match(html,/cannot yet be edited/);assert.match(html,/curriculum source checked|Curriculum evidence gap/);assert.doesNotMatch(html,/Save this section/);}
 });
