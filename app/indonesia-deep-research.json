@@ -34162,6 +34162,26 @@
           {
             "name": "Perbandingan Administrasi Publik",
             "sourceUrl": "https://fia.ub.ac.id/pendidikan/program-studi-administrasi-publik/silabus-administrasi-publik-s1/"
+          },
+          {
+            "name": "Pengantar Ilmu Administrasi Publik",
+            "sourceUrl": "https://fia.ub.ac.id/pendidikan/program-studi-administrasi-publik/silabus-administrasi-publik-s1/"
+          },
+          {
+            "name": "Hukum Administrasi Negara",
+            "sourceUrl": "https://fia.ub.ac.id/pendidikan/program-studi-administrasi-publik/silabus-administrasi-publik-s1/"
+          },
+          {
+            "name": "Etika Administrasi",
+            "sourceUrl": "https://fia.ub.ac.id/pendidikan/program-studi-administrasi-publik/silabus-administrasi-publik-s1/"
+          },
+          {
+            "name": "Kebijakan Publik",
+            "sourceUrl": "https://fia.ub.ac.id/pendidikan/program-studi-administrasi-publik/silabus-administrasi-publik-s1/"
+          },
+          {
+            "name": "Kepemimpinan",
+            "sourceUrl": "https://fia.ub.ac.id/pendidikan/program-studi-administrasi-publik/silabus-administrasi-publik-s1/"
           }
         ],
         "searchLog": [
@@ -34221,6 +34241,18 @@
         "courses": [
           {
             "name": "Akuntansi Intermediate I",
+            "sourceUrl": "https://fia.ub.ac.id/program-studi-administrasi-bisnis/pendidikan/struktur-mata-kuliah-administrasi-bisnis/"
+          },
+          {
+            "name": "Matematika Bisnis",
+            "sourceUrl": "https://fia.ub.ac.id/program-studi-administrasi-bisnis/pendidikan/struktur-mata-kuliah-administrasi-bisnis/"
+          },
+          {
+            "name": "Akuntansi Dasar",
+            "sourceUrl": "https://fia.ub.ac.id/program-studi-administrasi-bisnis/pendidikan/struktur-mata-kuliah-administrasi-bisnis/"
+          },
+          {
+            "name": "Kreativitas dan Inovasi",
             "sourceUrl": "https://fia.ub.ac.id/program-studi-administrasi-bisnis/pendidikan/struktur-mata-kuliah-administrasi-bisnis/"
           }
         ],
@@ -34286,6 +34318,22 @@
           {
             "name": "Politik Pajak",
             "sourceUrl": "https://fia.ub.ac.id/program-studi-perpajakan/pendidikan/struktur-mata-kuliah-perpajakan/"
+          },
+          {
+            "name": "Sistem Administrasi Perpajakan",
+            "sourceUrl": "https://fia.ub.ac.id/program-studi-perpajakan/pendidikan/struktur-mata-kuliah-perpajakan/"
+          },
+          {
+            "name": "Pajak Penghasilan Dasar",
+            "sourceUrl": "https://fia.ub.ac.id/program-studi-perpajakan/pendidikan/struktur-mata-kuliah-perpajakan/"
+          },
+          {
+            "name": "Akuntansi Pajak",
+            "sourceUrl": "https://fia.ub.ac.id/program-studi-perpajakan/pendidikan/struktur-mata-kuliah-perpajakan/"
+          },
+          {
+            "name": "Manajemen Pajak",
+            "sourceUrl": "https://fia.ub.ac.id/program-studi-perpajakan/pendidikan/struktur-mata-kuliah-perpajakan/"
           }
         ],
         "searchLog": [
@@ -34350,6 +34398,22 @@
           {
             "name": "Tata Kelola Perpustakaan Sekolah",
             "sourceUrl": "https://fia.ub.ac.id/pendidikan/program-studi-ilmu-perpustakaan/silabus-program-studi-ilmu-perpustkaan/"
+          },
+          {
+            "name": "Pengantar Ilmu Perpustakaan, Kearsipan dan Informasi",
+            "sourceUrl": "https://fia.ub.ac.id/pendidikan/program-studi-ilmu-perpustakaan/silabus-program-studi-ilmu-perpustkaan/"
+          },
+          {
+            "name": "Manajemen Dokumen",
+            "sourceUrl": "https://fia.ub.ac.id/pendidikan/program-studi-ilmu-perpustakaan/silabus-program-studi-ilmu-perpustkaan/"
+          },
+          {
+            "name": "Analisis Subjek dan Sistem Klasifikasi",
+            "sourceUrl": "https://fia.ub.ac.id/pendidikan/program-studi-ilmu-perpustakaan/silabus-program-studi-ilmu-perpustkaan/"
+          },
+          {
+            "name": "Bibliometrik",
+            "sourceUrl": "https://fia.ub.ac.id/pendidikan/program-studi-ilmu-perpustakaan/silabus-program-studi-ilmu-perpustkaan/"
           }
         ],
         "searchLog": [
@@ -34413,6 +34477,22 @@
           },
           {
             "name": "Pemanduan Pariwisata",
+            "sourceUrl": "https://fia.ub.ac.id/program-studi-pariwisata/pendidikan/struktur-mata-kuliah-s1-pariwisata/"
+          },
+          {
+            "name": "Pengantar Pariwisata",
+            "sourceUrl": "https://fia.ub.ac.id/program-studi-pariwisata/pendidikan/struktur-mata-kuliah-s1-pariwisata/"
+          },
+          {
+            "name": "Manajemen Operasi Hotel dan Resort",
+            "sourceUrl": "https://fia.ub.ac.id/program-studi-pariwisata/pendidikan/struktur-mata-kuliah-s1-pariwisata/"
+          },
+          {
+            "name": "Pariwisata Minat Khusus",
+            "sourceUrl": "https://fia.ub.ac.id/program-studi-pariwisata/pendidikan/struktur-mata-kuliah-s1-pariwisata/"
+          },
+          {
+            "name": "Ekonomi Pariwisata",
             "sourceUrl": "https://fia.ub.ac.id/program-studi-pariwisata/pendidikan/struktur-mata-kuliah-s1-pariwisata/"
           }
         ],
@@ -38206,6 +38286,26 @@
           },
           {
             "name": "Tata Kelola Teknologi Informasi",
+            "sourceUrl": "https://filkom.ub.ac.id/s1-si/kurikulum-si/"
+          },
+          {
+            "name": "Pemrograman Dasar",
+            "sourceUrl": "https://filkom.ub.ac.id/s1-si/kurikulum-si/"
+          },
+          {
+            "name": "Dasar Basis Data",
+            "sourceUrl": "https://filkom.ub.ac.id/s1-si/kurikulum-si/"
+          },
+          {
+            "name": "Administrasi Basis Data",
+            "sourceUrl": "https://filkom.ub.ac.id/s1-si/kurikulum-si/"
+          },
+          {
+            "name": "Perancangan User Experience",
+            "sourceUrl": "https://filkom.ub.ac.id/s1-si/kurikulum-si/"
+          },
+          {
+            "name": "Manajemen Proyek Sistem Informasi",
             "sourceUrl": "https://filkom.ub.ac.id/s1-si/kurikulum-si/"
           }
         ],
