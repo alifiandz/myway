@@ -2169,3 +2169,25 @@ select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible { outline
 .id-evidence-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(210px,100%),1fr));gap:12px;margin:18px 0}.id-evidence-grid.admissions{grid-template-columns:repeat(auto-fit,minmax(min(290px,100%),1fr))}.id-evidence-card{border:1px solid #e2e8f0;border-radius:12px;padding:15px;display:flex;align-items:flex-start;flex-direction:column;gap:10px;min-width:0;background:#fff}.id-evidence-card.verified{border-top:3px solid #588573}.id-evidence-card.conflicting{border-top:3px solid #cf9e46}.id-evidence-card-title{display:flex;justify-content:space-between;gap:12px;width:100%;font-size:13px}.id-evidence-card-title svg{flex-shrink:0;color:#718096}.id-evidence-status{display:block;color:#68788e;font-size:11px;line-height:1.6}.id-evidence-card p{font-size:13px;line-height:1.65;margin:0;overflow-wrap:anywhere}.id-evidence-note{font-size:11px;color:#68788e;width:100%}.id-evidence-note summary{cursor:pointer}.id-evidence-note p{margin-top:10px;font-size:12px}.id-evidence-card>.id-information-link{margin-top:auto}.id-researched-courses{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(230px,100%),1fr));gap:10px;list-style:none;padding:0}.id-researched-courses li{display:flex;align-items:flex-start;gap:10px;border:1px solid #e6eaf0;border-radius:10px;padding:12px;flex-wrap:wrap;font-size:13px}.id-researched-courses li>svg{flex-shrink:0;color:#718096}.id-researched-courses li>.id-information-link{font-size:10px;margin-left:25px}.id-research-date{display:block;color:#718096;font-size:11px;margin-top:16px}.id-historical-admissions{padding:18px;border:1px solid #e2e8f0;border-radius:14px;background:#f8fafc}.id-historical-admissions>summary{cursor:pointer;font-size:13px;font-weight:600;color:#69778b}.id-historical-admissions>div{margin-top:18px}.id-next-intake-research{margin:16px 0}.id-programme-research h4{margin-top:24px}
 
 .id-evidence-items{margin:0;padding-left:1.15rem;display:grid;gap:.45rem;font-size:.88rem;line-height:1.5}.id-evidence-card{min-width:0;overflow-wrap:anywhere}
+
+/* Shared student planning: preserve identity, contain long content and logo assets. */
+.pathway-page .application-official-evidence{border:1px solid #e1e6ef;border-radius:14px;background:#fff;padding:16px;margin-bottom:18px;min-width:0}
+.application-official-evidence>summary{font-size:14px;font-weight:600;cursor:pointer;color:var(--navy);overflow-wrap:anywhere}
+.application-official-evidence .id-evidence-grid{align-items:start}
+.application-official-evidence .detail-section{margin-top:14px}
+.pathway-choice-main>span,.school-program-copy,.dashboard-shortlist-list article,.stage-overview dl>div{min-width:0;overflow-wrap:anywhere}
+.pathway-page .section-head p,.stage-overview p,.document-panel-head small{line-height:1.55;max-width:72ch}
+.stage-requirements>div>span,.stage-overview dd,.id-evidence-card{overflow-wrap:anywhere;min-width:0}
+.university-logo,.school-logo{width:64px;height:64px;position:relative}
+.university-logo>span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:14px}
+.pathway-stage-workspace nav{display:flex;flex-wrap:wrap;gap:6px}
+.pathway-stage-workspace nav button,.pathway-choice-actions button,.pathway-choice-actions select{min-height:40px}
+@media(max-width:760px){
+ .pathway-page,.dashboard-grid,.pathway-stage-workspace,.stage-evidence,.stage-overview{min-width:0;max-width:100%}
+ .pathway-choice-main{width:100%;min-width:0}.pathway-choice-actions{display:flex;flex-wrap:wrap;gap:8px}
+ .stage-overview dl,.evidence-form,.application-official-evidence .id-evidence-grid{grid-template-columns:minmax(0,1fr)}
+ .stage-requirements>header{display:none}.stage-requirements>div{grid-template-columns:minmax(0,1fr);gap:8px}
+ .document-panel-head,.section-head{flex-wrap:wrap;gap:12px}.pathway-stage-toggle{min-width:0}.pathway-stage-toggle>span{min-width:0;overflow-wrap:anywhere}
+ .pathway-page{padding-bottom:110px}.compare-tray{max-width:calc(100vw - 24px);bottom:80px}.feedback-trigger{bottom:18px}
+ .id-evidence-status,.id-small-note,.pathway-helper{font-size:13px;line-height:1.55}
+}

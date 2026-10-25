@@ -18,6 +18,7 @@ export default function PublicUniversityLogo({ universityId, fallback, name }: {
   const [published, setPublished] = useState<string | null>(null), [failed, setFailed] = useState<string | null>(null);
   useEffect(() => {
     let active = true;
+    setPublished(null); setFailed(null);
     if (universityId) void publishedLogos().then((logos) => { if (active) setPublished(logos.get(universityId) ?? null); }).catch(() => { /* Existing logos remain available offline. */ });
     return () => { active = false; };
   }, [universityId]);
