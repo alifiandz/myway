@@ -1,10 +1,15 @@
+import {structuredCurricula, type StructuredCurriculum} from './indonesia-structured-curricula';
 import researchData from './indonesia-deep-research.json';
 export type ResearchStatus='verified'|'not_announced'|'source_inaccessible'|'not_found'|'conflicting';
 export type EvidenceField={value:unknown;status:ResearchStatus;sourceUrl?:string|null;sourceYear?:string|null;note?:string|{en:string;id:string}|null};
-export type ProgrammeResearchRecord={status:string;checkedOn?:string;fields:Record<string,EvidenceField>;courses?:{name:string;sourceUrl:string}[];searchLog:{url:string;outcome:string}[]};
+export type ProgrammeResearchRecord={structuredCurriculum?:StructuredCurriculum;status:string;checkedOn?:string;fields:Record<string,EvidenceField>;courses?:{name:string;sourceUrl:string}[];searchLog:{url:string;outcome:string}[]};
 export type UniversityResearchRecord={universityId:string;checkedOn:string;programmes:Record<string,ProgrammeResearchRecord>;admissions:{targetYear:string;fields:Record<string,EvidenceField>}};
 export const universityResearch=researchData as Record<string,UniversityResearchRecord>;
 export const programmeResearch=Object.assign({},...Object.values(universityResearch).map(u=>u.programmes)) as Record<string,ProgrammeResearchRecord>;
+// Optional extension leaves legacy course examples and source evidence unchanged.
+for (const [programmeId, curriculum] of Object.entries(structuredCurricula)) {
+ if (programmeResearch[programmeId]) programmeResearch[programmeId].structuredCurriculum = curriculum;
+}
 export function evidenceText(value:unknown,id:boolean):string {
  if(value===null||value===undefined)return '';
  if(typeof value==='object'&&!Array.isArray(value)&&('en' in value||'id' in value)){const v=value as {en?:unknown;id?:unknown};return evidenceText(id?(v.id??v.en):(v.en??v.id),id);}
