@@ -6,7 +6,9 @@ import { calculateProgramFit, selectRecommendations, type FitResult } from "./pr
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import IndonesiaExplore from "./indonesia-explore";
-import IndonesiaPathway from "./indonesia-pathway";
+import {indonesiaPlanningProgrammes, mergeIndonesiaSelections, isIndonesiaProgramme} from "./indonesia-planning";
+import {INDONESIA_PLANS_KEY, indonesiaHref, indonesiaProgrammes} from "./indonesia-data";
+import {ProgrammeAdmissionResearch, NextIntakeResearch} from "./indonesia-research-information";
 import PublicUniversityLogo from "./university-logo";
 import reviewedLogoAssets from "./institution-logo-assets.json";
 import { publicMyWayUrl } from "./myway-url";
@@ -108,7 +110,7 @@ type Program = {
   sources: { label: string; href: string }[];
 };
 
-const programs: Program[] = [
+const internationalPrograms: Program[] = [
   {
     id: "aalto",
     university: "Aalto University",
@@ -226,6 +228,7 @@ const programs: Program[] = [
     sources: [{ label: "Official Global BBA page", href: "https://em-lyon.com/en/student/bachelor/global-bba" }],
   },
 ];
+const programs: Program[] = [...internationalPrograms, ...indonesiaPlanningProgrammes];
 
 type BusinessSchool = {
   id: string;
@@ -1402,21 +1405,22 @@ function Pathway({ selected, completed: allCompleted, toggleTask: toggleStoredTa
   const [activeId, setActiveId] = useState(initialApplicationId || dream?.p.id || selected[0]?.p.id || "");
   const active = selected.find((item) => item.p.id === activeId) || dream || selected[0];
   const isEscp = active?.p.id === "escp";
+  const indonesiaActive = isIndonesiaProgramme(active?.p.id);
   const readinessStages = active ? applicationReadiness[active.p.id]?.stages || [] : [];
   const pathwayReadiness = active ? applicationReadiness[active.p.id]?.score || 0 : 0;
   const completed = active ? [
     ...allCompleted.filter((id) => id.startsWith(`${active.p.id}:`)).map((id) => id.slice(active.p.id.length + 1)),
-    ...(active.role === "Dream" ? allCompleted.filter((id) => !id.includes(":")) : []),
+    ...(active.role === "Dream" && !isIndonesiaProgramme(active.p.id) ? allCompleted.filter((id) => !id.includes(":")) : []),
   ] : [];
   const toggleTask = (id: string) => { if (active) toggleStoredTask(`${active.p.id}:${id}`); };
-  const records = new Proxy({} as Record<string, string>, { get: (_target, property) => { if (typeof property !== "string" || !active) return ""; const sharedKey = sharedRequirementProfileKeys[property]; return (sharedKey ? sharedDocumentNames[sharedKey] : "") || allRecords[`${active.p.id}:${property}`] || (active.role === "Dream" ? allRecords[property] : "") || ""; } });
+  const records = new Proxy({} as Record<string, string>, { get: (_target, property) => { if (typeof property !== "string" || !active) return ""; const sharedKey = isIndonesiaProgramme(active.p.id) ? undefined : sharedRequirementProfileKeys[property]; return (sharedKey ? sharedDocumentNames[sharedKey] : "") || allRecords[`${active.p.id}:${property}`] || (active.role === "Dream" && !isIndonesiaProgramme(active.p.id) ? allRecords[property] : "") || ""; } });
   const updateRecord = (key: string, value: string) => { if (active) updateStoredRecord(`${active.p.id}:${key}`, value); };
   useEffect(() => { let current = true; const timer = window.setTimeout(() => { listVaultDocuments().then((documents) => current && setVaultDocuments(documents)).catch(() => toast("Could not load cloud documents. Check your connection and reopen My Documents.")); try { setDocumentLinks(JSON.parse(window.localStorage.getItem("myway-document-links") || "{}")); } catch { setDocumentLinks({}); } try { setSharedDocumentNames(JSON.parse(window.localStorage.getItem("myway-profile-documents") || "{}")); } catch { setSharedDocumentNames({}); } }, 0); return () => { current = false; window.clearTimeout(timer); }; }, [toast]);
   useEffect(() => () => { if (previewUrl) URL.revokeObjectURL(previewUrl); }, [previewUrl]);
   const saveLinks = (next: Record<string, string>) => { setDocumentLinks(next); window.localStorage.setItem("myway-document-links", JSON.stringify(next)); };
-  const activeLinkKey = (key: string) => sharedRequirementProfileKeys[key] ? profileLinkKey(sharedRequirementProfileKeys[key]) : active ? `${active.p.id}:${key}` : key;
+  const activeLinkKey = (key: string) => !isIndonesiaProgramme(active?.p.id) && sharedRequirementProfileKeys[key] ? profileLinkKey(sharedRequirementProfileKeys[key]) : active ? `${active.p.id}:${key}` : key;
   const updateSharedDocumentName = (key: string, value: string) => {
-    const profileKey = sharedRequirementProfileKeys[key];
+    const profileKey = isIndonesiaProgramme(active?.p.id) ? undefined : sharedRequirementProfileKeys[key];
     if (!profileKey) return;
     let next: Record<string, string> = {};
     try { next = JSON.parse(window.localStorage.getItem("myway-profile-documents") || "{}"); } catch {}
@@ -1515,6 +1519,7 @@ function Pathway({ selected, completed: allCompleted, toggleTask: toggleStoredTa
     "Keep offer and enrolment records together; avoid sensitive data in prototype mode",
   ];
   return <div className="page-enter pathway-page" data-tour="pathway-main">
+    {indonesiaActive && active && <section key={active.p.id}><p className="id-small-note">Preparation checklist only: document suggestions below are not confirmed university requirements. Record the exact route and official checklist before applying. Files stored in MyWay are not submitted to a university.</p><ProgrammeAdmissionResearch programmeId={active.p.id} id={false}/><NextIntakeResearch uid={active.p.id.split('-')[1]} id={false}/></section>}
     <section className="page-intro"><div><span className="eyebrow">Your university plan</span><h2>My Pathway</h2><p>{selected.length ? `${selected.length} university option${selected.length === 1 ? "" : "s"} organised by role` : "Build a shortlist, then choose one Dream university to track."}</p></div><button className="secondary-button" onClick={() => go("explore")}><Plus size={15} /> Add university</button></section>
     {active ? <><section className="application-switcher pathway-application-switcher"><label><span>Application workspace</span><select value={active.p.id} onChange={(event) => { setActiveId(event.target.value); setExpandedStage(0); setStageTab("overview"); }}>{selected.map((item) => <option key={item.p.id} value={item.p.id}>{item.p.university} — {item.role}</option>)}</select></label><small>Each university keeps separate requirements, evidence, actions and readiness.</small></section><article className="card dream-pathway-card"><div className="dream-pathway-identity"><span className="dream-label"><Sparkles size={13} /> {active.role} application</span><div><UniversityLogo program={active.p} size="large" /><span><h3>{active.p.university}</h3><p>{active.p.title} · {active.p.location}</p><button className="text-link" onClick={() => openProgram(active.p)}>View university <ChevronRight size={14} /></button></span></div></div><div className="dream-progress"><span><strong>Application readiness</strong><em>{pathwayReadiness}%</em></span><div className="bar"><i style={{ width: pathwayReadiness + "%" }} /></div><small>{readyStages} of 9 stages ready · specific to this application · not an admission score</small></div><div className="dream-controls"><label><span>Change role</span><select value={active.role} onChange={(event) => changeRole(active.p, event.target.value as Role)}><option>Dream</option><option>Target</option><option>Alternative</option></select></label><button className="outline-button danger-action" onClick={() => removePath(active.p)}><X size={14} /> Remove</button></div></article></> : <article className="card pathway-empty-dream"><span className="large-icon"><Sparkles /></span><div><span className="section-label">Application tracker</span><h3>Add a university to begin</h3><p>Every Dream, Target and Alternative university receives its own preparation workspace.</p><button className="primary-button" onClick={() => go("explore")}><Search size={15} /> Explore universities</button></div></article>}
     <section className="card document-vault-summary"><span className="vault-summary-icon"><FolderOpen size={19} /></span><span><span className="section-label">Shared across every application</span><strong>My Documents</strong><small>{vaultDocuments.length ? `${vaultDocuments.length} file${vaultDocuments.length === 1 ? "" : "s"} available for reuse across your applications` : "Upload once, then reuse the same file for multiple university requirements"}</small></span><button className="secondary-button" onClick={() => { setSelectingDocument(null); setVaultOpen(true); }}>Open My Documents <ChevronRight size={14} /></button></section>
@@ -1848,7 +1853,9 @@ export default function App() {
       try { setPathwayRecords(JSON.parse(window.localStorage.getItem("myway-pathway-records") || "{}")); } catch { setPathwayRecords({}); }
       try {
         const storedPathway = JSON.parse(window.localStorage.getItem("myway-pathway-selection") || "[]") as { id: string; role: Role }[];
-        setPathway(storedPathway.flatMap(({ id, role }) => {
+        const legacyRecords = JSON.parse(window.localStorage.getItem("myway-pathway-records") || "{}");
+        const merged = mergeIndonesiaSelections(storedPathway, legacyRecords[INDONESIA_PLANS_KEY]);
+        setPathway(merged.flatMap(({ id, role }) => {
           const program = programs.find((item) => item.id === id);
           if (program) return [{ p: program, role }];
           if (id.startsWith("school:")) {
@@ -1978,6 +1985,7 @@ export default function App() {
   }, []);
   const openPathwayStage = (index: number, programId: string) => { setPathwayStage(index); setPathwayApplicationId(programId); go("pathway"); };
   const openProgram = (program: Program) => {
+    if(isIndonesiaProgramme(program.id)){window.location.href=indonesiaHref(indonesiaProgrammes.find(p=>p.id===program.id)!);return;}
     setView("explore");
     if (program.id.startsWith("school:")) {
       setSelectedSchoolId(program.id.slice("school:".length));
@@ -2026,12 +2034,16 @@ export default function App() {
       const singleDream = role === "Dream" ? withoutCurrent.map((item) => item.role === "Dream" ? { ...item, role: "Target" as Role } : item) : withoutCurrent;
       const next = [...singleDream, { p, role }];
       window.localStorage.setItem("myway-pathway-selection", JSON.stringify(next.map((item) => ({ id: item.p.id, role: item.role }))));
+      const legacy = JSON.stringify(next.filter(item=>isIndonesiaProgramme(item.p.id)).map(item=>({id:item.p.id,role:item.role})));
+      setPathwayRecords(records=>{const updated={...records,[INDONESIA_PLANS_KEY]:legacy};window.localStorage.setItem("myway-pathway-records",JSON.stringify(updated));return updated;});
       return next;
     });
     setToast(p.university + " added as " + role);
   };
   const removePath = (p: Program) => {
-    setPathway((current) => { const next = current.filter((item) => item.p.id !== p.id); window.localStorage.setItem("myway-pathway-selection", JSON.stringify(next.map((item) => ({ id: item.p.id, role: item.role })))); return next; });
+    setPathway((current) => { const next = current.filter((item) => item.p.id !== p.id); window.localStorage.setItem("myway-pathway-selection", JSON.stringify(next.map((item) => ({ id: item.p.id, role: item.role }))));
+      const legacy = JSON.stringify(next.filter(item=>isIndonesiaProgramme(item.p.id)).map(item=>({id:item.p.id,role:item.role})));
+      setPathwayRecords(records=>{const updated={...records,[INDONESIA_PLANS_KEY]:legacy};window.localStorage.setItem("myway-pathway-records",JSON.stringify(updated));return updated;}); return next; });
     setToast(p.university + " removed from pathway");
   };
   const toggleSchoolPathway = (school: BusinessSchool) => {
@@ -2039,18 +2051,29 @@ export default function App() {
     const program = school.programId ? programs.find((item) => item.id === school.programId) : undefined;
     const choice = program ?? schoolAsProgram(school);
     const alreadyAdded = pathway.some((item) => item.p.id === choice.id);
-    setPathway((current) => { const next = alreadyAdded ? current.filter((item) => item.p.id !== choice.id) : [...current, { p: choice, role: "Target" as Role }]; window.localStorage.setItem("myway-pathway-selection", JSON.stringify(next.map((item) => ({ id: item.p.id, role: item.role })))); return next; });
+    setPathway((current) => { const next = alreadyAdded ? current.filter((item) => item.p.id !== choice.id) : [...current, { p: choice, role: "Target" as Role }]; window.localStorage.setItem("myway-pathway-selection", JSON.stringify(next.map((item) => ({ id: item.p.id, role: item.role }))));
+      const legacy = JSON.stringify(next.filter(item=>isIndonesiaProgramme(item.p.id)).map(item=>({id:item.p.id,role:item.role})));
+      setPathwayRecords(records=>{const updated={...records,[INDONESIA_PLANS_KEY]:legacy};window.localStorage.setItem("myway-pathway-records",JSON.stringify(updated));return updated;}); return next; });
     setToast(alreadyAdded ? `${school.name} removed from pathway` : `${school.name} added as Target`);
   };
   const toggleTask = (id: string) => setCompleted((current) => { const next = current.includes(id) ? current.filter((v) => v !== id) : [...current, id]; window.localStorage.setItem("myway-pathway-actions", JSON.stringify(next)); return next; });
   const updatePathwayRecord = (key: string, value: string) => {
+    if (key === INDONESIA_PLANS_KEY) {
+      const plans = mergeIndonesiaSelections([], value);
+      setPathway(current => {
+        const next = [...current.filter(x => !isIndonesiaProgramme(x.p.id)), ...plans.flatMap(x => {const p=programs.find(p=>p.id===x.id);return p?[{p,role:x.role}]:[];})];
+        const normalised=mergeIndonesiaSelections(next.map(x=>({id:x.p.id,role:x.role})));
+        const final=next.map(x=>({...x,role:normalised.find(n=>n.id===x.p.id)!.role}));
+        window.localStorage.setItem("myway-pathway-selection",JSON.stringify(final.map(x=>({id:x.p.id,role:x.role}))));return final;
+      });
+    }
     setPathwayRecords((current) => {
       const next = { ...current, [key]: value };
       window.localStorage.setItem("myway-pathway-records", JSON.stringify(next));
       return next;
     });
   };
-  const dashboardProgram = pathway.find((item) => item.role === "Dream")?.p;
+  const dashboardProgram = (pathway.find((item) => item.role === "Dream") || pathway[0])?.p;
   const sharedRecord = (key: string) => {
     const profileMap: Record<string, string | undefined> = {
       intake: profileSnapshot.intake,
@@ -2072,7 +2095,7 @@ export default function App() {
     };
     return profileMap[key] || documentMap[key] || "";
   };
-  const recordFilled = (key: string, programId?: string) => Boolean((programId && pathwayRecords[`${programId}:${key}`])?.trim() || (programId === dashboardProgram?.id ? pathwayRecords[key]?.trim() : "") || sharedRecord(key).trim());
+  const recordFilled = (key: string, programId?: string) => isIndonesiaProgramme(programId) ? Boolean(pathwayRecords[`${programId}:${key}`]?.trim()) : Boolean((programId && pathwayRecords[`${programId}:${key}`])?.trim() || (programId === dashboardProgram?.id ? pathwayRecords[key]?.trim() : "") || sharedRecord(key).trim());
   const percentage = (checks: boolean[]) => checks.length ? Math.round(checks.filter(Boolean).length / checks.length * 100) : 0;
   const readinessFor = (program?: Program) => {
     if (!program) return { score: 0, stages: [] as ReadinessStage[] };
@@ -2092,7 +2115,7 @@ export default function App() {
     const requirements = percentage(stage.requirements);
     const records = percentage(stage.records.map(filled));
     const evidence = percentage(stage.evidence);
-    const actionComplete = (id: string) => completed.includes(`${program.id}:${id}`) || (program.id === dashboardProgram?.id && completed.includes(id));
+    const actionComplete = (id: string) => completed.includes(`${program.id}:${id}`) || (!isIndonesiaProgramme(program.id) && program.id === dashboardProgram?.id && completed.includes(id));
     const actions = percentage(stage.actions.map(actionComplete));
     return { label: stage.label, value: Math.round(requirements * .3 + records * .25 + evidence * .25 + actions * .2), requirements, records, evidence, actions, completedActions: stage.actions.filter(actionComplete).length, totalActions: stage.actions.length };
   });
@@ -2158,7 +2181,7 @@ export default function App() {
   else if (selectedSchool) { const program = selectedSchool.programId ? programs.find((item) => item.id === selectedSchool.programId) : undefined; const choice = program ?? schoolAsProgram(selectedSchool); const selectedRole = pathway.find((item) => item.p.id === choice.id)?.role; content = <SchoolDetail key={selectedSchool.id} school={selectedSchool} program={program} close={() => setSelectedSchoolId(null)} saved={saved.includes(selectedSchool.id)} toggleSaved={() => toggleSaved(selectedSchool.id)} compared={compared.includes(selectedSchool.id)} toggleCompare={() => toggleCompare(selectedSchool.id)} pathwayRole={selectedRole} addPath={(role) => addPath(choice, role)} removePath={() => removePath(choice)} fitResult={fitFor(choice, selectedSchool)} readinessScore={applicationReadiness[choice.id]?.score} reportIncorrect={() => openFeedback("incorrect", { university: selectedSchool.name, programme: program?.title ?? schoolStudy(selectedSchool).title })} />; }
   else if (view === "dashboard") content = <Dashboard candidates={discoveryPrograms} go={go} completed={completed} toggleTask={toggleTask} openProgram={openProgram} target={dashboardProgram} selected={pathway} pathwayReadiness={progress} readinessStages={readinessStages} programFits={programFits} profile={profileSnapshot} />;
   else if (view === "explore") content = <Explore openSchool={openSchool} saved={saved} setSaved={toggleSaved} compared={compared} toggleCompare={toggleCompare} schoolPathwayIds={pathway.map((item) => item.p.id)} toggleSchoolPathway={toggleSchoolPathway} language={language} records={pathwayRecords} updateRecord={updatePathwayRecord} goPathway={() => go("pathway")} />;
-  else if (view === "pathway") content = <><IndonesiaPathway records={pathwayRecords} updateRecord={updatePathwayRecord} language={language} /><Pathway selected={pathway} completed={completed} toggleTask={toggleTask} go={go} openProgram={openProgram} changeRole={addPath} removePath={removePath} records={pathwayRecords} updateRecord={updatePathwayRecord} applicationReadiness={applicationReadiness} toast={setToast} initialStage={pathwayStage} initialApplicationId={pathwayApplicationId} /></>;
+  else if (view === "pathway") content = <><Pathway selected={pathway} completed={completed} toggleTask={toggleTask} go={go} openProgram={openProgram} changeRole={addPath} removePath={removePath} records={pathwayRecords} updateRecord={updatePathwayRecord} applicationReadiness={applicationReadiness} toast={setToast} initialStage={pathwayStage} initialApplicationId={pathwayApplicationId} /></>;
   else if (view === "tasks") content = <TasksHabits completed={completed} toggleTask={toggleTask} toast={setToast} />;
   else if (view === "progress") content = <ProgressPage selected={pathway} applicationReadiness={applicationReadiness} openStage={openPathwayStage} openProgram={openProgram} go={go} />;
   else if (view === "profile") content = <ProfilePage toast={setToast} avatar={avatar} setAvatar={setAvatar} />;
