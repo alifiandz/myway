@@ -2405,3 +2405,63 @@ input, select, textarea { font-size: 16px; }
  .weekly-action { padding: 14px; gap: 8px; }
  .weekly-action-copy > em { margin: 0; }
 }
+
+/* Phone density: compact surfaces with readable copy and touch targets. */
+@media(max-width:700px) {
+ .content-wrap { width: calc(100% - 24px); padding-top: 14px; }
+ .topbar { height: 60px; padding-inline: 12px; }
+ .topbar h1 { font-size: 17px; }
+ .welcome-row, .page-intro { gap: 8px; margin-bottom: 14px; }
+ .welcome-row h2, .page-intro h2, .task-workspace-head h2 { font-size: 24px; line-height: 1.2; }
+ .welcome-row p, .page-intro p { font-size: 14px; margin-top: 5px; }
+ .section-label, .eyebrow { font-size: 11px; letter-spacing: .08em; }
+ .section-head h3, .weekly-actions-card .section-head h3, .habit-card h3 { font-size: 19px; }
+ .section-space { margin-top: 20px; }
+ .card { border-radius: 14px; }
+ .hero-progress { display: grid; grid-template-columns: minmax(0,1fr) 84px; min-height: 220px; padding: 18px; gap: 12px; }
+ .hero-progress > div > strong { font-size: 50px; margin-top: 10px; }
+ .hero-progress p { font-size: 13px; margin: 10px 0 12px; }
+ .hero-progress .ring { width: 80px; height: 80px; margin: 0; }
+ .hero-readiness-visual { min-width: 0; width: 84px; gap: 8px; }
+ .hero-weekly-gain { font-size: 11px; text-align: center; line-height: 1.4; white-space: normal; }
+ .hero-progress .text-link { font-size: 13px; min-height: 44px; }
+ .chosen-card, .match-card, .next-stage-card, .readiness-overview, .weekly-actions-card, .weekly-focus-card, .habit-card { padding: 14px; }
+ .program-list[aria-label] > .school-card, .indonesia-discovery .school-card { min-height: 0; padding: 12px; gap: 8px; }
+ .program-list[aria-label] .school-program-copy { gap: 6px; }
+ .school-identity strong, .school-program-copy strong { font-size: 14px; line-height: 1.35; }
+ .school-identity small, .school-study-meta { font-size: 12px; }
+ .program-list[aria-label] .school-study-meta { font-size: 12px; }
+ .program-list[aria-label] .school-actions { margin-top: 0; padding-top: 2px; }
+ .school-route-status { font-size: 11px; }
+ .school-actions > button { font-size: 12px; min-height: 44px; padding: 4px; }
+ .program-list, .indonesia-discovery .program-list { gap: 9px; }
+ .tasks-layout { gap: 12px; }
+ .weekly-action-list { margin-top: 12px; gap: 8px; }
+ .weekly-action { padding: 10px; gap: 4px 8px; border-radius: 10px; }
+ .weekly-action-copy { gap: 4px; }
+ .weekly-action-copy strong { font-size: 14px; line-height: 1.35; }
+ .weekly-action-copy small { font-size: 13px; line-height: 1.4; }
+ .weekly-action-copy > em, .weekly-action-source { font-size: 12px; line-height: 1.35; }
+ .weekly-action .routine-row-actions { gap: 0; }
+ .routine-row-actions button { width: 44px; height: 44px; }
+ .weekly-action > .open-task-button { min-height: 44px; font-size: 13px; }
+ .tasks-helper { font-size: 13px; margin-top: 6px; }
+ .focus-readiness { margin-top: 12px; }
+ .focus-readiness > strong { font-size: 36px; }
+ .focus-detail { padding: 8px 0; }
+ .dream-pathway-card, .document-vault-summary { padding: 14px; }
+ .dream-pathway-identity > div { grid-template-columns: 52px minmax(0,1fr); gap: 12px; }
+ .dream-pathway-identity > div > .university-logo.large { width: 52px; height: 52px; }
+ .dream-pathway-identity h3 { font-size: 16px; }
+ .dream-pathway-identity p { font-size: 13px; }
+ .mobile-nav { height: 58px; border-radius: 14px; }
+ .mobile-nav button small { font-size: 10px; }
+}
+@media(max-width:700px) {
+ .tasks-intro { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+ .tasks-intro > div { min-width: 0; flex: 1; }
+ .tasks-intro .primary-button { width: auto; min-height: 44px; padding: 8px 10px; font-size: 12px; flex-shrink: 0; }
+ .tasks-intro h2 { font-size: 22px; }
+ .tasks-intro p { font-size: 13px; }
+ .weekly-action-source { display: none; }
+}
