@@ -2298,7 +2298,6 @@ input, select, textarea { font-size: 16px; }
  .page-enter[data-tour="explore-main"] .page-intro .source-stamp { background: transparent; border: 0; padding: 0; }
  .page-enter[data-tour="explore-main"] .results-head { flex-wrap: nowrap; align-items: center; margin-bottom: 6px; }
  .page-enter[data-tour="explore-main"] .results-head > div > span { display: none; }
- .page-enter[data-tour="explore-main"] .school-program-copy > .school-route-status { display: none; }
  .indonesia-discovery .school-actions { grid-template-columns: auto minmax(0,1fr); }
 }
 @media(min-width:701px) {
@@ -2339,11 +2338,7 @@ input, select, textarea { font-size: 16px; }
 .weekly-focus-card > p { font-size: 13px; }
 .school-identity strong { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
 .school-identity small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.program-list[aria-label] .school-route-status { display: none; }
 @media(min-width:701px) {
- .program-list[aria-label] > .school-card { display: grid; grid-template-rows: 68px 88px 38px; gap: 12px; align-content: start; }
- .program-list[aria-label] .school-identity strong { min-height: 42px; }
- .program-list[aria-label] .school-program-copy { display: grid; grid-template-rows: 42px 38px; gap: 8px; align-content: start; }
  .program-list[aria-label] .school-program-copy strong { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
  .program-list[aria-label] .school-study-meta { align-content: start; }
  .program-list[aria-label] .school-actions { margin-top: 0; padding-top: 0; align-self: end; }
@@ -2358,9 +2353,55 @@ input, select, textarea { font-size: 16px; }
  .focus-detail small { flex-basis: 40%; }
 }
 @media(min-width:701px) {
- .program-list[aria-label] > .school-card { grid-template-rows: 68px 94px 38px; }
- .program-list[aria-label] .school-program-copy { grid-template-rows: 42px 44px; }
- .program-list[aria-label] .school-study-meta { max-height: 44px; overflow: hidden; }
  .program-list[aria-label] .school-actions > button { font-size: 12px; }
 }
 .school-identity small svg { display: inline-block; vertical-align: -2px; margin-right: 4px; }
+
+/* Readiness is the primary dashboard visual. */
+.hero-progress { min-height: 300px; padding: 32px; gap: 24px; }
+.hero-progress > div:first-child { flex: 1; min-width: 0; }
+.hero-progress > div > strong { font-size: 76px; margin-top: 14px; }
+.hero-progress p { max-width: 340px; margin: 16px 0 22px; }
+.hero-progress .ring { width: 152px; height: 152px; }
+.hero-readiness-visual { flex: 0 0 auto; padding-left: 0; gap: 16px; }
+.hero-weekly-gain { font-size: 13px; }
+/* The grid reserves the complete logo width plus an independent text gap. */
+.dream-pathway-identity > div { grid-template-columns: 84px minmax(0,1fr); gap: 20px; }
+.dream-pathway-identity > div > .university-logo.large { width: 84px; height: 84px; max-width: 100%; }
+.dream-pathway-identity > div > span:last-child { min-width: 0; overflow-wrap: anywhere; }
+.dream-pathway-identity h3 { line-height: 1.35; }
+/* Restore route labels and a natural, consistent card rhythm. */
+.program-list[aria-label] > .school-card { display: flex; flex-direction: column; gap: 14px; }
+.program-list[aria-label] .school-card-top { min-height: 64px; }
+.program-list[aria-label] .school-program-copy { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; flex: 1; }
+.program-list[aria-label] .school-route-status { display: inline-flex; width: fit-content; font-size: 12px; }
+.program-list[aria-label] .school-program-copy > strong { min-height: 42px; }
+.program-list[aria-label] .school-study-meta { min-height: 38px; font-size: 13px; }
+.program-list[aria-label] .school-actions { margin-top: 4px; padding-top: 8px; }
+/* Keep duration beside its task description, rather than floating to the right. */
+.weekly-action-copy > em { text-align: left; justify-self: start; color: var(--muted); font-size: 12px; font-weight: 500; line-height: 1.5; }
+.weekly-action-source { width: auto; font-size: 12px; font-weight: 500; line-height: 1.4; }
+.weekly-action { padding: 16px; gap: 12px; align-items: center; }
+.weekly-action-copy { gap: 6px; }
+.weekly-action-copy small { max-width: 58ch; }
+.weekly-action .open-task-button { min-height: 40px; }
+.weekly-focus-card { padding: 22px; }
+.habit-table-row { align-items: center; }
+.monthly-habit-copy > em { text-align: left; font-size: 12px; font-weight: 500; }
+@media(max-width:1000px) { .tasks-layout { grid-template-columns: minmax(0,1fr); } .weekly-focus-card { max-width: none; } }
+@media(max-width:700px) {
+ .hero-progress { min-height: 255px; padding: 22px; gap: 14px; flex-wrap: wrap; }
+ .hero-progress > div > strong { font-size: 60px; }
+ .hero-progress .ring { width: 104px; height: 104px; }
+ .hero-progress p { max-width: 240px; font-size: 14px; }
+ .hero-readiness-visual { gap: 10px; }
+ .hero-weekly-gain { font-size: 12px; }
+ .dream-pathway-identity > div { grid-template-columns: 64px minmax(0,1fr); gap: 16px; }
+ .dream-pathway-identity > div > .university-logo.large { width: 64px; height: 64px; padding: 6px; }
+ .dream-pathway-identity h3 { font-size: 18px; }
+ .program-list[aria-label] > .school-card { gap: 10px; }
+ .program-list[aria-label] .school-card-top { min-height: 0; }
+ .program-list[aria-label] .school-program-copy > strong, .program-list[aria-label] .school-study-meta { min-height: 0; }
+ .weekly-action { padding: 14px; gap: 8px; }
+ .weekly-action-copy > em { margin: 0; }
+}

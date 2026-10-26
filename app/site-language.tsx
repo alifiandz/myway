@@ -526,7 +526,7 @@ const idText: Record<string, string> = {
   "English test": "Tes Bahasa Inggris",
   "Entrepreneurship": "Kewirausahaan",
   "Entry": "Masuk",
-  "Preparation across 9 stages—not an admission prediction.": "Persiapan dalam 9 tahap—bukan prediksi penerimaan.",
+  "Preparation across 9 stages. This is not an admission prediction.": "Persiapan dalam 9 tahap. Ini bukan prediksi penerimaan.",
   "Confirm requirements with the university. MyWay stores your preparation; it does not submit your application.": "Konfirmasikan persyaratan dengan universitas. MyWay menyimpan persiapanmu, bukan mengirim pendaftaran.",
   "Estimates are planning guidance. Confirm requirements with the listed source.": "Perkiraan merupakan panduan persiapan. Konfirmasikan persyaratan melalui sumber yang tercantum.",
   "Choose a task to see its steps.": "Pilih tugas untuk melihat langkahnya.",
