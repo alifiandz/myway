@@ -2192,60 +2192,116 @@ select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible { outline
  .id-evidence-status,.id-small-note,.pathway-helper{font-size: 14px;line-height:1.55}
 }
 
-/* Comfortable reading and bounded discovery lists. */
-body { font-size: 16px; line-height: 1.5; }
+/* Readable type with distinct desktop and touch-screen density. */
+body { font-size: 15px; line-height: 1.5; }
 button, input, select, textarea { font-family: inherit; }
 input, select, textarea { font-size: 16px; }
-.page-intro p, .welcome-row p, .weekly-action-copy small, .readiness-context,
-.profile-field label, .school-identity strong, .school-program-copy strong { font-size: 16px; line-height: 1.5; }
-.section-label, .eyebrow { letter-spacing: .07em; }
-.program-list, .indonesia-discovery .program-list { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
-.school-card { padding: 22px; gap: 20px; min-height: 0; box-shadow: 0 3px 12px rgba(37,52,89,.045); }
-.school-identity { grid-template-columns: 44px minmax(0,1fr); gap: 12px; }
-.school-identity .crest { width: 44px; height: 44px; }
-.school-program-copy { gap: 12px; }
-.school-program-copy strong { min-height: 0; font-weight: 700; }
-.school-study-meta { gap: 8px 12px; line-height: 1.6; }
-.school-route-status { width: fit-content; max-width: 100%; padding: 6px 10px; }
-.school-actions { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 8px; }
-.school-actions > button { min-height: 44px; padding: 8px 10px; }
+.section-label, .eyebrow { font-size: 12px; letter-spacing: .065em; }
+.page-intro p, .welcome-row p, .readiness-context, .tasks-helper, .pathway-helper { font-size: 14px; line-height: 1.55; }
+.welcome-row h2, .page-intro h2 { font-size: clamp(27px,2.2vw,32px); line-height: 1.15; }
+.program-list, .indonesia-discovery .program-list { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; }
+.school-card, .indonesia-discovery .school-card { padding: 17px; gap: 12px; min-height: 0; box-shadow: 0 3px 12px rgba(37,52,89,.045); }
+.school-identity { grid-template-columns: 40px minmax(0,1fr); gap: 10px; }
+.school-identity .crest { width: 40px; height: 40px; }
+.school-identity strong, .school-program-copy strong { font-size: 15px; line-height: 1.4; }
+.school-identity small, .school-study-meta { font-size: 13px; line-height: 1.45; }
+.school-program-copy { gap: 8px; }
+.school-program-copy strong { min-height: 0; font-weight: 650; }
+.school-study-meta { gap: 5px 10px; }
+.school-route-status { width: fit-content; max-width: 100%; padding: 4px 8px; font-size: 12px; font-weight: 600; }
+.school-actions { display: flex; flex-wrap: wrap; gap: 5px; padding-top: 4px; }
+.school-actions > button { min-height: 38px; padding: 7px 8px; font-size: 13px; }
 .school-actions .compact-view { margin-left: auto; }
-.program-save { flex-shrink: 0; min-width: 44px; min-height: 44px; }
-.browse-pagination { margin: 16px 0; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
-.browse-pagination p { margin: 0; color: var(--muted); font-size: 14px; }
-.browse-pagination > div { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
-.browse-pagination button { min-height: 44px; display: inline-flex; align-items: center; gap: 6px; }
+.program-save { flex-shrink: 0; min-width: 36px; min-height: 36px; }
+.browse-pagination { margin: 12px 0; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+.browse-pagination p { margin: 0; color: var(--muted); font-size: 13px; }
+.browse-pagination > div { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+.browse-pagination button { min-height: 38px; display: inline-flex; align-items: center; gap: 5px; font-size: 13px; }
 .browse-pagination button:disabled { opacity: .45; cursor: default; }
-#international-results, #indonesia-results { scroll-margin-top: 120px; }
-.weekly-action-copy strong { white-space: normal; overflow: visible; font-size: 16px; }
-.weekly-action-copy small { font-style: normal; }
-.weekly-action-source { width: fit-content; }
-.weekly-action { grid-template-columns: 34px minmax(0,1fr) auto auto; min-height: 110px; }
-.weekly-action > em { max-width: 110px; }
-.routine-row-actions button { width: 40px; height: 44px; }
-.results-head { gap: 16px; flex-wrap: wrap; }
+#international-results, #indonesia-results { scroll-margin-top: 110px; }
+.weekly-action-copy strong { white-space: normal; overflow: visible; font-size: 15px; line-height: 1.4; }
+.weekly-action-copy small { font-size: 14px; font-style: normal; line-height: 1.45; }
+.weekly-action-source { width: fit-content; font-size: 12px; font-weight: 600; }
+.weekly-action { grid-template-columns: 30px minmax(0,1fr) auto auto; min-height: 88px; padding: 10px 12px; gap: 10px; }
+.weekly-action-copy > em, .weekly-action > em { font-size: 12px; }
+.routine-row-actions button { width: 32px; height: 36px; }
+.results-head { gap: 12px; flex-wrap: wrap; }
+.pathway-stage-toggle { padding-top: 10px; padding-bottom: 10px; }
+.pathway-stage-toggle strong { font-size: 15px; }
+.pathway-stage-toggle small, .pathway-stage-toggle > em { font-size: 13px; }
+@media(min-width:701px) {
+ .nav-item { min-height: 44px; font-size: 15px; }
+ .topbar .eyebrow { font-size: 12px; }
+ .sidebar-progress strong, .sidebar-progress small { font-size: 12px; }
+ .hero-progress { min-height: 175px; padding: 20px 22px; }
+ .hero-progress > div > strong { font-size: 44px; }
+ .hero-progress p { margin-bottom: 10px; }
+ .hero-progress .ring { width: 104px; height: 104px; }
+ .hero-weekly-gain, .today-count, .badge { font-size: 12px; }
+ .weekly-actions-card, .weekly-focus-card, .habit-card { padding: 20px; }
+ .weekly-focus-card { min-height: 0; }
+ .weekly-focus-card dt, .weekly-focus-card dd { font-size: 13px; }
+ .document-vault-summary { padding: 12px 16px; min-height: 68px; }
+ .document-vault-summary .section-label { font-size: 11px; }
+}
 @media(max-width:1200px) { .program-list, .indonesia-discovery .program-list { grid-template-columns: repeat(2,minmax(0,1fr)); } }
 @media(max-width:700px) {
-  .program-list, .indonesia-discovery .program-list { grid-template-columns: minmax(0,1fr); gap: 16px; }
-  .school-card { padding: 20px; }
-  .weekly-action { grid-template-columns: 30px minmax(0,1fr); gap: 12px; }
-  .weekly-action .routine-row-actions { grid-column: 2; grid-row: auto; }
-  .weekly-action > em { grid-column: 2; grid-row: auto; text-align: left; max-width: none; }
-  .browse-pagination > div { width: 100%; justify-content: space-between; gap: 8px; }
-  .browse-pagination > div > span { order: -1; width: 100%; text-align: center; }
-  .sidebar, .topbar, .bottom-nav, .card { backdrop-filter: none; }
-  .school-card:hover, .weekly-action:hover { transform: none; }
-  .school-card, .weekly-action { transition: none; }
-}
-@media(prefers-reduced-motion:reduce) { html { scroll-behavior: auto; } .page-enter { animation: none; } }
-
-.tasks-helper, .pathway-helper { font-size: 16px; line-height: 1.6; }
-.pathway-stage-toggle { padding-top: 14px; padding-bottom: 14px; }
-.pathway-stage-toggle strong { font-size: 16px; }
-@media(max-width:700px) {
- .weekly-action > .open-task-button { grid-column: 2; justify-self: start; min-height: 44px; }
- .school-actions .compact-view { width: 100%; justify-content: center; margin-left: 0; }
+ body { font-size: 15px; }
+ .program-list, .indonesia-discovery .program-list { grid-template-columns: minmax(0,1fr); gap: 10px; }
+ .school-card, .indonesia-discovery .school-card { padding: 14px; gap: 9px; border-radius: 15px; }
+ .school-card-top { gap: 8px; }
+ .school-identity { grid-template-columns: 36px minmax(0,1fr); gap: 9px; }
+ .school-identity .crest { width: 36px; height: 36px; }
+ .school-identity strong, .school-program-copy strong { font-size: 15px; line-height: 1.35; }
+ .school-identity small, .school-study-meta { font-size: 13px; }
+ .school-route-status { padding: 0; background: transparent; font-size: 12px; min-height: 18px; }
+ .school-program-copy { gap: 6px; }
+ .school-actions { display: grid; grid-template-columns: auto auto auto; gap: 4px; padding-top: 0; }
+ .school-actions > button { min-height: 44px; padding: 7px 6px; font-size: 13px; }
+ .school-actions .compact-view { width: auto; margin-left: 0; justify-content: center; }
+ .program-save { min-width: 44px; min-height: 44px; }
+ .page-enter[data-tour="explore-main"] .page-intro { margin: 12px 0; gap: 8px; }
+ .page-enter[data-tour="explore-main"] .page-intro h2 { font-size: 24px; }
+ .page-enter[data-tour="explore-main"] .page-intro p { font-size: 14px; }
+ .page-enter[data-tour="explore-main"] .page-intro .source-stamp { margin-top: 0; font-size: 12px; padding: 5px 8px; }
+ .page-enter[data-tour="explore-main"] .search-card { padding: 12px; margin-bottom: 14px; }
+ .page-enter[data-tour="explore-main"] .explore-control-row { grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 8px; margin-top: 8px; }
+ .page-enter[data-tour="explore-main"] .refine-toggle, .page-enter[data-tour="explore-main"] .saved-filter { min-height: 44px; padding: 7px 9px; gap: 6px; }
+ .page-enter[data-tour="explore-main"] .refine-toggle-copy small { display: none; }
+ .page-enter[data-tour="explore-main"] .saved-filter small { font-size: 12px; }
+ .page-enter[data-tour="explore-main"] .refine-toggle-copy strong, .page-enter[data-tour="explore-main"] .saved-filter strong { font-size: 14px; }
+ .browse-pagination { margin: 10px 0; gap: 6px; }
+ .browse-pagination > div { width: 100%; justify-content: space-between; flex-wrap: nowrap; gap: 4px; }
+ .browse-pagination > div > span { order: 0; width: auto; font-size: 12px; text-align: center; }
+ .browse-pagination button { min-height: 44px; padding: 7px 8px; }
+ .weekly-action { grid-template-columns: 28px minmax(0,1fr) auto; gap: 8px; min-height: 0; padding: 12px; }
+ .weekly-action-copy strong { font-size: 15px; }
+ .weekly-action-copy small { font-size: 14px; }
+ .weekly-action .routine-row-actions { grid-column: 2; grid-row: 2; }
+ .weekly-action > .open-task-button { grid-column: 3; grid-row: 2; min-height: 44px; }
+ .weekly-action .action-toggle { grid-column: 1; grid-row: 1; }
+ .weekly-action-copy { grid-column: 2 / -1; grid-row: 1; }
+ .routine-row-actions button { width: 40px; height: 44px; }
  .pathway-stage-toggle { grid-template-columns: 29px minmax(0,1fr) 18px; }
  .pathway-stage-toggle > em { grid-column: 2; grid-row: 2; }
  .pathway-stage-toggle > svg { grid-column: 3; grid-row: 1; }
+ .sidebar, .topbar, .bottom-nav, .card { backdrop-filter: none; }
+ .school-card:hover, .weekly-action:hover { transform: none; }
+ .school-card, .weekly-action { transition: none; }
+}
+@media(prefers-reduced-motion:reduce) { html { scroll-behavior: auto; } .page-enter { animation: none; } }
+@media(min-width:1440px) { .program-list, .indonesia-discovery .program-list { grid-template-columns: repeat(4,minmax(0,1fr)); } }
+@media(max-width:700px) {
+ .page-enter[data-tour="explore-main"] .page-intro .eyebrow,
+ .page-enter[data-tour="explore-main"] .page-intro p { display: none; }
+ .page-enter[data-tour="explore-main"] .page-intro { gap: 4px; }
+ .page-enter[data-tour="explore-main"] .page-intro .source-stamp { background: transparent; border: 0; padding: 0; }
+ .page-enter[data-tour="explore-main"] .results-head { flex-wrap: nowrap; align-items: center; margin-bottom: 6px; }
+ .page-enter[data-tour="explore-main"] .results-head > div > span { display: none; }
+ .page-enter[data-tour="explore-main"] .school-program-copy > .school-route-status { display: none; }
+ .indonesia-discovery .school-actions { grid-template-columns: auto minmax(0,1fr); }
+}
+@media(min-width:701px) {
+ .school-actions { gap: 3px; flex-wrap: nowrap; }
+ .school-actions > button { padding-left: 5px; padding-right: 5px; }
 }
