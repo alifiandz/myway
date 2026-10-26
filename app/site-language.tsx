@@ -5,6 +5,11 @@ import { useEffect } from "react";
 type Language = "en" | "id";
 
 const idText: Record<string, string> = {
+  "Add proof": "Tambah bukti",
+  "Your proof": "Buktimu",
+  "Saved note or reference": "Catatan atau referensi tersimpan",
+  "Note or reference · optional": "Catatan atau referensi · opsional",
+  "Personal record. Proof is optional and does not change task completion.": "Catatan pribadi. Bukti bersifat opsional dan tidak mengubah penyelesaian tugas.",
   "How time is recorded": "Cara pencatatan waktu",
   "Session steps": "Langkah sesi",
   "Optional proof": "Bukti opsional",
