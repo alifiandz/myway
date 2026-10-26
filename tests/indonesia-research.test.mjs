@@ -37,3 +37,13 @@ test('main-campus UNAIR programmes keep their own faculties and campus offerings
  for(const [slug,faculty] of Object.entries(expected))assert.equal(rows.find(r=>r.id==='id-unair-s1-'+slug).faculty,faculty);
  assert.equal(new Set(rows.map(r=>r.id)).size,530);
 });
+
+test('compact planning guidance keeps source years and uncertainty visible while preserving every detail and source',()=>{
+ for(const id of [false,true]){
+  const html=renderToStaticMarkup(React.createElement(components.NextIntakeResearch,{uid:'ui',id,collapsed:true}));
+  assert.match(html,id?/2027 belum dikonfirmasi/:/2027 requirements and fees are not confirmed/);
+  assert.match(html,/compact-evidence/);assert.match(html,/<details class="id-evidence-disclosure">/);assert.doesNotMatch(html,/<details[^>]*\bopen/);
+  assert.match(html,id?/Sumber tahun sebelumnya/:/Prior-year source/);assert.match(html,/2026/);assert.match(html,/https:\/\//);
+  for(const key of ['routes','eligibility','documents','fees','dates','scholarships','contact'])assert.ok(html.includes(key==='contact'?(id?'Kontak resmi':'Official contact'):({routes:['University admission routes','Jalur masuk universitas'],eligibility:['Eligibility','Syarat peserta'],documents:['Application documents','Dokumen pendaftaran'],fees:['Fees','Biaya'],dates:['Dates','Jadwal'],scholarships:['Scholarships','Beasiswa']})[key][id?1:0]));
+ }
+});

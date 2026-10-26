@@ -2305,3 +2305,62 @@ input, select, textarea { font-size: 16px; }
  .school-actions { gap: 3px; flex-wrap: nowrap; }
  .school-actions > button { padding-left: 5px; padding-right: 5px; }
 }
+
+/* Targeted visual hierarchy: concise summaries, optional detail and aligned cards. */
+.id-evidence-card.verified { color: var(--ink); font-weight: 400; }
+.id-evidence-card .id-evidence-status { color: var(--muted); font-size: 12px; font-weight: 400; line-height: 1.5; }
+.id-evidence-card > p, .id-evidence-card li, .id-evidence-note p { color: var(--ink); font-size: 13px; font-weight: 400; line-height: 1.55; }
+.id-evidence-card-title strong { font-size: 14px; font-weight: 650; }
+.compact-evidence { padding: 13px; gap: 7px; }
+.compact-evidence.prior-year { border-top-color: #c29a53; }
+.id-evidence-disclosure { width: 100%; font-size: 13px; font-weight: 400; }
+.id-evidence-disclosure > summary { color: var(--blue-dark); cursor: pointer; padding: 5px 0; }
+.id-evidence-disclosure p { margin: 8px 0; color: var(--ink); font-weight: 400; }
+.application-official-evidence .detail-section { box-shadow: none; border-radius: 10px; padding: 16px; }
+.application-official-evidence .id-small-note { margin: 8px 0; font-size: 13px; line-height: 1.5; }
+.pathway-action-item { display: grid; grid-template-columns: 24px minmax(0,1fr) auto; align-items: start; gap: 10px; padding: 12px; margin-top: 8px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); }
+.pathway-action-check { display: grid; place-items: start center; padding: 0; min-height: 32px; border: 0; background: transparent; cursor: pointer; }
+.pathway-action-copy { min-width: 0; }
+.pathway-action-copy > strong { font-size: 14px; line-height: 1.4; font-weight: 650; }
+.pathway-action-copy .pathway-action-current { margin: 3px 0 7px; color: var(--muted); font-size: 13px; line-height: 1.45; }
+.pathway-action-meta { display: flex; flex-wrap: wrap; gap: 5px 18px; font-size: 12px; color: var(--muted); }
+.pathway-action-meta b { font-size: 12px; text-transform: none; letter-spacing: normal; font-weight: 500; }
+.pathway-action-explanation { margin-top: 6px; font-size: 13px; }
+.pathway-action-explanation summary { cursor: pointer; color: var(--blue-dark); font-size: 12px; }
+.pathway-action-explanation p { margin: 7px 0 0; color: var(--muted); font-size: 13px; font-weight: 400; }
+.pathway-action-complete { padding: 4px 0 4px 8px; min-height: 32px; background: transparent; border: 0; color: var(--blue-dark); font-size: 12px; font-weight: 600; cursor: pointer; }
+.pathway-action-item.done .pathway-action-complete { color: var(--green); }
+.focus-readiness { margin-top: 18px; gap: 12px; }
+.focus-readiness > strong { font-size: 44px; }
+.focus-readiness b, .focus-readiness small { font-size: 12px; }
+.focus-detail { padding: 10px 0; align-items: start; }
+.focus-detail small { font-size: 12px; text-transform: none; letter-spacing: normal; font-weight: 500; flex: 0 0 40%; }
+.focus-detail strong { font-size: 13px; line-height: 1.45; font-weight: 600; text-align: right; }
+.weekly-focus-card > p { font-size: 13px; }
+.school-identity strong { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.school-identity small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.program-list[aria-label] .school-route-status { display: none; }
+@media(min-width:701px) {
+ .program-list[aria-label] > .school-card { display: grid; grid-template-rows: 68px 88px 38px; gap: 12px; align-content: start; }
+ .program-list[aria-label] .school-identity strong { min-height: 42px; }
+ .program-list[aria-label] .school-program-copy { display: grid; grid-template-rows: 42px 38px; gap: 8px; align-content: start; }
+ .program-list[aria-label] .school-program-copy strong { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+ .program-list[aria-label] .school-study-meta { align-content: start; }
+ .program-list[aria-label] .school-actions { margin-top: 0; padding-top: 0; align-self: end; }
+ .weekly-action-copy strong { font-size: 14px; }
+ .weekly-action-copy small { font-size: 13px; }
+ .weekly-action { min-height: 80px; }
+}
+@media(max-width:700px) {
+ .pathway-action-item { grid-template-columns: 24px minmax(0,1fr); padding: 12px; }
+ .pathway-action-complete { grid-column: 2; justify-self: start; min-height: 44px; padding: 5px 0; }
+ .pathway-action-check { min-height: 44px; }
+ .focus-detail small { flex-basis: 40%; }
+}
+@media(min-width:701px) {
+ .program-list[aria-label] > .school-card { grid-template-rows: 68px 94px 38px; }
+ .program-list[aria-label] .school-program-copy { grid-template-rows: 42px 44px; }
+ .program-list[aria-label] .school-study-meta { max-height: 44px; overflow: hidden; }
+ .program-list[aria-label] .school-actions > button { font-size: 12px; }
+}
+.school-identity small svg { display: inline-block; vertical-align: -2px; margin-right: 4px; }
