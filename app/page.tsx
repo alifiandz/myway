@@ -8,6 +8,8 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 import IndonesiaExplore from "./indonesia-explore";
 import BrowsePagination from "./browse-pagination";
 import PathwayActionCard from "./pathway-action-card";
+import FocusedTaskWorkspace from "./focused-task-workspace";
+import type {FocusSession} from "./focus-session";
 import { paginateResults, type ExploreBrowseState, initialExploreBrowseState } from "./explore-pagination";
 import type { Dispatch, SetStateAction } from "react";
 import {indonesiaPlanningProgrammes, mergeIndonesiaSelections, isIndonesiaProgramme} from "./indonesia-planning";
@@ -1189,7 +1191,7 @@ function ComparePanel({ ids, close, remove, open }: { ids: string[]; close: () =
   return <div ref={dialogRef as React.RefObject<HTMLDivElement>} tabIndex={-1} className="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="compare-title"><section className="compare-modal page-enter"><header><div><span className="eyebrow">Side-by-side evidence</span><h2 id="compare-title">Compare universities</h2><p>{items.length} of 4 selected</p></div><button className="icon-button" onClick={close} aria-label="Close comparison"><X /></button></header>{items.length ? <div className="compare-scroll"><div className="compare-grid" style={{ gridTemplateColumns: "170px repeat(" + items.length + ", minmax(210px, 1fr))" }}><strong className="compare-label">University</strong>{items.map((school) => { const program = school.programId ? programs.find((item) => item.id === school.programId) : undefined; return <article key={school.id}><button className="remove-x" onClick={() => remove(school.id)} aria-label={`Remove ${school.name} from comparison`}><X size={13} /></button><SchoolLogo school={school} program={program} /><strong>{school.name}</strong><small>{school.location}</small><button className="text-link" onClick={() => { open(school); close(); }}>View</button></article>; })}{rows.flatMap(([label, value]) => [<strong className="compare-label" key={label}>{label}</strong>, ...items.map((school) => <span className="compare-value" key={label + school.id}>{value(school)}</span>)])}</div></div> : <div className="empty"><Scale /><h3>Select universities to compare</h3></div>}<footer><p><CircleHelp size={14} /> Comparison uses official study pages and keeps ranking methodologies separate.</p><button className="primary-button" onClick={close}>Done</button></footer></section></div>;
 }
 
-type Routine = { id: string; title: string; focus: string; weeklyGoal: number; minutes: number };
+type Routine = { id: string; title: string; focus: string; weeklyGoal: number; minutes: number; focusSession?: FocusSession };
 
 type TaskGuide = { source: string; sourceDetail: string; outcome: string; steps: string[]; materials: string[]; doneWhen: string[] };
 
@@ -1222,22 +1224,9 @@ const taskGuides: Record<string, TaskGuide> = {
   "pathway-review": { source: "My Pathway · Weekly planning", sourceDetail: "Suggested to keep your university choices, requirements, and next decisions current.", outcome: "Leave your pathway with one verified update and one clear next action.", steps: ["Open your current target university", "Check one requirement or deadline", "Update the pathway if anything changed", "Choose next week’s highest-value action"], materials: ["My Pathway", "Official university page", "Application notes"], doneWhen: ["One fact is verified", "Your next action is clear", "Any outdated note is corrected"] },
 };
 
-function TaskWorkspace({ routine, isDone, close, toggleTask }: { routine: Routine; isDone: boolean; close: () => void; toggleTask: (id: string) => void }) {
+function TaskWorkspace({ routine, isDone, close, toggleTask, onSave }: { routine: Routine; isDone: boolean; close: () => void; toggleTask: (id: string) => void; onSave: (session: FocusSession) => void }) {
   const guide = taskGuides[routine.id] || { source: "Your routine · Personal target", sourceDetail: "Added from a target you chose for this week.", outcome: routine.focus, steps: ["Prepare what you need", "Complete one focused session", "Review what improved", "Save the next step"], materials: ["Your notes", "A quiet workspace", "Timer"], doneWhen: ["The planned session is complete", "The result is saved", "The next step is clear"] };
-  const [secondsLeft, setSecondsLeft] = useState(routine.minutes * 60);
-  const [running, setRunning] = useState(false);
-  const [checkedSteps, setCheckedSteps] = useState<number[]>([]);
-  useEffect(() => {
-    if (!running || secondsLeft <= 0) return;
-    const timer = window.setTimeout(() => {
-      setSecondsLeft((current) => Math.max(0, current - 1));
-      if (secondsLeft <= 1) setRunning(false);
-    }, 1000);
-    return () => window.clearTimeout(timer);
-  }, [running, secondsLeft]);
-  const minutes = String(Math.floor(secondsLeft / 60)).padStart(2, "0");
-  const seconds = String(secondsLeft % 60).padStart(2, "0");
-  return <div className="page-enter task-workspace"><button className="back-button" onClick={close}><ChevronLeft size={17} /> Back to weekly actions</button><section className="task-workspace-head"><div><span className="eyebrow">Focused task</span><h2>{routine.title}</h2><p>{routine.focus}</p><span className="task-source"><Sparkles size={14} /> {guide.source}</span></div><button className={isDone ? "outline-button selected" : "primary-button"} onClick={() => toggleTask(routine.id)}>{isDone ? <><CircleCheck size={16} /> Completed</> : <><Check size={16} /> Mark complete</>}</button></section><div className="task-workspace-grid"><main><article className="card task-guide-card"><span className="section-label">Your outcome</span><h3>{guide.outcome}</h3><p>{guide.sourceDetail}</p></article><article className="card task-guide-card"><div className="section-head"><div><span className="section-label">Do this now</span><h3>Step-by-step session</h3></div><span className="today-count">{checkedSteps.length} of {guide.steps.length}</span></div><div className="task-step-list">{guide.steps.map((step, index) => { const checked = checkedSteps.includes(index); return <button key={step} className={checked ? "checked" : ""} onClick={() => setCheckedSteps((current) => checked ? current.filter((item) => item !== index) : [...current, index])}><span>{checked ? <Check size={15} /> : index + 1}</span><strong>{step}</strong></button>; })}</div></article><div className="task-info-grid"><article className="card task-guide-card"><span className="section-label">What you need</span><ul>{guide.materials.map((item) => <li key={item}><CircleCheck size={15} /> {item}</li>)}</ul></article><article className="card task-guide-card"><span className="section-label">Done when</span><ul>{guide.doneWhen.map((item) => <li key={item}><Target size={15} /> {item}</li>)}</ul></article></div></main><aside className="card task-timer-card"><span className="section-label">Focus timer</span><div className="task-timer-ring"><strong>{minutes}:{seconds}</strong><small>{routine.minutes} minute session</small></div><button className="primary-button" onClick={() => setRunning((current) => !current)}>{running ? "Pause timer" : secondsLeft === 0 ? "Session finished" : "Start timer"}</button><button className="text-link" onClick={() => { setRunning(false); setSecondsLeft(routine.minutes * 60); }}>Reset</button><div className="task-related"><small>Connected to</small><strong>{guide.source}</strong><p>This link explains why the task appears in your week.</p></div></aside></div></div>;
+  return <FocusedTaskWorkspace routine={routine} guide={guide} isDone={isDone} close={close} toggleTask={toggleTask} onSave={onSave}/>;
 }
 
 const habitSeed: Record<string, number[]> = {};
@@ -1338,7 +1327,7 @@ function TasksHabits({ completed, toggleTask, toast }: { completed: string[]; to
   const routineEditor = (routine: Routine) => editingId === routine.id ? <div className="routine-editor"><input value={editDraft.title} onChange={(event) => setEditDraft((current) => ({ ...current, title: event.target.value }))} aria-label="Routine title" /><input value={editDraft.focus} onChange={(event) => setEditDraft((current) => ({ ...current, focus: event.target.value }))} aria-label="Routine description" /><label><span>Weekly target</span><input type="number" min="1" max="14" value={editDraft.weeklyGoal} onChange={(event) => setEditDraft((current) => ({ ...current, weeklyGoal: Number(event.target.value) || 1 }))} /></label><div><button className="primary-button compact" onClick={saveRoutine}>Save</button><button className="text-link" onClick={() => setEditingId(null)}>Cancel</button></div></div> : <><strong>{routine.title}</strong><small>{routine.focus}</small><em>{`${routine.minutes} min · ${routine.weeklyGoal}× weekly`}</em></>;
 
   const selectedTask = routines.find((routine) => routine.id === selectedTaskId);
-  if (selectedTask) return <TaskWorkspace routine={selectedTask} isDone={completed.includes(selectedTask.id)} close={() => setSelectedTaskId(null)} toggleTask={toggleTask} />;
+  if (selectedTask) return <TaskWorkspace routine={selectedTask} isDone={completed.includes(selectedTask.id)} close={() => setSelectedTaskId(null)} toggleTask={toggleTask} onSave={(focusSession) => setRoutines(current => current.map(item => item.id === selectedTask.id ? {...item, focusSession} : item))} />;
 
   return <div className="page-enter tasks-page" data-tour="tasks-main">
     <section className="page-intro tasks-intro"><div><span className="eyebrow">This week</span><h2>Tasks & Habits</h2><p>Set weekly targets, then build a routine around them.</p></div><button className="primary-button" onClick={() => setAdding(!adding)}><Plus size={15} /> Add target</button></section>
