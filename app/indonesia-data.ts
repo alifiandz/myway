@@ -1,4 +1,5 @@
 import catalogue from "./indonesia-catalogue.json";
+import universityLocations from "./indonesia-university-locations.json";
 export type IndonesiaProgramme = typeof catalogue[number];
 export const indonesiaProgrammes = catalogue;
 export const indonesiaUniversities = [...new Map(catalogue.map((p) => [p.university_id, { id: p.university_id, name: p.university }])).values()];
@@ -12,7 +13,7 @@ const aliases: Record<string, string> = { Manajemen: "management", Akuntansi: "a
 export const facultyAlias = (faculty: string) => /Ekonomi.*Bisnis Islam/.test(faculty) ? "FEBI" : /Ekonomi(ka)? dan Bisnis/.test(faculty) ? "FEB" : faculty.match(/\(([^)]+)\)$/)?.[1] ?? "";
 export function filterIndonesia(query: string, university: string, faculty: string) {
   const q = normalise(query);
-  return catalogue.filter((p) => (!university || p.university_id === university) && (!faculty || p.faculty === faculty) && normalise([p.title, p.university, p.university_id, p.faculty, facultyAlias(p.faculty), aliases[p.title] ?? ""].join(" ")).includes(q));
+  return catalogue.filter((p) => (!university || p.university_id === university) && (!faculty || p.faculty === faculty) && normalise([p.title, p.university, p.university_id, p.faculty, facultyAlias(p.faculty), aliases[p.title] ?? "", (universityLocations as Record<string, {label:string}>)[p.university_id]?.label ?? ""].join(" ")).includes(q));
 }
 export function indonesiaHref(p: IndonesiaProgramme) {
   return `?region=indonesia&university=${encodeURIComponent(p.university_id)}&faculty=${encodeURIComponent(p.faculty)}&programme=${encodeURIComponent(p.id)}#explore`;

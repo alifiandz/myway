@@ -1,0 +1,56 @@
+{
+  "ugm": {
+    "city": "Sleman",
+    "label": "Sleman · Yogyakarta",
+    "sourceUrl": "https://ugm.ac.id/id/kontak",
+    "checkedOn": "2026-10-27"
+  },
+  "uny": {
+    "city": "Sleman",
+    "label": "Sleman · Yogyakarta",
+    "sourceUrl": "https://kuik.uny.ac.id/kontak-kami-1",
+    "checkedOn": "2026-10-27"
+  },
+  "ui": {
+    "city": "Depok",
+    "label": "Depok",
+    "sourceUrl": "https://international.ui.ac.id/contact/",
+    "checkedOn": "2026-10-27"
+  },
+  "unair": {
+    "city": "Surabaya",
+    "label": "Surabaya",
+    "sourceUrl": "https://tracerstudy.unair.ac.id/",
+    "checkedOn": "2026-10-27"
+  },
+  "itb": {
+    "city": "Bandung",
+    "label": "Bandung",
+    "sourceUrl": "https://itb.ac.id/",
+    "checkedOn": "2026-10-27"
+  },
+  "undip": {
+    "city": "Semarang",
+    "label": "Semarang",
+    "sourceUrl": "https://undip.ac.id/",
+    "checkedOn": "2026-10-27"
+  },
+  "its": {
+    "city": "Surabaya",
+    "label": "Surabaya",
+    "sourceUrl": "https://www.its.ac.id/",
+    "checkedOn": "2026-10-27"
+  },
+  "ub": {
+    "city": "Malang",
+    "label": "Malang",
+    "sourceUrl": "https://selma.ub.ac.id/kontak/",
+    "checkedOn": "2026-10-27"
+  },
+  "uin": {
+    "city": "Sleman",
+    "label": "Sleman · Yogyakarta",
+    "sourceUrl": "https://uin-suka.ac.id/index.php/id/page/universitas/78-kontak",
+    "checkedOn": "2026-10-27"
+  }
+}
