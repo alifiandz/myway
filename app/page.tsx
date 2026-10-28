@@ -1,7 +1,5 @@
 "use client";
 
-import { configureWorkspace, isGuestWorkspace, planningStorage } from "./workspace-storage";
-
 import { buildPlanningReminders, localCalendarDate, type PlanningReminder } from "./planning-reminders";
 
 import { calculateProgramFit, selectRecommendations, type FitResult } from "./programme-fit";
@@ -805,7 +803,7 @@ function Onboarding({ finish, saveLater }: { finish: () => void; saveLater: () =
   const businessAreas = ["Business Administration", "Management", "International Business", "Entrepreneurship", "Marketing", "Finance", "Accounting", "Economics", "Business Analytics", "Supply Chain & Operations", "Human Resources", "Hospitality & Tourism", "Real Estate", "Sports Business", "Luxury Management", "Sustainability & Social Enterprise"];
   const toggleAdditional = (item: string) => { if (item === mainInterest || avoidedInterests.includes(item)) return; setAdditionalInterests((current) => current.includes(item) ? current.filter((value) => value !== item) : [...current, item]); };
   const toggleAvoided = (item: string) => { if (item === mainInterest || additionalInterests.includes(item)) return; setAvoidedInterests((current) => current.includes(item) ? current.filter((value) => value !== item) : [...current, item]); };
-  const saveOnboardingProfile = () => { let existing: Record<string, unknown> = {}; try { existing = JSON.parse(planningStorage().getItem("myway-profile") || "{}"); } catch {} planningStorage().setItem("myway-profile", JSON.stringify({ ...existing, name: fullName.trim() || preferredName.trim(), preferredName: preferredName.trim(), citizenship, countries, budget, average, test, score, graduation: graduation.trim() || existing.graduation || "", curriculum, degree: degreeRoute, fields: [mainInterest, ...additionalInterests].filter(Boolean).join(", "), avoidedFields: avoidedInterests.join(", "), language: selected.includes("English-taught") ? "English" : "", math: selected.includes("Low-to-moderate math") ? "Low-to-moderate" : "" })); planningStorage().setItem("myway-preference-priorities", JSON.stringify(priorities)); window.dispatchEvent(new Event("myway-profile-updated")); };
+  const saveOnboardingProfile = () => { let existing: Record<string, unknown> = {}; try { existing = JSON.parse(window.localStorage.getItem("myway-profile") || "{}"); } catch {} window.localStorage.setItem("myway-profile", JSON.stringify({ ...existing, name: fullName.trim() || preferredName.trim(), preferredName: preferredName.trim(), citizenship, countries, budget, average, test, score, graduation: graduation.trim() || existing.graduation || "", curriculum, degree: degreeRoute, fields: [mainInterest, ...additionalInterests].filter(Boolean).join(", "), avoidedFields: avoidedInterests.join(", "), language: selected.includes("English-taught") ? "English" : "", math: selected.includes("Low-to-moderate math") ? "Low-to-moderate" : "" })); window.localStorage.setItem("myway-preference-priorities", JSON.stringify(priorities)); window.dispatchEvent(new Event("myway-profile-updated")); };
   const completeOnboarding = () => { saveOnboardingProfile(); finish(); };
   const finishLater = () => { saveOnboardingProfile(); saveLater(); };
   return <main className="onboarding-shell">
@@ -1248,14 +1246,14 @@ function TasksHabits({ completed, toggleTask, toast }: { completed: string[]; to
   const [editDraft, setEditDraft] = useState({ title: "", focus: "", weeklyGoal: 1 });
   useEffect(() => {
     const timer = window.setTimeout(() => {
-      try { const stored = JSON.parse(planningStorage().getItem("myway-routines") || "null"); if (Array.isArray(stored) && stored.length) setRoutines(migrateStoredRoutines(stored)); } catch {}
-      try { const stored = JSON.parse(planningStorage().getItem("myway-habit-checks") || "null"); if (stored && typeof stored === "object") setHabitChecks(stored); } catch {}
+      try { const stored = JSON.parse(window.localStorage.getItem("myway-routines") || "null"); if (Array.isArray(stored) && stored.length) setRoutines(migrateStoredRoutines(stored)); } catch {}
+      try { const stored = JSON.parse(window.localStorage.getItem("myway-habit-checks") || "null"); if (stored && typeof stored === "object") setHabitChecks(stored); } catch {}
       setRoutineDataLoaded(true);
     }, 0);
     return () => window.clearTimeout(timer);
   }, []);
-  useEffect(() => { if (routineDataLoaded) planningStorage().setItem("myway-routines", JSON.stringify(routines)); }, [routineDataLoaded, routines]);
-  useEffect(() => { if (routineDataLoaded) planningStorage().setItem("myway-habit-checks", JSON.stringify(habitChecks)); }, [routineDataLoaded, habitChecks]);
+  useEffect(() => { if (routineDataLoaded) window.localStorage.setItem("myway-routines", JSON.stringify(routines)); }, [routineDataLoaded, routines]);
+  useEffect(() => { if (routineDataLoaded) window.localStorage.setItem("myway-habit-checks", JSON.stringify(habitChecks)); }, [routineDataLoaded, habitChecks]);
   const done = routines.filter((routine) => completed.includes(routine.id)).length;
   const today = new Date();
   const currentMonday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - ((today.getDay() + 6) % 7));
@@ -1378,7 +1376,7 @@ function DocumentVaultModal({ documents, links, selecting, onClose, onSelect, on
     catch (error) { window.alert(error instanceof Error ? error.message : "Files could not be imported. The originals are preserved."); }
     finally { setImporting(false); }
   };
-  return <div className="modal-backdrop document-vault-backdrop" onMouseDown={(event) => event.target === event.currentTarget && onClose()}><section ref={dialogRef} tabIndex={-1} className="document-vault-modal" role="dialog" aria-modal="true" aria-labelledby="document-vault-title"><header><span><span className="section-label">Private document workspace</span><h2 id="document-vault-title">My Documents</h2><p>{selecting ? `Choose a saved file for ${selecting.label}.` : "View, download and reuse documents across university applications."}</p></span><button aria-label="Close My Documents" onClick={onClose}><X size={18} /></button></header>{!isGuestWorkspace() && localCount > 0 && <div className="vault-migration"><span><strong>{localCount} file{localCount === 1 ? "" : "s"} still on this device</strong><small>Upload them to access them from your other devices. Originals stay here.</small></span><button className="outline-button compact" disabled={cloudUploading} onClick={uploadExisting}>{cloudUploading ? "Uploading…" : "Upload existing files"}</button></div>}{cloudError && <p role="alert" className="vault-cloud-error">{cloudError}</p>}<div className="vault-toolbar">{olderCount > 0 && <button className="outline-button compact" disabled={importing} onClick={importOlder}>{importing ? "Importing…" : `Import ${olderCount} older device files`}</button>}<span><FolderOpen size={16} /><strong>{documents.length} saved file{documents.length === 1 ? "" : "s"}</strong><small>{isGuestWorkspace() ? "Saved only in this browser" : "Private to your account"}</small></span><label className="primary-button compact"><Upload size={14} /> Add file<input type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xlsx,.xls" onChange={(event) => { const file = event.currentTarget.files?.[0]; if (file) onUpload(file); event.currentTarget.value = ""; }} /></label></div>{documents.length ? <div className="vault-document-list">{documents.map((document) => { const usageCount = Object.values(links).filter((id) => id === document.id).length; return <article key={document.id}><span className="document-file-icon"><FileText size={16} /></span><span><strong>{document.name}</strong><small>{document.storage === "local" ? "Device only · " : "Cloud saved · "}{document.category} · {formatFileSize(document.size)} · {formatStoredDate(document.uploadedAt)}</small><em>{usageCount ? `Used in ${usageCount} requirement${usageCount === 1 ? "" : "s"}` : document.previousVersionId ? `Previous version · v${document.version}` : "Not linked to a requirement"}</em></span><div>{selecting && <button className="vault-use-button" onClick={() => onSelect(document)}>Use file</button>}<button aria-label={`Preview ${document.name}`} onClick={() => onView(document)}><Eye size={14} /></button><button aria-label={`Download ${document.name}`} onClick={() => onDownload(document)}><Download size={14} /></button><button className="danger-action" aria-label={`Delete ${document.name}`} onClick={() => onDelete(document)}><Trash2 size={14} /></button></div></article>; })}</div> : <div className="vault-empty"><FolderOpen size={27} /><strong>No documents saved yet</strong><p>Upload a file here or from any Pathway requirement. It will then be available for reuse.</p></div>}<footer><CircleHelp size={14} /><span><strong>Document storage:</strong> {isGuestWorkspace() ? "Guest files stay in this browser and are not uploaded or synced. Download important files separately. Clearing browser data removes them. Maximum file size: 20 MB." : "New uploads are saved privately to your account and available on your other signed-in devices. Older device files need to be uploaded using the action above. Maximum file size: 20 MB."}</span></footer></section></div>;
+  return <div className="modal-backdrop document-vault-backdrop" onMouseDown={(event) => event.target === event.currentTarget && onClose()}><section ref={dialogRef} tabIndex={-1} className="document-vault-modal" role="dialog" aria-modal="true" aria-labelledby="document-vault-title"><header><span><span className="section-label">Private document workspace</span><h2 id="document-vault-title">My Documents</h2><p>{selecting ? `Choose a saved file for ${selecting.label}.` : "View, download and reuse documents across university applications."}</p></span><button aria-label="Close My Documents" onClick={onClose}><X size={18} /></button></header>{localCount > 0 && <div className="vault-migration"><span><strong>{localCount} file{localCount === 1 ? "" : "s"} still on this device</strong><small>Upload them to access them from your other devices. Originals stay here.</small></span><button className="outline-button compact" disabled={cloudUploading} onClick={uploadExisting}>{cloudUploading ? "Uploading…" : "Upload existing files"}</button></div>}{cloudError && <p role="alert" className="vault-cloud-error">{cloudError}</p>}<div className="vault-toolbar">{olderCount > 0 && <button className="outline-button compact" disabled={importing} onClick={importOlder}>{importing ? "Importing…" : `Import ${olderCount} older device files`}</button>}<span><FolderOpen size={16} /><strong>{documents.length} saved file{documents.length === 1 ? "" : "s"}</strong><small>Private to your account</small></span><label className="primary-button compact"><Upload size={14} /> Add file<input type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xlsx,.xls" onChange={(event) => { const file = event.currentTarget.files?.[0]; if (file) onUpload(file); event.currentTarget.value = ""; }} /></label></div>{documents.length ? <div className="vault-document-list">{documents.map((document) => { const usageCount = Object.values(links).filter((id) => id === document.id).length; return <article key={document.id}><span className="document-file-icon"><FileText size={16} /></span><span><strong>{document.name}</strong><small>{document.storage === "local" ? "Device only · " : "Cloud saved · "}{document.category} · {formatFileSize(document.size)} · {formatStoredDate(document.uploadedAt)}</small><em>{usageCount ? `Used in ${usageCount} requirement${usageCount === 1 ? "" : "s"}` : document.previousVersionId ? `Previous version · v${document.version}` : "Not linked to a requirement"}</em></span><div>{selecting && <button className="vault-use-button" onClick={() => onSelect(document)}>Use file</button>}<button aria-label={`Preview ${document.name}`} onClick={() => onView(document)}><Eye size={14} /></button><button aria-label={`Download ${document.name}`} onClick={() => onDownload(document)}><Download size={14} /></button><button className="danger-action" aria-label={`Delete ${document.name}`} onClick={() => onDelete(document)}><Trash2 size={14} /></button></div></article>; })}</div> : <div className="vault-empty"><FolderOpen size={27} /><strong>No documents saved yet</strong><p>Upload a file here or from any Pathway requirement. It will then be available for reuse.</p></div>}<footer><CircleHelp size={14} /><span><strong>Document storage:</strong> new uploads are saved privately to your account and available on your other signed-in devices. Older device files need to be uploaded using the action above. Maximum file size: 20 MB.</span></footer></section></div>;
 }
 
 function DocumentPreviewModal({ document, url, onClose, onDownload }: { document: VaultDocument; url: string; onClose: () => void; onDownload: () => void }) {
@@ -1411,18 +1409,18 @@ function Pathway({ selected, completed: allCompleted, toggleTask: toggleStoredTa
   const toggleTask = (id: string) => { if (active) toggleStoredTask(`${active.p.id}:${id}`); };
   const records = new Proxy({} as Record<string, string>, { get: (_target, property) => { if (typeof property !== "string" || !active) return ""; const sharedKey = isIndonesiaProgramme(active.p.id) ? undefined : sharedRequirementProfileKeys[property]; return (sharedKey ? sharedDocumentNames[sharedKey] : "") || allRecords[`${active.p.id}:${property}`] || (active.role === "Dream" && !isIndonesiaProgramme(active.p.id) ? allRecords[property] : "") || ""; } });
   const updateRecord = (key: string, value: string) => { if (active) updateStoredRecord(`${active.p.id}:${key}`, value); };
-  useEffect(() => { let current = true; const timer = window.setTimeout(() => { listVaultDocuments().then((documents) => current && setVaultDocuments(documents)).catch(() => toast(isGuestWorkspace() ? "Could not load browser documents. Check device storage and reopen My Documents." : "Could not load cloud documents. Check your connection and reopen My Documents.")); try { setDocumentLinks(JSON.parse(planningStorage().getItem("myway-document-links") || "{}")); } catch { setDocumentLinks({}); } try { setSharedDocumentNames(JSON.parse(planningStorage().getItem("myway-profile-documents") || "{}")); } catch { setSharedDocumentNames({}); } }, 0); return () => { current = false; window.clearTimeout(timer); }; }, [toast]);
+  useEffect(() => { let current = true; const timer = window.setTimeout(() => { listVaultDocuments().then((documents) => current && setVaultDocuments(documents)).catch(() => toast("Could not load cloud documents. Check your connection and reopen My Documents.")); try { setDocumentLinks(JSON.parse(window.localStorage.getItem("myway-document-links") || "{}")); } catch { setDocumentLinks({}); } try { setSharedDocumentNames(JSON.parse(window.localStorage.getItem("myway-profile-documents") || "{}")); } catch { setSharedDocumentNames({}); } }, 0); return () => { current = false; window.clearTimeout(timer); }; }, [toast]);
   useEffect(() => () => { if (previewUrl) URL.revokeObjectURL(previewUrl); }, [previewUrl]);
-  const saveLinks = (next: Record<string, string>) => { setDocumentLinks(next); planningStorage().setItem("myway-document-links", JSON.stringify(next)); };
+  const saveLinks = (next: Record<string, string>) => { setDocumentLinks(next); window.localStorage.setItem("myway-document-links", JSON.stringify(next)); };
   const activeLinkKey = (key: string) => !isIndonesiaProgramme(active?.p.id) && sharedRequirementProfileKeys[key] ? profileLinkKey(sharedRequirementProfileKeys[key]) : active ? `${active.p.id}:${key}` : key;
   const updateSharedDocumentName = (key: string, value: string) => {
     const profileKey = isIndonesiaProgramme(active?.p.id) ? undefined : sharedRequirementProfileKeys[key];
     if (!profileKey) return;
     let next: Record<string, string> = {};
-    try { next = JSON.parse(planningStorage().getItem("myway-profile-documents") || "{}"); } catch {}
+    try { next = JSON.parse(window.localStorage.getItem("myway-profile-documents") || "{}"); } catch {}
     if (value) next[profileKey] = value; else delete next[profileKey];
     setSharedDocumentNames(next);
-    planningStorage().setItem("myway-profile-documents", JSON.stringify(next));
+    window.localStorage.setItem("myway-profile-documents", JSON.stringify(next));
     window.dispatchEvent(new Event("myway-profile-updated"));
   };
   const reloadVault = async () => setVaultDocuments(await listVaultDocuments());
@@ -1579,21 +1577,21 @@ function ProfilePage({ toast, avatar, setAvatar }: { toast: (s: string) => void;
     reader.onload = () => typeof reader.result === "string" && chooseAvatar(reader.result);
     reader.readAsDataURL(file);
   };
-  useEffect(() => { const timer = window.setTimeout(() => { try { const saved = JSON.parse(planningStorage().getItem("myway-profile") || "null"); if (saved) setData((current) => ({ ...current, ...saved })); } catch {} try { setDocuments(JSON.parse(planningStorage().getItem("myway-profile-documents") || "{}")); } catch {} try { setDocumentLinks(JSON.parse(planningStorage().getItem("myway-document-links") || "{}")); } catch {} listVaultDocuments().then(setVaultDocuments).catch(() => toast(isGuestWorkspace() ? "Could not load browser documents. Check device storage and reopen My Documents." : "Could not load cloud documents. Check your connection and reopen My Documents.")); try { const savedPriorities = JSON.parse(planningStorage().getItem("myway-preference-priorities") || "null"); if (savedPriorities) setPreferencePriorities(savedPriorities); } catch {} }, 0); return () => window.clearTimeout(timer); }, [toast]);
+  useEffect(() => { const timer = window.setTimeout(() => { try { const saved = JSON.parse(window.localStorage.getItem("myway-profile") || "null"); if (saved) setData((current) => ({ ...current, ...saved })); } catch {} try { setDocuments(JSON.parse(window.localStorage.getItem("myway-profile-documents") || "{}")); } catch {} try { setDocumentLinks(JSON.parse(window.localStorage.getItem("myway-document-links") || "{}")); } catch {} listVaultDocuments().then(setVaultDocuments).catch(() => toast("Could not load cloud documents. Check your connection and reopen My Documents.")); try { const savedPriorities = JSON.parse(window.localStorage.getItem("myway-preference-priorities") || "null"); if (savedPriorities) setPreferencePriorities(savedPriorities); } catch {} }, 0); return () => window.clearTimeout(timer); }, [toast]);
   useEffect(() => () => { if (previewUrl) URL.revokeObjectURL(previewUrl); }, [previewUrl]);
   const update = (key: keyof typeof data, value: string) => setData((current) => ({ ...current, [key]: value }));
-  const save = () => { planningStorage().setItem("myway-profile", JSON.stringify(data)); planningStorage().setItem("myway-profile-documents", JSON.stringify(documents)); planningStorage().setItem("myway-preference-priorities", JSON.stringify(preferencePriorities)); window.dispatchEvent(new Event("myway-profile-updated")); setEditing(false); toast("Profile saved · matches recalculated"); };
+  const save = () => { window.localStorage.setItem("myway-profile", JSON.stringify(data)); window.localStorage.setItem("myway-profile-documents", JSON.stringify(documents)); window.localStorage.setItem("myway-preference-priorities", JSON.stringify(preferencePriorities)); window.dispatchEvent(new Event("myway-profile-updated")); setEditing(false); toast("Profile saved · matches recalculated"); };
   const completedFields = [data.citizenship, data.school, data.curriculum, data.graduation, data.average, data.score, data.intake, data.budget, data.activities, documents.passport, documents.transcript, documents.cv, documents.english].filter(Boolean).length;
   const completion = Math.round(completedFields / 13 * 100);
   const field = (key: keyof typeof data, label: string, placeholder: string) => <label className="profile-field"><span>{label}</span>{editing ? <input value={data[key]} onChange={(event) => update(key, event.target.value)} placeholder={placeholder} /> : <strong className={!data[key] ? "missing" : ""}>{data[key] || "Not added"}</strong>}</label>;
-  const saveDocumentState = (nextDocuments: Record<string, string>, nextLinks = documentLinks) => { setDocuments(nextDocuments); setDocumentLinks(nextLinks); planningStorage().setItem("myway-profile-documents", JSON.stringify(nextDocuments)); planningStorage().setItem("myway-document-links", JSON.stringify(nextLinks)); window.dispatchEvent(new Event("myway-profile-updated")); };
+  const saveDocumentState = (nextDocuments: Record<string, string>, nextLinks = documentLinks) => { setDocuments(nextDocuments); setDocumentLinks(nextLinks); window.localStorage.setItem("myway-profile-documents", JSON.stringify(nextDocuments)); window.localStorage.setItem("myway-document-links", JSON.stringify(nextLinks)); window.dispatchEvent(new Event("myway-profile-updated")); };
   const clearSharedPathwayRecord = (profileKey: string) => {
     const requirementKey = Object.entries(sharedRequirementProfileKeys).find(([, value]) => value === profileKey)?.[0];
     if (!requirementKey) return;
     let stored: Record<string, string> = {};
-    try { stored = JSON.parse(planningStorage().getItem("myway-pathway-records") || "{}"); } catch {}
+    try { stored = JSON.parse(window.localStorage.getItem("myway-pathway-records") || "{}"); } catch {}
     const next = Object.fromEntries(Object.entries(stored).filter(([key]) => key !== requirementKey && !key.endsWith(`:${requirementKey}`)));
-    planningStorage().setItem("myway-pathway-records", JSON.stringify(next));
+    window.localStorage.setItem("myway-pathway-records", JSON.stringify(next));
   };
   const reloadVault = async () => setVaultDocuments(await listVaultDocuments());
   const uploadProfileDocument = async (key: string, label: string, file: File) => { const linkKey = profileLinkKey(key); const previous = vaultDocuments.find((document) => document.id === documentLinks[linkKey]); const document: VaultDocument = { id: newVaultDocumentId(), name: file.name, type: file.type || "application/octet-stream", size: file.size, uploadedAt: new Date().toISOString(), category: label, version: previous ? previous.version + 1 : 1, previousVersionId: previous?.id }; try { await saveVaultDocument(document, file); saveDocumentState({ ...documents, [key]: file.name }, { ...documentLinks, [linkKey]: document.id }); await reloadVault(); toast(previous ? `${label} replaced · previous version kept` : `${label} saved to My Documents`); } catch (error) { toast(error instanceof Error ? error.message : "The file could not be uploaded. Please retry."); } };
@@ -1629,7 +1627,7 @@ function SettingsPage({ notifications, onNotificationsChange, toast, savedCount,
   useEffect(() => { listVaultDocuments().then((items) => setDocumentCount(items.length)).catch(() => setDocumentCount(0)); }, []);
   const exportData = async () => { const payload = await createPrototypeExport(); const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" }); const url = URL.createObjectURL(blob); const anchor = window.document.createElement("a"); anchor.href = url; anchor.download = `myway-planning-data-${new Date().toISOString().slice(0, 10)}.json`; anchor.style.display = "none"; window.document.body.appendChild(anchor); anchor.click(); anchor.remove(); window.setTimeout(() => URL.revokeObjectURL(url), 1000); toast("MyWay planning data downloaded"); };
   const importData = async (file: File) => { try { if (file.size > 5 * 1024 * 1024) throw new Error("Backup too large"); importPrototypeExport(JSON.parse(await file.text())); toast(language === "id" ? "Data MyWay dipulihkan · memuat ulang" : "MyWay data restored · reloading"); window.setTimeout(() => window.location.reload(), 500); } catch (error) { const storageFailed = error instanceof Error && error.message === "Backup could not be restored to device storage"; toast(storageFailed ? (language === "id" ? "Penyimpanan perangkat tidak tersedia. Kosongkan ruang lalu coba lagi." : "Device storage is unavailable. Free some space and try again.") : (language === "id" ? "File ini bukan cadangan MyWay yang didukung." : "This is not a supported MyWay data file")); } };
-  const resetData = async () => { if (!window.confirm(isGuestWorkspace() ? (language === "id" ? "Hapus seluruh perencanaan dan dokumen pengunjung di browser ini? Ekspor data dan unduh file penting terlebih dahulu." : "Clear all guest planning and documents in this browser? Export your data and download important files first.") : language === "id" ? "Hapus cache dan salinan dokumen lokal? Dokumen cloud dan data akun tetap tersimpan. Unggah file yang hanya ada di perangkat melalui Dokumen Saya terlebih dahulu." : "Clear this device cache and its local document copies? Cloud documents and account planning data will remain. Upload any device-only files in My Documents first.")) return; try { const userId = planningStorage().getItem("myway-active-user-id"); await clearVaultDocuments(); if (userId) planningStorage().removeItem(`myway-sync-base:${userId}`); MYWAY_LOCAL_KEYS.forEach((key) => planningStorage().removeItem(key)); planningStorage().removeItem("myway-active-user-id"); window.location.reload(); } catch { toast(language === "id" ? "Data perangkat tidak dapat dihapus sepenuhnya. Coba lagi sebelum menutup browser." : "Device data could not be fully cleared. Try again before closing the browser."); } };
+  const resetData = async () => { if (!window.confirm(language === "id" ? "Hapus cache dan salinan dokumen lokal? Dokumen cloud dan data akun tetap tersimpan. Unggah file yang hanya ada di perangkat melalui Dokumen Saya terlebih dahulu." : "Clear this device cache and its local document copies? Cloud documents and account planning data will remain. Upload any device-only files in My Documents first.")) return; try { const userId = window.localStorage.getItem("myway-active-user-id"); await clearVaultDocuments(); if (userId) window.localStorage.removeItem(`myway-sync-base:${userId}`); MYWAY_LOCAL_KEYS.forEach((key) => window.localStorage.removeItem(key)); window.localStorage.removeItem("myway-active-user-id"); window.location.reload(); } catch { toast(language === "id" ? "Data perangkat tidak dapat dihapus sepenuhnya. Coba lagi sebelum menutup browser." : "Device data could not be fully cleared. Try again before closing the browser."); } };
   const toggleNotifications = () => { const next = !notifications; onNotificationsChange(next); toast(next ? "In-app notifications enabled" : "In-app notifications paused"); };
   const id = language === "id";
   return <div className="page-enter settings-page" data-tour="settings-main">
@@ -1640,7 +1638,7 @@ function SettingsPage({ notifications, onNotificationsChange, toast, savedCount,
         <section id="general" className="card settings-panel"><div className="settings-panel-head"><span><Settings2 size={18}/></span><div><h3>{id ? "Umum" : "General"}</h3><p>{id ? "Pilih bagaimana MyWay terlihat dan berkomunikasi denganmu." : "Choose how MyWay looks and communicates with you."}</p></div></div><div className="setting-row setting-row-stack"><div><strong>{id ? "Tampilan" : "Appearance"}</strong><small>{id ? "Mode terang tersedia sekarang. Mode gelap akan hadir nanti." : "Light mode is available now. Dark mode is upcoming."}</small></div><div className="theme-picker theme-picker-compact"><button className={theme === "light" ? "selected" : ""} onClick={()=>setTheme('light')}><Sun size={16}/><span>{id?'Terang':'Light'}</span><Check size={14}/></button><button className="coming-soon" disabled aria-disabled="true"><Moon size={16}/><span>{id?'Gelap':'Dark'}</span><small>{id?'Segera hadir':'Upcoming'}</small></button></div></div><div className="setting-row"><div><strong>{id ? "Bahasa" : "Language"}</strong><small>{id ? "Terapkan bahasa pilihanmu ke seluruh halaman MyWay." : "Apply your preferred language across every MyWay page."}</small></div><div className="segmented-control" role="group" aria-label="Language"><button className={language==='en'?'active':''} onClick={()=>setLanguage('en')}>English</button><button className={language==='id'?'active':''} onClick={()=>setLanguage('id')}>Bahasa Indonesia</button></div></div></section>
         <section id="notifications" className="card settings-panel"><div className="settings-panel-head"><span><Bell size={18}/></span><div><h3>{id ? "Notifikasi" : "Notifications"}</h3><p>{id ? "Pilih apakah MyWay menampilkan pengingat perencanaan di aplikasi." : "Choose whether MyWay shows planning reminders inside the app."}</p></div></div><button className={`settings-toggle ${notifications ? "on" : ""}`} onClick={toggleNotifications} role="switch" aria-checked={notifications}><span><strong>{id ? "Pengingat dalam aplikasi" : "In-app reminders"}</strong><small>{notifications ? (id ? "Aktif" : "Enabled") : (id ? "Dijeda" : "Paused")}</small></span><i /></button><p className="settings-footnote">{id ? "Pengingat dalam aplikasi menggunakan tenggat tercatat dan tugas perencanaan saat MyWay terbuka. Notifikasi email dan push belum tersedia." : "In-app reminders use recorded deadlines and planning tasks while MyWay is open. Email and push notifications are not available."}</p></section>
         <section id="data" className="card settings-panel"><div className="settings-panel-head"><span><HardDrive size={18}/></span><div><h3>{id ? "Data & Penyimpanan" : "Data & Storage"}</h3><p>{id ? "Lihat data lokal, buat cadangan, atau pulihkan perencanaanmu." : "Review local data, create a backup, or restore your planning workspace."}</p></div></div><div className="settings-stats"><button onClick={() => go("profile")}><strong>{documentCount}</strong><small>{id ? "File tersimpan" : "Stored files"}</small></button><span><strong>{savedCount}</strong><small>{id ? "Universitas tersimpan" : "Saved universities"}</small></span><span><strong>{applicationCount}</strong><small>{id ? "Pilihan di Pathway" : "Pathway choices"}</small></span></div><div className="settings-actions"><button className="primary-button" onClick={exportData}><Download size={14}/>{id ? "Ekspor data" : "Export data"}</button><label className="outline-button"><Upload size={14}/>{id ? "Pulihkan data" : "Restore data"}<input type="file" accept="application/json,.json" onChange={(event)=>{const file=event.currentTarget.files?.[0];if(file)importData(file);event.currentTarget.value="";}}/></label><button className="outline-button" onClick={()=>go("profile")}><FolderOpen size={14}/>{id ? "Buka dokumen" : "Open documents"}</button></div><p className="settings-footnote">{id ? "Cadangan mencakup data perencanaan. File dokumen perlu diunduh terpisah dari Profil." : "Backups include planning data. Document files must be downloaded separately from Profile."}</p></section>
-        <section id="privacy" className="card settings-panel"><a href="/privacy" className="privacy-notice-link">{id ? "Baca pemberitahuan privasi & bantuan" : "Read privacy & support notice"}</a><div className="settings-panel-head"><span><LockKeyhole size={18}/></span><div><h3>{id ? "Privasi & Keamanan" : "Privacy & Security"}</h3><p>{isGuestWorkspace() ? (id ? "Data dan dokumen pengunjung tersimpan di browser ini saja. Tidak ada sinkronisasi akun." : "Guest planning and documents stay in this browser. They are not synced to an account.") : (id ? "Data perencanaan dan dokumen cloud bersifat pribadi dan tersedia antarperangkat." : "Planning data and cloud documents are private to your account and available across your devices.")}</p></div></div><div className="privacy-note"><ShieldCheck size={18}/><span><strong>{id ? "Penyimpanan lokal" : "Local storage"}</strong><small>{isGuestWorkspace() ? (id ? "Gunakan ekspor data untuk cadangan perencanaan. Unduh dokumen secara terpisah. Data pengunjung tetap terpisah saat masuk ke akun." : "Export planning data for a backup and download documents separately. Guest work stays separate when you sign in.") : (id ? "Profil, pilihan universitas, tugas dan progres disinkronkan ke akunmu." : "Your profile, university choices, tasks and pathway progress sync to your account.")}</small></span></div><div className="danger-row"><div><strong>{id ? "Hapus data perangkat" : "Clear device data"}</strong><small>{isGuestWorkspace() ? (id ? "Menghapus perencanaan dan dokumen pengunjung di browser ini. Ekspor data dan unduh file terlebih dahulu." : "Removes guest planning and documents from this browser. Export data and download files first.") : (id ? "Menghapus cache dan salinan lokal. Data akun tetap tersimpan." : "Clears this browser’s cache and local copies. Account planning data is retained.")}</small></div><button className="outline-button danger-action" onClick={resetData}><Trash2 size={14}/>{id ? "Hapus data" : "Clear data"}</button></div></section>
+        <section id="privacy" className="card settings-panel"><a href="/privacy" className="privacy-notice-link">{id ? "Baca pemberitahuan privasi & bantuan" : "Read privacy & support notice"}</a><div className="settings-panel-head"><span><LockKeyhole size={18}/></span><div><h3>{id ? "Privasi & Keamanan" : "Privacy & Security"}</h3><p>{id ? "Data perencanaan dan dokumen cloud bersifat pribadi dan tersedia antarperangkat." : "Planning data and cloud documents are private to your account and available across your devices."}</p></div></div><div className="privacy-note"><ShieldCheck size={18}/><span><strong>{id ? "Penyimpanan lokal" : "Local storage"}</strong><small>{id ? "Profil, pilihan universitas, tugas, progres, dan unggahan dokumen baru tersedia di perangkat yang masuk ke akunmu. Unggah file lama melalui Dokumen Saya." : "Your profile, university choices, tasks and pathway progress sync to your account. Uploaded document files remain on this device."}</small></span></div><div className="danger-row"><div><strong>{id ? "Hapus data perangkat" : "Clear device data"}</strong><small>{id ? "Menghapus cache dan salinan lokal. Dokumen cloud dan data akun tetap tersimpan. Unggah file lokal terlebih dahulu." : "Clears this browser’s cache and local copies. Cloud documents and account planning data are retained. Upload device-only files first."}</small></div><button className="outline-button danger-action" onClick={resetData}><Trash2 size={14}/>{id ? "Hapus data" : "Clear data"}</button></div></section>
         {adminVisible && <section id="admin" className="card settings-panel admin-settings-panel"><div className="settings-panel-head"><span><ShieldCheck size={18}/></span><div><h3>{id ? "Ruang Admin" : "Admin Workspace"}</h3><p>{id ? "Kelola tinjauan data dan masukan pengguna di ruang pribadi MyWay." : "Manage data review and user feedback in your private MyWay workspace."}</p></div></div><div className="help-row"><div><strong>{id ? "Buka panel admin" : "Open admin panel"}</strong><small>{id ? "Hanya akun pemilik MyWay yang dapat membuka halaman ini." : "Only the MyWay owner account can open this page."}</small></div><a className="primary-button" href="/admin/data" target="_blank" rel="noreferrer"><ShieldCheck size={14}/>{id ? "Buka Admin" : "Open Admin"}</a></div></section>}
         <section id="help" className="card settings-panel"><div className="settings-panel-head"><span><LifeBuoy size={18}/></span><div><h3>{id ? "Bantuan" : "Help"}</h3><p>{id ? "Pelajari kembali alur MyWay kapan pun kamu membutuhkannya." : "Revisit the MyWay workflow whenever you need a refresher."}</p></div></div><div className="help-row"><div><strong>{id ? "Tur terpandu MyWay" : "MyWay Guided Tour"}</strong><small>{id ? "Lihat cara Jelajahi, Bandingkan, Pathway, kesiapan, tugas, dan dokumen saling terhubung." : "See how Explore, Compare, Pathway, readiness, tasks and documents work together."}</small></div><button className="outline-button" onClick={replayTutorial}><BookOpen size={14}/>{id ? "Mulai ulang tur" : "Restart tour"}</button></div></section>
       </div>
@@ -1672,7 +1670,7 @@ function ProductTutorial({ close, go, language }: { close: () => void; go: (view
   const current = tutorialSteps[step];
   const copy = current[language];
   const id = language === "id";
-  const finish = () => { planningStorage().setItem("myway-product-tour-v2", "complete"); go("dashboard"); close(); };
+  const finish = () => { window.localStorage.setItem("myway-product-tour-v2", "complete"); go("dashboard"); close(); };
   const dialogRef = useDialogFocus(finish);
 
   useLayoutEffect(() => {
@@ -1779,6 +1777,33 @@ function AccountGate({ language, ready, openAccount, explore }: { language: "en"
   </main>;
 }
 
+function GuestExplore({ language, openAccount }: { language: Language; openAccount: () => void }) {
+  // Guest state never reads or writes account planning data or browser caches.
+  const [browse, setBrowse] = useState<ExploreBrowseState>(initialExploreBrowseState);
+  const [region, setRegion] = useState<"international" | "indonesia">("international");
+  const [school, setSchool] = useState<BusinessSchool | null>(null);
+  const [compared, setCompared] = useState<string[]>([]);
+  const [compareOpen, setCompareOpen] = useState(false);
+  const [records, setRecords] = useState<Record<string, string>>({});
+  const id = language === "id";
+  const toggleCompare = (key: string) => setCompared(current => current.includes(key) ? current.filter(value => value !== key) : current.length < 4 ? [...current, key] : current);
+  const openSchool = (next: BusinessSchool) => { setSchool(next); setCompareOpen(false); window.scrollTo({ top: 0 }); };
+  const updateGuestRecord = (key: string, value: string) => {
+    if (key === "indonesia-university-comparison") setRecords(current => ({ ...current, [key]: value }));
+    else openAccount();
+  };
+  const programme = school?.programId ? programs.find(item => item.id === school.programId) : undefined;
+  return <div className="guest-explore">
+    <header className="guest-header"><button type="button" className="guest-brand" aria-label="Back to university browsing" onClick={() => setSchool(null)}><PublicUniversityLogo fallback="/myway-mark.png" name="MyWay" /><strong>MyWay</strong></button><div><span>{id ? "Mode pengunjung" : "Guest browsing"}</span><button type="button" className="primary-button" onClick={openAccount}>{id ? "Masuk" : "Sign in"}</button></div></header>
+    <main className="content-wrap"><p className="guest-notice">{id ? "Jelajahi dengan bebas. Masuk untuk menyimpan universitas dan progresmu." : "Explore freely. Sign in to save universities and your progress."}</p>
+      {school ? <SchoolDetail key={school.id} school={school} program={programme} close={() => setSchool(null)} saved={false} toggleSaved={openAccount} compared={compared.includes(school.id)} toggleCompare={() => toggleCompare(school.id)} addPath={openAccount} removePath={openAccount} fitResult={calculateProgramFit(programme ?? schoolAsProgram(school), schoolStudy(school), {}, {})} reportIncorrect={openAccount} /> : <Explore searchRegion={region} setSearchRegion={setRegion} browse={browse} setBrowse={setBrowse} openSchool={openSchool} saved={[]} setSaved={openAccount} compared={compared} toggleCompare={toggleCompare} schoolPathwayIds={[]} toggleSchoolPathway={openAccount} language={language} records={records} updateRecord={updateGuestRecord} goPathway={openAccount} />}
+      <footer className="guest-footer"><a href="/privacy">{id ? "Privasi & bantuan" : "Privacy & support"}</a></footer>
+    </main>
+    {region === "international" && compared.length > 0 && !compareOpen && <button type="button" className="compare-fab" onClick={() => setCompareOpen(true)}><Scale size={17} />{id ? "Bandingkan" : "Compare"} {compared.length}<small>{id ? "dari 4" : "of 4"}</small></button>}
+    {compareOpen && <ComparePanel ids={compared} close={() => setCompareOpen(false)} remove={toggleCompare} open={openSchool} />}
+  </div>;
+}
+
 export default function App() {
   const [exploreBrowse, setExploreBrowse] = useState<ExploreBrowseState>(initialExploreBrowseState);
   const [onboarded, setOnboarded] = useState(false);
@@ -1818,12 +1843,12 @@ export default function App() {
   const [adminVisible, setAdminVisible] = useState(false);
   const [session, setSession] = useState<Session | null>(null);
   const [authReady, setAuthReady] = useState(false);
-  const [guestHydrated, setGuestHydrated] = useState(false);
-  const [guestStorageError, setGuestStorageError] = useState(false);
+  const [guestBrowsing, setGuestBrowsing] = useState(false);
   useEffect(() => {
-    const failed = () => setGuestStorageError(true);
-    window.addEventListener("myway-guest-storage-error", failed);
-    return () => window.removeEventListener("myway-guest-storage-error", failed);
+    const readGuestRoute = () => setGuestBrowsing(window.location.hash === "#explore");
+    readGuestRoute();
+    window.addEventListener("hashchange", readGuestRoute);
+    return () => window.removeEventListener("hashchange", readGuestRoute);
   }, []);
   const [completedAccountLoad, setCompletedAccountLoad] = useState<{ userId: string; attempt: number } | null>(null);
   const [syncStatus, setSyncStatus] = useState("Loading account data…");
@@ -1835,7 +1860,6 @@ export default function App() {
   const accountLastSignInAt = session?.user.last_sign_in_at || "";
   const accountPhoto = session?.user.user_metadata?.avatar_url || session?.user.user_metadata?.picture;
   const accountDisplayName = String(session?.user.user_metadata?.full_name || session?.user.user_metadata?.name || session?.user.email || "MW");
-  const guestDataReady = authReady && !accountUserId;
   const accountDataReady = authReady && !!accountUserId && completedAccountLoad?.userId === accountUserId && completedAccountLoad.attempt === syncAttempt.count;
   const syncConflict = pendingConflict?.userId === accountUserId && pendingConflict?.attempt === syncAttempt.count ? pendingConflict.value : null;
   const [hydratedAccount, setHydratedAccount] = useState<{ userId: string; attempt: number } | null>(null);
@@ -1844,25 +1868,25 @@ export default function App() {
   const [passwordRecovery, setPasswordRecovery] = useState(false);
 
   useEffect(() => {
-    if (!accountDataReady && !guestDataReady) return;
+    if (!accountDataReady) return;
     const loadProfile = () => {
-      try { setProfileSnapshot(JSON.parse(planningStorage().getItem("myway-profile") || "{}")); } catch { setProfileSnapshot({}); }
-      try { setProfileDocuments(JSON.parse(planningStorage().getItem("myway-profile-documents") || "{}")); } catch { setProfileDocuments({}); }
-      try { setPreferencePriorities(JSON.parse(planningStorage().getItem("myway-preference-priorities") || "{}")); } catch { setPreferencePriorities({}); }
+      try { setProfileSnapshot(JSON.parse(window.localStorage.getItem("myway-profile") || "{}")); } catch { setProfileSnapshot({}); }
+      try { setProfileDocuments(JSON.parse(window.localStorage.getItem("myway-profile-documents") || "{}")); } catch { setProfileDocuments({}); }
+      try { setPreferencePriorities(JSON.parse(window.localStorage.getItem("myway-preference-priorities") || "{}")); } catch { setPreferencePriorities({}); }
     };
     const hydrate = () => {
-      setRemindersEnabled(planningStorage().getItem("myway-notifications-enabled") !== "false");
-      const complete = planningStorage().getItem("myway-onboarding-v1") || planningStorage().getItem("alif-pathway-business-v1");
-      setOnboarded(isGuestWorkspace() || complete === "complete");
-      setTutorialOpen(!isGuestWorkspace() && complete === "complete" && !planningStorage().getItem("myway-product-tour-v2"));
+      setRemindersEnabled(window.localStorage.getItem("myway-notifications-enabled") !== "false");
+      const complete = window.localStorage.getItem("myway-onboarding-v1") || window.localStorage.getItem("alif-pathway-business-v1");
+      setOnboarded(complete === "complete");
+      setTutorialOpen(complete === "complete" && !window.localStorage.getItem("myway-product-tour-v2"));
       const hash = window.location.hash.replace("#", "");
       if (hash === "account") { setView("settings"); window.history.replaceState(null, "", "#settings"); }
       else if (hash === "settings") setView("settings");
       else if (navItems.some((item) => item.id === hash)) setView(hash as View);
-      try { const restored=JSON.parse(planningStorage().getItem("myway-pathway-records") || "{}");setPathwayRecords(restored);setPathwayApplicationId(restored["active-planning-application"] || ""); } catch { setPathwayRecords({}); }
+      try { const restored=JSON.parse(window.localStorage.getItem("myway-pathway-records") || "{}");setPathwayRecords(restored);setPathwayApplicationId(restored["active-planning-application"] || ""); } catch { setPathwayRecords({}); }
       try {
-        const storedPathway = JSON.parse(planningStorage().getItem("myway-pathway-selection") || "[]") as { id: string; role: Role }[];
-        const legacyRecords = JSON.parse(planningStorage().getItem("myway-pathway-records") || "{}");
+        const storedPathway = JSON.parse(window.localStorage.getItem("myway-pathway-selection") || "[]") as { id: string; role: Role }[];
+        const legacyRecords = JSON.parse(window.localStorage.getItem("myway-pathway-records") || "{}");
         const merged = mergeIndonesiaSelections(storedPathway, legacyRecords[INDONESIA_PLANS_KEY]);
         setPathway(merged.flatMap(({ id, role }) => {
           const program = programs.find((item) => item.id === id);
@@ -1874,53 +1898,39 @@ export default function App() {
           return [];
         }));
       } catch { setPathway([]); }
-      try { setCompleted(JSON.parse(planningStorage().getItem("myway-pathway-actions") || "[]")); } catch { setCompleted([]); }
-      try { setSaved(JSON.parse(planningStorage().getItem("myway-saved") || "[]")); } catch { setSaved([]); }
-      try { setCompared(JSON.parse(planningStorage().getItem("myway-compared") || "[]")); } catch { setCompared([]); }
-      setAvatarState(planningStorage().getItem("myway-profile-avatar") || "MW");
-      const storedLanguage = planningStorage().getItem("myway-language");
+      try { setCompleted(JSON.parse(window.localStorage.getItem("myway-pathway-actions") || "[]")); } catch { setCompleted([]); }
+      try { setSaved(JSON.parse(window.localStorage.getItem("myway-saved") || "[]")); } catch { setSaved([]); }
+      try { setCompared(JSON.parse(window.localStorage.getItem("myway-compared") || "[]")); } catch { setCompared([]); }
+      setAvatarState(window.localStorage.getItem("myway-profile-avatar") || "MW");
+      const storedLanguage = window.localStorage.getItem("myway-language");
       if (storedLanguage === "en" || storedLanguage === "id") setLanguageState(storedLanguage);
-      const storedTheme = planningStorage().getItem("myway-theme");
+      const storedTheme = window.localStorage.getItem("myway-theme");
       if (storedTheme === "light") setThemeState("light");
-      else { setThemeState("light"); planningStorage().setItem("myway-theme", "light"); }
+      else { setThemeState("light"); window.localStorage.setItem("myway-theme", "light"); }
       loadProfile();
       if (accountUserId) setHydratedAccount({ userId: accountUserId, attempt: syncAttempt.count });
-      else { setGuestHydrated(true); setSyncStatus("Guest mode · saved only in this browser"); }
     };
     const timer = window.setTimeout(hydrate, 0);
     const refresh = () => { hydrate(); setSyncGeneration(value => value + 1); };
     window.addEventListener("myway-account-updated", refresh);
     window.addEventListener("myway-profile-updated", loadProfile);
     return () => { window.clearTimeout(timer); window.removeEventListener("myway-account-updated", refresh); window.removeEventListener("myway-profile-updated", loadProfile); };
-  }, [accountDataReady, accountUserId, syncAttempt.count, guestDataReady]);
+  }, [accountDataReady, accountUserId, syncAttempt.count]);
   useEffect(() => {
     let active = true;
     let unsubscribe = () => {};
-    let workspaceUser: string | null | undefined;
-    const selectWorkspace = (next: Session | null) => {
-      const nextUser = next?.user.id ?? null;
-      if (workspaceUser !== undefined && workspaceUser !== nextUser) { window.location.reload(); return false; }
-      workspaceUser = nextUser;
-      configureWorkspace(next ? "account" : "guest");
-      return true;
-    };
     getSupabaseClient().then(async (supabase) => {
       const { data } = await supabase.auth.getSession();
-      if (active && selectWorkspace(data.session)) {
-        if (data.session && window.sessionStorage.getItem("myway-password-recovery") === "pending") { window.sessionStorage.removeItem("myway-password-recovery"); setPasswordRecovery(true); setAuthOpen(true); }
-        setSession(data.session); setAuthReady(true);
-      }
+      if (active) { setSession(data.session); setAuthReady(true); }
       const listener = supabase.auth.onAuthStateChange((event, nextSession) => {
         if (!active) return;
-        if (event === "PASSWORD_RECOVERY") window.sessionStorage.setItem("myway-password-recovery", "pending");
-        if (!selectWorkspace(nextSession)) return;
         setSession(nextSession);
         if (!nextSession) { setCompletedAccountLoad(null); setPendingConflict(null); setHydratedAccount(null); }
-        if (event === "PASSWORD_RECOVERY") { window.sessionStorage.removeItem("myway-password-recovery"); setPasswordRecovery(true); setAuthOpen(true); }
+        if (event === "PASSWORD_RECOVERY") { setPasswordRecovery(true); setAuthOpen(true); }
         if (event === "SIGNED_IN") setPasswordRecovery(false);
       });
       unsubscribe = () => listener.data.subscription.unsubscribe();
-    }).catch(() => { if (active) { configureWorkspace("guest"); setAuthReady(true); } });
+    }).catch(() => { if (active) setAuthReady(true); });
     return () => { active = false; unsubscribe(); };
   }, []);
   useEffect(() => {
@@ -1986,13 +1996,13 @@ export default function App() {
     void refreshAdminAccess();
     return () => { active = false; };
   }, [session]);
-  const setAvatar = (value: string) => { setAvatarState(value); planningStorage().setItem("myway-profile-avatar", value); };
+  const setAvatar = (value: string) => { setAvatarState(value); window.localStorage.setItem("myway-profile-avatar", value); };
   const setLanguage = (value: "en" | "id") => {
-    planningStorage().setItem("myway-language", value);
+    window.localStorage.setItem("myway-language", value);
     setLanguageState(value);
     window.location.reload();
   };
-  const setTheme = (value: "light" | "dark" | "system") => { setThemeState(value); planningStorage().setItem("myway-theme", value); };
+  const setTheme = (value: "light" | "dark" | "system") => { setThemeState(value); window.localStorage.setItem("myway-theme", value); };
   const openFeedback = (category?: FeedbackCategory, context: FeedbackContext = {}) => { setFeedbackCategory(category); setFeedbackContext(context); setFeedbackOpen(true); };
   useEffect(() => { document.documentElement.dataset.theme = "light"; }, [theme]);
   useEffect(() => {
@@ -2030,25 +2040,25 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
   const finish = () => {
-    planningStorage().setItem("myway-onboarding-v1", "complete");
-    try { setProfileSnapshot(JSON.parse(planningStorage().getItem("myway-profile") || "{}")); } catch {}
-    try { setPreferencePriorities(JSON.parse(planningStorage().getItem("myway-preference-priorities") || "{}")); } catch {}
+    window.localStorage.setItem("myway-onboarding-v1", "complete");
+    try { setProfileSnapshot(JSON.parse(window.localStorage.getItem("myway-profile") || "{}")); } catch {}
+    try { setPreferencePriorities(JSON.parse(window.localStorage.getItem("myway-preference-priorities") || "{}")); } catch {}
     setOnboarded(true); setView("explore"); setTutorialOpen(true); setToast("Profile ready · start with the quick MyWay tour");
   };
   const saveLater = () => {
-    planningStorage().setItem("myway-onboarding-v1", "complete");
+    window.localStorage.setItem("myway-onboarding-v1", "complete");
     setOnboarded(true); setView("dashboard"); setTutorialOpen(true); setToast("Progress saved · start with the quick MyWay tour");
   };
   const toggleSaved = (id: string) => {
     const next = saved.includes(id) ? saved.filter((v) => v !== id) : [...saved, id];
     setSaved(next);
-    planningStorage().setItem("myway-saved", JSON.stringify(next));
+    window.localStorage.setItem("myway-saved", JSON.stringify(next));
     setToast(saved.includes(id) ? "Removed from saved programs" : "Program saved");
   };
   const toggleCompare = (id: string) => {
-    if (compared.includes(id)) { const next = compared.filter((v) => v !== id); setCompared(next); planningStorage().setItem("myway-compared", JSON.stringify(next)); return; }
+    if (compared.includes(id)) { const next = compared.filter((v) => v !== id); setCompared(next); window.localStorage.setItem("myway-compared", JSON.stringify(next)); return; }
     if (compared.length >= 4) { setToast("You can compare up to 4 programs"); setCompareOpen(true); return; }
-    const next = [...compared, id]; setCompared(next); planningStorage().setItem("myway-compared", JSON.stringify(next)); setToast("Added to comparison");
+    const next = [...compared, id]; setCompared(next); window.localStorage.setItem("myway-compared", JSON.stringify(next)); setToast("Added to comparison");
   };
   const addPath = (p: Program, role: Role = "Target") => {
     if (/no direct undergraduate/i.test(p.entry)) { setToast(`${p.university} has no direct bachelor pathway`); return; }
@@ -2056,17 +2066,17 @@ export default function App() {
       const withoutCurrent = current.filter((v) => v.p.id !== p.id);
       const singleDream = role === "Dream" ? withoutCurrent.map((item) => item.role === "Dream" ? { ...item, role: "Target" as Role } : item) : withoutCurrent;
       const next = [...singleDream, { p, role }];
-      planningStorage().setItem("myway-pathway-selection", JSON.stringify(next.map((item) => ({ id: item.p.id, role: item.role }))));
+      window.localStorage.setItem("myway-pathway-selection", JSON.stringify(next.map((item) => ({ id: item.p.id, role: item.role }))));
       const legacy = JSON.stringify(next.filter(item=>isIndonesiaProgramme(item.p.id)).map(item=>({id:item.p.id,role:item.role})));
-      setPathwayRecords(records=>{const updated={...records,[INDONESIA_PLANS_KEY]:legacy};planningStorage().setItem("myway-pathway-records",JSON.stringify(updated));return updated;});
+      setPathwayRecords(records=>{const updated={...records,[INDONESIA_PLANS_KEY]:legacy};window.localStorage.setItem("myway-pathway-records",JSON.stringify(updated));return updated;});
       return next;
     });
     setToast(p.university + " added as " + role);
   };
   const removePath = (p: Program) => {
-    setPathway((current) => { const next = current.filter((item) => item.p.id !== p.id); planningStorage().setItem("myway-pathway-selection", JSON.stringify(next.map((item) => ({ id: item.p.id, role: item.role }))));
+    setPathway((current) => { const next = current.filter((item) => item.p.id !== p.id); window.localStorage.setItem("myway-pathway-selection", JSON.stringify(next.map((item) => ({ id: item.p.id, role: item.role }))));
       const legacy = JSON.stringify(next.filter(item=>isIndonesiaProgramme(item.p.id)).map(item=>({id:item.p.id,role:item.role})));
-      setPathwayRecords(records=>{const updated={...records,[INDONESIA_PLANS_KEY]:legacy};planningStorage().setItem("myway-pathway-records",JSON.stringify(updated));return updated;}); return next; });
+      setPathwayRecords(records=>{const updated={...records,[INDONESIA_PLANS_KEY]:legacy};window.localStorage.setItem("myway-pathway-records",JSON.stringify(updated));return updated;}); return next; });
     setToast(p.university + " removed from pathway");
   };
   const toggleSchoolPathway = (school: BusinessSchool) => {
@@ -2074,12 +2084,12 @@ export default function App() {
     const program = school.programId ? programs.find((item) => item.id === school.programId) : undefined;
     const choice = program ?? schoolAsProgram(school);
     const alreadyAdded = pathway.some((item) => item.p.id === choice.id);
-    setPathway((current) => { const next = alreadyAdded ? current.filter((item) => item.p.id !== choice.id) : [...current, { p: choice, role: "Target" as Role }]; planningStorage().setItem("myway-pathway-selection", JSON.stringify(next.map((item) => ({ id: item.p.id, role: item.role }))));
+    setPathway((current) => { const next = alreadyAdded ? current.filter((item) => item.p.id !== choice.id) : [...current, { p: choice, role: "Target" as Role }]; window.localStorage.setItem("myway-pathway-selection", JSON.stringify(next.map((item) => ({ id: item.p.id, role: item.role }))));
       const legacy = JSON.stringify(next.filter(item=>isIndonesiaProgramme(item.p.id)).map(item=>({id:item.p.id,role:item.role})));
-      setPathwayRecords(records=>{const updated={...records,[INDONESIA_PLANS_KEY]:legacy};planningStorage().setItem("myway-pathway-records",JSON.stringify(updated));return updated;}); return next; });
+      setPathwayRecords(records=>{const updated={...records,[INDONESIA_PLANS_KEY]:legacy};window.localStorage.setItem("myway-pathway-records",JSON.stringify(updated));return updated;}); return next; });
     setToast(alreadyAdded ? `${school.name} removed from pathway` : `${school.name} added as Target`);
   };
-  const toggleTask = (id: string) => setCompleted((current) => { const next = current.includes(id) ? current.filter((v) => v !== id) : [...current, id]; planningStorage().setItem("myway-pathway-actions", JSON.stringify(next)); return next; });
+  const toggleTask = (id: string) => setCompleted((current) => { const next = current.includes(id) ? current.filter((v) => v !== id) : [...current, id]; window.localStorage.setItem("myway-pathway-actions", JSON.stringify(next)); return next; });
   const updatePathwayRecord = (key: string, value: string) => {
     if (key === INDONESIA_PLANS_KEY) {
       const plans = mergeIndonesiaSelections([], value);
@@ -2087,18 +2097,18 @@ export default function App() {
         const next = [...current.filter(x => !isIndonesiaProgramme(x.p.id)), ...plans.flatMap(x => {const p=programs.find(p=>p.id===x.id);return p?[{p,role:x.role}]:[];})];
         const normalised=mergeIndonesiaSelections(next.map(x=>({id:x.p.id,role:x.role})));
         const final=next.map(x=>({...x,role:normalised.find(n=>n.id===x.p.id)!.role}));
-        planningStorage().setItem("myway-pathway-selection",JSON.stringify(final.map(x=>({id:x.p.id,role:x.role}))));return final;
+        window.localStorage.setItem("myway-pathway-selection",JSON.stringify(final.map(x=>({id:x.p.id,role:x.role}))));return final;
       });
     }
     setPathwayRecords((current) => {
       const next = { ...current, [key]: value };
-      planningStorage().setItem("myway-pathway-records", JSON.stringify(next));
+      window.localStorage.setItem("myway-pathway-records", JSON.stringify(next));
       return next;
     });
   };
   const selectPlanningApplication = useCallback((id: string) => {
     setPathwayApplicationId(id);
-    setPathwayRecords(current => { if(current["active-planning-application"]===id)return current;const next={...current,"active-planning-application":id};planningStorage().setItem("myway-pathway-records",JSON.stringify(next));return next; });
+    setPathwayRecords(current => { if(current["active-planning-application"]===id)return current;const next={...current,"active-planning-application":id};window.localStorage.setItem("myway-pathway-records",JSON.stringify(next));return next; });
   }, []);
   const dashboardProgram = (pathway.find(item=>item.p.id===pathwayApplicationId) || pathway.find((item) => item.role === "Dream") || pathway[0])?.p;
   const sharedRecord = (key: string) => {
@@ -2169,7 +2179,7 @@ export default function App() {
         ? { body: `${readinessStages[nextIncompleteStage].label} is the next incomplete stage for your Dream application.`, action: "Continue pathway" }
         : { body: "Your Dream application stages are ready. Review every source before submitting through the official portal.", action: "Review progress" };
   const reminders = buildPlanningReminders(pathway, pathwayRecords, completed, reminderDate, remindersEnabled);
-  const changeReminders = (enabled: boolean) => { planningStorage().setItem("myway-notifications-enabled", String(enabled)); setRemindersEnabled(enabled); };
+  const changeReminders = (enabled: boolean) => { window.localStorage.setItem("myway-notifications-enabled", String(enabled)); setRemindersEnabled(enabled); };
   const runNoticeAction = () => { if (!dashboardProgram) go("explore"); else if (!profileSnapshot.intake) go("profile"); else if (nextIncompleteStage >= 0) openPathwayStage(nextIncompleteStage, dashboardProgram.id); else go("progress"); };
   const selectedProgram = selectedProgramId ? programs.find((program) => program.id === selectedProgramId) ?? null : null;
   const selectedSchool = selectedSchoolId ? allBusinessSchools.find((school) => school.id === selectedSchoolId) ?? null : null;
@@ -2200,7 +2210,7 @@ export default function App() {
       </> : <><p>{syncStatus}</p><button className="outline-button" onClick={() => choose()}>{language === "id" ? "Coba lagi" : "Retry account sync"}</button></>}
     </section></main>;
   }
-  if (!authReady || (session ? !accountDisplayReady : !guestHydrated)) return <><SiteLanguage language={language} /><AccountGate language={language} ready={false} openAccount={() => setAuthOpen(true)} explore={() => {}} /></>;
+  if (!authReady || !session || !accountDisplayReady) return <><SiteLanguage language={language} />{authReady && !session && guestBrowsing ? <GuestExplore language={language} openAccount={() => setAuthOpen(true)} /> : <AccountGate language={language} ready={authReady && (!session || accountDisplayReady)} openAccount={() => setAuthOpen(true)} explore={() => { setGuestBrowsing(true); window.location.hash = "explore"; }} />}{authOpen && <AuthModal key={passwordRecovery ? "recovery" : "account"} session={session} recovery={passwordRecovery} language={language} close={() => { setAuthOpen(false); setPasswordRecovery(false); }} openProfile={() => setView("profile")} />}</>;
 
   if (!onboarded) return <><SiteLanguage language={language} /><Onboarding finish={finish} saveLater={saveLater} /></>;
 
@@ -2213,12 +2223,12 @@ export default function App() {
   else if (view === "tasks") content = <TasksHabits completed={completed} toggleTask={toggleTask} toast={setToast} />;
   else if (view === "progress") content = <ProgressPage activeApplicationId={pathwayApplicationId} onSelectApplication={selectPlanningApplication} selected={pathway} applicationReadiness={applicationReadiness} openStage={openPathwayStage} openProgram={openProgram} go={go} />;
   else if (view === "profile") content = <ProfilePage toast={setToast} avatar={avatar} setAvatar={setAvatar} />;
-  else content = <SettingsPage notifications={remindersEnabled} onNotificationsChange={changeReminders} toast={setToast} savedCount={saved.length} applicationCount={pathway.length} replayTutorial={() => setTutorialOpen(true)} go={go} language={language} setLanguage={setLanguage} theme={theme} setTheme={setTheme} adminVisible={!!session && adminVisible} />;
+  else content = <SettingsPage notifications={remindersEnabled} onNotificationsChange={changeReminders} toast={setToast} savedCount={saved.length} applicationCount={pathway.length} replayTutorial={() => setTutorialOpen(true)} go={go} language={language} setLanguage={setLanguage} theme={theme} setTheme={setTheme} adminVisible={adminVisible} />;
 
   return <div className="app-shell">
     <SiteLanguage language={language} />
     <Navigation active={view} go={go} openGuide={() => setGuideOpen(true)} progress={progress} hasTarget={Boolean(dashboardProgram)} language={language} />
-    <main className="app-main"><Header reminders={reminders} remindersEnabled={remindersEnabled} onReminderAction={(reminder) => openPathwayStage(reminder.stage, reminder.programmeId)} view={view} go={go} notices={notices} setNotices={setNotices} notice={notice} onNoticeAction={runNoticeAction} avatar={avatar} language={language} session={session} openAccount={() => setAuthOpen(true)} /><div className="content-wrap" key={syncGeneration}><div role="status" className="sync-status">{session ? syncStatus : <><strong>{language === "id" ? "Mode pengunjung" : "Guest mode"}</strong><span role={guestStorageError ? "alert" : undefined}>{guestStorageError ? (language === "id" ? "Penyimpanan browser tidak tersedia atau penuh. Perubahan terbaru mungkin belum tersimpan. Ekspor data dari Pengaturan sebelum menutup halaman." : "Browser storage is unavailable or full. Recent changes may not be saved. Export data from Settings before closing this page.") : (language === "id" ? "Tersimpan di browser ini saja. Menghapus data browser akan menghapus progres lokal." : "Saved only in this browser. Clearing browser data removes your local progress.")}</span><button type="button" className="text-link" onClick={() => setAuthOpen(true)}>{language === "id" ? "Masuk ke akun" : "Sign in to your account"}</button></>}</div>{content}</div></main>
+    <main className="app-main"><Header reminders={reminders} remindersEnabled={remindersEnabled} onReminderAction={(reminder) => openPathwayStage(reminder.stage, reminder.programmeId)} view={view} go={go} notices={notices} setNotices={setNotices} notice={notice} onNoticeAction={runNoticeAction} avatar={avatar} language={language} session={session} openAccount={() => setAuthOpen(true)} /><div className="content-wrap" key={syncGeneration}><div role="status" className="sync-status">{syncStatus}</div>{content}</div></main>
     <button className="feedback-fab" data-tour="feedback-button" onClick={() => openFeedback()}><MessageSquare size={15} /><span>Feedback</span></button>
     {compared.length > 0 && !compareOpen && !(view === "explore" && exploreRegion === "indonesia") && <button className="compare-fab" onClick={() => setCompareOpen(true)}><Scale size={17} /><span>Compare {compared.length}</span><small>of 4</small></button>}
     {compareOpen && <ComparePanel ids={compared} close={() => setCompareOpen(false)} remove={toggleCompare} open={openSchool} />}

@@ -1,4 +1,3 @@
-import { planningStorage } from "./workspace-storage.ts";
 import { listVaultDocuments, type VaultDocument } from "./document-vault.ts";
 
 const EXPORTABLE_KEYS = [
@@ -37,7 +36,7 @@ export type MyWayPrototypeExport = {
 export async function createPrototypeExport(): Promise<MyWayPrototypeExport> {
   const data: Record<string, string> = {};
   EXPORTABLE_KEYS.forEach((key) => {
-    const value = planningStorage().getItem(key);
+    const value = window.localStorage.getItem(key);
     if (value !== null) data[key] = value;
   });
   let documentInventory: VaultDocument[] = [];
@@ -85,7 +84,7 @@ export function importPrototypeExport(value: unknown) {
     if (key === "myway-habit-checks" && !values.every(item => Array.isArray(item) && item.every(day => Number.isInteger(day) && day >= 1 && day <= 31))) throw new Error("Invalid habit check");
     if (key === "myway-routines" && !values.every(item => item && typeof item === "object" && typeof item.id === "string" && typeof item.title === "string" && typeof item.focus === "string" && Number.isFinite(item.weeklyGoal) && item.weeklyGoal > 0 && Number.isFinite(item.minutes) && item.minutes > 0)) throw new Error("Invalid routine");
   }
-  const storage = planningStorage();
+  const storage = window.localStorage;
   const previous = new Map(entries.map(([key]) => [key, storage.getItem?.(key) ?? null]));
   const written: string[] = [];
   try {

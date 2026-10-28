@@ -65,22 +65,3 @@ test("older device files remain hidden until import and cannot be imported into 
     assert.equal(await getVaultDocument("old"), undefined);
   } finally { globalThis.window = original; }
 });
-
-test("guest files and account files remain isolated, including clear and legacy import", async () => {
-  const {configureWorkspace}=await import('../app/workspace-storage.ts');
-  const original=globalThis.window,d=device();
-  try {
-    globalThis.window=d.window;configureWorkspace('account');
-    d.window.localStorage.setItem('myway-active-user-id','owner');
-    await saveVaultDocument({id:'owner',name:'owner.pdf',uploadedAt:'2026-10-28',version:1},new Blob(['owner file']));
-    configureWorkspace('guest');assert.deepEqual(await listVaultDocuments(),[]);
-    assert.equal(await legacyDocumentCount(),0);await assert.rejects(importLegacyDocuments(),/Sign in/);
-    await saveVaultDocument({id:'guest',name:'guest.pdf',uploadedAt:'2026-10-28',version:1},new Blob(['guest file']));
-    assert.equal(await getVaultDocument('owner'),undefined);
-    configureWorkspace('account');assert.equal(await getVaultDocument('guest'),undefined);
-    assert.equal(await (await getVaultDocument('owner')).blob.text(),'owner file');
-    configureWorkspace('guest');assert.equal(await (await getVaultDocument('guest')).blob.text(),'guest file');
-    await clearVaultDocuments();assert.deepEqual(await listVaultDocuments(),[]);
-    configureWorkspace('account');assert.equal(await (await getVaultDocument('owner')).blob.text(),'owner file');
-  }finally{configureWorkspace('account');globalThis.window=original;}
-});

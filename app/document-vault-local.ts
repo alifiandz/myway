@@ -1,4 +1,3 @@
-import { isGuestWorkspace } from "./workspace-storage.ts";
 import type { VaultDocument } from "./document-vault-types";
 
 type StoredVaultDocument = VaultDocument & { blob: Blob };
@@ -8,7 +7,6 @@ const STORE_NAME = "documents";
 const DB_VERSION = 1;
 
 export function accountVaultName() {
-  if (isGuestWorkspace()) return `${DB_NAME}:guest-v1`;
   const userId = window.localStorage.getItem("myway-active-user-id");
   if (!userId) throw new Error("Sign in before opening your documents.");
   return `${DB_NAME}:${userId}`;
@@ -62,14 +60,13 @@ export async function deleteVaultDocument(id: string) {
 export async function clearVaultDocuments() {
   const userId = window.localStorage.getItem("myway-active-user-id");
   await runVaultRequest<undefined>("readwrite", (store) => store.clear());
-  if (!isGuestWorkspace() && userId && window.localStorage.getItem(LEGACY_OWNER_KEY) === userId) {
+  if (userId && window.localStorage.getItem(LEGACY_OWNER_KEY) === userId) {
     await runVaultRequest<undefined>("readwrite", store => store.clear(), DB_NAME);
   }
 }
 
 const LEGACY_OWNER_KEY = "myway-legacy-vault-owner-id";
 export async function legacyDocumentCount() {
-  if (isGuestWorkspace()) return 0;
   const userId = window.localStorage.getItem("myway-active-user-id");
   const owner = window.localStorage.getItem(LEGACY_OWNER_KEY);
   if (!userId || (owner && owner !== userId) || window.localStorage.getItem(`myway-legacy-vault-imported:${userId}`)) return 0;
@@ -77,7 +74,6 @@ export async function legacyDocumentCount() {
 }
 
 export async function importLegacyDocuments() {
-  if (isGuestWorkspace()) throw new Error("Sign in to import older account documents.");
   const target = accountVaultName();
   const userId = window.localStorage.getItem("myway-active-user-id")!;
   const owner = window.localStorage.getItem(LEGACY_OWNER_KEY);
