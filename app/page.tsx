@@ -5,6 +5,8 @@ import { buildPlanningReminders, localCalendarDate, type PlanningReminder } from
 import { calculateProgramFit, selectRecommendations, type FitResult } from "./programme-fit";
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import Brand from "./myway-brand";
+import AccountSyncNotice from "./account-sync-notice";
 import LandingWelcome from "./landing-welcome";
 import IndonesiaExplore from "./indonesia-explore";
 import BrowsePagination from "./browse-pagination";
@@ -723,12 +725,6 @@ function OfficialSchoolLogo({ school, size }: { school: BusinessSchool; size: "l
   </span>;
 }
 
-function Brand() {
-  return <div className="brand"><span className="brand-mark">
-    {/* eslint-disable-next-line @next/next/no-img-element */}
-    <img src="/myway-mark.png?v=brand-20261028" alt="" />
-  </span><span><strong><b>My</b><em>Way</em></strong><small>Explore · Plan · Go Further</small></span></div>;
-}
 
 function Navigation({ active, go, openGuide, progress, hasTarget, language }: { active: View; go: (v: View) => void; openGuide: () => void; progress: number; hasTarget: boolean; language: "en" | "id" }) {
   const labels: Record<View, string> = language === "id" ? { dashboard: "Beranda", explore: "Jelajahi", pathway: "Jalur Saya", tasks: "Tugas & Kebiasaan", progress: "Progres", profile: "Profil", settings: "Pengaturan" } : { dashboard: "Dashboard", explore: "Explore", pathway: "Pathway", tasks: "Tasks & Habits", progress: "Progress", profile: "Profile", settings: "Settings" };
@@ -2219,7 +2215,7 @@ export default function App() {
   return <div className="app-shell">
     <SiteLanguage language={language} />
     <Navigation active={view} go={go} openGuide={() => setGuideOpen(true)} progress={progress} hasTarget={Boolean(dashboardProgram)} language={language} />
-    <main className="app-main"><Header reminders={reminders} remindersEnabled={remindersEnabled} onReminderAction={(reminder) => openPathwayStage(reminder.stage, reminder.programmeId)} view={view} go={go} notices={notices} setNotices={setNotices} notice={notice} onNoticeAction={runNoticeAction} avatar={avatar} language={language} session={session} openAccount={() => setAuthOpen(true)} /><div className="content-wrap" key={syncGeneration}><div role="status" className="sync-status">{syncStatus}</div>{content}</div></main>
+    <main className="app-main"><Header reminders={reminders} remindersEnabled={remindersEnabled} onReminderAction={(reminder) => openPathwayStage(reminder.stage, reminder.programmeId)} view={view} go={go} notices={notices} setNotices={setNotices} notice={notice} onNoticeAction={runNoticeAction} avatar={avatar} language={language} session={session} openAccount={() => setAuthOpen(true)} /><div className="content-wrap" key={syncGeneration}><AccountSyncNotice status={syncStatus} />{content}</div></main>
     <button className="feedback-fab" data-tour="feedback-button" onClick={() => openFeedback()}><MessageSquare size={15} /><span>Feedback</span></button>
     {compared.length > 0 && !compareOpen && !(view === "explore" && exploreRegion === "indonesia") && <button className="compare-fab" onClick={() => setCompareOpen(true)}><Scale size={17} /><span>Compare {compared.length}</span><small>of 4</small></button>}
     {compareOpen && <ComparePanel ids={compared} close={() => setCompareOpen(false)} remove={toggleCompare} open={openSchool} />}

@@ -2751,3 +2751,16 @@ input, select, textarea { font-size: 16px; }
 .admin-brand>img { width:58px; height:34px; object-fit:contain; }
 .guest-brand img { width:58px; height:32px; object-fit:contain; }
 .mobile-brand .brand-mark { width:54px; height:32px; }
+
+/* Compact brand lockup with a separate, readable tagline. */
+.brand { display:grid; grid-template-columns:54px minmax(0,1fr); align-items:center; column-gap:10px; row-gap:7px; width:fit-content; max-width:100%; }
+.brand .brand-mark { width:54px; height:32px; background:transparent; }
+.brand .brand-copy { display:block; min-width:0; }
+.brand .brand-copy strong { display:block; font-size:24px; line-height:1.1; font-weight:780; letter-spacing:-.045em; color:var(--navy); }
+.brand .brand-tagline { grid-column:1 / -1; display:block; font-size:10px; line-height:1.5; font-weight:500; letter-spacing:.01em; text-transform:none; white-space:normal; color:var(--muted); }
+.sidebar>.brand { padding:2px 8px 24px; margin-bottom:2px; }
+.onboarding-art .brand .brand-copy strong { color:#fff; }
+.onboarding-art .brand .brand-tagline { color:rgba(255,255,255,.78); }
+.mobile-brand .brand { grid-template-columns:48px minmax(0,1fr); }
+.mobile-brand .brand .brand-mark { width:48px; height:28px; }
+.mobile-brand .brand .brand-copy strong { font-size:22px; }
