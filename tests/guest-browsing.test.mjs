@@ -13,7 +13,7 @@ function setup(){
  const writes=[],signins=[];
  const states=[{},'international',null,[],false,{}];let index=0;
  const component=name=>Object.assign(()=>null,{displayName:name});
- const context={require,exports:{},useState:()=>{const i=index++;return [states[i],value=>writes.push([i,value])];},initialExploreBrowseState:{},Explore:component('Explore'),SchoolDetail:component('SchoolDetail'),ComparePanel:component('ComparePanel'),PublicUniversityLogo:component('Logo'),Search:component('Search'),CircleUserRound:component('User'),ShieldCheck:component('Shield'),LockKeyhole:component('Lock'),Scale:component('Scale')};
+ const context={require,exports:{},useState:()=>{const i=index++;return [states[i],value=>writes.push([i,value])];},initialExploreBrowseState:{},LandingWelcome:component('LandingWelcome'),Explore:component('Explore'),SchoolDetail:component('SchoolDetail'),ComparePanel:component('ComparePanel'),PublicUniversityLogo:component('Logo'),Search:component('Search'),CircleUserRound:component('User'),ShieldCheck:component('Shield'),LockKeyhole:component('Lock'),Scale:component('Scale')};
  vm.createContext(context);vm.runInContext(ts.transpileModule(pieces+'\nexports.GuestExplore=GuestExplore;exports.AccountGate=AccountGate;', {compilerOptions:{module:ts.ModuleKind.CommonJS,jsx:ts.JsxEmit.ReactJSX}}).outputText,context);
  return {context,writes,signins,openAccount:()=>signins.push(true)};
 }
@@ -32,11 +32,8 @@ test('guest component has no persistence or account storage access',()=>{
  assert.doesNotMatch(guest,/localStorage|sessionStorage|startAccountSync|fetch\(|getSupabaseClient/);
  assert.match(source,/authReady && !session && guestBrowsing/);
 });
-test('welcome screen offers guest entry in English and Indonesian',()=>{
- const s=setup();for(const language of ['en','id']){
- const tree=s.context.exports.AccountGate({language,ready:true,openAccount:s.openAccount,explore:()=>s.signins.push('guest')});
- const buttons=[];function collect(n){if(!n)return;if(n.type==='button')buttons.push(n);React.Children.forEach(n.props?.children,collect);}collect(tree);
- assert.equal(buttons.length,2);buttons[0].props.onClick();assert.equal(s.signins.at(-1),'guest');
- assert.ok(React.Children.toArray(buttons[0].props.children).some(x=>x===(language==='id'?'Jelajahi tanpa akun':'Explore without an account')));
- }
+test('welcome gate opens the approved landing with real sign in and guest actions',()=>{
+ const s=setup(),tree=s.context.exports.AccountGate({language:'en',ready:true,openAccount:s.openAccount,explore:()=>s.signins.push('guest')});
+ assert.equal(tree.type.displayName,'LandingWelcome');tree.props.openAccount();tree.props.explore();assert.deepEqual(s.signins,[true,'guest']);
+ const loading=s.context.exports.AccountGate({language:'en',ready:false,openAccount:s.openAccount,explore(){}});assert.equal(loading.type,'main');
 });

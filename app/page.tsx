@@ -5,6 +5,7 @@ import { buildPlanningReminders, localCalendarDate, type PlanningReminder } from
 import { calculateProgramFit, selectRecommendations, type FitResult } from "./programme-fit";
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import LandingWelcome from "./landing-welcome";
 import IndonesiaExplore from "./indonesia-explore";
 import BrowsePagination from "./browse-pagination";
 import PathwayActionCard from "./pathway-action-card";
@@ -1759,22 +1760,8 @@ function PlanningGuide({ close, go }: { close: () => void; go: (view: View) => v
 }
 
 function AccountGate({ language, ready, openAccount, explore }: { language: "en" | "id"; ready: boolean; openAccount: () => void; explore: () => void }) {
-  const id = language === "id";
-  return <main className="account-gate">
-    <section className="account-gate-card">
-      <div className="brand account-gate-brand"><span className="brand-mark"><img src="/myway-mark.png" alt="" /></span><span><strong><b>My</b><em>Way</em></strong><small>Explore · Plan · Go Further</small></span></div>
-      {!ready ? <div className="account-gate-loading"><i /><span>{id ? "Menyiapkan MyWay" : "Preparing MyWay"}</span></div> : <>
-        <span className="account-gate-icon"><ShieldCheck size={25} /></span>
-        <span className="eyebrow">{id ? "RUANG PRIBADIMU" : "YOUR PRIVATE WORKSPACE"}</span>
-        <h1>{id ? "Temukan universitas pilihanmu." : "Find your university."}</h1>
-        <p>{id ? "Jelajahi dan bandingkan universitas tanpa akun. Masuk untuk menyimpan pilihan dan merencanakan aplikasimu." : "Browse and compare universities without an account. Sign in to save your choices and plan your applications."}</p>
-        <button className="primary-button account-gate-action" onClick={explore}><Search size={17} />{id ? "Jelajahi tanpa akun" : "Explore without an account"}</button>
-        <button className="outline-button account-gate-action" onClick={openAccount}><CircleUserRound size={17} />{id ? "Masuk atau buat akun" : "Sign in or create account"}</button>
-        <a href="/privacy" className="privacy-notice-link">{id ? "Privasi & bantuan" : "Privacy & support"}</a>
-        <div className="account-gate-note"><LockKeyhole size={14} /><span>{id ? "Tidak ada progres pribadi yang ditampilkan kepada pengunjung." : "No personal progress is shown to visitors."}</span></div>
-      </>}
-    </section>
-  </main>;
+  if (ready) return <LandingWelcome openAccount={openAccount} explore={explore} />;
+  return <main className="account-gate"><section className="account-gate-card"><div className="account-gate-loading"><i /><span>{language === "id" ? "Menyiapkan MyWay" : "Preparing MyWay"}</span></div></section></main>;
 }
 
 function GuestExplore({ language, openAccount }: { language: Language; openAccount: () => void }) {
@@ -1844,12 +1831,6 @@ export default function App() {
   const [session, setSession] = useState<Session | null>(null);
   const [authReady, setAuthReady] = useState(false);
   const [guestBrowsing, setGuestBrowsing] = useState(false);
-  useEffect(() => {
-    const readGuestRoute = () => setGuestBrowsing(window.location.hash === "#explore");
-    readGuestRoute();
-    window.addEventListener("hashchange", readGuestRoute);
-    return () => window.removeEventListener("hashchange", readGuestRoute);
-  }, []);
   const [completedAccountLoad, setCompletedAccountLoad] = useState<{ userId: string; attempt: number } | null>(null);
   const [syncStatus, setSyncStatus] = useState("Loading account data…");
   const [pendingConflict, setPendingConflict] = useState<{ userId: string; attempt: number; value: SyncConflict } | null>(null);
@@ -1866,6 +1847,16 @@ export default function App() {
   const accountDisplayReady = accountDataReady && hydratedAccount?.userId === accountUserId && hydratedAccount.attempt === syncAttempt.count;
   const [authOpen, setAuthOpen] = useState(false);
   const [passwordRecovery, setPasswordRecovery] = useState(false);
+  useEffect(() => {
+    const readGuestRoute = () => {
+      setGuestBrowsing(window.location.hash === "#explore");
+      if (window.location.hash === "#signin") setAuthOpen(true);
+    };
+    readGuestRoute();
+    window.addEventListener("hashchange", readGuestRoute);
+    return () => window.removeEventListener("hashchange", readGuestRoute);
+  }, []);
+
 
   useEffect(() => {
     if (!accountDataReady) return;
