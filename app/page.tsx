@@ -1758,7 +1758,7 @@ function PlanningGuide({ close, go }: { close: () => void; go: (view: View) => v
   return <div className="modal-backdrop guide-backdrop" onMouseDown={(event) => event.target === event.currentTarget && close()}><section ref={dialogRef} tabIndex={-1} className="guide-modal" role="dialog" aria-modal="true" aria-labelledby="planning-guide-title"><header><span><span className="eyebrow">MyWay guide</span><h2 id="planning-guide-title">From discovery to application</h2><p>MyWay organises preparation. Final applications are submitted through official university portals.</p></span><button className="icon-button" aria-label="Close planning guide" onClick={close}><X size={18} /></button></header><div>{steps.map((step, index) => <article key={step.title}><span>{String(index + 1).padStart(2, "0")}</span><div><strong>{step.title}</strong><p>{step.body}</p><button className="text-link" onClick={() => { go(step.view); close(); }}>{step.action} <ChevronRight size={13} /></button></div></article>)}</div><footer><CircleHelp size={14} /><span>Fit scores describe preference alignment. Readiness tracks preparation—not admission probability.</span></footer></section></div>;
 }
 
-function AccountGate({ language, ready, openAccount }: { language: "en" | "id"; ready: boolean; openAccount: () => void }) {
+function AccountGate({ language, ready, openAccount, explore }: { language: "en" | "id"; ready: boolean; openAccount: () => void; explore: () => void }) {
   const id = language === "id";
   return <main className="account-gate">
     <section className="account-gate-card">
@@ -1766,14 +1766,42 @@ function AccountGate({ language, ready, openAccount }: { language: "en" | "id"; 
       {!ready ? <div className="account-gate-loading"><i /><span>{id ? "Menyiapkan MyWay" : "Preparing MyWay"}</span></div> : <>
         <span className="account-gate-icon"><ShieldCheck size={25} /></span>
         <span className="eyebrow">{id ? "RUANG PRIBADIMU" : "YOUR PRIVATE WORKSPACE"}</span>
-        <h1>{id ? "Masuk sebelum mulai merencanakan." : "Sign in before you start planning."}</h1>
-        <p>{id ? "Progres, profil, universitas tersimpan, dan jalur aplikasi hanya ditampilkan setelah kamu masuk ke akun MyWay." : "Your progress, profile, saved universities, and application pathway only appear after you sign in to MyWay."}</p>
-        <button className="primary-button account-gate-action" onClick={openAccount}><CircleUserRound size={17} />{id ? "Masuk atau buat akun" : "Sign in or create account"}</button>
+        <h1>{id ? "Temukan universitas pilihanmu." : "Find your university."}</h1>
+        <p>{id ? "Jelajahi dan bandingkan universitas tanpa akun. Masuk untuk menyimpan pilihan dan merencanakan aplikasimu." : "Browse and compare universities without an account. Sign in to save your choices and plan your applications."}</p>
+        <button className="primary-button account-gate-action" onClick={explore}><Search size={17} />{id ? "Jelajahi tanpa akun" : "Explore without an account"}</button>
+        <button className="outline-button account-gate-action" onClick={openAccount}><CircleUserRound size={17} />{id ? "Masuk atau buat akun" : "Sign in or create account"}</button>
         <a href="/privacy" className="privacy-notice-link">{id ? "Privasi & bantuan" : "Privacy & support"}</a>
         <div className="account-gate-note"><LockKeyhole size={14} /><span>{id ? "Tidak ada progres pribadi yang ditampilkan kepada pengunjung." : "No personal progress is shown to visitors."}</span></div>
       </>}
     </section>
   </main>;
+}
+
+function GuestExplore({ language, openAccount }: { language: Language; openAccount: () => void }) {
+  // Guest state never reads or writes account planning data or browser caches.
+  const [browse, setBrowse] = useState<ExploreBrowseState>(initialExploreBrowseState);
+  const [region, setRegion] = useState<"international" | "indonesia">("international");
+  const [school, setSchool] = useState<BusinessSchool | null>(null);
+  const [compared, setCompared] = useState<string[]>([]);
+  const [compareOpen, setCompareOpen] = useState(false);
+  const [records, setRecords] = useState<Record<string, string>>({});
+  const id = language === "id";
+  const toggleCompare = (key: string) => setCompared(current => current.includes(key) ? current.filter(value => value !== key) : current.length < 4 ? [...current, key] : current);
+  const openSchool = (next: BusinessSchool) => { setSchool(next); setCompareOpen(false); window.scrollTo({ top: 0 }); };
+  const updateGuestRecord = (key: string, value: string) => {
+    if (key === "indonesia-university-comparison") setRecords(current => ({ ...current, [key]: value }));
+    else openAccount();
+  };
+  const programme = school?.programId ? programs.find(item => item.id === school.programId) : undefined;
+  return <div className="guest-explore">
+    <header className="guest-header"><button type="button" className="guest-brand" aria-label="Back to university browsing" onClick={() => setSchool(null)}><PublicUniversityLogo fallback="/myway-mark.png" name="MyWay" /><strong>MyWay</strong></button><div><span>{id ? "Mode pengunjung" : "Guest browsing"}</span><button type="button" className="primary-button" onClick={openAccount}>{id ? "Masuk" : "Sign in"}</button></div></header>
+    <main className="content-wrap"><p className="guest-notice">{id ? "Jelajahi dengan bebas. Masuk untuk menyimpan universitas dan progresmu." : "Explore freely. Sign in to save universities and your progress."}</p>
+      {school ? <SchoolDetail key={school.id} school={school} program={programme} close={() => setSchool(null)} saved={false} toggleSaved={openAccount} compared={compared.includes(school.id)} toggleCompare={() => toggleCompare(school.id)} addPath={openAccount} removePath={openAccount} fitResult={calculateProgramFit(programme ?? schoolAsProgram(school), schoolStudy(school), {}, {})} reportIncorrect={openAccount} /> : <Explore searchRegion={region} setSearchRegion={setRegion} browse={browse} setBrowse={setBrowse} openSchool={openSchool} saved={[]} setSaved={openAccount} compared={compared} toggleCompare={toggleCompare} schoolPathwayIds={[]} toggleSchoolPathway={openAccount} language={language} records={records} updateRecord={updateGuestRecord} goPathway={openAccount} />}
+      <footer className="guest-footer"><a href="/privacy">{id ? "Privasi & bantuan" : "Privacy & support"}</a></footer>
+    </main>
+    {region === "international" && compared.length > 0 && !compareOpen && <button type="button" className="compare-fab" onClick={() => setCompareOpen(true)}><Scale size={17} />{id ? "Bandingkan" : "Compare"} {compared.length}<small>{id ? "dari 4" : "of 4"}</small></button>}
+    {compareOpen && <ComparePanel ids={compared} close={() => setCompareOpen(false)} remove={toggleCompare} open={openSchool} />}
+  </div>;
 }
 
 export default function App() {
@@ -1815,6 +1843,13 @@ export default function App() {
   const [adminVisible, setAdminVisible] = useState(false);
   const [session, setSession] = useState<Session | null>(null);
   const [authReady, setAuthReady] = useState(false);
+  const [guestBrowsing, setGuestBrowsing] = useState(false);
+  useEffect(() => {
+    const readGuestRoute = () => setGuestBrowsing(window.location.hash === "#explore");
+    readGuestRoute();
+    window.addEventListener("hashchange", readGuestRoute);
+    return () => window.removeEventListener("hashchange", readGuestRoute);
+  }, []);
   const [completedAccountLoad, setCompletedAccountLoad] = useState<{ userId: string; attempt: number } | null>(null);
   const [syncStatus, setSyncStatus] = useState("Loading account data…");
   const [pendingConflict, setPendingConflict] = useState<{ userId: string; attempt: number; value: SyncConflict } | null>(null);
@@ -2175,7 +2210,8 @@ export default function App() {
       </> : <><p>{syncStatus}</p><button className="outline-button" onClick={() => choose()}>{language === "id" ? "Coba lagi" : "Retry account sync"}</button></>}
     </section></main>;
   }
-  if (!authReady || !session || !accountDisplayReady) return <><SiteLanguage language={language} /><AccountGate language={language} ready={authReady && (!session || accountDisplayReady)} openAccount={() => setAuthOpen(true)} />{authOpen && <AuthModal key={passwordRecovery ? "recovery" : "account"} session={session} recovery={passwordRecovery} language={language} close={() => { setAuthOpen(false); setPasswordRecovery(false); }} openProfile={() => setView("profile")} />}</>;
+  if (!authReady || !session || !accountDisplayReady) return <><SiteLanguage language={language} />{authReady && !session && guestBrowsing ? <GuestExplore language={language} openAccount={() => setAuthOpen(true)} /> : <AccountGate language={language} ready={authReady && (!session || accountDisplayReady)} openAccount={() => setAuthOpen(true)} explore={() => { setGuestBrowsing(true); window.location.hash = "explore"; }} />}{authOpen && <AuthModal key={passwordRecovery ? "recovery" : "account"} session={session} recovery={passwordRecovery} language={language} close={() => { setAuthOpen(false); setPasswordRecovery(false); }} openProfile={() => setView("profile")} />}</>;
+
   if (!onboarded) return <><SiteLanguage language={language} /><Onboarding finish={finish} saveLater={saveLater} /></>;
 
   let content;
