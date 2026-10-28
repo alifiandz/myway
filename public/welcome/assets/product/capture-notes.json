@@ -1,0 +1,11 @@
+{
+  "capturedOn": "2026-10-23",
+  "sourceCommit": "0e5393a33d413985198c987cd726b4aa3a13b8bb",
+  "method": "Browser screenshots of current production components rendered in an isolated local screenshot harness; no production account, auth bypass, personal data or service writes. Original UI components and CSS unchanged.",
+  "screens": {
+    "explore": "Actual Explore component, public directory, no saved choices.",
+    "pathway": "Actual Pathway component with three example university roles and no completed actions or uploaded documents.",
+    "tasks": "Actual TasksHabits component with default weekly targets and zero completed actions.",
+    "dashboard": "Actual Dashboard component rendered locally with explicit example data: nine stage values [100,100,100,80,60,60,40,40,20], average rounded to 67%; two sample completed weekly actions. No user account or production data."
+  }
+}
