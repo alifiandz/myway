@@ -107,7 +107,7 @@ export default function FeedbackInbox() {
 
   return <><SiteLanguage language={language} /><main className="feedback-admin-shell university-admin-shell">
     <aside className="feedback-admin-sidebar">
-      <Link className="admin-brand" href="/"><Image src="/myway-mark.png" alt="" width={38} height={38} unoptimized /> MyWay</Link>
+      <Link className="admin-brand" href="/"><Image src="/myway-mark.png?v=brand-20261028" alt="" width={38} height={38} unoptimized /> MyWay</Link>
       <div className="admin-private-label"><ShieldCheck size={14} /> Private admin</div>
       <AdminNavigation active="feedback" language={language} feedbackCount={newCount}/>
       <div className="admin-account"><div><UserRound size={16} /><span><small>Signed in as</small>{adminName}</span></div><button type="button" className="admin-signout" title="Sign out" onClick={async () => { const supabase = await getSupabaseClient(); await supabase.auth.signOut(); window.location.href = "/"; }}><LogOut size={16} /></button></div>

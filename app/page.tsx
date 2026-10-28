@@ -726,7 +726,7 @@ function OfficialSchoolLogo({ school, size }: { school: BusinessSchool; size: "l
 function Brand() {
   return <div className="brand"><span className="brand-mark">
     {/* eslint-disable-next-line @next/next/no-img-element */}
-    <img src="/myway-mark.png" alt="" />
+    <img src="/myway-mark.png?v=brand-20261028" alt="" />
   </span><span><strong><b>My</b><em>Way</em></strong><small>Explore · Plan · Go Further</small></span></div>;
 }
 
@@ -1781,7 +1781,7 @@ function GuestExplore({ language, openAccount }: { language: Language; openAccou
   };
   const programme = school?.programId ? programs.find(item => item.id === school.programId) : undefined;
   return <div className="guest-explore">
-    <header className="guest-header"><button type="button" className="guest-brand" aria-label="Back to university browsing" onClick={() => setSchool(null)}><PublicUniversityLogo fallback="/myway-mark.png" name="MyWay" /><strong>MyWay</strong></button><div><span>{id ? "Mode pengunjung" : "Guest browsing"}</span><button type="button" className="primary-button" onClick={openAccount}>{id ? "Masuk" : "Sign in"}</button></div></header>
+    <header className="guest-header"><button type="button" className="guest-brand" aria-label="Back to university browsing" onClick={() => setSchool(null)}><PublicUniversityLogo fallback="/myway-mark.png?v=brand-20261028" name="MyWay" /><strong>MyWay</strong></button><div><span>{id ? "Mode pengunjung" : "Guest browsing"}</span><button type="button" className="primary-button" onClick={openAccount}>{id ? "Masuk" : "Sign in"}</button></div></header>
     <main className="content-wrap"><p className="guest-notice">{id ? "Jelajahi dengan bebas. Masuk untuk menyimpan universitas dan progresmu." : "Explore freely. Sign in to save universities and your progress."}</p>
       {school ? <SchoolDetail key={school.id} school={school} program={programme} close={() => setSchool(null)} saved={false} toggleSaved={openAccount} compared={compared.includes(school.id)} toggleCompare={() => toggleCompare(school.id)} addPath={openAccount} removePath={openAccount} fitResult={calculateProgramFit(programme ?? schoolAsProgram(school), schoolStudy(school), {}, {})} reportIncorrect={openAccount} /> : <Explore searchRegion={region} setSearchRegion={setRegion} browse={browse} setBrowse={setBrowse} openSchool={openSchool} saved={[]} setSaved={openAccount} compared={compared} toggleCompare={toggleCompare} schoolPathwayIds={[]} toggleSchoolPathway={openAccount} language={language} records={records} updateRecord={updateGuestRecord} goPathway={openAccount} />}
       <footer className="guest-footer"><a href="/privacy">{id ? "Privasi & bantuan" : "Privacy & support"}</a></footer>

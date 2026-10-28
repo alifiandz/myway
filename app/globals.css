@@ -2742,3 +2742,12 @@ input, select, textarea { font-size: 16px; }
 }
 
 .myway-landing-frame { display:block; width:100%; height:100dvh; border:0; background:#fcfaf2; }
+
+/* The horizontal MyWay ribbon mark uses its full silhouette without cropping. */
+.brand-mark { width:64px; height:36px; border-radius:0; background:transparent; box-shadow:none; overflow:visible; }
+.brand-mark img { width:100%; height:100%; object-fit:contain; }
+.auth-brand>span { width:58px; height:34px; background:transparent; border-radius:0; overflow:visible; }
+.auth-brand>span img { width:100%; height:100%; object-fit:contain; }
+.admin-brand>img { width:58px; height:34px; object-fit:contain; }
+.guest-brand img { width:58px; height:32px; object-fit:contain; }
+.mobile-brand .brand-mark { width:54px; height:32px; }
