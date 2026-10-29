@@ -2780,3 +2780,30 @@ input, select, textarea { font-size: 16px; }
  .id-evidence-card.academic-fact > .text-link { font-size:15px; padding:10px; }
  .id-credit-summary .id-credit-legend > div { align-items:flex-start; }
 }
+
+/* Habit views use readable controls at every calendar scale. */
+.task-tabs { width:fit-content; max-width:100%; grid-template-columns:repeat(2,minmax(0,1fr)); gap:4px; }
+.task-tabs button { min-height:42px; padding:8px 22px; white-space:nowrap; line-height:1.25; }
+.habit-table.month { min-width:0; display:grid; grid-template-columns:repeat(auto-fit,minmax(min(310px,100%),1fr)); gap:18px; padding-top:18px; align-items:start; }
+.habit-table.month .habit-table-row { min-width:0; min-height:0; display:flex; flex-direction:column; align-items:stretch; gap:18px; padding:18px; border:1px solid var(--line); border-radius:14px; background:#fff; }
+.habit-table.month .monthly-habit-copy { min-height:100px; }
+.habit-table.month .monthly-habit-copy small { font-style:normal; font-size:13px; }
+.habit-table.month .habit-progress { display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--line); padding-top:14px; gap:12px; }
+.habit-table.month .habit-progress em { margin:0; font-size:12px; }
+.habit-month-calendar { min-width:0; }
+.habit-calendar-weekdays,.habit-calendar-dates { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:6px; }
+.habit-calendar-weekdays { margin-bottom:8px; }
+.habit-calendar-weekdays span { text-align:center; color:var(--muted); font-size:12px; font-weight:600; }
+.habit-calendar-dates button { position:relative; min-width:0; min-height:40px; padding:7px 0; border:1px solid #dfe3ed; border-radius:9px; background:#fafbfd; color:var(--navy); font-size:14px; font-weight:600; cursor:pointer; }
+.habit-calendar-dates button.checked { background:var(--navy); border-color:var(--navy); color:white; }
+.habit-calendar-dates button svg { position:absolute; right:2px; bottom:2px; }
+.habit-calendar-dates button:hover { border-color:var(--blue); }
+.habit-calendar-dates button:focus-visible,.task-tabs button:focus-visible { outline:2px solid var(--blue); outline-offset:3px; }
+@media(max-width:650px){
+ .task-tabs { width:100%; }
+ .task-tabs button { padding:8px 5px; font-size:12px; min-height:42px; }
+ .habit-table.month .habit-table-row { padding:14px; }
+ .habit-table.month .monthly-habit-copy { min-height:0; }
+ .habit-table-scroll:has(.habit-table.month) { margin-right:0; padding-right:0; overflow:visible; }
+ .habit-calendar-dates button { min-height:40px; }
+}
