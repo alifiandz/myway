@@ -47,3 +47,17 @@ test('compact planning guidance keeps source years and uncertainty visible while
   for(const key of ['routes','eligibility','documents','fees','dates','scholarships','contact'])assert.ok(html.includes(key==='contact'?(id?'Kontak resmi':'Official contact'):({routes:['University admission routes','Jalur masuk universitas'],eligibility:['Eligibility','Syarat peserta'],documents:['Application documents','Dokumen pendaftaran'],fees:['Fees','Biaya'],dates:['Dates','Jadwal'],scholarships:['Scholarships','Beasiswa']})[key][id?1:0]));
  }
 });
+
+const academics=load(path.join(root,'indonesia-information.tsx'));
+test('UGM credit categories reconcile to the published 2026 total in both languages',()=>{
+ const a=academics.academicProfiles['id-ugm-s1-manajemen'];
+ assert.equal(a.creditBreakdown.reduce((sum,row)=>sum+Number(row[0]),0),144);
+ assert.deepEqual(Array.from(a.creditBreakdown,row=>row[0]),['84','27','33']);
+ for(const id of [false,true]){const html=renderToStaticMarkup(React.createElement(academics.AcademicStudy,{programme:{id:'id-ugm-s1-manajemen'},id}));assert.match(html,/144 SKS/);assert.match(html,/2026/);assert.match(html,/role="img"/);assert.match(html,id?/Mata kuliah wajib universitas/:/University compulsory courses/);assert.match(html,/27913-kurikulum-manajemen-2026/);}
+});
+test('missing credit categories never turn a published total into an invented chart',()=>{
+ const html=renderToStaticMarkup(React.createElement(academics.AcademicStudy,{programme:{id:'id-unair-s1-manajemen'},id:false}));assert.match(html,/category breakdown has not yet been verified/);assert.doesNotMatch(html,/id-credit-bar/);
+});
+test('programme answers have distinct emphasis while conflicting sources stay disclosed',()=>{
+ const html=renderToStaticMarkup(React.createElement(components.ProgrammeResearchInformation,{programmeId:'id-ui-s1-manajemen',id:false,study:true}));assert.match(html,/class="id-evidence-value">Sarjana Ekonomi/);assert.match(html,/Official sources disagree/);assert.match(html,/145 SKS/);assert.match(html,/144 SKS/);
+});

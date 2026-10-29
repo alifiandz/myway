@@ -173,7 +173,7 @@
     "degreeSourceUrl": "https://admissions.ugm.ac.id/v26/program-studi/sarjana-manajemen/",
     "careersSourceUrl": "https://admissions.ugm.ac.id/v26/program-studi/sarjana-manajemen/",
     "sourceYear": "2026",
-    "checkedOn": "2026-10-23",
+    "checkedOn": "2026-10-29",
     "cohortNote": {
       "en": "The September 2026 curriculum lists 144 credits over semesters 1–7; earlier cohorts follow their applicable curriculum.",
       "id": "Kurikulum September 2026 memuat 144 SKS pada semester 1–7; angkatan terdahulu mengikuti kurikulum yang berlaku baginya."
@@ -194,6 +194,23 @@
       [
         "Business development",
         "Pengembangan bisnis"
+      ]
+    ],
+    "creditBreakdown": [
+      [
+        "84",
+        "Programme compulsory courses",
+        "Mata kuliah wajib prodi"
+      ],
+      [
+        "27",
+        "University compulsory courses",
+        "Mata kuliah wajib universitas"
+      ],
+      [
+        "33",
+        "Second majors, minors, intensification & electives",
+        "Second majors, minors, intensifikasi & pilihan"
       ]
     ]
   },

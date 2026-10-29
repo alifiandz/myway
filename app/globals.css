@@ -2764,3 +2764,19 @@ input, select, textarea { font-size: 16px; }
 .mobile-brand .brand { grid-template-columns:48px minmax(0,1fr); }
 .mobile-brand .brand .brand-mark { width:48px; height:28px; }
 .mobile-brand .brand .brand-copy strong { font-size:22px; }
+
+/* Programme answers lead; source context stays readable and secondary. */
+.academic-fact .id-evidence-card-title { order:0; color:var(--muted); }
+.id-evidence-card.academic-fact > .id-evidence-value,
+.id-evidence-card.academic-fact > .text-link { order:1; margin:4px 0 8px; padding:12px; width:100%; border-radius:9px; background:#f4f6fb; color:var(--navy); font-size:16px; font-weight:700; line-height:1.45; }
+.academic-fact > .id-evidence-status { order:2; }
+.academic-fact > .id-evidence-note { order:3; }
+.academic-fact > .id-information-link { order:4; padding-top:10px; }
+.id-credit-summary .id-review-note { margin-top:16px; }
+.id-credit-pending { display:grid; gap:12px; }
+.id-credit-pending p { margin:0; color:var(--muted); font-size:13px; line-height:1.5; }
+@media(max-width:650px){
+ .id-evidence-card.academic-fact > .id-evidence-value,
+ .id-evidence-card.academic-fact > .text-link { font-size:15px; padding:10px; }
+ .id-credit-summary .id-credit-legend > div { align-items:flex-start; }
+}
