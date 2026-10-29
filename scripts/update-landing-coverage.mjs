@@ -18,8 +18,9 @@ for(const [uid,name] of new Map(catalogue.map(p=>[p.university_id,p.university])
 const records=rows.map(row=>{if(!row.city||!row.country)throw Error('Missing location: '+row.id);const logo=logos[row.id]?.src??`/institution-logos/${row.id}.png`;if(!fs.existsSync('public'+logo))throw Error('Missing logo: '+logo);return {id:row.id,name:row.name,city:row.city,country:row.country,status:row.status,logoSrc:logo};});
 if(new Set(records.map(r=>r.id)).size!==records.length)throw Error('Duplicate institution');
 const countries=new Set(records.map(r=>r.country)), cities=new Set(records.map(r=>r.country+'|'+r.city.trim().toLowerCase()));
-const totals=[countries.size,cities.size,records.length];
+const totals=[Math.floor(countries.size/10)*10,Math.floor(cities.size/5)*5,Math.floor(records.length/10)*10];
 const file='public/welcome/index.html';let html=read(file);
+html=html.replace(/const catalogTotals=.*?;\n/,()=>`const catalogTotals=[Math.floor(new Set(catalogRecords.map(r=>r.country)).size/10)*10,Math.floor(new Set(catalogRecords.map(r=>r.country+'|'+r.city.trim().toLowerCase())).size/5)*5,Math.floor(new Set(catalogRecords.map(r=>r.id)).size/10)*10];\n`);
 html=html.replace(/const catalogRecords=.*?;\n/,()=>`const catalogRecords=${JSON.stringify(records)};\n`);
 html=html.replace(/<path\b[^>]*><title>([^<]+)<\/title><\/path>/g,(path,title)=>{if(!countries.has(title)||path.includes('data-country="'))return path;return path.replace(/class="[^"]*"/,'class="land available"').replace(/ aria-hidden="true"/,'').replace(/<path\b/,'<path data-country="'+title+'" tabindex="0" role="button"');});
 // Canonical SVG names may differ from directory country names.
