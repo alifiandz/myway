@@ -2807,3 +2807,10 @@ input, select, textarea { font-size: 16px; }
  .habit-table-scroll:has(.habit-table.month) { margin-right:0; padding-right:0; overflow:visible; }
  .habit-calendar-dates button { min-height:40px; }
 }
+
+/* Return from guest discovery to the public landing page. */
+.guest-header .guest-navigation{display:flex;align-items:center;gap:24px;min-width:0}
+.guest-home{display:inline-flex;align-items:center;gap:8px;color:#243863;font-size:13px;font-weight:600;white-space:nowrap;padding:9px 11px;border:1px solid #dce2ef;border-radius:9px;transition:background .2s,border-color .2s}
+.guest-home:hover{background:#eef2ff;border-color:#bdcaff}.guest-home:focus-visible{outline:2px solid #073cff;outline-offset:3px}
+.guest-home>span:first-child{font-size:18px;line-height:1}
+@media(max-width:600px){.guest-header .guest-navigation{gap:12px}.guest-home{font-size:12px;padding:8px;gap:5px}.guest-home-extra{display:none}}
