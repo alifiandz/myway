@@ -254,7 +254,7 @@ const catalogRecords=[{"id":"ft-school-2","name":"HEC Paris","city":"Paris","cou
 const catalogTotals=[Math.floor(new Set(catalogRecords.map(r=>r.country)).size/10)*10,Math.floor(new Set(catalogRecords.map(r=>r.country+'|'+r.city.trim().toLowerCase())).size/5)*5,Math.floor(new Set(catalogRecords.map(r=>r.id)).size/10)*10];
 document.querySelectorAll('.stat-number').forEach((el,i)=>el.dataset.total=catalogTotals[i]);
 let counterRun=0;
-function runCounters(){const run=++counterRun;document.querySelectorAll('.stat-number').forEach(el=>{const total=Number(el.dataset.total);if(reduceMotion){el.textContent=total+'+';return}el.textContent='0+';const begin=performance.now();function tick(now){if(run!==counterRun)return;const progress=Math.min((now-begin)/2000,1);el.textContent=Math.round(total*(1-Math.pow(1-progress,2)))+'+'+'+';if(progress<1)requestAnimationFrame(tick)}requestAnimationFrame(tick)})}
+function runCounters(){const run=++counterRun;document.querySelectorAll('.stat-number').forEach(el=>{const total=Number(el.dataset.total);if(reduceMotion){el.textContent=total+'+';return}el.textContent='0+';const begin=performance.now();function tick(now){if(run!==counterRun)return;const progress=Math.min((now-begin)/2000,1);el.textContent=Math.round(total*(1-Math.pow(1-progress,2)))+'+';if(progress<1)requestAnimationFrame(tick)}requestAnimationFrame(tick)})}
 const mapObserver=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){mapRoot.classList.add('map-ready');mapObserver.disconnect()}},{threshold:.15});mapObserver.observe(mapRoot);
 const statsObserver=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting))runCounters()},{threshold:.4});statsObserver.observe(document.querySelector('.coverage-stats'));
 
