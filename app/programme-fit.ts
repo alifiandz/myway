@@ -3,12 +3,14 @@ type FitStudy = { status: string; areas: string[] };
 type FitProfile = { fields?: string; avoidedFields?: string; degree?: string; math?: string; countries?: string; language?: string; budget?: string };
 export type FitResult = {
   score: number | null;
-  label: "Strong fit" | "Good fit" | "Possible fit" | "Low fit" | "Complete profile" | "Must-have unverified";
+  label: "Strong fit" | "Good fit" | "Possible fit" | "Low fit" | "Complete profile" | "Must-have unverified" | "Not enough information";
   mustHaveGaps: string[];
   confidence: number;
   reasons: string[];
   breakdown: { label: string; weight: number; score: number; note: string }[];
 };
+
+const unknownEvidence = (value: string) => !value.trim() || /not assessed|not (?:yet )?(?:verified|confirmed|found|established)|unknown|unavailable|needs? (?:review|verification)|check (?:the )?official/i.test(value);
 
 export function calculateProgramFit(program: FitProgram, study: FitStudy | undefined, profile: FitProfile, priorities: Record<string, string>): FitResult {
   const selectedFields = (profile.fields || "").split(",").map((item) => item.trim().toLowerCase()).filter(Boolean);
@@ -25,18 +27,18 @@ export function calculateProgramFit(program: FitProgram, study: FitStudy | undef
     const selectedMatches = selectedFields.filter((field) => searchable.includes(field) || areas.some((area) => area.includes(field) || field.includes(area)));
     const avoidedMatches = avoidedFields.filter((field) => searchable.includes(field));
     const score = avoidedMatches.length ? 25 : selectedMatches.length ? Math.min(100, 78 + selectedMatches.length * 8) : 55;
-    breakdown.push({ label: "Business interests", weight: 25, score, note: avoidedMatches.length ? `Includes an avoided area: ${avoidedMatches[0]}` : selectedMatches.length ? `Matches ${selectedMatches.slice(0, 2).join(" and ")}` : "Broad business overlap" });
+    breakdown.push({ label: "Study interests", weight: 25, score, note: avoidedMatches.length ? `Includes an avoided area: ${avoidedMatches[0]}` : selectedMatches.length ? `Matches ${selectedMatches.slice(0, 2).join(" and ")}` : "No direct match in reviewed study areas" });
   }
 
   const degree = (profile.degree || "").toLowerCase();
   const directBachelor = study?.status === "bachelor" || /bachelor.+available|direct bachelor/i.test(program.entry);
   const restricted = study?.status === "restricted" || /restricted/i.test(program.entry);
   const accessScore = restricted ? 40 : directBachelor ? 95 : 65;
-  breakdown.push({ label: "Study access", weight: 25, score: accessScore, note: restricted ? "Restricted undergraduate eligibility" : degree.includes("bachelor") || !degree ? "Bachelor’s programme confirmed; admissions vary" : "Check degree-route compatibility" });
+  if (restricted || directBachelor) breakdown.push({ label: "Study access", weight: 25, score: accessScore, note: restricted ? "Restricted undergraduate eligibility" : degree.includes("bachelor") || !degree ? "Bachelor’s programme confirmed; admissions vary" : "Check degree-route compatibility" });
 
   const mathPreference = (profile.math || "").toLowerCase();
   const mathEvidence = (program.math || "").toLowerCase();
-  if (mathPreference && !/not yet verified/.test(mathEvidence)) {
+  if (mathPreference && !unknownEvidence(mathEvidence) && /\b(low|light|moderate|high|heavy)\b/.test(mathEvidence)) {
     const wantsLow = /low|light/.test(mathPreference);
     const isHigh = /high|heavy/.test(mathEvidence);
     const isModerate = /moderate/.test(mathEvidence);
@@ -46,13 +48,13 @@ export function calculateProgramFit(program: FitProgram, study: FitStudy | undef
 
   const practicalScores: number[] = [];
   const practicalNotes: string[] = [];
-  if (profile.countries) {
+  if (profile.countries && !unknownEvidence(program.location)) {
     const countries = profile.countries.toLowerCase().split(",").map((item) => item.trim()).filter(Boolean);
     const match = countries.some((country) => program.location.toLowerCase().includes(country));
     practicalScores.push(match ? 100 : 45);
     practicalNotes.push(match ? "Preferred location" : "Outside preferred locations");
   }
-  if (profile.language) {
+  if (profile.language && !unknownEvidence(program.language)) {
     const match = program.language.toLowerCase().includes(profile.language.toLowerCase()) || (/english/i.test(profile.language) && /english/i.test(program.language));
     practicalScores.push(match ? 100 : 40);
     practicalNotes.push(match ? "Preferred teaching language" : "Language needs review");
@@ -60,9 +62,14 @@ export function calculateProgramFit(program: FitProgram, study: FitStudy | undef
   if (practicalScores.length) breakdown.push({ label: "Location & language", weight: 15, score: Math.round(practicalScores.reduce((sum, value) => sum + value, 0) / practicalScores.length), note: practicalNotes.join(" · ") });
 
   const budgetText = profile.budget || "";
-  const budget = Number(budgetText.replace(/[^0-9.]/g, ""));
-  const tuition = Number((program.tuition || "").replace(/[^0-9.]/g, ""));
-  if (/(€|eur)/i.test(budgetText) && budget > 0 && tuition > 0 && !/not yet verified|see the current/i.test(program.tuition)) {
+  // Compare only explicit amounts in the same currency; never concatenate years or ranges.
+  const euroAmount = (value: string) => {
+    if(unknownEvidence(value)) return null;
+    const match = value.trim().match(/^(?:€|EUR)\s*(\d+(?:[ ,]\d{3})*(?:\.\d{1,2})?)(?=\s*(?:$|\/|per\b|annually\b|annual\b))/i);
+    return match ? Number(match[1].replace(/[ ,]/g,'')) : null;
+  };
+  const budget = euroAmount(budgetText), tuition = euroAmount(program.tuition || '');
+  if (budget !== null && budget > 0 && tuition !== null && tuition > 0) {
     breakdown.push({ label: "Budget", weight: 10, score: tuition <= budget ? 100 : tuition <= budget * 1.2 ? 60 : 25, note: tuition <= budget ? "Within the recorded tuition limit" : "Above the recorded tuition limit" });
   }
 
@@ -91,6 +98,9 @@ export function calculateProgramFit(program: FitProgram, study: FitStudy | undef
     return { mustHaveGaps: [], score: null, label: "Complete profile", confidence: 0, reasons: ["Add study interests and preferences to calculate a personal match."], breakdown };
   }
 
+  if (!breakdown.some(item => item.label !== 'Study access')) {
+    return {mustHaveGaps,score:null,label:'Not enough information',confidence:0,reasons:['Your selected preferences need confirmed programme evidence before a fit score can be calculated.'],breakdown};
+  }
   const availableWeight = breakdown.reduce((sum, item) => sum + item.weight, 0);
   const rawScore = Math.round(breakdown.reduce((sum, item) => sum + item.score * item.weight, 0) / Math.max(availableWeight, 1));
   const score = mustHaveGaps.length ? Math.min(rawScore, 59) : rawScore;

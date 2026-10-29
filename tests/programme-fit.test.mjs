@@ -36,3 +36,18 @@ test('missing profile and all unconfirmed must-haves produce no fabricated recom
  const unknown = calculateProgramFit(program,study,profile,{Scholarships:'Must have'});
  assert.deepEqual(selectRecommendations([{id:'blank'},{id:'unknown'}],{blank,unknown}),[]);
 });
+
+test('unknown maths evidence never earns compatibility points',()=>{
+ for(const math of ['Not assessed','Not yet verified','Unknown','Not confirmed','']){
+  const result=calculateProgramFit({...program,math},undefined,{math:'Low'},{});
+  assert(!result.breakdown.some(row=>row.label==='Math comfort'));
+  assert.equal(result.score,null);assert.equal(result.label,'Not enough information');
+ }
+ const known=calculateProgramFit({...program,math:'High'},study,{math:'Low'},{});
+ assert.equal(known.breakdown.find(row=>row.label==='Math comfort').score,25);
+});
+test('unknown language and ambiguous or mixed-currency tuition are excluded',()=>{
+ const result=calculateProgramFit({...program,language:'Not confirmed',tuition:'IDR 2026/2027: 15000000'},study,{language:'English',budget:'EUR 20000'},{});
+ assert(!result.breakdown.some(row=>row.label==='Location & language'||row.label==='Budget'));
+ assert.equal(result.score,null);
+});
