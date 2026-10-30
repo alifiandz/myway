@@ -7,6 +7,7 @@ import { calculateProgramFit, selectRecommendations, type FitResult } from "./pr
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import Brand from "./myway-brand";
+import UsageTracker from "./usage-tracker";
 import HabitMonthCalendar from "./habit-month-calendar";
 import AccountSyncNotice from "./account-sync-notice";
 import LandingWelcome from "./landing-welcome";
@@ -2215,6 +2216,7 @@ export default function App() {
   else content = <SettingsPage notifications={remindersEnabled} onNotificationsChange={changeReminders} toast={setToast} savedCount={saved.length} applicationCount={pathway.length} replayTutorial={() => setTutorialOpen(true)} go={go} language={language} setLanguage={setLanguage} theme={theme} setTheme={setTheme} adminVisible={adminVisible} />;
 
   return <div className="app-shell">
+    {accountUserId && accountDisplayReady && <UsageTracker page={view} userId={accountUserId}/>}
     <SiteLanguage language={language} />
     <Navigation active={view} go={go} openGuide={() => setGuideOpen(true)} progress={progress} hasTarget={Boolean(dashboardProgram)} language={language} />
     <main className="app-main"><Header reminders={reminders} remindersEnabled={remindersEnabled} onReminderAction={(reminder) => openPathwayStage(reminder.stage, reminder.programmeId)} view={view} go={go} notices={notices} setNotices={setNotices} notice={notice} onNoticeAction={runNoticeAction} avatar={avatar} language={language} session={session} openAccount={() => setAuthOpen(true)} /><div className="content-wrap" key={syncGeneration}><AccountSyncNotice status={syncStatus} />{content}</div></main>
