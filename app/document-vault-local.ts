@@ -89,3 +89,10 @@ export async function importLegacyDocuments() {
   window.localStorage.setItem(`myway-legacy-vault-imported:${userId}`, "complete");
   return stored.length;
 }
+
+// Unassigned shared-browser files require the existing explicit ownership step.
+export async function importOwnedLegacyDocuments() {
+  const userId = window.localStorage.getItem("myway-active-user-id");
+  if (!userId || window.localStorage.getItem(LEGACY_OWNER_KEY) !== userId || window.localStorage.getItem(`myway-legacy-vault-imported:${userId}`)) return 0;
+  return importLegacyDocuments();
+}
