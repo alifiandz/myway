@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="430" viewBox="0 0 1100 430" role="img" aria-labelledby="title desc">
+<title id="title">The MyWay journey: explore, choose, prepare</title>
+<desc id="desc">Explore university programmes, choose Dream, Target and Alternative options, then prepare through requirements, records, evidence and actions. Product concept illustration, not a screenshot.</desc>
+<defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#172b56"/><stop offset="1" stop-color="#294985"/></linearGradient><linearGradient id="route"><stop stop-color="#91bdff"/><stop offset="1" stop-color="#94e4d6"/></linearGradient></defs>
+<rect width="1100" height="430" rx="20" fill="url(#bg)"/>
+<circle cx="1075" cy="0" r="240" fill="#6484cc" opacity=".09"/><circle cx="30" cy="440" r="175" fill="#94e4d6" opacity=".05"/>
+<g font-family="Arial, Helvetica, sans-serif">
+<text x="46" y="45" fill="#a9c5fb" font-size="11" font-weight="700" letter-spacing="2">THE MYWAY JOURNEY</text>
+<text x="46" y="91" fill="#fff" font-size="31" font-weight="700" letter-spacing="-.6">A direction you choose. A path you build.</text>
+<text x="46" y="119" fill="#c0cee5" font-size="14">From finding your options to knowing what to prepare next.</text>
+<path d="M200 205H900" stroke="url(#route)" stroke-width="2" stroke-dasharray="6 7"/>
+<g transform="translate(46 168)">
+<rect width="316" height="210" rx="12" fill="#fff"/>
+<circle cx="30" cy="33" r="16" fill="#eaf0ff"/><text x="30" y="38" text-anchor="middle" font-size="12" font-weight="700" fill="#455ed7">01</text>
+<text x="57" y="39" fill="#203462" font-size="19" font-weight="700">Explore</text>
+<path d="M22 62H294" stroke="#e6eaf3"/>
+<text x="23" y="91" fill="#53627d" font-size="13">Programmes. Places. Possibilities.</text>
+<rect x="22" y="112" width="272" height="29" rx="6" fill="#f4f6fb"/><text x="34" y="131" fill="#203462" font-size="12">Interests + priorities</text>
+<rect x="22" y="150" width="272" height="29" rx="6" fill="#f4f6fb"/><text x="34" y="169" fill="#203462" font-size="12">Programme fit + evidence</text>
+</g>
+<g transform="translate(392 168)">
+<rect width="316" height="210" rx="12" fill="#fff"/>
+<circle cx="30" cy="33" r="16" fill="#eaf0ff"/><text x="30" y="38" text-anchor="middle" font-size="12" font-weight="700" fill="#455ed7">02</text>
+<text x="57" y="39" fill="#203462" font-size="19" font-weight="700">Choose</text>
+<path d="M22 62H294" stroke="#e6eaf3"/>
+<text x="23" y="91" fill="#53627d" font-size="13">A shortlist with a role for each choice.</text>
+<rect x="22" y="116" width="75" height="29" rx="14" fill="#edf0ff"/><text x="59" y="135" text-anchor="middle" fill="#455ed7" font-size="11" font-weight="700">Dream</text>
+<rect x="105" y="116" width="75" height="29" rx="14" fill="#eaf6f1"/><text x="142" y="135" text-anchor="middle" fill="#3c765c" font-size="11" font-weight="700">Target</text>
+<rect x="188" y="116" width="106" height="29" rx="14" fill="#f7f2e8"/><text x="241" y="135" text-anchor="middle" fill="#8b682e" font-size="11" font-weight="700">Alternative</text>
+<text x="23" y="174" fill="#53627d" font-size="12">Save options. Compare what matters.</text>
+</g>
+<g transform="translate(738 168)">
+<rect width="316" height="210" rx="12" fill="#fff"/>
+<circle cx="30" cy="33" r="16" fill="#eaf0ff"/><text x="30" y="38" text-anchor="middle" font-size="12" font-weight="700" fill="#455ed7">03</text>
+<text x="57" y="39" fill="#203462" font-size="19" font-weight="700">Prepare</text>
+<path d="M22 62H294" stroke="#e6eaf3"/>
+<text x="23" y="91" fill="#53627d" font-size="13">Turn the goal into your next action.</text>
+<g fill="#53627d" font-size="12"><text x="43" y="120">Requirements + student records</text><text x="43" y="148">Evidence + preparation tasks</text><text x="43" y="176">Deadlines + progress</text></g>
+<g fill="#5f76e8"><circle cx="28" cy="116" r="4"/><circle cx="28" cy="144" r="4"/><circle cx="28" cy="172" r="4"/></g>
+</g>
+<text x="1054" y="409" text-anchor="end" fill="#a9bbd9" font-size="10">Product journey illustration · Not an admissions prediction</text>
+</g></svg>
