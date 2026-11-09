@@ -137,7 +137,7 @@ test('valid raster screenshots upload, while downloads reject legacy SVG and use
  const uploadedResponse=await worker.fetch(new Request('http://localhost/api/feedback',{method:'POST',body:form}),{BUCKET:{put:async()=>{uploaded=true}},DB:{prepare:()=>({bind:()=>({run:async()=>({success:true})})})}},{waitUntil(){},passThroughOnException(){}});
  assert.equal(uploadedResponse.status,200);assert.equal(uploaded,true);
  for (const type of ['image/png','image/svg+xml']) {
-  const response=await worker.fetch(new Request('http://localhost/api/admin/feedback/example/screenshot',{headers:{'oai-authenticated-user-id':'11111111-1111-4111-8111-111111111111'}}),{DB:{prepare:()=>({bind:()=>({first:async()=>({screenshot_key:'mock',screenshot_name:'untrusted.svg'})})})},BUCKET:{get:async()=>({size:auditPng.length,httpMetadata:{contentType:type},arrayBuffer:async()=>auditPng.buffer})}},{waitUntil(){},passThroughOnException(){}});
+  const response=await worker.fetch(new Request('http://localhost/api/admin/feedback/example/screenshot',{headers:{'oai-authenticated-user-id':'11111111-1111-4111-8111-111111111111'}}),{MYWAY_ADMIN_ACCOUNT_IDS:'11111111-1111-4111-8111-111111111111',DB:{prepare:()=>({bind:()=>({first:async()=>({screenshot_key:'mock',screenshot_name:'untrusted.svg'})})})},BUCKET:{get:async()=>({size:auditPng.length,httpMetadata:{contentType:type},arrayBuffer:async()=>auditPng.buffer})}},{waitUntil(){},passThroughOnException(){}});
   assert.equal(response.status,type==='image/png'?200:415);
   if(type==='image/png') {assert.equal(response.headers.get('x-content-type-options'),'nosniff');assert.match(response.headers.get('content-disposition'),/^attachment;/);assert.match(response.headers.get('content-security-policy'),/sandbox/);}
  }
@@ -154,4 +154,16 @@ test("admin university and logo routes preserve shared navigation and a back rou
     if (path.endsWith("ft-school-2")) assert.match(html, /Back to all universities/);
     assert.doesNotMatch(html, /name="note"/, "Private notes are not rendered before authentication and loading");
   }
+});
+
+
+test("platform admin identity requires an explicitly configured allowlist", async () => {
+  const { default: worker } = await import("../dist/server/index.js");
+  const id = "11111111-1111-4111-8111-111111111111";
+  const request = () => new Request("http://localhost/api/admin-visibility", { headers: { "oai-authenticated-user-id": id } });
+  const ctx = { waitUntil() {}, passThroughOnException() {} };
+  const unconfigured = await worker.fetch(request(), {}, ctx);
+  assert.deepEqual(await unconfigured.json(), { authorized: false });
+  const configured = await worker.fetch(request(), { MYWAY_ADMIN_ACCOUNT_IDS: id }, ctx);
+  assert.deepEqual(await configured.json(), { authorized: true });
 });

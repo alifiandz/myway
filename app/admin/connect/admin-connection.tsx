@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { getSupabaseClient } from "../../supabase-client";
 
-const ADMIN_ORIGIN = "https://admin.example.com";
+const ADMIN_ORIGIN = process.env.NEXT_PUBLIC_ADMIN_ORIGIN ?? "";
 
 export default function AdminConnection() {
   const [message, setMessage] = useState("Connecting your MyWay administrator account…");
@@ -12,6 +12,7 @@ export default function AdminConnection() {
     let active = true;
     void (async () => {
       try {
+        if (!ADMIN_ORIGIN) throw new Error("The administrator portal origin is not configured.");
         const supabase = await getSupabaseClient();
         const { data } = await supabase.auth.getSession();
         if (!data.session) throw new Error("Sign in to MyWay first, then try again.");

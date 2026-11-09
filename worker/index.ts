@@ -8,6 +8,8 @@ interface Env {
   DB: D1Database;
   BUCKET: R2Bucket;
   MYWAY_ADMIN_SECRET?: string;
+  MYWAY_ADMIN_ACCOUNT_IDS?: string;
+  MYWAY_ADMIN_ORIGIN?: string;
   SUPABASE_URL?: string;
   SUPABASE_PUBLISHABLE_KEY?: string;
   SUPABASE_GOOGLE_ENABLED?: string;
@@ -25,18 +27,17 @@ interface ExecutionContext {
   passThroughOnException(): void;
 }
 
-const ADMIN_ACCOUNT_IDS = new Set(["11111111-1111-4111-8111-111111111111"]);
 const FEEDBACK_STATUSES = new Set(["new", "reviewing", "resolved"]);
-const ADMIN_ORIGIN = "https://admin.example.com";
 
-function isAdmin(request: Request): boolean {
+function isAdmin(request: Request, env: Env): boolean {
+  const accountIds = new Set((env.MYWAY_ADMIN_ACCOUNT_IDS ?? "").split(",").map((id) => id.trim()).filter(Boolean));
   const accountId = request.headers.get("oai-authenticated-user-id");
-  return Boolean(accountId && ADMIN_ACCOUNT_IDS.has(accountId));
+  return Boolean(accountId && accountIds.has(accountId));
 }
 
 function isAdminRequest(request: Request, env: Env): boolean {
   const supplied = request.headers.get("x-myway-admin-key");
-  return isAdmin(request) || Boolean(env.MYWAY_ADMIN_SECRET && supplied === env.MYWAY_ADMIN_SECRET);
+  return isAdmin(request, env) || Boolean(env.MYWAY_ADMIN_SECRET && supplied === env.MYWAY_ADMIN_SECRET);
 }
 
 async function isSupabaseAdmin(request: Request, env: Env): Promise<boolean> {
@@ -56,9 +57,9 @@ async function isSupabaseAdmin(request: Request, env: Env): Promise<boolean> {
   } catch { return false; }
 }
 
-function adminCors(response: Response): Response {
+function adminCors(response: Response, env: Env): Response {
   const next = new Response(response.body, response);
-  next.headers.set("Access-Control-Allow-Origin", ADMIN_ORIGIN);
+  next.headers.set("Access-Control-Allow-Origin", env.MYWAY_ADMIN_ORIGIN ?? "");
   next.headers.set("Access-Control-Allow-Methods", "GET, PATCH, OPTIONS");
   next.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization, X-MyWay-Admin-Key");
   next.headers.set("Vary", "Origin");
@@ -85,6 +86,7 @@ async function validScreenshotBytes(bytes: Uint8Array, type: string): Promise<bo
 
 const worker = {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+    const cors = (response: Response) => adminCors(response, env);
     const url = new URL(request.url);
 
     if (url.pathname === "/api/health") {
@@ -97,15 +99,15 @@ const worker = {
     }
 
     if (url.pathname === "/api/admin-visibility" && request.method === "GET") {
-      return Response.json({ authorized: isAdmin(request) }, { headers: { "Cache-Control": "private, no-store" } });
+      return Response.json({ authorized: isAdmin(request, env) }, { headers: { "Cache-Control": "private, no-store" } });
     }
 
     if (url.pathname.startsWith("/api/admin/feedback") && request.method === "OPTIONS") {
-      return adminCors(new Response(null, { status: 204 }));
+      return cors(new Response(null, { status: 204 }));
     }
 
     if (url.pathname === "/api/admin/feedback" && request.method === "GET") {
-      if (!isAdminRequest(request, env) && !await isSupabaseAdmin(request, env)) return adminCors(adminOnly());
+      if (!isAdminRequest(request, env) && !await isSupabaseAdmin(request, env)) return cors(adminOnly());
       try {
         const category = url.searchParams.get("category") ?? "all";
         const status = url.searchParams.get("status") ?? "all";
@@ -134,55 +136,55 @@ const worker = {
           status, internal_notes AS internalNotes, updated_at AS updatedAt, created_at AS createdAt
           FROM feedback_submissions ${where} ORDER BY created_at DESC LIMIT 250`;
         const result = await env.DB.prepare(query).bind(...bindings).all();
-        return adminCors(Response.json({ submissions: result.results }));
+        return cors(Response.json({ submissions: result.results }));
       } catch (error) {
         console.error("Feedback inbox failed", error);
-        return adminCors(Response.json({ error: "The feedback inbox could not be loaded." }, { status: 500 }));
+        return cors(Response.json({ error: "The feedback inbox could not be loaded." }, { status: 500 }));
       }
     }
 
     const adminFeedbackMatch = url.pathname.match(/^\/api\/admin\/feedback\/([^/]+)$/);
     if (adminFeedbackMatch && request.method === "PATCH") {
-      if (!isAdminRequest(request, env) && !await isSupabaseAdmin(request, env)) return adminCors(adminOnly());
+      if (!isAdminRequest(request, env) && !await isSupabaseAdmin(request, env)) return cors(adminOnly());
       try {
         const id = decodeURIComponent(adminFeedbackMatch[1]);
         const body = await request.json() as { status?: string; internalNotes?: string };
         const status = String(body.status ?? "");
         const internalNotes = String(body.internalNotes ?? "").trim().slice(0, 8000);
         if (!FEEDBACK_STATUSES.has(status)) {
-          return adminCors(Response.json({ error: "Invalid feedback status." }, { status: 400 }));
+          return cors(Response.json({ error: "Invalid feedback status." }, { status: 400 }));
         }
         const updatedAt = new Date().toISOString();
         const result = await env.DB.prepare("UPDATE feedback_submissions SET status = ?, internal_notes = ?, updated_at = ? WHERE id = ?")
           .bind(status, internalNotes || null, updatedAt, id).run();
-        if (!result.meta.changes) return adminCors(Response.json({ error: "Feedback was not found." }, { status: 404 }));
-        return adminCors(Response.json({ ok: true, updatedAt }));
+        if (!result.meta.changes) return cors(Response.json({ error: "Feedback was not found." }, { status: 404 }));
+        return cors(Response.json({ ok: true, updatedAt }));
       } catch (error) {
         console.error("Feedback update failed", error);
-        return adminCors(Response.json({ error: "The feedback could not be updated." }, { status: 500 }));
+        return cors(Response.json({ error: "The feedback could not be updated." }, { status: 500 }));
       }
     }
 
     const adminScreenshotMatch = url.pathname.match(/^\/api\/admin\/feedback\/([^/]+)\/screenshot$/);
     if (adminScreenshotMatch && request.method === "GET") {
-      if (!isAdminRequest(request, env) && !await isSupabaseAdmin(request, env)) return adminCors(adminOnly());
+      if (!isAdminRequest(request, env) && !await isSupabaseAdmin(request, env)) return cors(adminOnly());
       try {
         const id = decodeURIComponent(adminScreenshotMatch[1]);
         const row = await env.DB.prepare("SELECT screenshot_key, screenshot_name FROM feedback_submissions WHERE id = ?").bind(id).first<{ screenshot_key: string | null; screenshot_name: string | null }>();
-        if (!row?.screenshot_key) return adminCors(new Response("Screenshot not found", { status: 404 }));
+        if (!row?.screenshot_key) return cors(new Response("Screenshot not found", { status: 404 }));
         const object = await env.BUCKET.get(row.screenshot_key);
-        if (!object) return adminCors(new Response("Screenshot not found", { status: 404 }));
+        if (!object) return cors(new Response("Screenshot not found", { status: 404 }));
         const type = object.httpMetadata?.contentType ?? "";
-        if (!SCREENSHOT_TYPES.has(type) || object.size > 8 * 1024 * 1024) return adminCors(new Response("Unsupported screenshot", { status: 415 }));
+        if (!SCREENSHOT_TYPES.has(type) || object.size > 8 * 1024 * 1024) return cors(new Response("Unsupported screenshot", { status: 415 }));
         const bytes = new Uint8Array(await object.arrayBuffer());
-        if (!await validScreenshotBytes(bytes, type)) return adminCors(new Response("Unsupported screenshot", { status: 415 }));
+        if (!await validScreenshotBytes(bytes, type)) return cors(new Response("Unsupported screenshot", { status: 415 }));
         const headers = new Headers({ "Content-Type": type, "Cache-Control": "private, no-store", "X-Content-Type-Options": "nosniff", "Content-Security-Policy": "default-src 'none'; sandbox" });
         const extension = type === "image/png" ? "png" : type === "image/jpeg" ? "jpg" : "webp";
         headers.set("Content-Disposition", `attachment; filename="feedback-screenshot.${extension}"`);
-        return adminCors(new Response(bytes, { headers }));
+        return cors(new Response(bytes, { headers }));
       } catch (error) {
         console.error("Feedback screenshot failed", error);
-        return adminCors(new Response("Screenshot could not be loaded", { status: 500 }));
+        return cors(new Response("Screenshot could not be loaded", { status: 500 }));
       }
     }
 
