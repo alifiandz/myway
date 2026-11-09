@@ -40,3 +40,20 @@ next-env.d.ts
 /.sites-runtime/
 /outputs/
 /work/
+
+# Local credentials and environment
+.env*
+!.env.example
+.dev.vars*
+*.key
+*.p12
+*.pfx
+credentials*.json
+
+!.dev.vars.example
+
+# Build metadata and release archives
+*.tsbuildinfo
+*.tar.gz
+*.tgz
+*.zip
