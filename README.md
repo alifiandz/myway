@@ -4,7 +4,7 @@
   <p><strong>Explore. Plan. Go Further.</strong></p>
   <p>Discover your options. Build your university pathway. Keep moving toward your future.</p>
   <p><strong><a href="https://mywaypath.com">Explore MyWay →</a></strong> · <a href="#what-you-can-do">Discover the features</a> · <a href="#run-myway-locally">Run it locally</a> · <a href="docs/roadmap.md">See the roadmap</a></p>
-  <p><a href="https://github.com/alifiandz/myway-showcase/actions/workflows/verify.yml"><img src="https://github.com/alifiandz/myway-showcase/actions/workflows/verify.yml/badge.svg" alt="Verify MyWay workflow status" /></a></p>
+  <p><a href="https://github.com/alifiandz/myway/actions/workflows/verify.yml"><img src="https://github.com/alifiandz/myway/actions/workflows/verify.yml/badge.svg" alt="Verify MyWay workflow status" /></a></p>
   <p>
     <img src="https://img.shields.io/badge/React-19.2.6-149eca?style=for-the-badge&amp;logo=react&amp;logoColor=white" alt="React 19.2.6" />
     <img src="https://img.shields.io/badge/TypeScript-5.9.3-3178c6?style=for-the-badge&amp;logo=typescript&amp;logoColor=white" alt="TypeScript 5.9.3" />
@@ -71,8 +71,8 @@ MyWay does not submit university applications or guarantee admission. Confirm el
 Use **Node.js 22.13 or newer** and npm. Linux is the recommended environment for the retained Sites/Vinext scripts; macOS requires the dependencies’ native runtime support.
 
 ```sh
-git clone https://github.com/alifiandz/myway-showcase.git
-cd myway-showcase
+git clone https://github.com/alifiandz/myway.git
+cd myway
 npm ci
 npm run dev
 ```
