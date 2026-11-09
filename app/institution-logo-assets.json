@@ -1,0 +1,591 @@
+{
+  "ft-school-2": {
+    "src": "/institution-logos/reviewed/ft-school-2.png",
+    "background": "#ffffff"
+  },
+  "ft-school-3": {
+    "src": "/institution-logos/reviewed/ft-school-3.svg",
+    "background": "#203462"
+  },
+  "ft-school-4": {
+    "src": "/institution-logos/reviewed/ft-school-4.svg",
+    "background": "#203462"
+  },
+  "ft-school-5": {
+    "src": "/institution-logos/reviewed/ft-school-5.svg",
+    "background": "#ffffff"
+  },
+  "ft-school-10": {
+    "src": "/institution-logos/reviewed/ft-school-10.svg",
+    "background": "#e2001a"
+  },
+  "ft-school-15": {
+    "src": "/institution-logos/reviewed/ft-school-15.svg",
+    "background": "#ffffff"
+  },
+  "ft-school-18": {
+    "src": "/institution-logos/reviewed/ft-school-18.svg",
+    "background": "#ffffff"
+  },
+  "ft-school-19": {
+    "src": "/institution-logos/reviewed/ft-school-19.svg",
+    "background": "#ffffff"
+  },
+  "ft-school-20": {
+    "src": "/institution-logos/reviewed/ft-school-20.svg",
+    "background": "#ffffff"
+  },
+  "ft-school-25": {
+    "src": "/institution-logos/reviewed/ft-school-25.svg",
+    "background": "#ffffff"
+  },
+  "ft-school-27": {
+    "src": "/institution-logos/reviewed/ft-school-27.svg",
+    "background": "#ffffff"
+  },
+  "ft-school-28": {
+    "src": "/institution-logos/reviewed/ft-school-28.svg",
+    "background": "#ffffff"
+  },
+  "ft-school-31": {
+    "src": "/institution-logos/reviewed/ft-school-31.svg",
+    "background": "#203462"
+  },
+  "ft-school-32": {
+    "src": "/institution-logos/reviewed/ft-school-32.svg",
+    "background": "#203462"
+  },
+  "ft-school-35": {
+    "src": "/institution-logos/reviewed/ft-school-35.svg",
+    "background": "#ffffff"
+  },
+  "ft-school-43": {
+    "src": "/institution-logos/reviewed/ft-school-43.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-43-128.webp 128w, /institution-logos/reviewed/ft-school-43-256.webp 256w, /institution-logos/reviewed/ft-school-43.png 464w"
+  },
+  "ft-school-44": {
+    "src": "/institution-logos/reviewed/ft-school-44.svg",
+    "background": "#ffffff"
+  },
+  "ft-school-48": {
+    "src": "/institution-logos/reviewed/ft-school-48.svg",
+    "background": "#ffffff"
+  },
+  "ft-school-49": {
+    "src": "/institution-logos/reviewed/ft-school-49.svg",
+    "background": "#ffffff"
+  },
+  "ft-school-56": {
+    "src": "/institution-logos/reviewed/ft-school-56.svg",
+    "background": "#ffffff"
+  },
+  "ft-school-60": {
+    "src": "/institution-logos/reviewed/ft-school-60.svg",
+    "background": "#ffffff"
+  },
+  "ft-school-63": {
+    "src": "/institution-logos/reviewed/ft-school-63.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-63-128.webp 128w, /institution-logos/reviewed/ft-school-63-256.webp 256w, /institution-logos/reviewed/ft-school-63.png 309w"
+  },
+  "ft-school-69": {
+    "src": "/institution-logos/reviewed/ft-school-69.svg",
+    "background": "#ffffff"
+  },
+  "ft-school-74": {
+    "src": "/institution-logos/reviewed/ft-school-74.svg",
+    "background": "#ffffff"
+  },
+  "ft-school-76": {
+    "src": "/institution-logos/reviewed/ft-school-76.svg",
+    "background": "#ffffff"
+  },
+  "ft-school-97": {
+    "src": "/institution-logos/reviewed/ft-school-97.svg",
+    "background": "#ffffff"
+  },
+  "ft-school-99": {
+    "src": "/institution-logos/reviewed/ft-school-99.svg",
+    "background": "#ffffff"
+  },
+  "verified-school-lse": {
+    "src": "/institution-logos/reviewed/verified-school-lse.svg",
+    "background": "#e0112b"
+  },
+  "verified-school-kings": {
+    "src": "/institution-logos/reviewed/verified-school-kings.svg",
+    "background": "#e2231a"
+  },
+  "verified-school-birmingham": {
+    "src": "/institution-logos/reviewed/verified-school-birmingham.svg",
+    "background": "#ffffff"
+  },
+  "verified-school-sheffield": {
+    "src": "/institution-logos/reviewed/verified-school-sheffield.svg",
+    "background": "#ffffff"
+  },
+  "verified-school-groningen": {
+    "src": "/institution-logos/reviewed/verified-school-groningen.svg",
+    "background": "#ffffff"
+  },
+  "indonesia-ugm": {
+    "src": "/institution-logos/reviewed/indonesia-ugm.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/indonesia-ugm-128.webp 128w, /institution-logos/reviewed/indonesia-ugm-256.webp 256w, /institution-logos/reviewed/indonesia-ugm-512.webp 512w, /institution-logos/reviewed/indonesia-ugm-1024.webp 1024w, /institution-logos/reviewed/indonesia-ugm.png 1263w"
+  },
+  "indonesia-uny": {
+    "src": "/institution-logos/reviewed/indonesia-uny.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/indonesia-uny-128.webp 128w, /institution-logos/reviewed/indonesia-uny-256.webp 256w, /institution-logos/reviewed/indonesia-uny-512.webp 512w, /institution-logos/reviewed/indonesia-uny.png 752w"
+  },
+  "indonesia-uin": {
+    "src": "/institution-logos/reviewed/indonesia-uin.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/indonesia-uin-128.webp 128w, /institution-logos/reviewed/indonesia-uin-256.webp 256w, /institution-logos/reviewed/indonesia-uin-512.webp 512w, /institution-logos/reviewed/indonesia-uin-1024.webp 1024w, /institution-logos/reviewed/indonesia-uin.png 3706w"
+  },
+  "indonesia-ui": {
+    "src": "/institution-logos/reviewed/indonesia-ui.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/indonesia-ui-128.webp 128w, /institution-logos/reviewed/indonesia-ui-256.webp 256w, /institution-logos/reviewed/indonesia-ui.png 405w"
+  },
+  "indonesia-unair": {
+    "src": "/institution-logos/reviewed/indonesia-unair.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/indonesia-unair-128.webp 128w, /institution-logos/reviewed/indonesia-unair-256.webp 256w, /institution-logos/reviewed/indonesia-unair-512.webp 512w, /institution-logos/reviewed/indonesia-unair-1024.webp 1024w, /institution-logos/reviewed/indonesia-unair.png 7501w"
+  },
+  "indonesia-itb": {
+    "src": "/institution-logos/reviewed/indonesia-itb.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/indonesia-itb-128.webp 128w, /institution-logos/reviewed/indonesia-itb-256.webp 256w, /institution-logos/reviewed/indonesia-itb-512.webp 512w, /institution-logos/reviewed/indonesia-itb-1024.webp 1024w, /institution-logos/reviewed/indonesia-itb.png 1095w"
+  },
+  "indonesia-amikom": {
+    "src": "/institution-logos/reviewed/indonesia-amikom.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/indonesia-amikom-128.webp 128w, /institution-logos/reviewed/indonesia-amikom-256.webp 256w, /institution-logos/reviewed/indonesia-amikom.png 453w"
+  },
+  "ft-school-1": {
+    "src": "/institution-logos/reviewed/ft-school-1.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-1-128.webp 128w, /institution-logos/reviewed/ft-school-1-256.webp 256w, /institution-logos/reviewed/ft-school-1.png 330w"
+  },
+  "ft-school-6": {
+    "src": "/institution-logos/reviewed/ft-school-6.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-6-128.webp 128w, /institution-logos/reviewed/ft-school-6.png 168w"
+  },
+  "ft-school-7": {
+    "src": "/institution-logos/reviewed/ft-school-7.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-7.png 113w"
+  },
+  "ft-school-8": {
+    "src": "/institution-logos/reviewed/ft-school-8.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-8-128.webp 128w, /institution-logos/reviewed/ft-school-8-256.webp 256w, /institution-logos/reviewed/ft-school-8-512.webp 512w, /institution-logos/reviewed/ft-school-8-1024.webp 1024w, /institution-logos/reviewed/ft-school-8.png 1180w"
+  },
+  "ft-school-9": {
+    "src": "/institution-logos/reviewed/ft-school-9.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-9-128.webp 128w, /institution-logos/reviewed/ft-school-9-256.webp 256w, /institution-logos/reviewed/ft-school-9-512.webp 512w, /institution-logos/reviewed/ft-school-9-1024.webp 1024w, /institution-logos/reviewed/ft-school-9.png 1178w"
+  },
+  "ft-school-11": {
+    "src": "/institution-logos/reviewed/ft-school-11.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-11-128.webp 128w, /institution-logos/reviewed/ft-school-11.png 151w"
+  },
+  "ft-school-12": {
+    "src": "/institution-logos/reviewed/ft-school-12.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-12-128.webp 128w, /institution-logos/reviewed/ft-school-12-256.webp 256w, /institution-logos/reviewed/ft-school-12-512.webp 512w, /institution-logos/reviewed/ft-school-12-1024.webp 1024w, /institution-logos/reviewed/ft-school-12.png 1168w"
+  },
+  "ft-school-13": {
+    "src": "/institution-logos/reviewed/ft-school-13.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-13-128.webp 128w, /institution-logos/reviewed/ft-school-13-256.webp 256w, /institution-logos/reviewed/ft-school-13-512.webp 512w, /institution-logos/reviewed/ft-school-13.png 880w"
+  },
+  "ft-school-14": {
+    "src": "/institution-logos/reviewed/ft-school-14.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-14-128.webp 128w, /institution-logos/reviewed/ft-school-14-256.webp 256w, /institution-logos/reviewed/ft-school-14.png 314w"
+  },
+  "ft-school-16": {
+    "src": "/institution-logos/reviewed/ft-school-16.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-16-128.webp 128w, /institution-logos/reviewed/ft-school-16-256.webp 256w, /institution-logos/reviewed/ft-school-16-512.webp 512w, /institution-logos/reviewed/ft-school-16-1024.webp 1024w, /institution-logos/reviewed/ft-school-16.png 1186w"
+  },
+  "ft-school-17": {
+    "src": "/institution-logos/reviewed/ft-school-17.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-17-128.webp 128w, /institution-logos/reviewed/ft-school-17-256.webp 256w, /institution-logos/reviewed/ft-school-17-512.webp 512w, /institution-logos/reviewed/ft-school-17-1024.webp 1024w, /institution-logos/reviewed/ft-school-17.png 1182w"
+  },
+  "ft-school-21": {
+    "src": "/institution-logos/reviewed/ft-school-21.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-21.png 89w"
+  },
+  "ft-school-22": {
+    "src": "/institution-logos/reviewed/ft-school-22.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-22-128.webp 128w, /institution-logos/reviewed/ft-school-22.png 182w"
+  },
+  "ft-school-23": {
+    "src": "/institution-logos/reviewed/ft-school-23.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-23.png 128w"
+  },
+  "ft-school-24": {
+    "src": "/institution-logos/reviewed/ft-school-24.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-24-128.webp 128w, /institution-logos/reviewed/ft-school-24-256.webp 256w, /institution-logos/reviewed/ft-school-24.png 378w"
+  },
+  "ft-school-26": {
+    "src": "/institution-logos/reviewed/ft-school-26.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-26-128.webp 128w, /institution-logos/reviewed/ft-school-26-256.webp 256w, /institution-logos/reviewed/ft-school-26-512.webp 512w, /institution-logos/reviewed/ft-school-26-1024.webp 1024w, /institution-logos/reviewed/ft-school-26.png 1196w"
+  },
+  "ft-school-29": {
+    "src": "/institution-logos/reviewed/ft-school-29.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-29-128.webp 128w, /institution-logos/reviewed/ft-school-29-256.webp 256w, /institution-logos/reviewed/ft-school-29-512.webp 512w, /institution-logos/reviewed/ft-school-29-1024.webp 1024w, /institution-logos/reviewed/ft-school-29.png 1186w"
+  },
+  "ft-school-30": {
+    "src": "/institution-logos/reviewed/ft-school-30.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-30-128.webp 128w, /institution-logos/reviewed/ft-school-30-256.webp 256w, /institution-logos/reviewed/ft-school-30-512.webp 512w, /institution-logos/reviewed/ft-school-30.png 867w"
+  },
+  "ft-school-33": {
+    "src": "/institution-logos/reviewed/ft-school-33.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-33-128.webp 128w, /institution-logos/reviewed/ft-school-33-256.webp 256w, /institution-logos/reviewed/ft-school-33.png 273w"
+  },
+  "ft-school-34": {
+    "src": "/institution-logos/reviewed/ft-school-34.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-34-128.webp 128w, /institution-logos/reviewed/ft-school-34-256.webp 256w, /institution-logos/reviewed/ft-school-34-512.webp 512w, /institution-logos/reviewed/ft-school-34.png 764w"
+  },
+  "ft-school-36": {
+    "src": "/institution-logos/reviewed/ft-school-36.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-36-128.webp 128w, /institution-logos/reviewed/ft-school-36-256.webp 256w, /institution-logos/reviewed/ft-school-36.png 350w"
+  },
+  "ft-school-37": {
+    "src": "/institution-logos/reviewed/ft-school-37.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-37-128.webp 128w, /institution-logos/reviewed/ft-school-37-256.webp 256w, /institution-logos/reviewed/ft-school-37.png 341w"
+  },
+  "ft-school-38": {
+    "src": "/institution-logos/reviewed/ft-school-38.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-38-128.webp 128w, /institution-logos/reviewed/ft-school-38-256.webp 256w, /institution-logos/reviewed/ft-school-38-512.webp 512w, /institution-logos/reviewed/ft-school-38-1024.webp 1024w, /institution-logos/reviewed/ft-school-38.png 1200w"
+  },
+  "ft-school-39": {
+    "src": "/institution-logos/reviewed/ft-school-39.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-39-128.webp 128w, /institution-logos/reviewed/ft-school-39-256.webp 256w, /institution-logos/reviewed/ft-school-39-512.webp 512w, /institution-logos/reviewed/ft-school-39-1024.webp 1024w, /institution-logos/reviewed/ft-school-39.png 1190w"
+  },
+  "ft-school-40": {
+    "src": "/institution-logos/reviewed/ft-school-40.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-40-128.webp 128w, /institution-logos/reviewed/ft-school-40.png 251w"
+  },
+  "ft-school-41": {
+    "src": "/institution-logos/reviewed/ft-school-41.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-41.png 67w"
+  },
+  "ft-school-42": {
+    "src": "/institution-logos/reviewed/ft-school-42.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-42-128.webp 128w, /institution-logos/reviewed/ft-school-42.png 136w"
+  },
+  "ft-school-45": {
+    "src": "/institution-logos/reviewed/ft-school-45.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-45-128.webp 128w, /institution-logos/reviewed/ft-school-45-256.webp 256w, /institution-logos/reviewed/ft-school-45-512.webp 512w, /institution-logos/reviewed/ft-school-45-1024.webp 1024w, /institution-logos/reviewed/ft-school-45.png 1178w"
+  },
+  "ft-school-46": {
+    "src": "/institution-logos/reviewed/ft-school-46.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-46-128.webp 128w, /institution-logos/reviewed/ft-school-46.png 218w"
+  },
+  "ft-school-47": {
+    "src": "/institution-logos/reviewed/ft-school-47.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-47-128.webp 128w, /institution-logos/reviewed/ft-school-47.png 200w"
+  },
+  "ft-school-50": {
+    "src": "/institution-logos/reviewed/ft-school-50.png",
+    "background": "#20357a",
+    "srcSet": "/institution-logos/reviewed/ft-school-50.png 120w"
+  },
+  "ft-school-51": {
+    "src": "/institution-logos/reviewed/ft-school-51.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-51-128.webp 128w, /institution-logos/reviewed/ft-school-51-256.webp 256w, /institution-logos/reviewed/ft-school-51-512.webp 512w, /institution-logos/reviewed/ft-school-51.png 589w"
+  },
+  "ft-school-52": {
+    "src": "/institution-logos/reviewed/ft-school-52.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-52-128.webp 128w, /institution-logos/reviewed/ft-school-52-256.webp 256w, /institution-logos/reviewed/ft-school-52-512.webp 512w, /institution-logos/reviewed/ft-school-52-1024.webp 1024w, /institution-logos/reviewed/ft-school-52.png 1188w"
+  },
+  "ft-school-53": {
+    "src": "/institution-logos/reviewed/ft-school-53.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-53-128.webp 128w, /institution-logos/reviewed/ft-school-53-256.webp 256w, /institution-logos/reviewed/ft-school-53.png 317w"
+  },
+  "ft-school-54": {
+    "src": "/institution-logos/reviewed/ft-school-54.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-54-128.webp 128w, /institution-logos/reviewed/ft-school-54-256.webp 256w, /institution-logos/reviewed/ft-school-54-512.webp 512w, /institution-logos/reviewed/ft-school-54-1024.webp 1024w, /institution-logos/reviewed/ft-school-54.png 1193w"
+  },
+  "ft-school-55": {
+    "src": "/institution-logos/reviewed/ft-school-55.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-55-128.webp 128w, /institution-logos/reviewed/ft-school-55-256.webp 256w, /institution-logos/reviewed/ft-school-55-512.webp 512w, /institution-logos/reviewed/ft-school-55.png 788w"
+  },
+  "ft-school-57": {
+    "src": "/institution-logos/reviewed/ft-school-57.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-57-128.webp 128w, /institution-logos/reviewed/ft-school-57-256.webp 256w, /institution-logos/reviewed/ft-school-57.png 426w"
+  },
+  "ft-school-58": {
+    "src": "/institution-logos/reviewed/ft-school-58.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-58-128.webp 128w, /institution-logos/reviewed/ft-school-58.png 184w"
+  },
+  "ft-school-59": {
+    "src": "/institution-logos/reviewed/ft-school-59.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-59-128.webp 128w, /institution-logos/reviewed/ft-school-59-256.webp 256w, /institution-logos/reviewed/ft-school-59-512.webp 512w, /institution-logos/reviewed/ft-school-59.png 553w"
+  },
+  "ft-school-61": {
+    "src": "/institution-logos/reviewed/ft-school-61.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-61-128.webp 128w, /institution-logos/reviewed/ft-school-61-256.webp 256w, /institution-logos/reviewed/ft-school-61.png 512w"
+  },
+  "ft-school-62": {
+    "src": "/institution-logos/reviewed/ft-school-62.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-62-128.webp 128w, /institution-logos/reviewed/ft-school-62-256.webp 256w, /institution-logos/reviewed/ft-school-62-512.webp 512w, /institution-logos/reviewed/ft-school-62.png 560w"
+  },
+  "ft-school-64": {
+    "src": "/institution-logos/reviewed/ft-school-64.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-64-128.webp 128w, /institution-logos/reviewed/ft-school-64-256.webp 256w, /institution-logos/reviewed/ft-school-64-512.webp 512w, /institution-logos/reviewed/ft-school-64.png 988w"
+  },
+  "ft-school-65": {
+    "src": "/institution-logos/reviewed/ft-school-65.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-65-128.webp 128w, /institution-logos/reviewed/ft-school-65-256.webp 256w, /institution-logos/reviewed/ft-school-65-512.webp 512w, /institution-logos/reviewed/ft-school-65.png 823w"
+  },
+  "ft-school-66": {
+    "src": "/institution-logos/reviewed/ft-school-66.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-66-128.webp 128w, /institution-logos/reviewed/ft-school-66-256.webp 256w, /institution-logos/reviewed/ft-school-66-512.webp 512w, /institution-logos/reviewed/ft-school-66-1024.webp 1024w, /institution-logos/reviewed/ft-school-66.png 1187w"
+  },
+  "ft-school-67": {
+    "src": "/institution-logos/reviewed/ft-school-67.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-67-128.webp 128w, /institution-logos/reviewed/ft-school-67.png 254w"
+  },
+  "ft-school-68": {
+    "src": "/institution-logos/reviewed/ft-school-68.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-68-128.webp 128w, /institution-logos/reviewed/ft-school-68.png 161w"
+  },
+  "ft-school-70": {
+    "src": "/institution-logos/reviewed/ft-school-70.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-70-128.webp 128w, /institution-logos/reviewed/ft-school-70-256.webp 256w, /institution-logos/reviewed/ft-school-70-512.webp 512w, /institution-logos/reviewed/ft-school-70-1024.webp 1024w, /institution-logos/reviewed/ft-school-70.png 1176w"
+  },
+  "ft-school-71": {
+    "src": "/institution-logos/reviewed/ft-school-71.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-71-128.webp 128w, /institution-logos/reviewed/ft-school-71-256.webp 256w, /institution-logos/reviewed/ft-school-71-512.webp 512w, /institution-logos/reviewed/ft-school-71-1024.webp 1024w, /institution-logos/reviewed/ft-school-71.png 1188w"
+  },
+  "ft-school-72": {
+    "src": "/institution-logos/reviewed/ft-school-72.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-72-128.webp 128w, /institution-logos/reviewed/ft-school-72-256.webp 256w, /institution-logos/reviewed/ft-school-72-512.webp 512w, /institution-logos/reviewed/ft-school-72-1024.webp 1024w, /institution-logos/reviewed/ft-school-72.png 1184w"
+  },
+  "ft-school-73": {
+    "src": "/institution-logos/reviewed/ft-school-73.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-73-128.webp 128w, /institution-logos/reviewed/ft-school-73-256.webp 256w, /institution-logos/reviewed/ft-school-73-512.webp 512w, /institution-logos/reviewed/ft-school-73-1024.webp 1024w, /institution-logos/reviewed/ft-school-73.png 1182w"
+  },
+  "ft-school-75": {
+    "src": "/institution-logos/reviewed/ft-school-75.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-75-128.webp 128w, /institution-logos/reviewed/ft-school-75-256.webp 256w, /institution-logos/reviewed/ft-school-75.png 257w"
+  },
+  "ft-school-77": {
+    "src": "/institution-logos/reviewed/ft-school-77.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-77-128.webp 128w, /institution-logos/reviewed/ft-school-77-256.webp 256w, /institution-logos/reviewed/ft-school-77-512.webp 512w, /institution-logos/reviewed/ft-school-77-1024.webp 1024w, /institution-logos/reviewed/ft-school-77.png 1172w"
+  },
+  "ft-school-78": {
+    "src": "/institution-logos/reviewed/ft-school-78.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-78-128.webp 128w, /institution-logos/reviewed/ft-school-78.png 157w"
+  },
+  "ft-school-79": {
+    "src": "/institution-logos/reviewed/ft-school-79.png",
+    "background": "#0371bc",
+    "srcSet": "/institution-logos/reviewed/ft-school-79-128.webp 128w, /institution-logos/reviewed/ft-school-79.png 150w"
+  },
+  "ft-school-80": {
+    "src": "/institution-logos/reviewed/ft-school-80.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-80-128.webp 128w, /institution-logos/reviewed/ft-school-80-256.webp 256w, /institution-logos/reviewed/ft-school-80-512.webp 512w, /institution-logos/reviewed/ft-school-80.png 1020w"
+  },
+  "ft-school-81": {
+    "src": "/institution-logos/reviewed/ft-school-81.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-81-128.webp 128w, /institution-logos/reviewed/ft-school-81-256.webp 256w, /institution-logos/reviewed/ft-school-81-512.webp 512w, /institution-logos/reviewed/ft-school-81.png 606w"
+  },
+  "ft-school-82": {
+    "src": "/institution-logos/reviewed/ft-school-82.png",
+    "background": "#07141f",
+    "srcSet": "/institution-logos/reviewed/ft-school-82-128.webp 128w, /institution-logos/reviewed/ft-school-82.png 150w"
+  },
+  "ft-school-83": {
+    "src": "/institution-logos/reviewed/ft-school-83.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-83-128.webp 128w, /institution-logos/reviewed/ft-school-83-256.webp 256w, /institution-logos/reviewed/ft-school-83-512.webp 512w, /institution-logos/reviewed/ft-school-83-1024.webp 1024w, /institution-logos/reviewed/ft-school-83.png 1178w"
+  },
+  "ft-school-84": {
+    "src": "/institution-logos/reviewed/ft-school-84.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-84-128.webp 128w, /institution-logos/reviewed/ft-school-84.png 163w"
+  },
+  "ft-school-85": {
+    "src": "/institution-logos/reviewed/ft-school-85.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-85-128.webp 128w, /institution-logos/reviewed/ft-school-85-256.webp 256w, /institution-logos/reviewed/ft-school-85-512.webp 512w, /institution-logos/reviewed/ft-school-85-1024.webp 1024w, /institution-logos/reviewed/ft-school-85.png 1178w"
+  },
+  "ft-school-86": {
+    "src": "/institution-logos/reviewed/ft-school-86.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-86-128.webp 128w, /institution-logos/reviewed/ft-school-86-256.webp 256w, /institution-logos/reviewed/ft-school-86-512.webp 512w, /institution-logos/reviewed/ft-school-86-1024.webp 1024w, /institution-logos/reviewed/ft-school-86.png 1186w"
+  },
+  "ft-school-87": {
+    "src": "/institution-logos/reviewed/ft-school-87.png",
+    "background": "#00345c",
+    "srcSet": "/institution-logos/reviewed/ft-school-87-128.webp 128w, /institution-logos/reviewed/ft-school-87-256.webp 256w, /institution-logos/reviewed/ft-school-87-512.webp 512w, /institution-logos/reviewed/ft-school-87-1024.webp 1024w, /institution-logos/reviewed/ft-school-87.png 1200w"
+  },
+  "ft-school-88": {
+    "src": "/institution-logos/reviewed/ft-school-88.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-88-128.webp 128w, /institution-logos/reviewed/ft-school-88-256.webp 256w, /institution-logos/reviewed/ft-school-88-512.webp 512w, /institution-logos/reviewed/ft-school-88-1024.webp 1024w, /institution-logos/reviewed/ft-school-88.png 1188w"
+  },
+  "ft-school-89": {
+    "src": "/institution-logos/reviewed/ft-school-89.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-89-128.webp 128w, /institution-logos/reviewed/ft-school-89-256.webp 256w, /institution-logos/reviewed/ft-school-89.png 308w"
+  },
+  "ft-school-90": {
+    "src": "/institution-logos/reviewed/ft-school-90.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-90-128.webp 128w, /institution-logos/reviewed/ft-school-90-256.webp 256w, /institution-logos/reviewed/ft-school-90.png 347w"
+  },
+  "ft-school-91": {
+    "src": "/institution-logos/reviewed/ft-school-91.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-91-128.webp 128w, /institution-logos/reviewed/ft-school-91.png 200w"
+  },
+  "ft-school-92": {
+    "src": "/institution-logos/reviewed/ft-school-92.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-92-128.webp 128w, /institution-logos/reviewed/ft-school-92-256.webp 256w, /institution-logos/reviewed/ft-school-92-512.webp 512w, /institution-logos/reviewed/ft-school-92.png 681w"
+  },
+  "ft-school-93": {
+    "src": "/institution-logos/reviewed/ft-school-93.png",
+    "background": "#df0015",
+    "srcSet": "/institution-logos/reviewed/ft-school-93-128.webp 128w, /institution-logos/reviewed/ft-school-93-256.webp 256w, /institution-logos/reviewed/ft-school-93-512.webp 512w, /institution-logos/reviewed/ft-school-93-1024.webp 1024w, /institution-logos/reviewed/ft-school-93.png 1200w"
+  },
+  "ft-school-94": {
+    "src": "/institution-logos/reviewed/ft-school-94.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-94-128.webp 128w, /institution-logos/reviewed/ft-school-94-256.webp 256w, /institution-logos/reviewed/ft-school-94-512.webp 512w, /institution-logos/reviewed/ft-school-94.png 819w"
+  },
+  "ft-school-95": {
+    "src": "/institution-logos/reviewed/ft-school-95.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-95-128.webp 128w, /institution-logos/reviewed/ft-school-95-256.webp 256w, /institution-logos/reviewed/ft-school-95-512.webp 512w, /institution-logos/reviewed/ft-school-95-1024.webp 1024w, /institution-logos/reviewed/ft-school-95.png 1178w"
+  },
+  "ft-school-96": {
+    "src": "/institution-logos/reviewed/ft-school-96.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-96-128.webp 128w, /institution-logos/reviewed/ft-school-96-256.webp 256w, /institution-logos/reviewed/ft-school-96-512.webp 512w, /institution-logos/reviewed/ft-school-96-1024.webp 1024w, /institution-logos/reviewed/ft-school-96.png 1170w"
+  },
+  "ft-school-98": {
+    "src": "/institution-logos/reviewed/ft-school-98.png",
+    "background": "#ee3123",
+    "srcSet": "/institution-logos/reviewed/ft-school-98.png 42w"
+  },
+  "ft-school-100": {
+    "src": "/institution-logos/reviewed/ft-school-100.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/ft-school-100-128.webp 128w, /institution-logos/reviewed/ft-school-100-256.webp 256w, /institution-logos/reviewed/ft-school-100-512.webp 512w, /institution-logos/reviewed/ft-school-100.png 709w"
+  },
+  "verified-school-liverpool": {
+    "src": "/institution-logos/reviewed/verified-school-liverpool.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/verified-school-liverpool-128.webp 128w, /institution-logos/reviewed/verified-school-liverpool.png 200w"
+  },
+  "verified-school-twente": {
+    "src": "/institution-logos/reviewed/verified-school-twente.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/verified-school-twente-128.webp 128w, /institution-logos/reviewed/verified-school-twente.png 156w"
+  },
+  "verified-school-southampton": {
+    "src": "/institution-logos/reviewed/verified-school-southampton.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/verified-school-southampton-128.webp 128w, /institution-logos/reviewed/verified-school-southampton.png 158w"
+  },
+  "verified-school-sussex": {
+    "src": "/institution-logos/reviewed/verified-school-sussex.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/verified-school-sussex-128.webp 128w, /institution-logos/reviewed/verified-school-sussex.png 152w"
+  },
+  "verified-school-qmul": {
+    "src": "/institution-logos/reviewed/verified-school-qmul.png",
+    "background": "#21386a",
+    "srcSet": "/institution-logos/reviewed/verified-school-qmul-128.webp 128w, /institution-logos/reviewed/verified-school-qmul.png 200w"
+  },
+  "verified-school-radboud": {
+    "src": "/institution-logos/reviewed/verified-school-radboud.png",
+    "background": "#e30615",
+    "srcSet": "/institution-logos/reviewed/verified-school-radboud-128.webp 128w, /institution-logos/reviewed/verified-school-radboud.png 200w"
+  },
+  "verified-school-newcastle": {
+    "src": "/institution-logos/reviewed/verified-school-newcastle.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/verified-school-newcastle-128.webp 128w, /institution-logos/reviewed/verified-school-newcastle.png 199w"
+  },
+  "verified-school-cardiff": {
+    "src": "/institution-logos/reviewed/verified-school-cardiff.png",
+    "background": "#e3251b",
+    "srcSet": "/institution-logos/reviewed/verified-school-cardiff-128.webp 128w, /institution-logos/reviewed/verified-school-cardiff.png 200w"
+  },
+  "verified-school-nus": {
+    "src": "/institution-logos/reviewed/verified-school-nus.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/verified-school-nus.png 104w"
+  },
+  "indonesia-its": {
+    "src": "/institution-logos/reviewed/indonesia-its-emblem.png",
+    "background": "#ffffff",
+    "srcSet": "/institution-logos/reviewed/indonesia-its-emblem-128.webp 128w, /institution-logos/reviewed/indonesia-its-emblem-256.webp 256w, /institution-logos/reviewed/indonesia-its-emblem-512.webp 512w, /institution-logos/reviewed/indonesia-its-emblem-1024.webp 1024w, /institution-logos/reviewed/indonesia-its-emblem.png 1559w"
+  },
+  "indonesia-undip": {
+    "src": "/institution-logos/reviewed/indonesia-undip.png",
+    "background": "#fff"
+  },
+  "indonesia-ub": {
+    "src": "/institution-logos/reviewed/indonesia-ub-512.webp",
+    "background": "#fff",
+    "srcSet": "/institution-logos/reviewed/indonesia-ub-128.webp 128w, /institution-logos/reviewed/indonesia-ub-256.webp 256w, /institution-logos/reviewed/indonesia-ub-512.webp 512w, /institution-logos/reviewed/indonesia-ub-1024.webp 1024w"
+  }
+}

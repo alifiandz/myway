@@ -1,0 +1,7 @@
+# Copy to ignored .dev.vars and configure your own local services.
+SUPABASE_URL=
+SUPABASE_PUBLISHABLE_KEY=
+SUPABASE_GOOGLE_ENABLED=false
+MYWAY_ADMIN_ACCOUNT_IDS=
+MYWAY_ADMIN_SECRET=
+MYWAY_ADMIN_ORIGIN=

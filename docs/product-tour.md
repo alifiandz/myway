@@ -4,7 +4,7 @@ MyWay’s central idea is that university discovery should lead somewhere: a sho
 
 ## 1. Explore your direction
 
-Start with business-related programmes and the preferences that matter to you. Programme-fit explanations consider recorded evidence rather than treating every university as equally suitable.
+Start with universities in Indonesia and internationally, then inspect programmes and the preferences that matter to you. Programme-fit explanations consider recorded evidence rather than treating every university as equally suitable.
 
 A fit result describes alignment with preferences. It does not predict admission. Missing information can change the result and should be checked against official university sources.
 
@@ -35,15 +35,15 @@ Tasks, habits, and progress make the next step easier to see. Progress describes
 
 ## 4. Use dates you can verify
 
-A deadline reminder is only useful when the date is reliable. The public reminder example accepts explicit calendar dates, rejects invalid ones, and respects completed actions and notification preferences.
+A deadline reminder is only useful when the date is reliable. The reminder logic accepts explicit calendar dates, rejects invalid ones, and respects completed actions and notification preferences.
 
-The example does not fetch live admissions dates or send push/email notifications. Check official university sources for intake-specific dates.
+The standalone reminder example does not fetch live admissions dates or send push/email notifications. Check official university sources for intake-specific dates.
 
 ## 5. Keep planning changes intentional
 
-The public sync example demonstrates revision-aware writes and conflict handling. It preserves conflicting local work and waits for an explicit choice instead of silently selecting a winner.
+The preserved engineering sync example demonstrates revision-aware writes and conflict handling. It preserves conflicting local work and waits for an explicit choice instead of silently selecting a winner.
 
-The tests simulate a backend in memory. Real account ownership and database access policies remain responsibilities of the full application.
+The tests simulate a backend in memory. The full application source, cloud-document code, and schema policies are now included. Live service configuration and policy validation remain separate deployment responsibilities.
 
 ## Try the product or inspect the logic
 

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {buildPlanningReminders,calendarDay,localCalendarDate} from '../src/planning-reminders.ts';
+import {buildPlanningReminders,calendarDay,localCalendarDate} from '../app/planning-reminders.ts';
 const apps=[{p:{id:'one',university:'University One'},role:'Dream'},{p:{id:'two',university:'University Two'},role:'Target'}];
 test('reminders respect pause, due-today and the 14-day window',()=>{
  const records={'one:deadline':'2026-10-09','two:deadline':'2026-10-23'};

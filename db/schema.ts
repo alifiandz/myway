@@ -1,0 +1,27 @@
+import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+
+export const feedbackSubmissions = sqliteTable("feedback_submissions", {
+  id: text("id").primaryKey(),
+  category: text("category").notNull(),
+  details: text("details").notNull(),
+  expected: text("expected"),
+  pageFeature: text("page_feature"),
+  informationCategory: text("information_category"),
+  reviewRequest: text("review_request"),
+  sourceUrl: text("source_url"),
+  name: text("name"),
+  email: text("email"),
+  mayContact: integer("may_contact", { mode: "boolean" }).notNull().default(false),
+  pageUrl: text("page_url").notNull(),
+  university: text("university"),
+  programme: text("programme"),
+  locale: text("locale"),
+  userAgent: text("user_agent"),
+  viewport: text("viewport"),
+  screenshotKey: text("screenshot_key"),
+  screenshotName: text("screenshot_name"),
+  status: text("status").notNull().default("new"),
+  internalNotes: text("internal_notes"),
+  updatedAt: text("updated_at"),
+  createdAt: text("created_at").notNull(),
+});

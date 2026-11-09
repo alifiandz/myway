@@ -1,127 +1,155 @@
 <div align="center">
-  <img src="assets/myway-mark.png" alt="MyWay logo" width="100" />
+  <img src="assets/myway-mark.png" alt="MyWay logo" width="250" />
   <h1>MyWay</h1>
-  <p><strong>Your future. Your way.</strong></p>
-  <p>Explore your options. Choose your direction. Build your university pathway.</p>
-  <p><strong><a href="https://mywaypath.com">Explore MyWay →</a></strong> · <a href="#what-you-can-do">Discover the features</a> · <a href="#run-the-code">Run the code</a></p>
+  <p><strong>Explore. Plan. Go Further.</strong></p>
+  <p>Discover your options. Build your university pathway. Keep moving toward your future.</p>
+  <p><strong><a href="https://mywaypath.com">Explore MyWay →</a></strong> · <a href="#what-you-can-do">Discover the features</a> · <a href="#run-myway-locally">Run it locally</a> · <a href="docs/roadmap.md">See the roadmap</a></p>
   <p><a href="https://github.com/alifiandz/myway-showcase/actions/workflows/verify.yml"><img src="https://github.com/alifiandz/myway-showcase/actions/workflows/verify.yml/badge.svg" alt="Verify MyWay workflow status" /></a></p>
   <p>
     <img src="https://img.shields.io/badge/React-19.2.6-149eca?style=for-the-badge&amp;logo=react&amp;logoColor=white" alt="React 19.2.6" />
     <img src="https://img.shields.io/badge/TypeScript-5.9.3-3178c6?style=for-the-badge&amp;logo=typescript&amp;logoColor=white" alt="TypeScript 5.9.3" />
     <img src="https://img.shields.io/badge/Vite-8.0.13-646cff?style=for-the-badge&amp;logo=vite&amp;logoColor=white" alt="Vite 8.0.13" />
+    <img src="https://img.shields.io/badge/Supabase-Accounts_%26_Data-3ecf8e?style=for-the-badge&amp;logo=supabase&amp;logoColor=white" alt="Supabase accounts and data" />
     <img src="https://img.shields.io/badge/Node.js-22.13%2B-43853d?style=for-the-badge&amp;logo=nodedotjs&amp;logoColor=white" alt="Node.js 22.13 or newer" />
   </p>
-  <p><sub>Application stack shown above · Public engineering examples run with Node.js alone</sub></p>
 </div>
 
 ## A university shortlist is only the beginning.
 
 **MyWay helps students move from “Where could I study?” to “What should I prepare next?”**
 
-Explore business-related university programmes, compare the options that matter to you, and organize your choices into a personal pathway. Put your preferences, requirements, records, evidence, and next actions in context rather than keeping them scattered across tabs and notes.
+Explore universities in Indonesia and internationally, look closer at faculties and study programmes, and compare the options that matter to you. Organize your choices as **Dream, Target, or Alternative**, then bring requirements, dates, documents, and preparation work into a personal pathway.
 
-A Dream university gives you a direction. Target and Alternative choices give you options. Your pathway connects those choices to preparation you can actually work on.
+Your dashboard connects the big goal with the next action. Tasks, habits, focus sessions, and progress views help turn research into preparation you can keep building.
 
-<p align="center"><img src="assets/student-journey.svg" alt="MyWay journey: explore programmes, choose Dream, Target and Alternative universities, and prepare through requirements, records, evidence and actions" width="100%" /></p>
+<p align="center"><img src="assets/student-journey.svg" alt="Explore programmes, choose Dream, Target and Alternative options, and prepare through requirements, records, evidence and actions" width="100%" /></p>
 
 ## What you can do
 
 | Your goal | How MyWay helps |
 | --- | --- |
-| Find a direction that reflects your interests | Explore business-related programmes alongside recorded study information and your preferences. |
-| Understand why an option appears relevant | Programme-fit explanations surface contributing factors and missing must-have evidence. |
-| Keep your options organized | Save and compare universities, then give each pathway choice a Dream, Target, or Alternative role. |
-| Know what preparation involves | Bring requirements, student records, supporting evidence, and actions into a personal pathway. |
-| Keep moving between big milestones | Organize tasks and habits and review preparation progress. |
-| Pay attention to the right dates | Planning reminders use explicit calendar dates and respect completed actions and preferences. |
-| Continue your planning across sessions | Account planning sync includes revision checks and an explicit conflict-resolution path. |
+| Understand your university options | Indonesia and international discovery, search, filters, programme information, and links to source evidence. |
+| Make a more informed shortlist | Save universities, compare choices, and organize Dream, Target, and Alternative pathways. |
+| See why a programme may fit | Preference-based fit explanations make contributing factors and missing must-have evidence visible. |
+| Know what to prepare | Pathway stages connect admission requirements, student records, supporting evidence, and next actions. |
+| Keep important documents together | A document vault supports local file handling and configured account-based cloud storage and synchronization. |
+| Turn preparation into consistent work | Tasks, habits, a month calendar, and focus-session tools support day-to-day preparation. |
+| See what still needs attention | Readiness views, progress, and date-based planning reminders surface unfinished work. |
+| Continue across devices | Account planning revision checks, conflict notices, and document-sync code support continuity when backend services are configured. |
+| Keep the directory useful | Administrator tools support university and logo review, feedback, and authorized account/usage information. |
 
-[Take a closer look at the student journey →](docs/product-tour.md)
+[Walk through the product →](docs/product-tour.md)
+
+## A look inside MyWay
+
+<p align="center"><img src="public/welcome/assets/product/dashboard.webp" alt="MyWay dashboard showing sample pathway readiness, a chosen university and next preparation actions" width="100%" /></p>
+
+<table><tr><td width="50%"><img src="public/welcome/assets/product/explore.webp" alt="MyWay university exploration screen" /><br /><strong>Explore your options</strong></td><td width="50%"><img src="public/welcome/assets/product/pathway.webp" alt="MyWay personal university pathway screen" /><br /><strong>Build your pathway</strong></td></tr></table>
+
+<sub>Existing product screenshots captured with public catalogue and explicitly synthetic/example progress. No student account or private documents are shown. The captures predate the current transparent logo refresh; see the current mark above.</sub>
+
+## The application source is here
+
+This repository now includes the **full application source snapshot corresponding to Sites v182**, alongside the original public engineering examples. It includes pages, shared modules, styles, the landing experience, assets, Worker/API code, database migrations, and regression tests.
+
+The earlier version of this repository contained only three extracted modules. Those examples are preserved under [`examples/engineering/`](examples/engineering/) so their original ten-test suite can still run independently.
+
+This is a source release, not a copy of production data or a claim that every production integration has been independently verified. Live accounts, private documents, feedback records, university database rows, runtime secrets, and deployment credentials are not included.
 
 ## Built around clearer decisions
 
-- **Reasons alongside results.** Programme fit explains preference alignment; it is not an admission probability.
-- **Missing evidence stays visible.** An unverified must-have should not quietly become a confident recommendation.
-- **Dates should be real.** Ambiguous or impossible dates must not become fabricated deadline reminders.
-- **Your choices should not disappear silently.** Revision-aware planning sync handles conflicting browser changes explicitly.
-- **Information needs upkeep.** The full application includes an operator workspace for reviewing university facts, source evidence, and logos.
+- **Readiness is preparation, not an admission prediction.** Progress describes completed preparation work.
+- **Fit needs context.** Preference alignment should show its reasons and unverified must-haves.
+- **Dates should be real.** Unknown or ambiguous dates should not become fabricated deadline reminders.
+- **Changes should be intentional.** Planning revisions and conflict notices help avoid silently overwriting work.
+- **Private files need account boundaries.** Local and cloud document implementations are included; their production authorization and recovery still need environment-specific validation.
 
-MyWay supports preparation and comparison. Admissions decisions, eligibility, fees, and dates must be confirmed with the university’s official sources.
+MyWay does not submit university applications or guarantee admission. Confirm eligibility, fees, intakes, and deadlines with each university’s official sources.
 
-## Current project status
+## Run MyWay locally
 
-MyWay is a working product project by [Alif](https://github.com/alifiandz), developed through product, design, data, and reliability iterations with AI-assisted implementation.
-
-**This public repository is the engineering showcase:** three runnable modules, ten tests using synthetic data, product documentation, and the decisions behind the work. The complete application is maintained separately and is not included in this repository.
-
-The examples were extracted from the application’s **v133 source snapshot**. Their tests demonstrate selected logic; they do not establish the current live website’s availability, database security, or end-to-end correctness. The v133 application snapshot previously passed TypeScript, a production build, and 48 application tests; that is historical snapshot evidence, not this repository’s test count.
-
-[Read the scope and next priorities →](docs/project-status.md)
-
-## Run the code
-
-Use **Node.js 22.13 or newer**:
+Use **Node.js 22.13 or newer** and npm. Linux is the recommended environment for the retained Sites/Vinext scripts; macOS requires the dependencies’ native runtime support.
 
 ```sh
 git clone https://github.com/alifiandz/myway-showcase.git
 cd myway-showcase
-npm test
+npm ci
+npm run dev
 ```
 
-No package installation, account, API key, or production database is required. The command runs all ten public example tests. It does not start the full MyWay website.
+Open the local address printed by Vite. Local browsing can use the bundled catalogue and assets. Account, cloud-document, catalogue API, and administration features need your own configured services; missing configuration is not a working production backend.
 
-GitHub Actions runs the same suite for changes to `main` and for pull requests. Its badge above reports the actual workflow status.
+See [local setup and configuration](docs/setup.md) before testing connected features.
 
-## Engineering you can inspect
+### Check and build
 
-| Module | The decision | Verification |
-| --- | --- | --- |
-| [Programme fit](src/programme-fit.ts) | Separate preferences from must-haves and expose evidence gaps. | Confirmed, missing, and negative evidence; incomplete profiles; selection across a 100-candidate synthetic catalogue. |
-| [Account sync](src/account-sync.ts) | Use expected revisions so a stale browser cannot silently overwrite newer planning. | Cross-browser refresh, preserved conflicting local data, and stale-write refusal using an in-memory test backend. |
-| [Planning reminders](src/planning-reminders.ts) | Validate explicit calendar dates and scope reminders to the relevant programme. | Due-today, overdue, future-window, completed, paused, invalid-date, and programme-scoped records. |
+```sh
+npm run typecheck
+npm test
+npm run test:examples
+```
 
-[Explore the reasoning, tradeoffs, and limitations →](docs/engineering.md)
+`npm test` builds the Worker, validates the deployment artifact, and runs the full application regression suite. The build is generated in `dist/`. `npm run test:examples` runs the original ten synthetic-data examples without calling production services.
+
+GitHub Actions runs these checks without deployment credentials. A green badge means the repository checks passed; it does not certify a live database or production security configuration.
+
+## Where MyWay goes next
+
+The roadmap strengthens the product that already exists:
+
+1. **Better university evidence:** deeper programme coverage, clearer provenance, review status, and intake-specific verification.
+2. **More useful pathways:** clearer next steps, requirements, preparation gaps, and explanations of fit and readiness.
+3. **Stronger continuity:** better account/document recovery, conflict handling, and reliable cross-device workflows.
+4. **Production confidence:** repeatable migration checks, account-boundary tests, accessibility, performance, and recovery rehearsals.
+
+These are development priorities, not a dated release commitment or a claim that every improvement has shipped.
+
+[Read the current status and development roadmap →](docs/roadmap.md)
 
 ## Under the hood
 
-| Technology | Role in the full application |
+| Technology | Role |
 | --- | --- |
-| React + TypeScript | Interactive screens, typed product logic, and application state. |
-| Next.js conventions + Vinext/Vite | Application structure, development, and build tooling. |
-| Tailwind CSS + Lucide | Interface styling and icons. |
-| Supabase | Account and catalogue/planning data integrations. |
-| Managed database and object storage | Supporting services for feedback workflows. |
-
-The public showcase only needs **Node.js**. Its tests use the built-in Node test runner and synthetic records; they do not contact production services.
+| React + TypeScript | Product screens, typed logic, client state, and shared interactions. |
+| Next.js conventions + Vinext/Vite | Application routing, development, and Worker builds. |
+| Tailwind CSS + Lucide | Styling and interface icons. |
+| Supabase | Account, catalogue, planning, and cloud-document integrations. |
+| Cloudflare Workers + D1 + R2 | Worker/API runtime, feedback data, and supporting object storage. |
+| IndexedDB + browser storage | Device-local documents, planning state, and continuity helpers. |
+| Node test runner + runtime mocks | Regression tests for product logic, client boundaries, and Worker behavior. |
+| GitHub Actions | Automated type checking, builds, and tests. |
 
 ```text
-assets/                 MyWay branding and student-journey illustration
-src/
-  programme-fit.ts      Preference alignment and recommendation eligibility
-  account-sync.ts       Planning snapshots, revisions, and conflicts
-  planning-reminders.ts Calendar validation and reminder selection
-tests/                  Ten executable example tests
-docs/
-  product-tour.md       The student journey and key product concepts
-  engineering.md        Three decisions, tradeoffs, and test boundaries
-  build-story.md        Product thinking and documented development work
-  project-status.md     Publication scope and next priorities
-.github/workflows/      Automated example verification
+app/                    Application pages, admin tools, state and product logic
+public/                 Transparent MyWay logo, landing page, images and logos
+worker/                 Worker API routes and health checks
+supabase/migrations/    Schema and policy migrations; no production database dump
+db/, drizzle/           Supporting D1 schema and migrations
+tests/                  Full application regression suite
+examples/engineering/   Original three modules and ten independent tests
+assets/                 README branding and journey illustration
+docs/                   Setup, product guide, roadmap and source provenance
+build/, scripts/        Build, validation and supporting tools
+.github/workflows/      Automated verification; no automatic production release
 ```
 
 ## Explore the build
 
-- [Student journey and product guide](docs/product-tour.md)
-- [Engineering decisions and limitations](docs/engineering.md)
-- [The work behind the screens](docs/build-story.md)
-- [Project status and next priorities](docs/project-status.md)
+- [Product guide](docs/product-tour.md)
+- [Setup and configuration](docs/setup.md)
+- [Current status and roadmap](docs/roadmap.md)
+- [Publication scope and source provenance](docs/project-status.md)
+- [Three earlier engineering decisions](docs/engineering.md)
+- [The product’s build story](docs/build-story.md)
 
-MyWay existed before this public repository. Its initial import is a snapshot, not the project’s start date or a complete record of earlier development.
+## Source and asset boundaries
 
-No production credentials, student records, university database dumps, internal review notes, or deployment configuration are included. No open-source license has been granted by publishing this showcase; public visibility alone does not assign reuse rights.
+The source snapshot is based on Sites v182 (`b1bca7d8185f6c531d2d3b3440e3d8b972669fdb`). The original website and private repository are unchanged. Production project identifiers and owner-specific administrator access values have been removed or made configurable in this public copy.
+
+Institution names, facts, and third-party marks retain their respective rights. Source/attribution records shipped with the assets remain included; logos do not imply affiliation. No open-source license has been assigned to the application. Public visibility alone does not grant broad reuse rights.
 
 ---
 
-**You do not need every answer to take your next step. Start with a direction.**
+**Your direction can change. Your preparation can keep moving.**
 
-[Explore your pathway with MyWay →](https://mywaypath.com)
+[Explore MyWay →](https://mywaypath.com)

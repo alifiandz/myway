@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { startAccountSync, readPlanning } from "../src/account-sync.ts";
+import { startAccountSync, readPlanning } from "../app/account-sync.ts";
 
 class MemoryStorage {
   values = new Map();
@@ -71,4 +71,16 @@ test("stale browser cannot silently overwrite a newer account revision", async (
     assert.equal(db.get("user-a").data["myway-saved"],'["remote"]');
     assert.equal(conflict.local["myway-saved"],'["local"]');
   } finally { globalThis.window=original; }
+});
+
+test("optional routine proof and focus timing survive account sync without changing existing habits", async () => {
+ const original=globalThis.window,db=new Map(),a=browser('focus-user'),b=browser('focus-user');
+ try {
+  const routines=[{id:'research',title:'Research',focus:'Check a source',weeklyGoal:2,minutes:20,focusSession:{version:1,proofNote:'Recorded one result',proofUrl:'https://example.org/source',checkedSteps:[0],totalFocusMs:60000,totalBreakMs:30000,breakCount:1}}];
+  a.localStorage.setItem('myway-routines',JSON.stringify(routines));a.localStorage.setItem('myway-habit-checks','{"2026-9-research":[2]}');
+  globalThis.window=a;await startAccountSync(client(db,'focus-user'),'focus-user',callbacks());
+  globalThis.window=b;await startAccountSync(client(db,'focus-user'),'focus-user',callbacks());
+  assert.deepEqual(JSON.parse(b.localStorage.getItem('myway-routines')),routines);
+  assert.equal(b.localStorage.getItem('myway-habit-checks'),'{"2026-9-research":[2]}');
+ } finally {globalThis.window=original;}
 });

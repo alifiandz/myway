@@ -1,0 +1,10 @@
+import * as local from "./document-vault-local.ts";
+import { createDocumentVault } from "./document-vault-service.ts";
+export type { VaultDocument } from "./document-vault-types";
+export { newVaultDocumentId, clearVaultDocuments, legacyDocumentCount, importLegacyDocuments, importOwnedLegacyDocuments } from "./document-vault-local.ts";
+const vault = createDocumentVault(async () => (await import("./document-vault-cloud")).openCloudVault(), { list: local.listVaultDocuments, get: local.getVaultDocument, remove: local.deleteVaultDocument });
+export const listVaultDocuments = () => vault.list();
+export const getVaultDocument = (id: string) => vault.get(id);
+export const saveVaultDocument = vault.save;
+export const deleteVaultDocument = (id: string) => vault.remove(id);
+export const migrateLocalDocuments = () => vault.migrate();

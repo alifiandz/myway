@@ -1,3 +1,5 @@
+> These notes describe the original v133 excerpts, preserved in [`examples/engineering/`](../examples/engineering/). The full current application is now included under `app/`.
+
 # Three engineering decisions
 
 ## 1. Make recommendation uncertainty visible

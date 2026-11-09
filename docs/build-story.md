@@ -30,4 +30,4 @@ MyWay is Alif’s product project, developed iteratively with AI-assisted implem
 
 ## Publication scope
 
-This package is a case study with selected working code. The full application, production configuration, migration SQL, personal records, and internal operator notes are excluded. Public visibility alone does not assign an open-source license; licensing should be chosen deliberately before offering reuse rights.
+This repository originally held a case study with selected working code. The full v182 application source and schema migrations are now included. Production configuration, personal records, and private operator database notes remain excluded. Public visibility alone does not assign an open-source license; licensing should be chosen deliberately before offering reuse rights.

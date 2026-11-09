@@ -1,0 +1,578 @@
+{
+  "ugm": {
+    "year": "2026/2027",
+    "intro": {
+      "en": "UGM uses national selection and its own admission routes. SNBP assesses school achievement, SNBT uses UTBK, and UM UGM CBT combines UGM's test with a UTBK score. PBU and Afirmasi Tridharma have additional applicant criteria.",
+      "id": "UGM menggunakan seleksi nasional dan jalur mandiri. SNBP menilai prestasi sekolah, SNBT menggunakan UTBK, sedangkan UM UGM CBT menggabungkan tes UGM dengan nilai UTBK. PBU dan Afirmasi Tridharma memiliki kriteria peserta tambahan."
+    },
+    "routes": [
+      "SNBP",
+      "SNBT",
+      "UM UGM PBU",
+      "Afirmasi Tridharma UGM",
+      "UM UGM CBT"
+    ],
+    "fees": {
+      "en": "UKT is charged per semester and varies by programme and assigned subsidy group. The 2026/2027 regular-S1 table lists six groups, including fully subsidised groups. Independent-route applicants should also check the applicable IPI provisions; a single price does not apply to every programme or household.",
+      "id": "UKT dibayarkan per semester dan berbeda menurut program studi serta kelompok subsidi yang ditetapkan. Tabel S1 reguler 2026/2027 memuat enam kelompok, termasuk kelompok bersubsidi penuh. Peserta jalur mandiri juga perlu memeriksa ketentuan IPI yang berlaku; biayanya tidak sama untuk semua program studi dan keluarga."
+    },
+    "timing": {
+      "en": "2026/2027 regular undergraduate selection is closed. UGM's 7 July 2026 announcement says all selection processes had finished by mid-June. No 2027 dates are verified here.",
+      "id": "Seleksi sarjana reguler 2026/2027 sudah ditutup. Pengumuman UGM tanggal 7 Juli 2026 menyatakan seluruh seleksi selesai sejak pertengahan Juni. Jadwal 2027 belum diverifikasi di sini."
+    },
+    "eligibility": {
+      "en": "Eligibility and programme choices vary by selection route. The university’s published route rules apply to applicants.",
+      "id": "Persyaratan peserta dan pilihan program berbeda menurut jalur seleksi. Peserta mengikuti ketentuan jalur yang diterbitkan universitas."
+    },
+    "links": [
+      {
+        "label": {
+          "en": "Admission routes",
+          "id": "Jalur penerimaan"
+        },
+        "url": "https://admissions.ugm.ac.id/v26/pendaftaran-mahasiswa-baru-wni/sarjana-sarjana-terapan/ragam-seleksi-sarjana-sarjana-terapan-2025/"
+      },
+      {
+        "label": {
+          "en": "2026/2027 regular undergraduate UKT",
+          "id": "UKT S1 reguler 2026/2027"
+        },
+        "url": "https://admissions.ugm.ac.id/v26/uang-kuliah-tunggal-ukt-tahun-2026/"
+      },
+      {
+        "label": {
+          "en": "UGM confirms 2026 intake closed",
+          "id": "Pengumuman penutupan penerimaan 2026"
+        },
+        "url": "https://ugm.ac.id/id/berita/jalur-seleksi-penerimaan-mahasiswa-baru-ugm-sudah-ditutup-informasi-penambahan-kuota-tidak-benar/"
+      },
+      {
+        "label": {
+          "en": "Independent route IPI explanation",
+          "id": "Ketentuan IPI jalur mandiri"
+        },
+        "url": "https://ugm.ac.id/id/berita/ugm-buka-pendaftaraan-seleksi-ujian-mandiri-cbt/"
+      }
+    ],
+    "checkedOn": "2026-10-23"
+  },
+  "uny": {
+    "year": "Schedule: 2026; published fee tables: 2025/2026",
+    "intro": {
+      "en": "UNY offers SNBP, SNBT and Seleksi Mandiri. Independent selection includes achievement portfolios, campus or home-based CBT, and UTBK-SNBT score selection. Some routes or programmes also require a skills test, interview or portfolio.",
+      "id": "UNY menyediakan jalur SNBP, SNBT, dan Seleksi Mandiri. Jalur mandiri mencakup portofolio prestasi, CBT di kampus atau domisili, serta seleksi skor UTBK-SNBT. Jalur atau program tertentu juga mensyaratkan tes keterampilan, wawancara, atau portofolio."
+    },
+    "routes": [
+      "SNBP",
+      "SNBT",
+      "SM Prestasi Akademik / Prestasi Unggul",
+      "SM CBT Kampus / Domisili",
+      "SM Skor UTBK-SNBT"
+    ],
+    "fees": {
+      "en": "The 2026/2027 S1 leaflet sets minimum UKT IV plus IPI for Mandiri. Older nominal tables are labelled 2025/2026.",
+      "id": "Leaflet S1 2026/2027 menetapkan minimal UKT IV dan IPI untuk Mandiri. Tabel nominal lama berlabel 2025/2026."
+    },
+    "timing": {
+      "en": "The published regular-S1 schedule is for 2026 and its listed registration windows have passed: UTBK-score selection ended 17 July and CBT Domisili ended 23 July. RPL, IUP and cooperation have separate schedules. No 2027 regular-S1 schedule is verified here.",
+      "id": "Jadwal S1 reguler yang dipublikasikan adalah tahun 2026 dan seluruh periode pendaftaran yang tercantum sudah lewat: seleksi skor UTBK berakhir 17 Juli dan CBT Domisili berakhir 23 Juli. RPL, IUP, dan kerja sama memiliki jadwal tersendiri. Jadwal S1 reguler 2027 belum diverifikasi di sini."
+    },
+    "eligibility": {
+      "en": "Eligibility and programme choices vary by selection route. The university’s published route rules apply to applicants.",
+      "id": "Persyaratan peserta dan pilihan program berbeda menurut jalur seleksi. Peserta mengikuti ketentuan jalur yang diterbitkan universitas."
+    },
+    "links": [
+      {
+        "label": {
+          "en": "S1 admission routes",
+          "id": "Jalur penerimaan S1"
+        },
+        "url": "https://pmb.uny.ac.id/program-sarjana/jalur"
+      },
+      {
+        "label": {
+          "en": "2026/2027 S1 admission & fee policy",
+          "id": "Ketentuan penerimaan & biaya S1 2026/2027"
+        },
+        "url": "https://pmb.uny.ac.id/sites/pmb.uny.ac.id/files/2026-02/Leaflet%20SM%20S1%20UNY%20-%2012.02.26.pdf#page=3"
+      },
+      {
+        "label": {
+          "en": "2026 regular-S1 schedule",
+          "id": "Jadwal S1 reguler 2026"
+        },
+        "url": "https://pmb.uny.ac.id/program-sarjana/jadwal"
+      },
+      {
+        "label": {
+          "en": "S1 UKT table and year",
+          "id": "Tabel UKT S1 & tahun tarif"
+        },
+        "url": "https://pmb.uny.ac.id/program-sarjana/ukt-2024"
+      },
+      {
+        "label": {
+          "en": "S1 independent-route IPI policy",
+          "id": "Ketentuan IPI S1 jalur mandiri"
+        },
+        "url": "https://pmb.uny.ac.id/sarjana-ipi"
+      }
+    ],
+    "checkedOn": "2026-10-23"
+  },
+  "uin": {
+    "year": "2026/2027",
+    "intro": {
+      "en": "UIN Sunan Kalijaga has five main S1 selection families: SNBP, SNBT, SPAN-PTKIN, UM-PTKIN and Mandiri. In the 2026 announcement, score-based Mandiri portfolios used UTBK results for 19 general programmes and UM-PTKIN results for 25 religious programmes. Mandiri also includes CBT, achievement and inclusive portfolio schemes.",
+      "id": "UIN Sunan Kalijaga memiliki lima kelompok seleksi S1: SNBP, SNBT, SPAN-PTKIN, UM-PTKIN, dan Mandiri. Pengumuman 2026 menyebut portofolio Mandiri berbasis skor UTBK untuk 19 program umum dan skor UM-PTKIN untuk 25 program keagamaan. Mandiri juga mencakup CBT, prestasi, dan skema portofolio inklusif."
+    },
+    "routes": [
+      "SNBP",
+      "SNBT",
+      "SPAN-PTKIN",
+      "UM-PTKIN",
+      "Mandiri"
+    ],
+    "fees": {
+      "en": "S1 tuition uses semester UKT groups determined by the student's economic circumstances. UKT is paid at the start of each semester. Application fees depend on the selection route; the university's June 2026 announcement listed Rp250,000 for Mandiri Prestasi and diversity portfolios. This is a historical application fee, not the tuition for every programme.",
+      "id": "Biaya kuliah S1 menggunakan kelompok UKT berdasarkan kemampuan ekonomi mahasiswa. UKT dibayarkan pada awal setiap semester. Biaya pendaftaran berbeda menurut jalur; pengumuman Juni 2026 mencantumkan Rp250.000 untuk Mandiri Prestasi dan Portofolio Keberagaman. Angka ini adalah biaya pendaftaran historis, bukan uang kuliah semua program."
+    },
+    "timing": {
+      "en": "The main regular-S1 2026 Mandiri payment deadline was 13 July, with finalisation by noon WIB on 14 July. Medicine had a separate later schedule. These are past dates, not an open intake. No 2027 regular-S1 timetable is verified here.",
+      "id": "Batas pembayaran Mandiri S1 utama tahun 2026 adalah 13 Juli, dengan finalisasi sampai pukul 12.00 WIB tanggal 14 Juli. Kedokteran memiliki jadwal lanjutan tersendiri. Ini adalah tanggal yang sudah lewat, bukan penerimaan yang sedang dibuka. Jadwal S1 reguler 2027 belum diverifikasi di sini."
+    },
+    "eligibility": {
+      "en": "Eligibility and programme choices vary by selection route. The university’s published route rules apply to applicants.",
+      "id": "Persyaratan peserta dan pilihan program berbeda menurut jalur seleksi. Peserta mengikuti ketentuan jalur yang diterbitkan universitas."
+    },
+    "links": [
+      {
+        "label": {
+          "en": "S1 routes and requirements",
+          "id": "Jalur & persyaratan S1"
+        },
+        "url": "https://admisi.uin-suka.ac.id/informasi/16"
+      },
+      {
+        "label": {
+          "en": "Programme-specific score routes and 2026 closing date",
+          "id": "Pilihan program berdasarkan skor & batas 2026"
+        },
+        "url": "https://admisi.uin-suka.ac.id/berita/143"
+      },
+      {
+        "label": {
+          "en": "2026 S1 UKT and selected application fees",
+          "id": "UKT S1 & biaya pendaftaran 2026"
+        },
+        "url": "https://admisi.uin-suka.ac.id/berita/141"
+      }
+    ],
+    "checkedOn": "2026-10-23"
+  },
+  "ui": {
+    "year": "2026/2027",
+    "intro": {
+      "en": "UI lists SNBP, SNBT, PPKB, SJP and SIMAK UI for regular undergraduate admission.",
+      "id": "UI mencantumkan SNBP, SNBT, PPKB, SJP, dan SIMAK UI untuk penerimaan S1 Reguler."
+    },
+    "routes": [
+      "SNBP",
+      "SNBT–UTBK",
+      "PPKB",
+      "SJP",
+      "SIMAK UI"
+    ],
+    "eligibility": {
+      "en": "Regular S1 accepts SMA, SMK, MA or equivalent graduates within the last three graduation years. Each route has additional requirements.",
+      "id": "S1 Reguler menerima lulusan SMA, SMK, MA, atau sederajat dalam tiga tahun kelulusan terakhir. Setiap jalur memiliki ketentuan tambahan."
+    },
+    "fees": {
+      "en": "SNBP/SNBT charge semesterly UKT without IPI. Independent routes charge UKT plus a one-time IPI; the final amount follows UI’s assessment and tariff group.",
+      "id": "SNBP/SNBT dikenai UKT per semester tanpa IPI. Jalur mandiri dikenai UKT dan IPI satu kali; nominal akhir mengikuti penetapan UI serta kelompok tarif."
+    },
+    "timing": {
+      "en": "The published regular SIMAK registration ran 8 May–5 June 2026; exams were 13–14 June. Those dates have passed. They are not an open 2027 application window.",
+      "id": "Pendaftaran SIMAK reguler berlangsung 8 Mei–5 Juni 2026; ujian 13–14 Juni. Jadwal tersebut telah lewat dan bukan periode pendaftaran 2027 yang sedang dibuka."
+    },
+    "applicationFee": {
+      "en": "SIMAK regular S1/Vokasi application: Rp650,000 in the published 2026 schedule.",
+      "id": "Pendaftaran SIMAK S1 Reguler/Vokasi: Rp650.000 pada jadwal terbitan 2026."
+    },
+    "links": [
+      {
+        "label": {
+          "en": "S1 routes & eligibility",
+          "id": "Jalur & persyaratan S1"
+        },
+        "url": "https://simak.ui.ac.id/s1-reguler/"
+      },
+      {
+        "label": {
+          "en": "2026 dates & application fee",
+          "id": "Jadwal & biaya pendaftaran 2026"
+        },
+        "url": "https://simak.ui.ac.id/simak-ui/"
+      },
+      {
+        "label": {
+          "en": "Official tuition decrees",
+          "id": "SK biaya pendidikan resmi"
+        },
+        "url": "https://simak.ui.ac.id/sk-biaya-pendidikan-ui/"
+      }
+    ],
+    "checkedOn": "2026-10-23"
+  },
+  "unair": {
+    "year": "2026/2027",
+    "intro": {
+      "en": "UNAIR offers national selection and Mandiri Prestasi, UTBK Plus, Ujian Tulis and Kemitraan. UTBK Plus combines the UTBK result with a subject test.",
+      "id": "UNAIR menyediakan seleksi nasional serta Mandiri Prestasi, UTBK Plus, Ujian Tulis, dan Kemitraan. UTBK Plus menggabungkan nilai UTBK dengan tes mata pelajaran."
+    },
+    "routes": [
+      "SNBP",
+      "SNBT",
+      "Mandiri Prestasi",
+      "Mandiri UTBK Plus",
+      "Mandiri Ujian Tulis",
+      "Mandiri Kemitraan"
+    ],
+    "eligibility": {
+      "en": "Published 2026 Mandiri rules cover Indonesian high-school graduates of 2024–2026. Prestasi and Kemitraan have additional achievement or partner-recommendation conditions.",
+      "id": "Ketentuan Mandiri 2026 mencakup WNI lulusan SMA/sederajat tahun 2024–2026. Prestasi dan Kemitraan memiliki syarat tambahan berupa prestasi atau rekomendasi mitra."
+    },
+    "fees": {
+      "en": "Mandiri charges semester UKT and IPI. Amounts vary by programme and route.",
+      "id": "Mandiri dikenai UKT per semester dan IPI. Nominal berbeda menurut program serta jalur."
+    },
+    "timing": {
+      "en": "The published 2026 deadlines—28 May for Prestasi, 8 June for UTBK Plus, and 21 June for Ujian Tulis/Kemitraan—have passed. No 2027 timetable is confirmed in this summary.",
+      "id": "Batas terbitan 2026—28 Mei untuk Prestasi, 8 Juni untuk UTBK Plus, dan 21 Juni untuk Ujian Tulis/Kemitraan—telah lewat. Ringkasan ini belum mengonfirmasi jadwal 2027."
+    },
+    "links": [
+      {
+        "label": {
+          "en": "Mandiri routes",
+          "id": "Jalur mandiri"
+        },
+        "url": "https://ppmb.unair.ac.id/id/page1/informasi-umum-smua?tabmenu=front-tab-menu-pendaftaran-sarjana"
+      },
+      {
+        "label": {
+          "en": "Mandiri tuition by programme",
+          "id": "Biaya mandiri menurut program"
+        },
+        "url": "https://ppmb.unair.ac.id/id/page1/biaya-studi-sarjana-mandiri?label=Sarjana&menu=BiayaStudi&tabmenu=front-tab-menu-studi-fee-s1"
+      },
+      {
+        "label": {
+          "en": "Admissions timetable",
+          "id": "Jadwal penerimaan"
+        },
+        "url": "https://ppmb.unair.ac.id/id/jadwal-sarjana"
+      }
+    ],
+    "checkedOn": "2026-10-23"
+  },
+  "itb": {
+    "year": "2026/2027",
+    "intro": {
+      "en": "ITB lists SNBP, SNBT and Seleksi Siswa Unggul (SSU), with test and non-test options. Some national routes admit students to a faculty/school before programme allocation after the first year.",
+      "id": "ITB mencantumkan SNBP, SNBT, dan Seleksi Siswa Unggul (SSU) dengan pilihan tes serta non-tes. Sejumlah jalur nasional menerima mahasiswa di fakultas/sekolah sebelum penempatan program setelah tahun pertama."
+    },
+    "routes": [
+      "SNBP",
+      "SNBT",
+      "SSU Tes",
+      "SSU Non Tes"
+    ],
+    "eligibility": {
+      "en": "SSU requirements depend on the faculty or programme: drawing tests apply to FSRD/Architecture, while SBM applicants take Mathematics. Special Peminatan arrangements have their own rules.",
+      "id": "Persyaratan SSU mengikuti fakultas atau program: tes menggambar berlaku untuk FSRD/Arsitektur, sedangkan peminat SBM mengikuti Matematika. Ketentuan Peminatan diatur tersendiri."
+    },
+    "fees": {
+      "en": "The 2026 SSU test notice lists semester UKT-7 of Rp12.25m for FMIPA-M, Rp14.5m for SBM, and Rp12.5m for other listed faculties/schools. IPI categories range Rp55m–85m. These are SSU-specific figures.",
+      "id": "Pengumuman SSU Tes 2026 mencantumkan UKT-7 per semester Rp12,25 juta untuk FMIPA-M, Rp14,5 juta untuk SBM, dan Rp12,5 juta untuk fakultas/sekolah lain yang tercantum. Kategori IPI Rp55–85 juta. Angka ini khusus SSU."
+    },
+    "timing": {
+      "en": "The published 2026 selection and re-registration periods have passed; SSU test re-registration ran 27 June–3 July 2026. No 2027 schedule is confirmed here.",
+      "id": "Periode seleksi dan daftar ulang 2026 telah lewat; daftar ulang SSU Tes berlangsung 27 Juni–3 Juli 2026. Jadwal 2027 belum dikonfirmasi di sini."
+    },
+    "links": [
+      {
+        "label": {
+          "en": "Undergraduate admission",
+          "id": "Penerimaan sarjana"
+        },
+        "url": "https://admission.itb.ac.id/id/program/sarjana"
+      },
+      {
+        "label": {
+          "en": "2026 SSU tests & requirements",
+          "id": "Tes & ketentuan SSU 2026"
+        },
+        "url": "https://itb.ac.id/berita/itb-hadirkan-jarak-baru-seleksi-siswa-unggul-ssu-buka-peluang-bagi-siswa-berprestasi/63178"
+      },
+      {
+        "label": {
+          "en": "SSU tuition & re-registration notice",
+          "id": "Pengumuman biaya & daftar ulang SSU"
+        },
+        "url": "https://akademik.itb.ac.id/id/berita-dan-acara/pengumuman-hasil-seleksi-dan-panduan-daftar-ulang-jalur-penerimaan-seleksi-siswa-unggul-ssu-itb-jalur-tes"
+      }
+    ],
+    "checkedOn": "2026-10-23"
+  },
+  "undip": {
+    "year": "2026/2027",
+    "intro": {
+      "en": "No regular S1 application window verified open on 23 October 2026. Current PMB open notices concern postgraduate and professional study.",
+      "id": "Belum ada pendaftaran S1 reguler yang terverifikasi masih dibuka pada 23 Oktober 2026. Pengumuman aktif PMB menyangkut pascasarjana dan profesi."
+    },
+    "routes": [
+      "SNBP",
+      "SNBT",
+      "SBUB",
+      "UM CBT online",
+      "UM nilai UTBK dan rapor"
+    ],
+    "eligibility": {
+      "en": "Requirements vary by route. UM CBT 2026 lists school graduates from 2024–2026 and maximum age 25 on 1 July 2026; its Paket C wording lists only 2024–2025. UTBK-based UM requires the 2026 UTBK certificate and semester 1–5 reports. SBUB is for 2026 graduates with qualifying achievements and semester averages of at least 70/100.",
+      "id": "Syarat berbeda tiap jalur. UM CBT 2026 mencantumkan lulusan sekolah 2024–2026 dan usia maksimal 25 tahun per 1 Juli 2026; ketentuan Paket C hanya menyebut 2024–2025. UM nilai UTBK memerlukan sertifikat UTBK 2026 dan rapor semester 1–5. SBUB untuk lulusan 2026 dengan prestasi sesuai ketentuan serta rata-rata rapor minimal 70/100."
+    },
+    "fees": {
+      "en": "The regular UM table lists programme-specific semester UKT groups I–VIII plus one-time IPI with two IPI groups. The 2026 UM application fee was Rp350,000. Check the exact programme and route before budgeting; IUP fees are separate.",
+      "id": "Tabel UM reguler memuat UKT per semester kelompok I–VIII menurut program serta IPI sekali selama masa studi dengan dua kelompok IPI. Biaya pendaftaran UM 2026 sebesar Rp350.000. Periksa program dan jalur yang tepat; biaya IUP terpisah."
+    },
+    "timing": {
+      "en": "Historical 2026 dates: SNBP 3–18 February; SNBT 25 March–7 April; UM CBT registration 5 May–11 June and tests 22–30 June; UM UTBK 3–17 June; second UTBK round 10–20 July. These are past deadlines.",
+      "id": "Jadwal 2026 yang sudah berlalu: SNBP 3–18 Februari; SNBT 25 Maret–7 April; pendaftaran UM CBT 5 Mei–11 Juni dan tes 22–30 Juni; UM nilai UTBK 3–17 Juni; gelombang 2 nilai UTBK 10–20 Juli."
+    },
+    "links": [
+      {
+        "label": {
+          "en": "Official admissions",
+          "id": "Penerimaan resmi"
+        },
+        "url": "https://pmb.undip.ac.id/"
+      },
+      {
+        "label": {
+          "en": "2026/2027 programme list",
+          "id": "Daftar program 2026/2027"
+        },
+        "url": "https://pmb.undip.ac.id/wp-content/uploads/2026/04/SK-NO-41-TENTANG-PENETAPAN-DAYA-TAMPUNG-VOKASI-DAN-SARJANA-TAHUN-2026-2027.pdf"
+      },
+      {
+        "label": {
+          "en": "UM CBT 2026",
+          "id": "UM CBT 2026"
+        },
+        "url": "https://pmb.undip.ac.id/sarjana/jalur-um-sarjana/"
+      },
+      {
+        "label": {
+          "en": "UM UTBK 2026",
+          "id": "UM UTBK 2026"
+        },
+        "url": "https://pmb.undip.ac.id/sarjana/jalur-um-sarjana-utbk/"
+      },
+      {
+        "label": {
+          "en": "UM UTBK · round 2",
+          "id": "UM UTBK · gelombang 2"
+        },
+        "url": "https://pmb.undip.ac.id/jalur-um-program-sarjana-gelombang-2/"
+      },
+      {
+        "label": {
+          "en": "SBUB 2026",
+          "id": "SBUB 2026"
+        },
+        "url": "https://pmb.undip.ac.id/sarjana/jalur-sbub/"
+      },
+      {
+        "label": {
+          "en": "UM regular tuition & IPI",
+          "id": "UKT & IPI UM reguler"
+        },
+        "url": "https://pmb.undip.ac.id/wp-content/uploads/2026/04/UKT-DAN-IPI-PROGRAM-SARJANA-JALUR-UM-REGULER.pdf"
+      },
+      {
+        "label": {
+          "en": "2026 admission calendar",
+          "id": "Kalender penerimaan 2026"
+        },
+        "url": "https://pmb.undip.ac.id/kalender-pendaftaran/"
+      }
+    ],
+    "checkedOn": "2026-10-23",
+    "applicationFee": {
+      "en": "UM 2026 application: Rp350,000.",
+      "id": "Pendaftaran UM 2026: Rp350.000."
+    }
+  },
+  "its": {
+    "year": "2026/2027",
+    "intro": {
+      "en": "Published2026 S1 application periods have passed. No2027 S1 schedule verified.",
+      "id": "Periode pendaftaran S1 tahun2026 yang dipublikasikan sudah berlalu. Jadwal S1 tahun2027 belum terverifikasi.",
+      "code": "past-published-dates"
+    },
+    "routes": [
+      "SNBP",
+      "SNBT",
+      "SMITS FLAT: Mandiri Beasiswa / Mandiri Prestasi",
+      "SMITS ACE: Mandiri Kemitraan / Mandiri Umum",
+      "SMITS CDT: Mandiri Talenta Desain"
+    ],
+    "eligibility": {
+      "en": "Rules depend on route. SMITS2026 accepts WNI school/PaketC graduates2024–2026, maximum age26 on1July2026, excluding SNBP2024–2026 admits. FLAT requires certified achievement; ACE requires TesSMITS; CDT requires a design portfolio.",
+      "id": "Syarat berbeda menurut jalur. SMITS2026 menerima WNI lulusan sekolah/PaketC2024–2026, maksimal26tahun pada1Juli2026, yang tidak diterima SNBP2024–2026. FLAT mensyaratkan prestasi bersertifikat; ACE menggunakan TesSMITS; CDT menggunakan portofolio desain."
+    },
+    "fees": {
+      "en": "UKT and IPI vary by route and programme. Use the official tables below.",
+      "id": "UKT dan IPI berbeda menurut jalur dan program. Lihat tabel resmi di bawah."
+    },
+    "timing": {
+      "en": "Published 2026 dates have passed.",
+      "id": "Jadwal 2026 yang dipublikasikan sudah berlalu."
+    },
+    "links": [
+      {
+        "label": {
+          "en": "S1 admissions",
+          "id": "Penerimaan S1"
+        },
+        "url": "https://www.its.ac.id/admission/sarjana/"
+      },
+      {
+        "label": {
+          "en": "SNBP requirements",
+          "id": "Syarat SNBP"
+        },
+        "url": "https://www.its.ac.id/admission/snbp/"
+      },
+      {
+        "label": {
+          "en": "SNBT tuition & requirements",
+          "id": "UKT & syarat SNBT"
+        },
+        "url": "https://www.its.ac.id/admission/snbt/"
+      },
+      {
+        "label": {
+          "en": "SMITS FLAT fees & requirements",
+          "id": "Biaya & syarat SMITS FLAT"
+        },
+        "url": "https://www.its.ac.id/admission/smits-flat/"
+      },
+      {
+        "label": {
+          "en": "SMITS ACE tuition & IPI",
+          "id": "UKT & IPI SMITS ACE"
+        },
+        "url": "https://www.its.ac.id/admission/smits-ace/"
+      },
+      {
+        "label": {
+          "en": "SMITS CDT tuition & dates",
+          "id": "UKT & jadwal SMITS CDT"
+        },
+        "url": "https://www.its.ac.id/admission/smits-cdt/"
+      },
+      {
+        "label": {
+          "en": "Current admission portal",
+          "id": "Portal penerimaan terkini"
+        },
+        "url": "https://admission.its.ac.id/"
+      }
+    ],
+    "checkedOn": "2026-10-23"
+  },
+  "ub": {
+    "year": "2026/2027",
+    "intro": {
+      "en": "2026 reference dates have passed. Preliminary 2027 plans are available.",
+      "id": "Jadwal acuan 2026 sudah lewat. Rencana awal 2027 tersedia."
+    },
+    "routes": [
+      "SNBP",
+      "SNBT",
+      "SMUB Nilai Rapor",
+      "SMUB Prestasi",
+      "SMUB Nilai UTBK",
+      "SMPD"
+    ],
+    "eligibility": {
+      "en": "Requirements vary by route and programme. UTBK routes require the relevant score; health and colour-vision rules differ by programme.",
+      "id": "Syarat berbeda menurut jalur dan program. Jalur UTBK memerlukan nilai yang sesuai; ketentuan kesehatan dan buta warna mengikuti program."
+    },
+    "fees": {
+      "en": "Programme-specific semester UKT; independent routes also apply IPI.",
+      "id": "UKT per semester sesuai program; jalur mandiri juga mengenakan IPI."
+    },
+    "timing": {
+      "en": "2026 regular S1 reference dates have passed. SMUB UTBK Murni payment registration ran 17–20 July 2026 and results were published 24 July 2026.",
+      "id": "Jadwal acuan 2026 telah berlalu. Pendaftaran UTBK Murni: 17–20 Juli; hasil: 24 Juli 2026."
+    },
+    "applicationFee": {
+      "en": "SMUB Nilai UTBK (Murni), 2026: Rp500,000. Other routes may differ.",
+      "id": "SMUB Nilai UTBK (Murni), 2026: Rp500.000. Jalur lain dapat berbeda."
+    },
+    "links": [
+      {
+        "label": {
+          "en": "Official SMUB 2026 routes",
+          "id": "Jalur resmi SMUB 2026"
+        },
+        "url": "https://selma.ub.ac.id/smub"
+      },
+      {
+        "label": {
+          "en": "2026 UTBK Murni requirements and dates",
+          "id": "Syarat dan jadwal UTBK Murni 2026"
+        },
+        "url": "https://selma.ub.ac.id/smub-murni-utbk-2026/"
+      },
+      {
+        "label": {
+          "en": "2026 UTBK Murni results",
+          "id": "Hasil UTBK Murni 2026"
+        },
+        "url": "https://selma.ub.ac.id/pengumuman-hasil-smub-utbk-murni-2026/"
+      },
+      {
+        "label": {
+          "en": "Official UKT fee tables",
+          "id": "Tabel biaya UKT resmi"
+        },
+        "url": "https://selma.ub.ac.id/ukt/"
+      },
+      {
+        "label": {
+          "en": "Official IPI fee tables",
+          "id": "Tabel biaya IPI resmi"
+        },
+        "url": "https://selma.ub.ac.id/ipi/"
+      },
+      {
+        "label": {
+          "en": "Preliminary 2027 SNBT overview",
+          "id": "Gambaran awal SNBT 2027"
+        },
+        "url": "https://selma.ub.ac.id/seleksi-masuk-nasional-tes/"
+      },
+      {
+        "label": {
+          "en": "SMPD overview",
+          "id": "Gambaran SMPD"
+        },
+        "url": "https://selma.ub.ac.id/smpd/"
+      }
+    ],
+    "checkedOn": "2026-10-23"
+  }
+}

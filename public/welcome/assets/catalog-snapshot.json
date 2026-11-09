@@ -1,0 +1,819 @@
+{
+  "checkedOn": "2026-10-22",
+  "source": "https://mywaypath.com/assets/page-CDni4wF9.js",
+  "scope": "Public undergraduate directory; one primary city/country per institution, excluding other campuses and graduate-only records.",
+  "corrections": [
+    {
+      "id": "ft-school-60",
+      "city": "Breukelen",
+      "source": "https://brochure.nyenrode.nl/exchange-brochure/contact"
+    },
+    {
+      "id": "ft-school-85",
+      "city": "Louvain-la-Neuve",
+      "source": "https://uclouvain.be/en/faculties/lsm/people-and-contact"
+    }
+  ],
+  "records": [
+    {
+      "id": "ft-school-2",
+      "name": "HEC Paris",
+      "location": "France",
+      "city": "Paris",
+      "country": "France",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-4",
+      "name": "ESCP Business School",
+      "location": "Multi-country Europe",
+      "city": "Paris",
+      "country": "France",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-6",
+      "name": "Bocconi University",
+      "location": "Milan, Italy",
+      "city": "Milan",
+      "country": "Italy",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-7",
+      "name": "ESSEC Business School",
+      "location": "France",
+      "city": "Cergy",
+      "country": "France",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-8",
+      "name": "University of St Gallen",
+      "location": "Switzerland",
+      "city": "St. Gallen",
+      "country": "Switzerland",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-9",
+      "name": "EDHEC Business School",
+      "location": "France",
+      "city": "Roubaix",
+      "country": "France",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-10",
+      "name": "emlyon business school",
+      "location": "France",
+      "city": "Lyon",
+      "country": "France",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-11",
+      "name": "Esade Business School",
+      "location": "Spain",
+      "city": "Barcelona",
+      "country": "Spain",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-14",
+      "name": "University of Oxford: Saïd",
+      "location": "United Kingdom",
+      "city": "Oxford",
+      "country": "United Kingdom",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-16",
+      "name": "SKEMA Business School",
+      "location": "France",
+      "city": "Lille",
+      "country": "France",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-17",
+      "name": "Nova School of Business and Economics",
+      "location": "Portugal",
+      "city": "Lisbon",
+      "country": "Portugal",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-18",
+      "name": "Warwick Business School",
+      "location": "United Kingdom",
+      "city": "Coventry",
+      "country": "United Kingdom",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-19",
+      "name": "Stockholm School of Economics",
+      "location": "Sweden",
+      "city": "Stockholm",
+      "country": "Sweden",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-20",
+      "name": "WHU – Otto Beisheim School of Management",
+      "location": "Germany",
+      "city": "Vallendar",
+      "country": "Germany",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-21",
+      "name": "IE Business School",
+      "location": "Spain",
+      "city": "Madrid",
+      "country": "Spain",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-23",
+      "name": "University College Dublin — Lochlann Quinn School of Business",
+      "location": "Dublin, Ireland",
+      "city": "Dublin",
+      "country": "Ireland",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-24",
+      "name": "Grenoble Ecole de Management",
+      "location": "France",
+      "city": "Grenoble",
+      "country": "France",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-26",
+      "name": "Católica Lisbon School of Business and Economics",
+      "location": "Portugal",
+      "city": "Lisbon",
+      "country": "Portugal",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-27",
+      "name": "Audencia",
+      "location": "France",
+      "city": "Nantes",
+      "country": "France",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-28",
+      "name": "NEOMA Business School",
+      "location": "France",
+      "city": "Mont-Saint-Aignan",
+      "country": "France",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-30",
+      "name": "EADA Business School Barcelona",
+      "location": "Spain",
+      "city": "Barcelona",
+      "country": "Spain",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-31",
+      "name": "Frankfurt School of Finance and Management",
+      "location": "Germany",
+      "city": "Frankfurt",
+      "country": "Germany",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-32",
+      "name": "KEDGE Business School",
+      "location": "France",
+      "city": "Talence",
+      "country": "France",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-33",
+      "name": "Rotterdam School of Management, Erasmus University",
+      "location": "Netherlands",
+      "city": "Rotterdam",
+      "country": "Netherlands",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-34",
+      "name": "Bayes Business School",
+      "location": "United Kingdom",
+      "city": "London",
+      "country": "United Kingdom",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-36",
+      "name": "Alliance Manchester Business School",
+      "location": "United Kingdom",
+      "city": "Manchester",
+      "country": "United Kingdom",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-37",
+      "name": "Henley Business School",
+      "location": "United Kingdom",
+      "city": "Henley-on-Thames",
+      "country": "United Kingdom",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-38",
+      "name": "University of Porto – FEP | PBS",
+      "location": "Portugal",
+      "city": "Porto",
+      "country": "Portugal",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-39",
+      "name": "Imperial Business School",
+      "location": "United Kingdom",
+      "city": "London",
+      "country": "United Kingdom",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-40",
+      "name": "BI Norwegian Business School",
+      "location": "Norway",
+      "city": "Oslo",
+      "country": "Norway",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-41",
+      "name": "WU Vienna University of Economics and Business",
+      "location": "Austria",
+      "city": "Vienna",
+      "country": "Austria",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-42",
+      "name": "Kozminski University",
+      "location": "Poland",
+      "city": "Warsaw",
+      "country": "Poland",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-43",
+      "name": "Trinity College Dublin, Trinity Business School",
+      "location": "Ireland",
+      "city": "Dublin",
+      "country": "Ireland",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-44",
+      "name": "Iscte Business School",
+      "location": "Portugal",
+      "city": "Lisbon",
+      "country": "Portugal",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-45",
+      "name": "Copenhagen Business School",
+      "location": "Denmark",
+      "city": "Copenhagen",
+      "country": "Denmark",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-46",
+      "name": "Aalto University",
+      "location": "Finland",
+      "city": "Espoo",
+      "country": "Finland",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-47",
+      "name": "IÉSEG School of Management",
+      "location": "France",
+      "city": "Paris",
+      "country": "France",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-48",
+      "name": "Prague University of Economics and Business",
+      "location": "Czechia",
+      "city": "Prague",
+      "country": "Czech Republic",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-50",
+      "name": "Luiss University / Luiss Business School",
+      "location": "Italy",
+      "city": "Rome",
+      "country": "Italy",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-51",
+      "name": "NHH Norwegian School of Economics",
+      "location": "Norway",
+      "city": "Bergen",
+      "country": "Norway",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-52",
+      "name": "HEC Lausanne, University of Lausanne",
+      "location": "Switzerland",
+      "city": "Lausanne",
+      "country": "Switzerland",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-53",
+      "name": "Sabancı Business School",
+      "location": "Türkiye",
+      "city": "Istanbul",
+      "country": "Turkey",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-54",
+      "name": "Solvay Brussels School of Economics and Management",
+      "location": "Belgium",
+      "city": "Brussels",
+      "country": "Belgium",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-56",
+      "name": "Excelia Business School",
+      "location": "France",
+      "city": "La Rochelle",
+      "country": "France",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-57",
+      "name": "MBS School of Business",
+      "location": "France",
+      "city": "Montpellier",
+      "country": "France",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-58",
+      "name": "Koç University",
+      "location": "Istanbul, Turkey",
+      "city": "Istanbul",
+      "country": "Turkey",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-59",
+      "name": "EBS Business School",
+      "location": "Germany",
+      "city": "Oestrich-Winkel",
+      "country": "Germany",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-60",
+      "name": "Nyenrode Business Universiteit",
+      "location": "Netherlands",
+      "city": "Breukelen",
+      "country": "Netherlands",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-61",
+      "name": "Rennes School of Business",
+      "location": "France",
+      "city": "Rennes",
+      "country": "France",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-62",
+      "name": "University of Cologne",
+      "location": "Germany",
+      "city": "Cologne",
+      "country": "Germany",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-63",
+      "name": "University of Bologna",
+      "location": "Bologna, Italy · Programme: Forlì",
+      "city": "Bologna",
+      "country": "Italy",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-64",
+      "name": "ICN Business School",
+      "location": "France",
+      "city": "Nancy",
+      "country": "France",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-65",
+      "name": "University of Ljubljana, School of Economics and Business",
+      "location": "Slovenia",
+      "city": "Ljubljana",
+      "country": "Slovenia",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-66",
+      "name": "ESSCA School of Management",
+      "location": "France",
+      "city": "Angers",
+      "country": "France",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-67",
+      "name": "ISEG – Lisbon School of Economics and Management",
+      "location": "Portugal",
+      "city": "Lisbon",
+      "country": "Portugal",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-68",
+      "name": "University of Bath School of Management",
+      "location": "United Kingdom",
+      "city": "Bath",
+      "country": "United Kingdom",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-69",
+      "name": "Paris School of Business",
+      "location": "France",
+      "city": "Paris",
+      "country": "France",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-70",
+      "name": "University of Edinburgh Business School",
+      "location": "United Kingdom",
+      "city": "Edinburgh",
+      "country": "United Kingdom",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-71",
+      "name": "Durham University Business School",
+      "location": "United Kingdom",
+      "city": "Durham",
+      "country": "United Kingdom",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-72",
+      "name": "ZHAW School of Management and Law",
+      "location": "Switzerland",
+      "city": "Winterthur",
+      "country": "Switzerland",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-73",
+      "name": "EM Strasbourg Business School",
+      "location": "France",
+      "city": "Strasbourg",
+      "country": "France",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-75",
+      "name": "Lund University School of Economics and Management",
+      "location": "Sweden",
+      "city": "Lund",
+      "country": "Sweden",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-76",
+      "name": "Burgundy School of Business",
+      "location": "France",
+      "city": "Dijon",
+      "country": "France",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-77",
+      "name": "Institut Mines-Télécom Business School",
+      "location": "France",
+      "city": "Évry-Courcouronnes",
+      "country": "France",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-78",
+      "name": "University of Zurich",
+      "location": "Switzerland",
+      "city": "Zürich",
+      "country": "Switzerland",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-79",
+      "name": "TUM School of Management",
+      "location": "Germany",
+      "city": "München",
+      "country": "Germany",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-80",
+      "name": "Maastricht University, School of Business and Economics",
+      "location": "Netherlands",
+      "city": "Maastricht",
+      "country": "Netherlands",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-81",
+      "name": "Católica Porto School of Business and Economics",
+      "location": "Portugal",
+      "city": "Porto",
+      "country": "Portugal",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-82",
+      "name": "Hanken School of Economics",
+      "location": "Finland",
+      "city": "Helsinki",
+      "country": "Finland",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-83",
+      "name": "University Carlos III de Madrid",
+      "location": "Spain",
+      "city": "Madrid",
+      "country": "Spain",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-85",
+      "name": "Louvain School of Management, UCLouvain",
+      "location": "Belgium",
+      "city": "Louvain-la-Neuve",
+      "country": "Belgium",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-86",
+      "name": "Jönköping International Business School",
+      "location": "Sweden",
+      "city": "Jönköping",
+      "country": "Sweden",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-87",
+      "name": "University of Glasgow: Adam Smith",
+      "location": "United Kingdom",
+      "city": "Glasgow",
+      "country": "United Kingdom",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-88",
+      "name": "IQS – Universitat Ramon Llull",
+      "location": "Spain",
+      "city": "Barcelona",
+      "country": "Spain",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-89",
+      "name": "Leeds University Business School",
+      "location": "United Kingdom",
+      "city": "Leeds",
+      "country": "United Kingdom",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-90",
+      "name": "Aston Business School",
+      "location": "United Kingdom",
+      "city": "Birmingham",
+      "country": "United Kingdom",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-91",
+      "name": "University of Amsterdam – Amsterdam Business School",
+      "location": "Netherlands",
+      "city": "Amsterdam",
+      "country": "Netherlands",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-92",
+      "name": "Deusto Business School",
+      "location": "Spain",
+      "city": "Madrid",
+      "country": "Spain",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-93",
+      "name": "EM Normandie Business School",
+      "location": "France",
+      "city": "Le Havre",
+      "country": "France",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-94",
+      "name": "TBS Education",
+      "location": "France",
+      "city": "Toulouse",
+      "country": "France",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-95",
+      "name": "Lancaster University Management School",
+      "location": "United Kingdom",
+      "city": "Lancaster",
+      "country": "United Kingdom",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-96",
+      "name": "ESDES Business School",
+      "location": "France",
+      "city": "Lyon",
+      "country": "France",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-97",
+      "name": "Clermont School of Business",
+      "location": "France",
+      "city": "Clermont-Ferrand",
+      "country": "France",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-98",
+      "name": "University of Strathclyde Business School",
+      "location": "United Kingdom",
+      "city": "Glasgow",
+      "country": "United Kingdom",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-99",
+      "name": "University of Antwerp Faculty of Business and Economics",
+      "location": "Belgium",
+      "city": "Antwerp",
+      "country": "Belgium",
+      "status": "bachelor"
+    },
+    {
+      "id": "ft-school-100",
+      "name": "SGH Warsaw School of Economics",
+      "location": "Poland",
+      "city": "Warsaw",
+      "country": "Poland",
+      "status": "bachelor"
+    },
+    {
+      "id": "verified-school-lse",
+      "name": "London School of Economics and Political Science",
+      "location": "London, United Kingdom",
+      "city": "London",
+      "country": "United Kingdom",
+      "status": "bachelor"
+    },
+    {
+      "id": "verified-school-kings",
+      "name": "King’s College London",
+      "location": "London, United Kingdom",
+      "city": "London",
+      "country": "United Kingdom",
+      "status": "bachelor"
+    },
+    {
+      "id": "verified-school-birmingham",
+      "name": "University of Birmingham",
+      "location": "Birmingham, United Kingdom",
+      "city": "Birmingham",
+      "country": "United Kingdom",
+      "status": "bachelor"
+    },
+    {
+      "id": "verified-school-sheffield",
+      "name": "University of Sheffield",
+      "location": "Sheffield, United Kingdom",
+      "city": "Sheffield",
+      "country": "United Kingdom",
+      "status": "bachelor"
+    },
+    {
+      "id": "verified-school-liverpool",
+      "name": "University of Liverpool",
+      "location": "Liverpool, United Kingdom",
+      "city": "Liverpool",
+      "country": "United Kingdom",
+      "status": "bachelor"
+    },
+    {
+      "id": "verified-school-groningen",
+      "name": "University of Groningen",
+      "location": "Groningen, Netherlands",
+      "city": "Groningen",
+      "country": "Netherlands",
+      "status": "bachelor"
+    },
+    {
+      "id": "verified-school-twente",
+      "name": "University of Twente",
+      "location": "Enschede, Netherlands",
+      "city": "Enschede",
+      "country": "Netherlands",
+      "status": "bachelor"
+    },
+    {
+      "id": "verified-school-southampton",
+      "name": "University of Southampton",
+      "location": "Southampton, United Kingdom",
+      "city": "Southampton",
+      "country": "United Kingdom",
+      "status": "bachelor"
+    },
+    {
+      "id": "verified-school-sussex",
+      "name": "University of Sussex",
+      "location": "Brighton, United Kingdom",
+      "city": "Brighton",
+      "country": "United Kingdom",
+      "status": "bachelor"
+    },
+    {
+      "id": "verified-school-qmul",
+      "name": "Queen Mary University of London",
+      "location": "London, United Kingdom",
+      "city": "London",
+      "country": "United Kingdom",
+      "status": "bachelor"
+    },
+    {
+      "id": "verified-school-radboud",
+      "name": "Radboud University",
+      "location": "Nijmegen, Netherlands",
+      "city": "Nijmegen",
+      "country": "Netherlands",
+      "status": "bachelor"
+    },
+    {
+      "id": "verified-school-newcastle",
+      "name": "Newcastle University",
+      "location": "Newcastle upon Tyne, United Kingdom",
+      "city": "Newcastle upon Tyne",
+      "country": "United Kingdom",
+      "status": "bachelor"
+    },
+    {
+      "id": "verified-school-cardiff",
+      "name": "Cardiff University",
+      "location": "Cardiff, United Kingdom",
+      "city": "Cardiff",
+      "country": "United Kingdom",
+      "status": "bachelor"
+    },
+    {
+      "id": "verified-school-nus",
+      "name": "National University of Singapore",
+      "location": "Singapore, Singapore",
+      "city": "Singapore",
+      "country": "Singapore",
+      "status": "bachelor"
+    }
+  ]
+}

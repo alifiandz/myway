@@ -1,0 +1,170 @@
+{
+  "checkedOn": "2026-10-23",
+  "scope": "All 28 moving hero institutions; refreshed assets also update shared directory/map/feature images. Other map institutions retain existing supplied artwork.",
+  "policy": "Original institution artwork, preserve logo text and aspect ratio. Captions removed only from moving hero cards.",
+  "institutions": [
+    {
+      "id": "verified-school-lse",
+      "file": "assets/institution-logos/verified-school-lse.png",
+      "source": "https://www.lse.ac.uk/_mClaLQ_d4ab2ac8-076d-4f1b-a3ce-6d59df68522f/static/assets/LSE_logo.svg",
+      "sha256": "1dc291a06f50c8051ae0cf4e214b2da5311a6f9d0562661b3a745874fdedf83b"
+    },
+    {
+      "id": "ft-school-14",
+      "file": "assets/institution-logos/ft-school-14.png",
+      "source": "https://www.sbs.ox.ac.uk/themes/custom/rutherford/images/logo.svg",
+      "sha256": "70d67c58a86743960740f5ae4ba6f8d01e6622f6997f1ffa7766a5c8c053a958"
+    },
+    {
+      "id": "amikom",
+      "file": "assets/amikom.png",
+      "source": "https://amikom.ac.id/wp-content/uploads/2026/09/Logo-Primer-Horizontal.svg",
+      "sha256": "7aee718bf6f47ce991194fb46308450d8b8d85624caed1e6b84b79b1752a77a7"
+    },
+    {
+      "id": "ft-school-23",
+      "file": "assets/institution-logos/ft-school-23.png",
+      "source": "https://www.ucd.ie/quinn/t4media/ucdcob2026-crest-ucd.svg",
+      "sha256": "fc1e7d342782264bdf8124bb9ece7d2d0070da44acd59892ca8701012bf87300"
+    },
+    {
+      "id": "itb",
+      "file": "assets/itb.png",
+      "source": "https://itb.ac.id/assets/images/Logo%20ITB_COLOR_2026@4x.png",
+      "sha256": "b29e5c054d1d72af84bc9ff80f083efa0e4eadf15f6d527fd7e5f5b0ff639f0c"
+    },
+    {
+      "id": "ft-school-39",
+      "file": "assets/institution-logos/ft-school-39.png",
+      "source": "https://www.imperial.ac.uk/business-school/themes/custom/icbs/logo.svg",
+      "sha256": "8b568a427b7cef9944760fd8a7c356c275c9fce6ab09fa01eefdbfa855ddc44e"
+    },
+    {
+      "id": "ft-school-20",
+      "file": "assets/institution-logos/ft-school-20.png",
+      "source": "https://www.whu.edu/_assets/71eff83041c321f504087cf95eb25066/images/logo.svg",
+      "sha256": "c1320d290e00a5ae78e00450fc51a1c6cde27dbd997ece0dc3049883ca10d7be"
+    },
+    {
+      "id": "ft-school-9",
+      "file": "assets/institution-logos/ft-school-9.png",
+      "source": "https://www.edhec.edu/sites/default/files/logo.svg",
+      "sha256": "288c2c31092073bc9b19d71383fc235359fbdcdc803000d048a4ce28b17deffc"
+    },
+    {
+      "id": "ft-school-2",
+      "file": "assets/institution-logos/ft-school-2.png",
+      "source": "https://www.hec.edu/themes/custom/hec_theme/logo.svg",
+      "sha256": "361da6d9b636404d26a3444c7d7f5550c24710e14bb47f6d026ab0812f7d3a00"
+    },
+    {
+      "id": "ft-school-19",
+      "file": "assets/institution-logos/ft-school-19.png",
+      "source": "https://www.hhs.se/dist/images/public/logo-with-text.svg",
+      "sha256": "73f315d5bd3b894af5e507728816b2d472d7e53c8f7ce8a9e40d8e098c9b54f5"
+    },
+    {
+      "id": "ft-school-18",
+      "file": "assets/institution-logos/ft-school-18.png",
+      "source": "https://www.wbs.ac.uk/wbs2020/media/dist/img/wbs-logos/1i_WBS_PrimaryLogo_WebRGB_minheight250px.svg",
+      "sha256": "44a4012d918ae1b3623d47e0b6ab10c42616f0a6b6874958dd88578a1c1055a3"
+    },
+    {
+      "id": "ft-school-10",
+      "file": "assets/institution-logos/ft-school-10.png",
+      "source": "https://em-lyon.com/themes/custom/emlyon/logo.svg",
+      "sha256": "f66095734b8e90cebb836d9838628d31667a4144d1a00db9b2b4c46771880802"
+    },
+    {
+      "id": "verified-school-kings",
+      "file": "assets/institution-logos/verified-school-kings.png",
+      "source": "https://www.kcl.ac.uk/SiteElements/2017/images/kcl-logo.svg",
+      "sha256": "9e86a8574624644ae73de926ba4e7831f03f9fe0f6c9d465ef4a836ab99b8fc6"
+    },
+    {
+      "id": "ugm",
+      "file": "assets/ugm.png",
+      "source": "https://simpan.ugm.ac.id/s/UutuDmaDOpmcmku",
+      "sha256": "8d37299f33b4257bb3427fbae7e3ef53b183ff533b6ac80e3ca491d53d16163c"
+    },
+    {
+      "id": "uny",
+      "file": "assets/uny.png",
+      "source": "https://www.uny.ac.id/sites/default/files/2022-09/Logo%20UNY.png",
+      "sha256": "920c40a1432d737a2062e1bd9a91bbfa1d01b26eb7eacb169757e5796d432052"
+    },
+    {
+      "id": "unair",
+      "file": "assets/unair.png",
+      "source": "https://su.unair.ac.id/wp-content/uploads/2026/09/Wordmark-UNAIR-2026-Transparant-Blue.png",
+      "sha256": "820e9d677e2156ebee2552dccdf8a49ea071413e28676514e15ce3a2674fe991"
+    },
+    {
+      "id": "verified-school-nus",
+      "file": "assets/institution-logos/verified-school-nus.png",
+      "source": "https://www.nus.edu.sg/images/default-source/identity-images/nus-vlogo-color.png",
+      "sha256": "98cbed30ac5a4564438c8126ffacda5b162aac545ab466af8b02cdc8fa04d0bd"
+    },
+    {
+      "id": "ft-school-6",
+      "file": "assets/institution-logos/ft-school-6.png",
+      "source": "https://www.unibocconi.it/",
+      "sha256": "d8fce36ece52878cf2c92109992bfa05e382b9016b92dd23bb016508fb78edc7"
+    },
+    {
+      "id": "ft-school-7",
+      "file": "assets/institution-logos/ft-school-7.png",
+      "source": "https://www.essec.edu/en/",
+      "sha256": "d68230ea00a38cf6729642f26802fa3df5194af87802fb79f1788fb4eeb09241"
+    },
+    {
+      "id": "ft-school-8",
+      "file": "assets/institution-logos/ft-school-8.png",
+      "source": "https://www.unisg.ch/en/",
+      "sha256": "0838fb734c87e82591d13d92648b3bfce9673953a06964f5351c5023764802e0"
+    },
+    {
+      "id": "ft-school-16",
+      "file": "assets/institution-logos/ft-school-16.png",
+      "source": "https://reveal.skema.edu/en/",
+      "sha256": "32bcd5e88e514a6ff2272d4f48bd50e289832cecc88d2010beab81a2da789aa1"
+    },
+    {
+      "id": "ft-school-17",
+      "file": "assets/institution-logos/ft-school-17.png",
+      "source": "https://www.novasbe.unl.pt/Portals/_default/skins/novasbe/assets/images/novasbe.svg",
+      "sha256": "4716487ea2c453d3f96c661445b7988feca59e01cc123ccf30dba9765c06b729"
+    },
+    {
+      "id": "ft-school-33",
+      "file": "assets/institution-logos/ft-school-33.png",
+      "source": "https://www.rsm.nl/",
+      "sha256": "08d939b95ec8435de5bd1a40e311ef23bc09ddc7eee0e23d20126ff06be43575"
+    },
+    {
+      "id": "ui",
+      "review": "Retained existing colour variant; no replacement or redraw.",
+      "reference": "https://nursing.ui.ac.id/identitas-ui-logo/"
+    },
+    {
+      "id": "ft-school-4",
+      "review": "Retained existing colour variant; no replacement or redraw.",
+      "reference": "https://escp.eu/"
+    },
+    {
+      "id": "ft-school-11",
+      "review": "Retained existing colour variant; no replacement or redraw.",
+      "reference": "https://www.esade.edu/en"
+    },
+    {
+      "id": "ft-school-21",
+      "review": "Retained existing colour variant; no replacement or redraw.",
+      "reference": "https://www.ie.edu/business-school/"
+    },
+    {
+      "id": "ft-school-24",
+      "review": "Retained existing colour variant; no replacement or redraw.",
+      "reference": "https://www.grenoble-em.com/"
+    }
+  ]
+}
