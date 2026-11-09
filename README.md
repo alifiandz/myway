@@ -133,6 +133,12 @@ build/, scripts/        Build, validation and supporting tools
 .github/workflows/      Automated verification; no automatic production release
 ```
 
+## Development history
+
+MyWay grew through **185 real source commits** before this public release. The original dates and development lineage are now preserved, rather than presenting the work as one upload.
+
+[Explore the development timeline and restoration notes →](docs/development-history.md)
+
 ## Explore the build
 
 - [Product guide](docs/product-tour.md)
