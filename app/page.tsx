@@ -12,6 +12,7 @@ import UsageTracker from "./usage-tracker";
 import HabitMonthCalendar from "./habit-month-calendar";
 import AccountSyncNotice from "./account-sync-notice";
 import LandingWelcome from "./landing-welcome";
+import Discovery from "./major-discovery/discovery";
 import IndonesiaExplore from "./indonesia-explore";
 import BrowsePagination from "./browse-pagination";
 import PathwayActionCard from "./pathway-action-card";
@@ -1764,7 +1765,7 @@ function AccountGate({ language, ready, openAccount, explore }: { language: "en"
   return <main className="account-gate"><section className="account-gate-card"><div className="account-gate-loading"><i /><span>{language === "id" ? "Menyiapkan MyWay" : "Preparing MyWay"}</span></div></section></main>;
 }
 
-function GuestExplore({ language, openAccount }: { language: Language; openAccount: () => void }) {
+export function GuestExplore({ language, openAccount, initialDiscovery }: { language: Language; openAccount: () => void; initialDiscovery?: "explorer" | "match" }) {
   // Guest state never reads or writes account planning data or browser caches.
   const [browse, setBrowse] = useState<ExploreBrowseState>(initialExploreBrowseState);
   const [region, setRegion] = useState<"international" | "indonesia">("international");
@@ -1772,7 +1773,10 @@ function GuestExplore({ language, openAccount }: { language: Language; openAccou
   const [compared, setCompared] = useState<string[]>([]);
   const [compareOpen, setCompareOpen] = useState(false);
   const [records, setRecords] = useState<Record<string, string>>({});
+  const [discoveryTab, setDiscoveryTab] = useState<"universities" | "explorer" | "match">(initialDiscovery ?? "universities");
+  const [researchMajor, setResearchMajor] = useState("");
   const id = language === "id";
+  const changeDiscoveryTab = (tab: "universities" | "explorer" | "match") => { setDiscoveryTab(tab); setSchool(null); setCompareOpen(false); window.scrollTo({top:0}); };
   const toggleCompare = (key: string) => setCompared(current => current.includes(key) ? current.filter(value => value !== key) : current.length < 4 ? [...current, key] : current);
   const openSchool = (next: BusinessSchool) => { setSchool(next); setCompareOpen(false); window.scrollTo({ top: 0 }); };
   const updateGuestRecord = (key: string, value: string) => {
@@ -1781,12 +1785,13 @@ function GuestExplore({ language, openAccount }: { language: Language; openAccou
   };
   const programme = school?.programId ? programs.find(item => item.id === school.programId) : undefined;
   return <div className="guest-explore">
-    <header className="guest-header"><div className="guest-navigation"><a className="guest-home" href="/" aria-label={id ? "Kembali ke beranda" : "Back to home"}><span aria-hidden="true">←</span><span>{id ? "Kembali" : "Back"}<span className="guest-home-extra">{id ? " ke beranda" : " to home"}</span></span></a><button type="button" className="guest-brand" aria-label="Back to university browsing" onClick={() => setSchool(null)}><PublicUniversityLogo fallback="/myway-mark.png?v=brand-20261028" name="MyWay" /><strong>MyWay</strong></button></div><div><span>{id ? "Mode pengunjung" : "Guest browsing"}</span><button type="button" className="primary-button" onClick={openAccount}>{id ? "Masuk" : "Sign in"}</button></div></header>
-    <main className="content-wrap"><p className="guest-notice">{id ? "Jelajahi dengan bebas. Masuk untuk menyimpan universitas dan progresmu." : "Explore freely. Sign in to save universities and your progress."}</p>
+    <header className="guest-header"><div className="guest-navigation"><a className="guest-home" href="/" aria-label={id ? "Kembali ke beranda" : "Back to home"}><span aria-hidden="true">←</span><span>{id ? "Kembali" : "Back"}<span className="guest-home-extra">{id ? " ke beranda" : " to home"}</span></span></a><button type="button" className="guest-brand" aria-label="Back to university browsing" onClick={() => {setSchool(null); if(initialDiscovery) changeDiscoveryTab("universities");}}><PublicUniversityLogo fallback="/myway-mark.png?v=brand-20261028" name="MyWay" /><strong>MyWay</strong></button></div><div><span>{id ? "Mode pengunjung" : "Guest browsing"}</span><button type="button" className="primary-button" onClick={openAccount}>{id ? "Masuk" : "Sign in"}</button></div></header>
+    <main className="content-wrap">{initialDiscovery && <><nav className="md-explore-tabs" aria-label="Explore sections"><button type="button" aria-current={discoveryTab === "universities" ? "page" : undefined} onClick={() => changeDiscoveryTab("universities")}>Universities</button><button type="button" aria-current={discoveryTab === "explorer" ? "page" : undefined} onClick={() => changeDiscoveryTab("explorer")}>Majors</button><button type="button" aria-current={discoveryTab === "match" ? "page" : undefined} onClick={() => changeDiscoveryTab("match")}>Major Match <span>Preview</span></button></nav><p className="md-preview-status">Owner preview · Major content is draft. Major Match is unscored.</p></>}{initialDiscovery && discoveryTab !== "universities" ? <Discovery mode={discoveryTab} onModeChange={changeDiscoveryTab} onExplore={(name) => {setResearchMajor(name ?? "");changeDiscoveryTab("universities");}} /> : <><p className="guest-notice">{id ? "Jelajahi dengan bebas. Masuk untuk menyimpan universitas dan progresmu." : "Explore freely. Sign in to save universities and your progress."}</p>
+      {initialDiscovery && researchMajor && <aside className="md-research-context"><div><strong>Researching {researchMajor}</strong><p>Browse the catalogue and check the official programme title and curriculum. Results have not been mapped to this major.</p></div><button className="text-link" onClick={() => changeDiscoveryTab("explorer")}>Back to majors</button></aside>}
       {school ? <SchoolDetail key={school.id} school={school} program={programme} close={() => setSchool(null)} saved={false} toggleSaved={openAccount} compared={compared.includes(school.id)} toggleCompare={() => toggleCompare(school.id)} addPath={openAccount} removePath={openAccount} fitResult={calculateProgramFit(programme ?? schoolAsProgram(school), schoolStudy(school), {}, {})} reportIncorrect={openAccount} /> : <Explore searchRegion={region} setSearchRegion={setRegion} browse={browse} setBrowse={setBrowse} openSchool={openSchool} saved={[]} setSaved={openAccount} compared={compared} toggleCompare={toggleCompare} schoolPathwayIds={[]} toggleSchoolPathway={openAccount} language={language} records={records} updateRecord={updateGuestRecord} goPathway={openAccount} />}
-      <footer className="guest-footer"><a href="/privacy">{id ? "Privasi & bantuan" : "Privacy & support"}</a></footer>
+      </>}<footer className="guest-footer"><a href="/privacy">{id ? "Privasi & bantuan" : "Privacy & support"}</a></footer>
     </main>
-    {region === "international" && compared.length > 0 && !compareOpen && <button type="button" className="compare-fab" onClick={() => setCompareOpen(true)}><Scale size={17} />{id ? "Bandingkan" : "Compare"} {compared.length}<small>{id ? "dari 4" : "of 4"}</small></button>}
+    {(!initialDiscovery || discoveryTab === "universities") && region === "international" && compared.length > 0 && !compareOpen && <button type="button" className="compare-fab" onClick={() => setCompareOpen(true)}><Scale size={17} />{id ? "Bandingkan" : "Compare"} {compared.length}<small>{id ? "dari 4" : "of 4"}</small></button>}
     {compareOpen && <ComparePanel ids={compared} close={() => setCompareOpen(false)} remove={toggleCompare} open={openSchool} />}
   </div>;
 }

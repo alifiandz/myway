@@ -20,7 +20,7 @@ React 19, Next-compatible routing through Vinext, Vite 8 and a Cloudflare Worker
 
 ## D. Major Discovery integration
 
-Added /major-explorer-preview and /major-match-preview, sharing a scoped component/style system. Existing application source, navigation, auth and data models are unchanged. The catalogue contains 60 draft canonical concepts across 12 fields, with distinct IDs, subject research prompts, review state and empty programme mappings. Search, field filter, detail dialogs, three-way comparison and saved majors are implemented. Detail views link back to the existing catalogue without claiming a reviewed programme equivalence.
+Added /major-explorer-preview and /major-match-preview, sharing a scoped component/style system. The preview reuses the existing GuestExplore shell and catalogue through an optional initialDiscovery prop. Default guest navigation, auth and data models retain their prior behavior. The catalogue contains 60 draft canonical concepts across 12 fields, with distinct IDs, subject research prompts, review state and empty programme mappings. Search, field filter, detail dialogs, three-way comparison and saved majors are implemented. Detail views switch into the existing catalogue within the same guest shell, retaining the major as research context without claiming a reviewed programme equivalence.
 
 Match exposes the eight original MyWay academic/priorities screens corresponding to proposed screens 11–18. The official interest chapter is visibly held. No official items, RIASEC scores, rankings, fabricated percentages or implicit matching are included. Users can navigate, intentionally skip/clear, review and edit answers. Uncertainty is distinct from absence. Exclusive options and selection caps are enforced.
 
@@ -45,3 +45,15 @@ Post-change: TypeScript passed. Full Worker build/artifact checks and all 137 re
 Browser end-to-end, real account sync, production data parity, mobile screenshots and student/expert review remain unverified. No real scoring tests apply because no scoring model is enabled.
 
 Deploy a separate owner-private site, not the public mywaypath.com release. Production rollback is unnecessary because that release is untouched. To withdraw this preview, disable/delete only the new preview site or deploy its prior saved version after one exists. Keep the feature commit separate from the deployment-only manifest commit. Public launch, production configuration, programme mapping and genuine scoring require later review/authorization.
+
+## Owner-feedback revision
+
+The first version used a separate editorial header and typography, repeated draft warnings, a long directory and an answer-only summary. The owner reported that it felt disconnected from MyWay and that the guidance was weak. The revision uses the actual MyWay guest header, existing design tokens, buttons, cards and catalogue; a preview-only Explore tab row switches between Universities, Majors and Major Match. The 60-major list has search, filters, saved items and 12-per-page pagination. The reflection summary offers explicit keyword searches from chosen school subjects, manually saved majors and a direct university research action. These searches are navigation aids, not scoring or recommendations. Profile actions retain the major name as catalogue research context. No equivalence mappings or automatic application choices were added.
+
+The original eight question screens, selection rules and raw-answer schema remain unchanged. Notices are concise with scientific/source details in expandable sections. The existing guest sign-in boundaries remain in place for university planning. Discovery saves remain device-local.
+
+New regression checks exercise the shared-shell handoff, preservation of guest account boundaries, selected-subject searches and manually saved research list behavior. The managed preview CLI was attempted but failed because the relay could not open browser port 4173 (readiness timeout); visual, mobile and end-to-end browser QA remains unverified.
+
+The revised summary also turns explicitly selected study concerns into practical programme-research questions (for example, checking compulsory mathematics or clinical placements), without excluding any major.
+
+Revision validation: TypeScript, the production Worker build, artifact validation and all 141 regression tests passed. The new shared-shell and guidance tests are included in that count. Browser/mobile visual verification remains blocked by preview relay infrastructure.

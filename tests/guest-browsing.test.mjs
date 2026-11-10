@@ -9,11 +9,11 @@ const require=createRequire(import.meta.url);
 const source=fs.readFileSync(new URL('../app/page.tsx',import.meta.url),'utf8');
 const ast=ts.createSourceFile('page.tsx',source,ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX);
 const pieces=ast.statements.filter(n=>ts.isFunctionDeclaration(n)&&['GuestExplore','AccountGate'].includes(n.name?.text)).map(n=>n.getText(ast)).join('\n');
-function setup(){
+function setup(previewTab){
  const writes=[],signins=[];
- const states=[{},'international',null,[],false,{}];let index=0;
+ const states=[{},'international',null,[],false,{},previewTab,''];let index=0;
  const component=name=>Object.assign(()=>null,{displayName:name});
- const context={require,exports:{},useState:()=>{const i=index++;return [states[i],value=>writes.push([i,value])];},initialExploreBrowseState:{},LandingWelcome:component('LandingWelcome'),Explore:component('Explore'),SchoolDetail:component('SchoolDetail'),ComparePanel:component('ComparePanel'),PublicUniversityLogo:component('Logo'),Search:component('Search'),CircleUserRound:component('User'),ShieldCheck:component('Shield'),LockKeyhole:component('Lock'),Scale:component('Scale')};
+ const context={window:{scrollTo(){}},require,exports:{},useState:()=>{const i=index++;return [states[i],value=>writes.push([i,value])];},initialExploreBrowseState:{},Discovery:component('Discovery'),LandingWelcome:component('LandingWelcome'),Explore:component('Explore'),SchoolDetail:component('SchoolDetail'),ComparePanel:component('ComparePanel'),PublicUniversityLogo:component('Logo'),Search:component('Search'),CircleUserRound:component('User'),ShieldCheck:component('Shield'),LockKeyhole:component('Lock'),Scale:component('Scale')};
  vm.createContext(context);vm.runInContext(ts.transpileModule(pieces+'\nexports.GuestExplore=GuestExplore;exports.AccountGate=AccountGate;', {compilerOptions:{module:ts.ModuleKind.CommonJS,jsx:ts.JsxEmit.ReactJSX}}).outputText,context);
  return {context,writes,signins,openAccount:()=>signins.push(true)};
 }
@@ -36,4 +36,18 @@ test('welcome gate opens the approved landing with real sign in and guest action
  const s=setup(),tree=s.context.exports.AccountGate({language:'en',ready:true,openAccount:s.openAccount,explore:()=>s.signins.push('guest')});
  assert.equal(tree.type.displayName,'LandingWelcome');tree.props.openAccount();tree.props.explore();assert.deepEqual(s.signins,[true,'guest']);
  const loading=s.context.exports.AccountGate({language:'en',ready:false,openAccount:s.openAccount,explore(){}});assert.equal(loading.type,'main');
+});
+
+test('private discovery preview uses the existing guest catalogue without leaving its shell',()=>{
+ const s=setup('explorer');
+ const tree=s.context.exports.GuestExplore({language:'en',openAccount:s.openAccount,initialDiscovery:'explorer'});
+ const discovery=find(tree,'Discovery');assert.ok(discovery);assert.equal(discovery.props.mode,'explorer');
+ assert.equal(find(tree,'Explore'),undefined);
+ discovery.props.onExplore('Biology');
+ assert.ok(s.writes.some(([i,value])=>i===7&&value==='Biology'));
+ assert.ok(s.writes.some(([i,value])=>i===6&&value==='universities'));
+ assert.equal(s.signins.length,0);
+ const catalogue=setup('universities');
+ const universityTree=catalogue.context.exports.GuestExplore({language:'en',openAccount:catalogue.openAccount,initialDiscovery:'explorer'});
+ assert.ok(find(universityTree,'Explore'));assert.equal(find(universityTree,'Discovery'),undefined);
 });
