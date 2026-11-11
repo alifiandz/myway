@@ -1,0 +1,12 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      react:
+        patterns: [react, react-dom, react-server-dom-webpack, next, eslint-config-next]
+      cloudflare:
+        patterns: ['@cloudflare/*', wrangler, vinext, vite, '@vitejs/*']
