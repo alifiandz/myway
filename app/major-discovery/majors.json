@@ -1,0 +1,1202 @@
+[
+  {
+    "id": "medicine",
+    "slug": "medicine",
+    "name": "Medicine",
+    "category": "Health & Medicine",
+    "subjects": [
+      "Human anatomy",
+      "Physiology",
+      "Clinical reasoning"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "nursing",
+    "slug": "nursing",
+    "name": "Nursing",
+    "category": "Health & Medicine",
+    "subjects": [
+      "Patient care",
+      "Health assessment",
+      "Clinical practice"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "dentistry",
+    "slug": "dentistry",
+    "name": "Dentistry",
+    "category": "Health & Medicine",
+    "subjects": [
+      "Oral anatomy",
+      "Dental materials",
+      "Clinical practice"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "pharmacy",
+    "slug": "pharmacy",
+    "name": "Pharmacy",
+    "category": "Health & Medicine",
+    "subjects": [
+      "Pharmacology",
+      "Medicinal chemistry",
+      "Medication safety"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "public-health",
+    "slug": "public-health",
+    "name": "Public Health",
+    "category": "Health & Medicine",
+    "subjects": [
+      "Epidemiology",
+      "Biostatistics",
+      "Health policy"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "nutrition-dietetics",
+    "slug": "nutrition-dietetics",
+    "name": "Nutrition & Dietetics",
+    "category": "Health & Medicine",
+    "subjects": [
+      "Human nutrition",
+      "Food systems",
+      "Dietary assessment"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "mechanical-engineering",
+    "slug": "mechanical-engineering",
+    "name": "Mechanical Engineering",
+    "category": "Engineering",
+    "subjects": [
+      "Mechanics",
+      "Thermodynamics",
+      "Engineering design"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "civil-engineering",
+    "slug": "civil-engineering",
+    "name": "Civil Engineering",
+    "category": "Engineering",
+    "subjects": [
+      "Structures",
+      "Materials",
+      "Geotechnics"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "electrical-engineering",
+    "slug": "electrical-engineering",
+    "name": "Electrical Engineering",
+    "category": "Engineering",
+    "subjects": [
+      "Circuits",
+      "Signals",
+      "Power systems"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "chemical-engineering",
+    "slug": "chemical-engineering",
+    "name": "Chemical Engineering",
+    "category": "Engineering",
+    "subjects": [
+      "Transport processes",
+      "Thermodynamics",
+      "Reaction engineering"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "biomedical-engineering",
+    "slug": "biomedical-engineering",
+    "name": "Biomedical Engineering",
+    "category": "Engineering",
+    "subjects": [
+      "Biomechanics",
+      "Medical instrumentation",
+      "Biomaterials"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "environmental-engineering",
+    "slug": "environmental-engineering",
+    "name": "Environmental Engineering",
+    "category": "Engineering",
+    "subjects": [
+      "Water treatment",
+      "Pollution control",
+      "Environmental systems"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "computer-science",
+    "slug": "computer-science",
+    "name": "Computer Science",
+    "category": "Technology & Data",
+    "subjects": [
+      "Algorithms",
+      "Programming",
+      "Computer systems"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "software-engineering",
+    "slug": "software-engineering",
+    "name": "Software Engineering",
+    "category": "Technology & Data",
+    "subjects": [
+      "Software design",
+      "Testing",
+      "Requirements engineering"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "data-science",
+    "slug": "data-science",
+    "name": "Data Science",
+    "category": "Technology & Data",
+    "subjects": [
+      "Statistics",
+      "Data management",
+      "Machine learning"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "cybersecurity",
+    "slug": "cybersecurity",
+    "name": "Cybersecurity",
+    "category": "Technology & Data",
+    "subjects": [
+      "Network security",
+      "Cryptography",
+      "Security analysis"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "information-systems",
+    "slug": "information-systems",
+    "name": "Information Systems",
+    "category": "Technology & Data",
+    "subjects": [
+      "Business processes",
+      "Databases",
+      "Systems analysis"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "biology",
+    "slug": "biology",
+    "name": "Biology",
+    "category": "Natural Sciences",
+    "subjects": [
+      "Cell biology",
+      "Genetics",
+      "Ecology"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "chemistry",
+    "slug": "chemistry",
+    "name": "Chemistry",
+    "category": "Natural Sciences",
+    "subjects": [
+      "Organic chemistry",
+      "Analytical chemistry",
+      "Physical chemistry"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "physics",
+    "slug": "physics",
+    "name": "Physics",
+    "category": "Natural Sciences",
+    "subjects": [
+      "Mechanics",
+      "Electromagnetism",
+      "Quantum physics"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "mathematics",
+    "slug": "mathematics",
+    "name": "Mathematics",
+    "category": "Natural Sciences",
+    "subjects": [
+      "Calculus",
+      "Linear algebra",
+      "Mathematical proof"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "environmental-science",
+    "slug": "environmental-science",
+    "name": "Environmental Science",
+    "category": "Natural Sciences",
+    "subjects": [
+      "Ecology",
+      "Earth systems",
+      "Environmental measurement"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "psychology",
+    "slug": "psychology",
+    "name": "Psychology",
+    "category": "Psychology & Social Sciences",
+    "subjects": [
+      "Cognition",
+      "Research methods",
+      "Statistics"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "sociology",
+    "slug": "sociology",
+    "name": "Sociology",
+    "category": "Psychology & Social Sciences",
+    "subjects": [
+      "Social theory",
+      "Research methods",
+      "Social institutions"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "anthropology",
+    "slug": "anthropology",
+    "name": "Anthropology",
+    "category": "Psychology & Social Sciences",
+    "subjects": [
+      "Culture",
+      "Ethnography",
+      "Human diversity"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "political-science",
+    "slug": "political-science",
+    "name": "Political Science",
+    "category": "Psychology & Social Sciences",
+    "subjects": [
+      "Political theory",
+      "Comparative politics",
+      "Research methods"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "social-work",
+    "slug": "social-work",
+    "name": "Social Work",
+    "category": "Psychology & Social Sciences",
+    "subjects": [
+      "Social policy",
+      "Community practice",
+      "Human development"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "law",
+    "slug": "law",
+    "name": "Law",
+    "category": "Law & Public Affairs",
+    "subjects": [
+      "Legal reasoning",
+      "Public law",
+      "Private law"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "public-policy",
+    "slug": "public-policy",
+    "name": "Public Policy",
+    "category": "Law & Public Affairs",
+    "subjects": [
+      "Policy analysis",
+      "Economics",
+      "Programme evaluation"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "criminology",
+    "slug": "criminology",
+    "name": "Criminology",
+    "category": "Law & Public Affairs",
+    "subjects": [
+      "Crime theory",
+      "Justice systems",
+      "Research methods"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "public-administration",
+    "slug": "public-administration",
+    "name": "Public Administration",
+    "category": "Law & Public Affairs",
+    "subjects": [
+      "Public management",
+      "Governance",
+      "Public finance"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "international-relations",
+    "slug": "international-relations",
+    "name": "International Relations",
+    "category": "Humanities & Global Studies",
+    "subjects": [
+      "International politics",
+      "Diplomacy",
+      "Global history"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "history",
+    "slug": "history",
+    "name": "History",
+    "category": "Humanities & Global Studies",
+    "subjects": [
+      "Historical methods",
+      "Archival research",
+      "Historiography"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "philosophy",
+    "slug": "philosophy",
+    "name": "Philosophy",
+    "category": "Humanities & Global Studies",
+    "subjects": [
+      "Logic",
+      "Ethics",
+      "Epistemology"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "linguistics",
+    "slug": "linguistics",
+    "name": "Linguistics",
+    "category": "Humanities & Global Studies",
+    "subjects": [
+      "Syntax",
+      "Phonetics",
+      "Language analysis"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "literature",
+    "slug": "literature",
+    "name": "Literature",
+    "category": "Humanities & Global Studies",
+    "subjects": [
+      "Literary analysis",
+      "Critical theory",
+      "Comparative reading"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "religious-studies",
+    "slug": "religious-studies",
+    "name": "Religious Studies",
+    "category": "Humanities & Global Studies",
+    "subjects": [
+      "Religious traditions",
+      "Textual interpretation",
+      "Comparative study"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "architecture",
+    "slug": "architecture",
+    "name": "Architecture",
+    "category": "Arts & Design",
+    "subjects": [
+      "Design studio",
+      "Building technology",
+      "Architectural history"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "graphic-design",
+    "slug": "graphic-design",
+    "name": "Graphic Design",
+    "category": "Arts & Design",
+    "subjects": [
+      "Typography",
+      "Visual communication",
+      "Design studio"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "industrial-design",
+    "slug": "industrial-design",
+    "name": "Industrial Design",
+    "category": "Arts & Design",
+    "subjects": [
+      "Product design",
+      "Materials",
+      "Prototyping"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "animation",
+    "slug": "animation",
+    "name": "Animation",
+    "category": "Arts & Design",
+    "subjects": [
+      "Visual storytelling",
+      "Animation principles",
+      "Digital production"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "film-studies",
+    "slug": "film-studies",
+    "name": "Film Studies",
+    "category": "Arts & Design",
+    "subjects": [
+      "Film analysis",
+      "Film history",
+      "Screen theory"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "urban-planning",
+    "slug": "urban-planning",
+    "name": "Urban Planning",
+    "category": "Arts & Design",
+    "subjects": [
+      "Spatial planning",
+      "Urban systems",
+      "Planning policy"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "business-administration",
+    "slug": "business-administration",
+    "name": "Business Administration",
+    "category": "Business & Economics",
+    "subjects": [
+      "Management",
+      "Organizational behavior",
+      "Business strategy"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "accounting",
+    "slug": "accounting",
+    "name": "Accounting",
+    "category": "Business & Economics",
+    "subjects": [
+      "Financial reporting",
+      "Audit",
+      "Management accounting"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "finance",
+    "slug": "finance",
+    "name": "Finance",
+    "category": "Business & Economics",
+    "subjects": [
+      "Corporate finance",
+      "Investment",
+      "Risk analysis"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "economics",
+    "slug": "economics",
+    "name": "Economics",
+    "category": "Business & Economics",
+    "subjects": [
+      "Microeconomics",
+      "Macroeconomics",
+      "Econometrics"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "marketing",
+    "slug": "marketing",
+    "name": "Marketing",
+    "category": "Business & Economics",
+    "subjects": [
+      "Consumer research",
+      "Marketing strategy",
+      "Market analysis"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "primary-education",
+    "slug": "primary-education",
+    "name": "Primary Education",
+    "category": "Education",
+    "subjects": [
+      "Child development",
+      "Teaching methods",
+      "Classroom practice"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "early-childhood-education",
+    "slug": "early-childhood-education",
+    "name": "Early Childhood Education",
+    "category": "Education",
+    "subjects": [
+      "Early development",
+      "Play-based learning",
+      "Observation"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "secondary-education",
+    "slug": "secondary-education",
+    "name": "Secondary Education",
+    "category": "Education",
+    "subjects": [
+      "Subject pedagogy",
+      "Assessment",
+      "Classroom practice"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "special-education",
+    "slug": "special-education",
+    "name": "Special Education",
+    "category": "Education",
+    "subjects": [
+      "Inclusive education",
+      "Learning support",
+      "Individualized teaching"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "agriculture",
+    "slug": "agriculture",
+    "name": "Agriculture",
+    "category": "Agriculture & Food",
+    "subjects": [
+      "Crop science",
+      "Soil science",
+      "Agricultural systems"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "food-science",
+    "slug": "food-science",
+    "name": "Food Science",
+    "category": "Agriculture & Food",
+    "subjects": [
+      "Food chemistry",
+      "Food microbiology",
+      "Food processing"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "forestry",
+    "slug": "forestry",
+    "name": "Forestry",
+    "category": "Agriculture & Food",
+    "subjects": [
+      "Forest ecology",
+      "Forest management",
+      "Conservation"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "marine-science",
+    "slug": "marine-science",
+    "name": "Marine Science",
+    "category": "Agriculture & Food",
+    "subjects": [
+      "Marine ecology",
+      "Oceanography",
+      "Field methods"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "communication-studies",
+    "slug": "communication-studies",
+    "name": "Communication Studies",
+    "category": "Communication & Media",
+    "subjects": [
+      "Communication theory",
+      "Media research",
+      "Audience analysis"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "journalism",
+    "slug": "journalism",
+    "name": "Journalism",
+    "category": "Communication & Media",
+    "subjects": [
+      "Reporting",
+      "Media ethics",
+      "Verification"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "public-relations",
+    "slug": "public-relations",
+    "name": "Public Relations",
+    "category": "Communication & Media",
+    "subjects": [
+      "Strategic communication",
+      "Stakeholder research",
+      "Media relations"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  },
+  {
+    "id": "media-production",
+    "slug": "media-production",
+    "name": "Media Production",
+    "category": "Communication & Media",
+    "subjects": [
+      "Production planning",
+      "Audio and video",
+      "Editing"
+    ],
+    "status": "draft",
+    "mappingStatus": "not-reviewed",
+    "indonesianName": null,
+    "aliases": [],
+    "sources": [],
+    "reviewer": null,
+    "reviewedAt": null,
+    "programmes": [],
+    "version": "editorial-draft-1"
+  }
+]

@@ -1,0 +1,16 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {createRequire} from 'node:module';
+const require=createRequire(import.meta.url);
+const ts=require('typescript');
+const source=readFileSync(new URL('../app/major-discovery/model.ts',import.meta.url),'utf8');
+const catalogue=JSON.parse(readFileSync(new URL('../app/major-discovery/majors.json',import.meta.url),'utf8'));
+const js=ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}}).outputText;
+const mod={exports:{}};new Function('require','module','exports',js)(p=>p==='./majors.json'?catalogue:require(p),mod,mod.exports);
+const {majors,toggleChoice,readState,emptyState,steps,ratingLabels}=mod.exports;
+test('catalogue contains 60 unique draft concepts across all 12 fields without scoring or offering claims',()=>{assert.equal(majors.length,60);assert.equal(new Set(majors.map(m=>m.id)).size,60);assert.equal(new Set(majors.map(m=>m.category)).size,12);for(const m of majors){assert.equal(m.status,'draft');assert.equal(m.mappingStatus,'not-reviewed');assert.equal(m.programmes.length,0);assert.equal(m.subjects.length,3);assert.equal(m.reviewedAt,null);assert.equal(m.reviewer,null);}});
+test('selection limits and exclusive uncertainty preserve intentional uncertainty',()=>{assert.deepEqual(toggleChoice(['A','B','C'],'D',3,'Unsure'),['A','B','C']);assert.deepEqual(toggleChoice(['A','B'],'Unsure',3,'Unsure'),['Unsure']);assert.deepEqual(toggleChoice(['Unsure'],'A',3,'Unsure'),['A']);assert.deepEqual(toggleChoice(['A'],'A',3,'Unsure'),[]);});
+test('storage validates IDs, limits, versions and ignores hostile/malformed data',()=>{const s=readState(JSON.stringify({...emptyState(),saved:['medicine','medicine','fake'],compare:majors.slice(0,8).map(m=>m.id),step:999,answers:{'0':['Mathematics','Mathematics','fake','Physics','Biology','Chemistry'],'1':["I'm not sure yet",'Health & Medicine'],'2.0':['Unsure'],'2.1':['fake'],'2.2':['Like','Dislike']}}));assert.deepEqual(s.saved,['medicine']);assert.equal(s.compare.length,3);assert.equal(s.step,7);assert.deepEqual(s.answers['0'],['Mathematics','Physics','Biology']);assert.deepEqual(s.answers['1'],["I'm not sure yet"]);assert.deepEqual(s.answers['2.0'],['Unsure']);assert.equal(s.answers['2.1'],undefined);assert.equal(s.answers['2.2'],undefined);for(const raw of ['bad','null','[]','{"version":"future"}'])assert.deepEqual(readState(raw),emptyState());});
+test('all-like, all-dislike and all-unsure responses remain raw; no model or official score is created',()=>{for(const rating of ratingLabels){let s=emptyState();steps.forEach((step,i)=>step.ratings?.forEach((_,j)=>s.answers[`${i}.${j}`]=[rating]));s=readState(JSON.stringify(s));assert.equal(Object.keys(s.answers).length,12);assert.equal(s.instrumentVersion,null);assert.equal(s.modelVersion,null);assert.ok(!('scores' in s));}});
+test('blank responses remain distinct from unsure and restore deterministically',()=>{const s=emptyState();s.started=true;s.step=4;s.answers={'2.0':['Unsure']};const a=readState(JSON.stringify(s));assert.equal(a.answers['2.1'],undefined);assert.deepEqual(a.answers['2.0'],['Unsure']);assert.deepEqual(readState(JSON.stringify(a)),a);assert.equal(a.step,4);});
