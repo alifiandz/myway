@@ -20,7 +20,7 @@
     "test:isolated": "bash scripts/sites-env.sh -- node --experimental-strip-types --import ./tests/deny-network.mjs --test tests/authorization-boundaries.test.mjs tests/cloud-document-vault.test.mjs tests/cloud-document-storage-client.test.mjs tests/account-sync.test.mjs"
   },
   "dependencies": {
-    "@supabase/supabase-js": "2.117.1",
+    "@supabase/supabase-js": "2.119.0",
     "drizzle-orm": "0.45.2",
     "lucide-react": "^0.468.0",
     "next": "16.4.6",
